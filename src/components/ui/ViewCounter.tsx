@@ -1,7 +1,7 @@
 // components/ui/ViewCounter.tsx
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { incrementProjectView } from '@/lib/projects';
 
 interface ViewCounterProps {
@@ -10,19 +10,63 @@ interface ViewCounterProps {
 }
 
 const ViewCounter: React.FC<ViewCounterProps> = ({ projectId, viewCount = 0 }) => {
+  const [count, setCount] = useState(viewCount);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    // Increment the view count when the component mounts
-    // This is important - this needs to run once on initial load
-    const incrementView = async () => {
-      await incrementProjectView(projectId);
-    };
+    // Set initial count from props
+    setCount(viewCount);
     
-    incrementView();
-  }, [projectId]); // Only run once when projectId changes
+    async function updateViewCount() {
+      try {
+        // Check if this project has been viewed in this session
+        const viewedProjects = JSON.parse(
+          sessionStorage.getItem('viewed_projects') || '[]'
+        );
+        
+        if (viewedProjects.includes(projectId)) {
+          console.log('Project already viewed in this session');
+          setIsLoading(false);
+          return; // Already viewed
+        }
+        
+        // Add to viewed projects
+        viewedProjects.push(projectId);
+        sessionStorage.setItem('viewed_projects', JSON.stringify(viewedProjects));
+        
+        console.log('Incrementing view for project', projectId);
+        
+        // Use the API route to increment and get the updated count
+        const response = await fetch('/api/project-view', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ projectId }),
+          cache: 'no-store' // Ensure no caching
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.view_count) {
+          console.log('View count updated:', result.view_count);
+          setCount(result.view_count);
+        } else {
+          console.error('Failed to update view count:', result);
+        }
+      } catch (err) {
+        console.error('Failed to update view count:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    updateViewCount();
+  }, [projectId, viewCount]);
 
   return (
     <div className="text-sm text-gray-500 font-ptMono mt-8">
-      <span>{viewCount} view{viewCount !== 1 ? 's' : ''}</span>
+      <span>
+        {isLoading ? `${viewCount}` : `${count}`} view{count !== 1 ? 's' : ''}
+      </span>
     </div>
   );
 };

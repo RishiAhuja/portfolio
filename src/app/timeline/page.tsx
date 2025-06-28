@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from '@/components/ui/ExpandedContainer';
 import FadeInSection from '@/components/ui/FadeInSection';
+import NeuralNetwork from '@/components/ui/NeuralNetwork';
 import Link from 'next/link';
 
 interface TimelineEvent {
@@ -23,6 +24,7 @@ interface TimelineEvent {
 const Timeline: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState('2024-25');
   const [isMobile, setIsMobile] = useState(false);
+  const [totalEventCount, setTotalEventCount] = useState(0);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -443,6 +445,15 @@ const Timeline: React.FC = () => {
       community: data.filter(item => item.type === 'community').length,
     };
   };
+  
+  // Calculate total event count for all years (for neural network)
+  useEffect(() => {
+    let count = 0;
+    Object.values(timelineData).forEach(yearEvents => {
+      count += yearEvents.length;
+    });
+    setTotalEventCount(count);
+  }, []);
 
   const getButtonIcon = (iconType: string) => {
     switch (iconType) {
@@ -517,6 +528,8 @@ const Timeline: React.FC = () => {
       </div>
 
       <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto py-12 relative`}>
+        {/* Neural Network Visualization - neurons count matches timeline events */}
+        <NeuralNetwork eventCount={totalEventCount} />
         {/* Subtle blur effect for the header */}
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-bgShades-light/5 to-transparent pointer-events-none"></div>
         

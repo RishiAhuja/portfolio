@@ -1,5 +1,5 @@
 // lib/projects.ts
-import { supabase } from './supabase';
+import { supabase, noCacheSupabase } from './supabase';
 
 // Project interface
 export interface Project {
@@ -64,6 +64,10 @@ export const getAllProjects = async (
  */
 export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
   try {
+    // Use regular supabase client which has environment variables properly set
+    const timestamp = Date.now(); // Add timestamp for logging
+    console.log(`Fetching project with slug ${slug} at ${timestamp}`);
+    
     const { data, error } = await supabase
       .from('projects')
       .select('*')
@@ -71,11 +75,24 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
       .single();
 
     if (error) {
+      console.error(`Error fetching project with slug "${slug}":`, error);
       throw error;
+    }
+
+    if (!data) {
+      console.log(`No project found with slug "${slug}"`);
+      return null;
     }
 
     // We'll handle view counting separately in a client component
     // This avoids the sessionStorage error in server components
+    
+    console.log(`Fetched project ${slug} at ${timestamp}:`, {
+      id: data.id,
+      title: data.title,
+      slug: data.slug,
+      viewCount: data.view_count
+    });
 
     return data;
   } catch (error) {
@@ -100,24 +117,31 @@ export const incrementProjectView = async (projectId: string): Promise<void> => 
     );
     
     if (viewedProjects.includes(projectId)) {
+      console.log('Project already viewed in this session, skipping increment');
       return; // Already viewed in this session
     }
+    
+    console.log('Incrementing view count for project', projectId);
     
     // Add to viewed projects
     viewedProjects.push(projectId);
     sessionStorage.setItem('viewed_projects', JSON.stringify(viewedProjects));
     
     // Increment the view count
-    const { error } = await supabase.rpc('increment_project_view', { p_project_id: projectId });
+    const { error, data } = await supabase.rpc('increment_project_view', { p_project_id: projectId });
     
     if (error) {
       console.error('RPC error:', error);
       
       // Fallback: Directly update the view count if RPC fails
-      await supabase
+      const result = await supabase
         .from('projects')
         .update({ view_count: supabase.rpc('increment', { value: 'view_count' }) })
         .eq('id', projectId);
+        
+      console.log('Fallback update result:', result);
+    } else {
+      console.log('View incremented successfully:', data);
     }
   } catch (error) {
     console.error('Error incrementing project view:', error);
@@ -152,5 +176,30 @@ export const getRelatedProjects = async (
   } catch (error) {
     console.error('Error fetching related projects:', error);
     return [];
+  }
+};
+
+// Debug function to log all projects and their slugs
+export const debugListAllProjects = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('id, title, slug')
+      .order('created_at', { ascending: false });
+      
+    if (error) {
+      console.error('Error fetching projects for debug:', error);
+      return;
+    }
+    
+    console.log('=== ALL PROJECTS IN DATABASE ===');
+    data.forEach(project => {
+      console.log(`ID: ${project.id}, Title: ${project.title}, Slug: ${project.slug || 'NO SLUG'}`);
+    });
+    console.log('================================');
+    
+    return data;
+  } catch (error) {
+    console.error('Error in debug function:', error);
   }
 };

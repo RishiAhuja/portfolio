@@ -1,13 +1,16 @@
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProjectBySlug, getAllProjects, getRelatedProjects } from '@/lib/projects';
 import ProjectDetail from '@/components/project/ProjectDetail';
 import RelatedProjects from '@/components/project/RelatedProjects';
 import BackToTop from '@/components/ui/BackToTop';
+import { headers } from 'next/headers';
 
-// Force static rendering for this page
-export const dynamic = 'force-static';
-export const revalidate = 3600; // Revalidate every hour
+// Force server rendering at request time
+export const dynamic = 'force-dynamic';
+// Disable caching completely
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 // Define the correct params type
 type ProjectPageProps = {
@@ -16,19 +19,34 @@ type ProjectPageProps = {
   };
 };
 
-// Main page component - statically generated
+// This page uses server-side rendering to ensure view counts are dynamic
 export default async function ProjectPage({ params }: ProjectPageProps) {
+  // Add request headers for cache busting
+  const headersList = headers();
+  const referer = headersList.get('referer') || 'direct';
+  
   const { slug } = params;
 
-  // These will be fetched at build time for static paths
+  console.log(`Trying to load project with slug: "${slug}"`);
+
+  // Use the projects library function which handles the Supabase connection correctly
   const project = await getProjectBySlug(slug);
+    
   if (!project) {
+    console.error('Project not found with slug:', slug);
     notFound();
   }
-
-  // Get related projects statically
+  
+  console.log('Project found:', { 
+    id: project.id, 
+    title: project.title, 
+    slug: project.slug,
+    viewCount: project.view_count
+  });
+  
+  // Get related projects - also dynamic
   const relatedProjects = await getRelatedProjects(
-    project.id,
+    project.id, 
     project.category,
     3
   );
@@ -48,9 +66,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   );
 }
 
-// Generate metadata statically
-export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+// Generate metadata dynamically at request time
+export async function generateMetadata(
+  { params }: ProjectPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // Get timestamp to ensure fresh data
+  const timestamp = Date.now();
   const { slug } = params;
+  
+  // Use the getProjectBySlug function which handles Supabase correctly
   const project = await getProjectBySlug(slug);
   
   if (!project) {
@@ -59,6 +84,11 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       description: 'The requested project could not be found.',
     };
   }
+
+  // Ensure OG image is absolute URL
+  const imageUrl = project.image_url?.startsWith('http') 
+    ? project.image_url 
+    : `https://rishia.in/${project.image_url || 'og-image.jpg'}`;
 
   return {
     title: `${project.title} | Rishi's Portfolio`,
@@ -70,7 +100,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       siteName: 'Rishi Ahuja',
       images: [
         {
-          url: project.image_url || 'https://rishia.in/og-image.jpg',
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: project.title,
@@ -81,7 +111,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   };
 }
 
-// Keep the generateStaticParams function as is
+// Generate paths at build time, but keep the data fetching dynamic
 export async function generateStaticParams() {
   const projects = await getAllProjects();
   return projects.map((project) => ({

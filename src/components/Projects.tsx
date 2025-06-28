@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import { getAllProjects, Project } from '@/lib/projects';
+import { getAllProjects, Project, debugListAllProjects } from '@/lib/projects';
 import ProjectCardCompact from './ui/ProjectCardCompact';
 
 const Projects: React.FC = () => {
@@ -15,8 +15,17 @@ const Projects: React.FC = () => {
     const loadProjects = async () => {
       try {
         setIsLoading(true);
+        
+        // Debug: List all projects in the database
+        await debugListAllProjects();
+        
         const data = await getAllProjects();
-        setProjects(data);
+        
+        // Filter out projects without slugs to avoid navigation errors
+        const validProjects = data.filter(project => !!project.slug);
+        console.log(`Projects loaded: ${data.length}, valid projects with slugs: ${validProjects.length}`);
+        
+        setProjects(validProjects);
       } catch (err) {
         console.error('Error loading projects:', err);
         setError('Failed to load projects. Please try again later.');
