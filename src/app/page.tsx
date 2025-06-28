@@ -60,6 +60,17 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center">
       <JsonLd data={schema} />
       <Navigation /> {/* Add Navigation component */}
+      
+      {/* Header Navigation */}
+      <div className="fixed top-4 left-4 z-50">
+        <a 
+          href="/timeline" 
+          className="bg-bgShades-light border border-darkGrey px-4 py-2 rounded-sm text-accent hover:text-accent-light hover:border-accent-light transition-all font-ptMono text-sm"
+        >
+          📅 Timeline
+        </a>
+      </div>
+      
       <div className={`${isMobile ? 'w-full' : 'w-[65%]'} p-8`}>
         <section id="about">
           <AboutMe />
