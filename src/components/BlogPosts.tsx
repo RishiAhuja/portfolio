@@ -22,42 +22,37 @@ const BlogPosts: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const USERNAME = "rishi2220";
   
-  useEffect(() => {
-    const loadBlogPosts = async () => {
-      try {
-        setIsLoading(true);
-        console.log('Fetching Hashnode posts...');
-        
-        const data = await fetchHashnodePosts(USERNAME, 10);
-        console.log('Hashnode posts loaded:', data);
-        
-        const validPosts = Array.isArray(data) ? data : [];
-        setPosts(validPosts);
-        
-        if (validPosts.length === 0) {
-          setError('No blog posts found. Check username or network connection.');
-        }
-      } catch (err) {
-        console.error('Error fetching Hashnode posts:', err);
-        setError(`Failed to load blog posts: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadBlogPosts();
-  }, []);
-  
-  // Safe function to create a blog post snippet
-  const createSafeSnippet = (text: string | undefined | null): string => {
-    if (typeof text !== 'string') return 'No description available';
-    
+  const loadBlogPosts = async (forceRefresh = false) => {
     try {
-      return text.length > 60 ? text.slice(0, 60) + '...' : text;
-    } catch (e) {
-      return `No description available ${e instanceof Error ? e.message : ''}`;
+      setIsLoading(true);
+      console.log('Fetching Hashnode posts...');
+      
+      // Add timestamp to prevent caching
+      const timestamp = Date.now();
+      console.log(`Fetching posts at timestamp: ${timestamp}`);
+      
+      const data = await fetchHashnodePosts(USERNAME, 10);
+      console.log('Hashnode posts loaded:', data);
+      
+      const validPosts = Array.isArray(data) ? data : [];
+      setPosts(validPosts);
+      
+      if (validPosts.length === 0) {
+        setError('No blog posts found. Check username or network connection.');
+      } else {
+        setError(null);
+      }
+    } catch (err) {
+      console.error('Error fetching Hashnode posts:', err);
+      setError(`Failed to load blog posts: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
     }
   };
+  
+  useEffect(() => {
+    loadBlogPosts();
+  }, []);
   
   return (
     <div className="flex flex-col">
@@ -85,15 +80,17 @@ const BlogPosts: React.FC = () => {
             const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
             const link = getPostUrl(post);
             const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
-            const readTime = createSafeSnippet(post.brief);
+            
+            // Use slug as key for uniqueness, fallback to index
+            const uniqueKey = post.slug || post._id || `post-${index}`;
             
             return (
               <BlogPostItem
-                key={typeof post._id === 'string' ? post._id : `post-${index}`}
+                key={uniqueKey}
                 title={title}
                 link={link}
                 date={date}
-                readTime={readTime}
+                readTime={undefined} // Remove brief/readTime
               />
             );
           })}

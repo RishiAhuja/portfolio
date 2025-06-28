@@ -61,13 +61,19 @@ export default function Home() {
       <JsonLd data={schema} />
       <Navigation /> {/* Add Navigation component */}
       
-      {/* Header Navigation */}
-      <div className="fixed top-4 left-4 z-50">
+      {/* Timeline Navigation - Non-fixed */}
+      <div className="absolute top-0 right-0 z-40">
         <a 
           href="/timeline" 
-          className="bg-bgShades-light border border-darkGrey px-4 py-2 rounded-sm text-accent hover:text-accent-light hover:border-accent-light transition-all font-ptMono text-sm"
+          className="group flex items-center gap-2 bg-bgShades-light/80 backdrop-blur-sm border-l border-b border-darkGrey/30 px-4 py-3 
+          text-quillGray hover:text-accent transition-all duration-300 font-ptMono text-sm"
         >
-          📅 Timeline
+          <span>Year One</span>
+          <svg className="w-4 h-4 transition-all duration-300 group-hover:translate-x-1 opacity-70 group-hover:opacity-100" 
+            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </a>
       </div>
       

@@ -5,6 +5,10 @@ import ProjectDetail from '@/components/project/ProjectDetail';
 import RelatedProjects from '@/components/project/RelatedProjects';
 import BackToTop from '@/components/ui/BackToTop';
 
+// Force static rendering for this page
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every hour
+
 // Define the correct params type
 type ProjectPageProps = {
   params: {
@@ -12,15 +16,17 @@ type ProjectPageProps = {
   };
 };
 
-// Main page component
+// Main page component - statically generated
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = params;
 
+  // These will be fetched at build time for static paths
   const project = await getProjectBySlug(slug);
   if (!project) {
     notFound();
   }
 
+  // Get related projects statically
   const relatedProjects = await getRelatedProjects(
     project.id,
     project.category,
@@ -28,7 +34,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-codGray">
       <ProjectDetail project={project} />
 
       {relatedProjects.length > 0 && (
@@ -42,7 +48,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   );
 }
 
-// Also update the generateMetadata function
+// Generate metadata statically
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = params;
   const project = await getProjectBySlug(slug);
@@ -60,11 +66,11 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     openGraph: {
       title: `${project.title} | Rishi's Portfolio`,
       description: project.description,
-      url: `https://rishiahuja.dev/projects/${project.slug}`,
+      url: `https://rishia.in/projects/${project.slug}`,
       siteName: 'Rishi Ahuja',
       images: [
         {
-          url: project.image_url || 'https://rishiahuja.dev/og-image.jpg',
+          url: project.image_url || 'https://rishia.in/og-image.jpg',
           width: 1200,
           height: 630,
           alt: project.title,
