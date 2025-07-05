@@ -25,25 +25,21 @@ const BlogPosts: React.FC = () => {
   const loadBlogPosts = async (forceRefresh = false) => {
     try {
       setIsLoading(true);
-      console.log('Fetching Hashnode posts...');
-      
-      // Add timestamp to prevent caching
-      const timestamp = Date.now();
-      console.log(`Fetching posts at timestamp: ${timestamp}`);
+      setError(null);
+      console.log('🔄 Loading fresh blog posts...');
       
       const data = await fetchHashnodePosts(USERNAME, 10);
-      console.log('Hashnode posts loaded:', data);
+      console.log('✅ Fresh blog posts loaded:', data.length);
       
-      const validPosts = Array.isArray(data) ? data : [];
-      setPosts(validPosts);
-      
-      if (validPosts.length === 0) {
-        setError('No blog posts found. Check username or network connection.');
+      if (data && data.length > 0) {
+        setPosts(data);
+        console.log('📅 Latest post loaded:', data[0]?.title);
       } else {
-        setError(null);
+        console.warn('⚠️ No blog posts received from API');
+        setError('No blog posts found. Please check back later.');
       }
     } catch (err) {
-      console.error('Error fetching Hashnode posts:', err);
+      console.error('❌ Error loading blog posts:', err);
       setError(`Failed to load blog posts: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
@@ -59,9 +55,9 @@ const BlogPosts: React.FC = () => {
       <ExpandedContainer text="Blog Posts" />
       <div className="h-4" />
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="space-y-2 md:space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-darkGrey/30 h-16 rounded-sm animate-pulse"></div>
+            <div key={i} className="bg-darkGrey/30 h-16 md:h-20 rounded-sm animate-pulse"></div>
           ))}
         </div>
       ) : error ? (
@@ -73,7 +69,7 @@ const BlogPosts: React.FC = () => {
           No blog posts found. Check back soon!
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2 md:space-y-4">
           {posts.map((post, index) => {
             if (!post) return null;
             

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from '@/components/ui/ExpandedContainer';
 import FadeInSection from '@/components/ui/FadeInSection';
-import NeuralNetwork from '@/components/ui/NeuralNetwork';
+// import NeuralNetwork from '@/components/ui/NeuralNetwork';
 import Link from 'next/link';
 
 interface TimelineEvent {
@@ -41,6 +41,16 @@ const Timeline: React.FC = () => {
 
   const timelineData: Record<string, TimelineEvent[]> = {
     '2024-25': [
+      {
+        date: '5 July 2025',
+        title: 'Shamir\'s Secret Sharing Scheme and Multi Party Computation.',
+        type: 'blog',
+        description: 'Mathematical Blog (21 min read) exploring Shamir\'s Secret Sharing Scheme and Multi Party Computation for private key management.',
+        year: '2024-25',
+        buttons: [
+          { label: 'Read Blog', link: 'https://rishi2220.hashnode.dev/shamirs-secret-sharing-scheme-and-multi-party-computation', icon: 'blog' }
+        ]
+      },
       {
         date: '10 Jul 2025',
         title: 'Mess ERP with 6-way Infrastructure',
@@ -529,7 +539,7 @@ const Timeline: React.FC = () => {
 
       <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto py-12 relative`}>
         {/* Neural Network Visualization - neurons count matches timeline events */}
-        <NeuralNetwork eventCount={totalEventCount} />
+        {/* <NeuralNetwork eventCount={totalEventCount} /> */}
         {/* Subtle blur effect for the header */}
         <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-bgShades-light/5 to-transparent pointer-events-none"></div>
         
