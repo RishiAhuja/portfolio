@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from '@/components/ui/ExpandedContainer';
 import FadeInSection from '@/components/ui/FadeInSection';
-// import NeuralNetwork from '@/components/ui/NeuralNetwork';
 import Link from 'next/link';
+import { journeyPosts, JourneyPost } from '@/data/journey';
 
 interface TimelineEvent {
   date: string;
@@ -20,6 +20,176 @@ interface TimelineEvent {
     icon: 'github' | 'demo' | 'blog' | 'certificate' | 'video' | 'docs' | 'download' | 'external';
   }[];
 }
+
+const getButtonIcon = (iconType: string) => {
+  switch (iconType) {
+    case 'github':
+      return (
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+      );
+    case 'demo':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      );
+    case 'blog':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      );
+    case 'certificate':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+        </svg>
+      );
+    case 'video':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M13 16h-1.586a1 1 0 01-.707-.293l-2.414-2.414a1 1 0 00-.707-.293H7m9-5v.01M7 16v.01" />
+        </svg>
+      );
+    case 'docs':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      );
+    case 'download':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      );
+    case 'external':
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      );
+    default:
+      return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
+      );
+  }
+};
+
+interface TimelineCardProps {
+  item: TimelineEvent;
+  index: number;
+  findJourneyPost: (title: string, fallbackId: string) => JourneyPost | undefined;
+}
+
+const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPost }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const journeyPost = findJourneyPost(item.title, `timeline-${item.date}`);
+
+  return (
+    <div className="relative flex items-start">
+      {/* Improved Timeline dot - cleaner and more subtle */}
+      <div 
+        className="relative z-10 w-3 h-3 bg-accent rounded-full mt-6 mr-6 border-2 border-codGray
+          shadow-[0_0_8px_rgba(100,178,188,0.3)]"
+        style={{ 
+          animation: `dot-pulse 3s ease-in-out infinite ${index * 0.2}s`,
+        }}
+      >
+        {/* Subtle ring animation */}
+        <div className="absolute -inset-1 border border-accent/20 rounded-full animate-ping" 
+          style={{ animationDuration: '4s', animationDelay: `${index * 0.3}s` }}></div>
+      </div>
+      
+      {/* Timeline card - Simplified and cleaner */}
+      <div className="flex-1 mb-2">
+        <div 
+          className={`
+            border rounded-sm transition-all duration-300 relative group
+            ${isHovered ? 'border-accent shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] transform -translate-y-1' : 'border-darkGrey/30'}
+          `}
+          style={{ backgroundColor: '#191919' }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Accent corner */}
+          <div className={`absolute top-0 right-0 w-0 h-0 transition-all duration-300
+            border-t-[20px] border-r-[20px] 
+            ${isHovered ? 'border-t-accent border-r-accent' : 'border-t-transparent border-r-transparent'}`}>
+          </div>
+          
+          <div className="p-6">
+            {/* Header with Journey Link on the right */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1 pr-4">
+                <h3 className="text-xl font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gunSmoke leading-relaxed font-ptMono text-base">
+                  {item.description}
+                </p>
+              </div>
+              
+              {/* Journey Link - Subtle and on the right */}
+              {journeyPost && (
+                <Link
+                  href={`/journey/${journeyPost.slug}`}
+                  className="flex-shrink-0 text-xs font-ptMono text-gunSmoke hover:text-accent 
+                    transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5 mt-1"
+                >
+                  Read Journey →
+                </Link>
+              )}
+            </div>
+            
+            {/* Type and status pills */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="text-xs bg-darkGrey/30 text-gunSmoke px-3 py-1.5 rounded-sm font-ptMono">
+                {item.type}
+              </span>
+              {item.status && (
+                <span className="text-xs bg-accent/10 text-accent px-3 py-1.5 rounded-sm font-ptMono border border-accent/20">
+                  {item.status}
+                </span>
+              )}
+            </div>
+            
+            {/* Action Buttons */}
+            {item.buttons && item.buttons.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {item.buttons.map((button, buttonIndex) => (
+                  <a
+                    key={buttonIndex}
+                    href={button.link}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-ptMono 
+                      border border-darkGrey/50 text-gunSmoke hover:border-accent hover:text-accent 
+                      transition-all duration-200 rounded-sm hover:bg-accent/5"
+                    target={button.link.startsWith('#') ? '_self' : '_blank'}
+                    rel="noopener noreferrer"
+                  >
+                    {getButtonIcon(button.icon)}
+                    <span>{button.label}</span>
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* Bottom section */}
+            <div className="flex justify-between items-center pt-3 border-t border-darkGrey/20">
+              <span className="text-sm text-gunSmoke font-ptMono">
+                {item.date}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Timeline: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState('2024-25');
@@ -465,73 +635,23 @@ const Timeline: React.FC = () => {
     setTotalEventCount(count);
   }, []);
 
-  const getButtonIcon = (iconType: string) => {
-    switch (iconType) {
-      case 'github':
-        return (
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        );
-      case 'demo':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        );
-      case 'blog':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-          </svg>
-        );
-      case 'certificate':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-          </svg>
-        );
-      case 'video':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M13 16h-1.586a1 1 0 01-.707-.293l-2.414-2.414a1 1 0 00-.707-.293H7m9-5v.01M7 16v.01" />
-          </svg>
-        );
-      case 'docs':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        );
-      case 'download':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        );
-      case 'external':
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        );
-      default:
-        return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-          </svg>
-        );
-    }
-  };
-
   const currentData = timelineData[selectedYear] || [];
   const counts = getTypeCounts(currentData);
 
+  // Find related journey post for an event
+  const findJourneyPost = (eventTitle: string, eventId?: string): JourneyPost | undefined => {
+    return journeyPosts.find(post => 
+      post.eventId === eventId || 
+      post.title.toLowerCase().includes(eventTitle.toLowerCase().split(' ')[0]) ||
+      eventTitle.toLowerCase().includes(post.title.toLowerCase().split(' ')[0])
+    );
+  };
+
   return (
-    <main className="min-h-screen bg-codGray text-quillGray">
+    <main className="min-h-screen text-quillGray" style={{ backgroundColor: '#191919' }}>
       {/* Back to Home - with blur effect */}
       <div className={`${isMobile ? 'px-4' : 'px-8'} pt-8 sticky top-0 z-10`}>
-        <div className="absolute inset-0 bg-codGray/80 backdrop-blur-sm -z-10"></div>
+        <div className="absolute inset-0 backdrop-blur-sm -z-10" style={{ backgroundColor: 'rgba(25, 25, 25, 0.8)' }}></div>
         <Link href="/" className="inline-flex items-center text-accent hover:text-accent-light transition-colors font-ptMono">
           ← Back to Home
         </Link>
@@ -546,21 +666,19 @@ const Timeline: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12 relative">
           <h1 className="text-4xl font-bold font-ptMono text-quillGray mb-4">
-            First Year Timeline
+            Timeline
           </h1>
-          <p className="text-lg text-gunSmoke font-ptMono">
-            A chronological record of events
+          <p className="text-lg text-gunSmoke">
+            A chronological record of development milestones
           </p>
-          <div className="w-1/3 h-px bg-darkGrey mx-auto mt-4 relative overflow-hidden">
-            <div className="absolute left-0 top-0 h-full w-1/2 bg-accent-light opacity-60"></div>
-          </div>
+          <div className="w-24 h-px bg-accent mx-auto mt-6"></div>
         </div>
 
         {/* Year Selector */}
-        <div>
-          <div className="text-center mb-8">
-            <span className="text-gunSmoke font-ptMono text-sm">Academic Year 2024-25</span>
-          </div>
+        <div className="text-center mb-8">
+          <span className="text-gunSmoke text-sm px-3 py-1 border border-darkGrey/50 rounded-sm">
+            Academic Year 2024-25
+          </span>
         </div>
 
 
@@ -570,87 +688,31 @@ const Timeline: React.FC = () => {
           <div className="h-8" />
           
           <div className="relative">
-            {/* Timeline line with subtle glow */}
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-darkGrey"></div>
-            <div className="absolute left-4 top-0 h-8 w-0.5 bg-accent-light shadow-[0_0_10px_rgba(100,178,188,0.3)]"></div>
+            {/* Redesigned Timeline line - Clean and elegant */}
+            <div className="absolute left-5 top-0 bottom-0 w-px bg-darkGrey/30">
+              {/* Main timeline line */}
+              <div className="absolute inset-0 bg-gradient-to-b from-darkGrey/20 via-darkGrey/40 to-darkGrey/20"></div>
+              
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/10 to-transparent"></div>
+              
+              {/* Moving light accent - single, subtle animation */}
+              <div 
+                className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-accent/30 via-accent/10 to-transparent"
+                style={{
+                  animation: 'timeline-flow 15s ease-in-out infinite',
+                }}
+              ></div>
+            </div>
             
-            <div className="space-y-8">
+            <div className="space-y-12">
               {currentData.length > 0 ? currentData.map((item, index) => (
-                <div key={index} className="relative flex items-start">
-                  {/* Timeline dot with glow */}
-                  <div className="relative z-10 w-2 h-2 bg-accent rounded-full mt-6 mr-6 border-2 border-codGray shadow-[0_0_6px_rgba(100,178,188,0.4)]"></div>
-                  
-                  {/* Timeline card with glass effect */}
-                  <div className="flex-1">
-                    <div 
-                      className="border rounded-sm transition-all duration-300 h-full
-                        border-darkGrey hover:border-accent-light hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] hover:transform hover:-translate-y-1
-                        flex flex-col cursor-pointer group relative bg-codGray/70 backdrop-blur-[2px]"
-                    >
-                      {/* Accent corner */}
-                      <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
-                        border-t-[20px] border-r-[20px] 
-                        group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
-                      </div>
-                      
-                      <div className="p-4 flex-grow flex flex-col">
-                        {/* Header */}
-                        <h3 className="text-xl font-bold font-ptMono transition-colors duration-200
-                          group-hover:text-accent-light text-quillGray"
-                        >
-                          {item.title}
-                        </h3>
-                        
-                        <div className="h-2" />
-                        
-                        {/* Brief description */}
-                        <p className="text-sm text-gray-400 font-ptMono leading-relaxed mb-4">
-                          {item.description}
-                        </p>
-                        
-                        {/* Type and status pills */}
-                        <div className="flex flex-wrap gap-1 mt-auto mb-4">
-                          <span className="text-xs bg-darkGrey/50 text-gray-400 px-1.5 py-0.5 rounded-sm font-ptMono">
-                            {item.type}
-                          </span>
-                          {item.status && (
-                            <span className="text-xs bg-darkGrey/50 text-gray-400 px-1.5 py-0.5 rounded-sm font-ptMono">
-                              {item.status}
-                            </span>
-                          )}
-                        </div>
-                        
-                        {/* Action Buttons */}
-                        {item.buttons && item.buttons.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {item.buttons.map((button, buttonIndex) => (
-                              <a
-                                key={buttonIndex}
-                                href={button.link}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-ptMono 
-                                  border border-darkGrey text-gunSmoke hover:border-accent-light hover:text-accent-light 
-                                  transition-colors duration-200 rounded-sm bg-bgShades-light/50"
-                                target={button.link.startsWith('#') ? '_self' : '_blank'}
-                                rel="noopener noreferrer"
-                              >
-                                {getButtonIcon(button.icon)}
-                                <span>{button.label}</span>
-                              </a>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Bottom Actions */}
-                        <div className="flex justify-between items-center mt-auto">
-                          {/* Date */}
-                          <span className="text-xs text-gray-400 font-ptMono">
-                            {item.date}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <TimelineCard 
+                  key={index} 
+                  item={item} 
+                  index={index} 
+                  findJourneyPost={findJourneyPost}
+                />
               )) : (
                 <div className="text-center py-8">
                   <p className="text-gunSmoke font-ptMono">No timeline events found</p>
@@ -660,10 +722,42 @@ const Timeline: React.FC = () => {
           </div>
         </div>
 
+        {/* Improved CSS animation for timeline */}
+        <style jsx>{`
+          @keyframes timeline-flow {
+            0% {
+              transform: translateY(-100px);
+              opacity: 0;
+            }
+            10% {
+              opacity: 0.8;
+            }
+            90% {
+              opacity: 0.3;
+            }
+            100% {
+              transform: translateY(calc(100vh + 100px));
+              opacity: 0;
+            }
+          }
+          
+          @keyframes dot-pulse {
+            0%, 100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+            50% {
+              transform: scale(1.1);
+              opacity: 0.8;
+            }
+          }
+        `}</style>
+
         {/* Call to Action */}
         <div>
           <div className="text-center mt-16 p-8 border border-darkGrey rounded-sm hover:border-accent-light/50 transition-colors
-                          relative bg-bgShades-light/10 backdrop-blur-[1px]">
+                          relative backdrop-blur-[1px]"
+                          style={{ backgroundColor: 'rgba(26, 26, 26, 0.5)' }}>
             <div className="absolute inset-0 bg-gradient-to-t from-accent/3 to-transparent pointer-events-none"></div>
             <h2 className="text-2xl font-bold text-quillGray font-ptMono mb-4 relative">
               First Year Complete
@@ -674,7 +768,7 @@ const Timeline: React.FC = () => {
             <Link 
               href="/"
               className="inline-block border border-darkGrey hover:border-accent-light text-quillGray hover:text-accent-light px-6 py-3 rounded-sm transition-colors font-ptMono relative
-                        bg-bgShades-lighter/50 hover:bg-bgShades-lighter/80 backdrop-blur-sm"
+                        hover:bg-darkGrey/20 backdrop-blur-sm"
             >
               View Portfolio
             </Link>

@@ -10,9 +10,11 @@ import ContactSocial from '@/components/ContactSocial';
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import BackToTop from '@/components/ui/BackToTop';
+import ExpandedContainer from '@/components/ui/ExpandedContainer';
 import { useEffect, useState } from 'react';
 import FadeInSection from '@/components/ui/FadeInSection';
 import JsonLd from '@/components/JsonLd';
+import Link from 'next/link';
 
 export default function Home() {
   const schema = {
@@ -130,6 +132,100 @@ export default function Home() {
           </FadeInSection>
         </section>
         
+        <div className="h-8" />
+        
+        {/* Quick Links Section */}
+        <section id="explore">
+          <FadeInSection delay={200}>
+            <div className="flex flex-col">
+              <ExpandedContainer text="Explore More" />
+              <div className="h-4" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Link 
+                  href="/gallery"
+                  className="group relative border border-darkGrey/30 rounded-sm p-6 transition-all duration-300
+                    hover:border-accent/50 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.15)] hover:transform hover:-translate-y-0.5"
+                  style={{ backgroundColor: '#191919' }}
+                >
+                  {/* Accent corner */}
+                  <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
+                    border-t-[20px] border-r-[20px] 
+                    group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
+                  </div>
+                  
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-accent/10 rounded-sm flex items-center justify-center">
+                      <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-ptMono text-lg font-semibold text-quillGray group-hover:text-accent transition-colors">
+                      Gallery
+                    </h3>
+                  </div>
+                  <p className="text-gunSmoke leading-relaxed font-ptMono text-sm">
+                    A curated collection of moments, projects, and experiences captured through my lens.
+                  </p>
+                </Link>
+
+                <Link 
+                  href="/bucket-list"
+                  className="group relative border border-darkGrey/30 rounded-sm p-6 transition-all duration-300
+                    hover:border-accent/50 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.15)] hover:transform hover:-translate-y-0.5"
+                  style={{ backgroundColor: '#191919' }}
+                >
+                  {/* Accent corner */}
+                  <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
+                    border-t-[20px] border-r-[20px] 
+                    group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
+                  </div>
+                  
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-accent/10 rounded-sm flex items-center justify-center">
+                      <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                      </svg>
+                    </div>
+                    <h3 className="font-ptMono text-lg font-semibold text-quillGray group-hover:text-accent transition-colors">
+                      Bucket List
+                    </h3>
+                  </div>
+                  <p className="text-gunSmoke leading-relaxed font-ptMono text-sm">
+                    Goals, dreams, and aspirations I'm working towards in tech, travel, and personal growth.
+                  </p>
+                </Link>
+
+                <Link 
+                  href="/timeline"
+                  className="group relative border border-darkGrey/30 rounded-sm p-6 transition-all duration-300
+                    hover:border-accent/50 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.15)] hover:transform hover:-translate-y-0.5"
+                  style={{ backgroundColor: '#191919' }}
+                >
+                  {/* Accent corner */}
+                  <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
+                    border-t-[20px] border-r-[20px] 
+                    group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
+                  </div>
+                  
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-accent/10 rounded-sm flex items-center justify-center">
+                      <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-ptMono text-lg font-semibold text-quillGray group-hover:text-accent transition-colors">
+                      Timeline
+                    </h3>
+                  </div>
+                  <p className="text-gunSmoke leading-relaxed font-ptMono text-sm">
+                    A chronological journey through my first year of projects, achievements, and learning experiences.
+                  </p>
+                </Link>
+              </div>
+            </div>
+          </FadeInSection>
+        </section>
+
         <Footer />
       </div>
       <BackToTop /> {/* Add BackToTop component */}
