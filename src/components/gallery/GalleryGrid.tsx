@@ -22,13 +22,16 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ images, onImageClick, useBent
     );
   }
 
-  // Bento layout assigns different sizes to create visual interest
+  // Improved bento layout with better spacing and patterns
   const getBentoClass = (index: number) => {
+    // Create a more balanced pattern that fills space better
     const patterns = [
       'md:col-span-2 md:row-span-2', // Large
       'md:col-span-1 md:row-span-1', // Regular
+      'md:col-span-1 md:row-span-1', // Regular
       'md:col-span-1 md:row-span-2', // Tall
       'md:col-span-2 md:row-span-1', // Wide
+      'md:col-span-1 md:row-span-1', // Regular
       'md:col-span-1 md:row-span-1', // Regular
       'md:col-span-1 md:row-span-1', // Regular
     ];
@@ -36,8 +39,8 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ images, onImageClick, useBent
   };
 
   const gridClass = useBentoLayout 
-    ? "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[250px]"
-    : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4";
+    ? "grid grid-cols-1 md:grid-cols-3 gap-3 auto-rows-[180px] md:auto-rows-[200px]"
+    : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
 
   return (
     <div className={gridClass}>
@@ -45,7 +48,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({ images, onImageClick, useBent
         <div
           key={image.id}
           className={`group relative overflow-hidden rounded-sm bg-darkGrey/10 cursor-pointer border border-darkGrey/20 hover:border-accent/30 transition-all duration-300 ${
-            useBentoLayout ? `${getBentoClass(index)} aspect-auto` : 'aspect-square'
+            useBentoLayout ? `${getBentoClass(index)} aspect-auto` : 'aspect-square hover:scale-[1.02] hover:shadow-lg'
           }`}
           onClick={() => onImageClick(image, index)}
         >

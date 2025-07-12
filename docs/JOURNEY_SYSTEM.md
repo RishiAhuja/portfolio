@@ -35,13 +35,17 @@
 ### **Content Types Available:**
 ```typescript
 type ContentType = 
-  | 'paragraph'  // Regular text content
-  | 'heading'    // H1-H6 headings with level
-  | 'image'      // Images with alt text
-  | 'code'       // Code blocks with syntax highlighting
-  | 'quote'      // Blockquotes for emphasis
-  | 'list'       // Bulleted lists
-  | 'twitter';   // Twitter embed placeholders
+  | 'paragraph'   // Regular text content
+  | 'heading'     // H1-H6 headings with level
+  | 'image'       // Single images with alt text
+  | 'carousel'    // Multiple images in interactive gallery
+  | 'video'       // Local videos or YouTube embeds
+  | 'code'        // Code blocks with syntax highlighting
+  | 'quote'       // Blockquotes for emphasis
+  | 'list'        // Bulleted lists
+  | 'twitter'     // Twitter embed (with ads)
+  | 'tweetImage'  // Tweet screenshot + link (ad-free)
+  | 'linkEmbed';  // Link preview cards
 ```
 
 ### **Adding New Journey Posts:**
@@ -54,7 +58,7 @@ type ContentType =
   description: 'Brief description for cards',
   slug: 'url-friendly-slug',
   publishedDate: '2025-07-11',
-  readTime: 8, // minutes
+  readTime: 8, // minutes - now auto-calculated from content!
   coverImage: '/journey/your-cover.jpg',
   tags: ['tag1', 'tag2'],
   category: 'project' | 'learning' | 'experience' | 'achievement' | 'reflection',

@@ -66,9 +66,9 @@ export const galleryCategories: GalleryCategory[] = [
 export const galleryImages: GalleryImage[] = [
   {
     id: '1',
-    title: 'Development Setup',
+    title: 'Airbus',
     description: 'My current development environment setup',
-    imageUrl: '/gallery/setup-1.jpg',
+    imageUrl: '/gallery/airbus.jpg',
     category: 'tech',
     date: '2024-12-15',
     tags: ['setup', 'coding', 'workspace'],
@@ -77,9 +77,69 @@ export const galleryImages: GalleryImage[] = [
   },
   {
     id: '2',
-    title: 'Project Launch Day',
+    title: 'Car',
     description: 'Celebrating the launch of a major project',
-    imageUrl: '/gallery/launch-1.jpg',
+    imageUrl: '/gallery/car.jpg',
+    category: 'work',
+    date: '2024-11-20',
+    tags: ['project', 'launch', 'celebration'],
+    location: 'Office'
+  },
+  {
+    id: '3',
+    title: 'Egcad',
+    description: 'Celebrating the launch of a major project',
+    imageUrl: '/gallery/egcad.jpg',
+    category: 'work',
+    date: '2024-11-20',
+    tags: ['project', 'launch', 'celebration'],
+    location: 'Office'
+  },
+  {
+    id: '4',
+    title: 'Foundry',
+    description: 'Celebrating the launch of a major project',
+    imageUrl: '/gallery/foundry.jpg',
+    category: 'work',
+    date: '2024-11-20',
+    tags: ['project', 'launch', 'celebration'],
+    location: 'Office'
+  },
+  {
+    id: '4',
+    title: 'Hackmol',
+    description: 'Celebrating the launch of a major project',
+    imageUrl: '/gallery/id-hackmol.jpg',
+    category: 'work',
+    date: '2024-11-20',
+    tags: ['project', 'launch', 'celebration'],
+    location: 'Office'
+  },
+  {
+    id: '4',
+    title: 'Kisaan Mithra',
+    description: 'Celebrating the launch of a major project',
+    imageUrl: '/gallery/km-1.jpg',
+    category: 'work',
+    date: '2024-11-20',
+    tags: ['project', 'launch', 'celebration'],
+    location: 'Office'
+  },
+  {
+    id: '5',
+    title: 'Watch',
+    description: 'Celebrating the launch of a major project',
+    imageUrl: '/gallery/watch-1.jpg',
+    category: 'work',
+    date: '2024-11-20',
+    tags: ['project', 'launch', 'celebration'],
+    location: 'Office'
+  },
+  {
+    id: '6',
+    title: 'Station',
+    description: 'Celebrating the launch of a major project',
+    imageUrl: '/gallery/station.jpg',
     category: 'work',
     date: '2024-11-20',
     tags: ['project', 'launch', 'celebration'],

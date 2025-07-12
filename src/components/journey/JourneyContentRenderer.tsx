@@ -1,14 +1,29 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { JourneyContent } from '@/data/journey';
+import ImageCarousel from './ImageCarousel';
 
 interface JourneyContentRendererProps {
   content: JourneyContent[];
 }
 
+// Helper function to extract YouTube video ID from URL
+function extractYouTubeId(url: string): string | null {
+  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+}
+
 const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content }) => {
+  // Load Twitter widgets after component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).twttr?.widgets) {
+      (window as any).twttr.widgets.load();
+    }
+  }, [content]);
+
   const renderContent = (item: JourneyContent, index: number) => {
     switch (item.type) {
       case 'heading':
@@ -37,12 +52,13 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
       case 'image':
         return (
           <div key={index} className="mb-8">
-            <div className="relative w-full h-64 md:h-96 rounded-sm overflow-hidden">
+            <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ minHeight: '200px' }}>
               <Image
                 src={item.content!}
                 alt={item.alt || 'Journey image'}
-                fill
-                className="object-cover"
+                width={800}
+                height={600}
+                className="w-full h-auto object-contain"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
               />
             </div>
@@ -94,31 +110,180 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
         );
 
       case 'twitter':
+        // Only render if we have a valid tweet ID (real Twitter IDs are typically 19 digits)
+        if (!item.tweetId || item.tweetId.length < 15) {
+          // Skip invalid tweet IDs
+          return null;
+        }
+        
         return (
           <div key={index} className="mb-8 flex justify-center">
-            <div className="max-w-lg w-full border border-darkGrey/30 rounded-sm p-6" style={{ backgroundColor: '#1a1a1a' }}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-ptMono text-sm text-quillGray font-semibold">@username</p>
-                  <p className="font-ptMono text-xs text-gunSmoke">Twitter</p>
-                </div>
-              </div>
-              <p className="text-gunSmoke font-ptMono text-sm leading-relaxed mb-4">
-                This is a placeholder for Twitter embed with ID: {item.tweetId}
-              </p>
-              <div className="flex items-center gap-4 text-xs text-gunSmoke font-ptMono">
-                <span>12:34 PM · Jul 11, 2025</span>
-                <span>·</span>
-                <span className="text-accent">View on Twitter</span>
+            <div className="max-w-xl w-full">
+              {/* Real Twitter embed using Twitter's official embed API */}
+              <blockquote className="twitter-tweet" data-theme="dark">
+                <a href={`https://twitter.com/i/status/${item.tweetId}`}>
+                  Loading tweet...
+                </a>
+              </blockquote>
+              
+              {/* Fallback iframe if Twitter widget doesn't load */}
+              <div className="mt-4">
+                <iframe
+                  src={`https://twitframe.com/show?url=https://twitter.com/i/status/${item.tweetId}`}
+                  className="w-full border border-darkGrey/30 rounded-sm"
+                  style={{ 
+                    backgroundColor: '#1a1a1a',
+                    minHeight: '300px',
+                    height: '400px'
+                  }}
+                  frameBorder="0"
+                  scrolling="no"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
         );
+
+      case 'tweetImage':
+        return (
+          <div key={index} className="mb-8">
+            <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ minHeight: '200px' }}>
+              <Image
+                src={item.content!}
+                alt={item.alt || 'Tweet screenshot'}
+                width={800}
+                height={600}
+                className="w-full h-auto object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+              />
+            </div>
+            <div className="text-center mt-3">
+              {item.alt && (
+                <p className="text-sm text-gunSmoke font-ptMono mb-2 italic">
+                  {item.alt}
+                </p>
+              )}
+              {item.tweetUrl && (
+                <a 
+                  href={item.tweetUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-ptMono transition-colors"
+                >
+                  <span>🐦</span>
+                  View original tweet
+                </a>
+              )}
+            </div>
+          </div>
+        );
+
+      case 'linkEmbed':
+        const domain = item.domain || (item.content ? new URL(item.content).hostname : '');
+        return (
+          <div key={index} className="mb-8">
+            <a 
+              href={item.content} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block border border-darkGrey/30 rounded-sm overflow-hidden hover:border-accent/50 transition-colors bg-darkGrey/20 hover:bg-darkGrey/30"
+            >
+              <div className="flex">
+                {item.image && (
+                  <div className="w-32 h-24 flex-shrink-0">
+                    <Image
+                      src={item.image}
+                      alt={item.title || 'Link preview'}
+                      width={128}
+                      height={96}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex-1 p-4">
+                  <div className="text-xs text-gunSmoke font-ptMono mb-1 uppercase tracking-wide">
+                    {domain}
+                  </div>
+                  {item.title && (
+                    <h3 className="text-quillGray font-ptMono font-semibold text-sm mb-2 line-clamp-2">
+                      {item.title}
+                    </h3>
+                  )}
+                  {item.description && (
+                    <p className="text-gunSmoke font-ptMono text-xs line-clamp-2 leading-relaxed">
+                      {item.description}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className="text-accent text-xs">→</span>
+                    <span className="text-accent font-ptMono text-xs">Visit link</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        );
+
+      case 'carousel':
+        return (
+          <ImageCarousel
+            key={index}
+            images={item.images || []}
+            caption={item.caption}
+          />
+        );
+
+      case 'video':
+        const isYouTube = item.content?.includes('youtube.com') || item.content?.includes('youtu.be');
+        
+        if (isYouTube) {
+          // Extract YouTube video ID
+          const videoId = extractYouTubeId(item.content || '');
+          if (!videoId) return null;
+          
+          return (
+            <div key={index} className="mb-8">
+              <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title={item.alt || 'YouTube video'}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              {item.alt && (
+                <p className="text-sm text-gunSmoke font-ptMono mt-2 text-center italic">
+                  {item.alt}
+                </p>
+              )}
+            </div>
+          );
+        } else {
+          // Local video file
+          return (
+            <div key={index} className="mb-8">
+              <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10">
+                <video
+                  className="w-full h-auto"
+                  controls
+                  poster={item.poster}
+                  preload="metadata"
+                >
+                  <source src={item.content} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              {item.alt && (
+                <p className="text-sm text-gunSmoke font-ptMono mt-2 text-center italic">
+                  {item.alt}
+                </p>
+              )}
+            </div>
+          );
+        }
 
       default:
         return null;

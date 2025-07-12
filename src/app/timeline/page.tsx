@@ -88,14 +88,28 @@ interface TimelineCardProps {
 
 const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPost }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const journeyPost = findJourneyPost(item.title, `timeline-${item.date}`);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   return (
     <div className="relative flex items-start">
-      {/* Improved Timeline dot - cleaner and more subtle */}
+      {/* Improved Timeline dot - smaller on mobile */}
       <div 
-        className="relative z-10 w-3 h-3 bg-accent rounded-full mt-6 mr-6 border-2 border-codGray
-          shadow-[0_0_8px_rgba(100,178,188,0.3)]"
+        className={`relative z-10 bg-accent rounded-full border-2 border-codGray shadow-[0_0_8px_rgba(100,178,188,0.3)]
+          ${isMobile ? 'w-2.5 h-2.5 mt-4 mr-4' : 'w-3 h-3 mt-6 mr-6'}`}
         style={{ 
           animation: `dot-pulse 3s ease-in-out infinite ${index * 0.2}s`,
         }}
@@ -105,7 +119,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPos
           style={{ animationDuration: '4s', animationDelay: `${index * 0.3}s` }}></div>
       </div>
       
-      {/* Timeline card - Simplified and cleaner */}
+      {/* Timeline card - Responsive sizing */}
       <div className="flex-1 mb-2">
         <div 
           className={`
@@ -116,20 +130,22 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPos
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Accent corner */}
+          {/* Accent corner - smaller on mobile */}
           <div className={`absolute top-0 right-0 w-0 h-0 transition-all duration-300
-            border-t-[20px] border-r-[20px] 
+            ${isMobile ? 'border-t-[12px] border-r-[12px]' : 'border-t-[20px] border-r-[20px]'}
             ${isHovered ? 'border-t-accent border-r-accent' : 'border-t-transparent border-r-transparent'}`}>
           </div>
           
-          <div className="p-6">
+          <div className={isMobile ? "p-4" : "p-6"}>
             {/* Header with Journey Link on the right */}
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1 pr-4">
-                <h3 className="text-xl font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200 mb-2">
+            <div className={`flex items-start justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
+              <div className="flex-1 pr-3">
+                <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
+                  ${isMobile ? 'text-lg mb-2' : 'text-xl mb-2'}`}>
                   {item.title}
                 </h3>
-                <p className="text-gunSmoke leading-relaxed font-ptMono text-base">
+                <p className={`text-gunSmoke leading-relaxed font-ptMono
+                  ${isMobile ? 'text-sm' : 'text-base'}`}>
                   {item.description}
                 </p>
               </div>
@@ -138,8 +154,9 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPos
               {journeyPost && (
                 <Link
                   href={`/journey/${journeyPost.slug}`}
-                  className="flex-shrink-0 text-xs font-ptMono text-gunSmoke hover:text-accent 
-                    transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5 mt-1"
+                  className={`flex-shrink-0 font-ptMono text-gunSmoke hover:text-accent 
+                    transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5 mt-1
+                    ${isMobile ? 'text-xs' : 'text-xs'}`}
                 >
                   Read Journey →
                 </Link>
@@ -147,12 +164,14 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPos
             </div>
             
             {/* Type and status pills */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="text-xs bg-darkGrey/30 text-gunSmoke px-3 py-1.5 rounded-sm font-ptMono">
+            <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
+              <span className={`text-xs bg-darkGrey/30 text-gunSmoke rounded-sm font-ptMono
+                ${isMobile ? 'px-2 py-1' : 'px-3 py-1.5'}`}>
                 {item.type}
               </span>
               {item.status && (
-                <span className="text-xs bg-accent/10 text-accent px-3 py-1.5 rounded-sm font-ptMono border border-accent/20">
+                <span className={`text-xs bg-accent/10 text-accent rounded-sm font-ptMono border border-accent/20
+                  ${isMobile ? 'px-2 py-1' : 'px-3 py-1.5'}`}>
                   {item.status}
                 </span>
               )}
@@ -160,14 +179,15 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPos
             
             {/* Action Buttons */}
             {item.buttons && item.buttons.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
                 {item.buttons.map((button, buttonIndex) => (
                   <a
                     key={buttonIndex}
                     href={button.link}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-ptMono 
+                    className={`inline-flex items-center gap-2 font-ptMono 
                       border border-darkGrey/50 text-gunSmoke hover:border-accent hover:text-accent 
-                      transition-all duration-200 rounded-sm hover:bg-accent/5"
+                      transition-all duration-200 rounded-sm hover:bg-accent/5
+                      ${isMobile ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'}`}
                     target={button.link.startsWith('#') ? '_self' : '_blank'}
                     rel="noopener noreferrer"
                   >
@@ -180,7 +200,8 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index, findJourneyPos
 
             {/* Bottom section */}
             <div className="flex justify-between items-center pt-3 border-t border-darkGrey/20">
-              <span className="text-sm text-gunSmoke font-ptMono">
+              <span className={`text-gunSmoke font-ptMono
+                ${isMobile ? 'text-xs' : 'text-sm'}`}>
                 {item.date}
               </span>
             </div>
@@ -705,7 +726,7 @@ const Timeline: React.FC = () => {
               ></div>
             </div>
             
-            <div className="space-y-12">
+            <div className="space-y-8 md:space-y-12">
               {currentData.length > 0 ? currentData.map((item, index) => (
                 <TimelineCard 
                   key={index} 

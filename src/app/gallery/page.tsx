@@ -106,7 +106,7 @@ const GalleryPage: React.FC = () => {
           <GalleryGrid
             images={sortedImages}
             onImageClick={handleImageClick}
-            useBentoLayout={true}
+            useBentoLayout={false}
           />
 
           {/* Stats */}

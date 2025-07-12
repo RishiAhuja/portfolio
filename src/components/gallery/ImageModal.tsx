@@ -61,12 +61,12 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose, onNext,
 
         {/* Image info */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
-          <h3 className="text-xl font-playfair font-semibold mb-2">{image.title}</h3>
+          <h3 className="text-xl font-ptMono font-semibold mb-2">{image.title}</h3>
           {image.description && (
-            <p className="text-sm text-gray-300 mb-3">{image.description}</p>
+            <p className="text-sm text-gray-300 mb-3 font-ptMono">{image.description}</p>
           )}
           
-          <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+          <div className="flex flex-wrap gap-4 text-xs text-gray-400 font-ptMono">
             {image.location && (
               <span className="flex items-center gap-1">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -92,7 +92,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, isOpen, onClose, onNext,
               {image.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-1 bg-accent/20 text-accent text-xs rounded-sm border border-accent/30"
+                  className="px-2 py-1 bg-accent/20 text-accent text-xs rounded-sm border border-accent/30 font-ptMono"
                 >
                   #{tag}
                 </span>

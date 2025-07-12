@@ -1,12 +1,92 @@
+import { calculateReadTime } from '@/lib/readTime';
+
 // Journey/Timeline blog data structure
+// 
+// HOW TO ADD TWITTER CONTENT (AD-FREE):
+// Option 1: Screenshot + Link (Recommended)
+// 1. Take a screenshot of the tweet
+// 2. Save it in /public/journey/ folder
+// 3. Add as image with tweet link:
+//    {
+//      type: 'tweetImage',
+//      content: '/journey/tweet-screenshot.jpg',
+//      alt: 'Tweet by @username about...',
+//      tweetUrl: 'https://twitter.com/username/status/1234567890123456789'
+//    }
+//
+// Option 2: Live embed (has ads):
+//    {
+//      type: 'twitter',
+//      tweetId: '1234567890123456789'
+//    }
+//
+// HOW TO ADD IMAGES:
+// 1. Place your image in the /public/journey/ folder
+// 2. Reference it in your content like this:
+//    {
+//      type: 'image',
+//      content: '/journey/your-image.jpg',
+//      alt: 'Description of your image'
+//    }
+//
+// HOW TO ADD LINK EMBEDS:
+// 1. Add a link preview card like this:
+//    {
+//      type: 'linkEmbed',
+//      content: 'https://example.com/article',
+//      title: 'Article Title',
+//      description: 'Brief description of the link content',
+//      image: 'https://example.com/preview.jpg', // optional
+//      domain: 'example.com' // optional, auto-extracted if not provided
+//    }
+//
+// HOW TO ADD VIDEOS:
+// 1. For local videos, place them in /public/journey/ folder:
+//    {
+//      type: 'video',
+//      content: '/journey/demo-video.mp4',
+//      alt: 'Demo video showing the application',
+//      poster: '/journey/video-thumbnail.jpg' // optional poster image
+//    }
+// 2. For YouTube videos:
+//    {
+//      type: 'video',
+//      content: 'https://www.youtube.com/watch?v=VIDEO_ID',
+//      alt: 'YouTube video description'
+//    }
+//
+// HOW TO ADD IMAGE CAROUSEL/GALLERY:
+// 1. Place your images in the /public/journey/ folder
+// 2. Add multiple images in a single carousel:
+//    {
+//      type: 'carousel',
+//      images: [
+//        { src: '/journey/image1.jpg', alt: 'First image description' },
+//        { src: '/journey/image2.jpg', alt: 'Second image description' },
+//        { src: '/journey/image3.jpg', alt: 'Third image description' }
+//      ],
+//      caption: 'Optional caption for the entire carousel'
+//    }
+//
+// Images and videos maintain their original aspect ratio without cropping!
+// Read time is now calculated automatically based on content!
+
 export interface JourneyContent {
-  type: 'paragraph' | 'heading' | 'image' | 'code' | 'quote' | 'list' | 'twitter';
+  type: 'paragraph' | 'heading' | 'image' | 'code' | 'quote' | 'list' | 'twitter' | 'tweetImage' | 'linkEmbed' | 'carousel' | 'video';
   content?: string;
   level?: number; // for headings (h1, h2, etc.)
-  alt?: string; // for images
+  alt?: string; // for images and videos
   language?: string; // for code blocks
   items?: string[]; // for lists
-  tweetId?: string; // for twitter embeds
+  tweetId?: string; // for twitter embeds (with ads)
+  tweetUrl?: string; // for tweet image links (ad-free)
+  title?: string; // for link embeds
+  description?: string; // for link embeds
+  image?: string; // for link embeds
+  domain?: string; // for link embeds
+  images?: { src: string; alt: string }[]; // for carousel
+  caption?: string; // for carousel
+  poster?: string; // for video poster/thumbnail
 }
 
 export interface JourneyPost {
@@ -18,7 +98,7 @@ export interface JourneyPost {
   description: string;
   slug: string;
   publishedDate: string;
-  readTime: number; // in minutes
+  readTime?: number; // in minutes - auto-calculated if not provided
   coverImage?: string;
   tags: string[];
   category: 'project' | 'learning' | 'experience' | 'achievement' | 'reflection';
@@ -73,94 +153,270 @@ export const journeyCategories: JourneyCategory[] = [
   }
 ];
 
-// Sample journey posts
-export const journeyPosts: JourneyPost[] = [
-  {
-    id: 'fern',
-    projectId: 'fern', // Assuming you have a project with this ID
-    eventId: 'timeline-30 May 2025',
-    title: 'Building Fern: From Idea to Reality',
-    subtitle: 'The complete journey of developing a modern web application',
-    description: 'A detailed look into the development process of Fern, challenges faced, solutions implemented, and lessons learned along the way.',
-    slug: 'fern-development-journey',
-    publishedDate: '2024-03-15',
-    readTime: 12,
-    coverImage: '/journey/fern-cover.jpg',
-    tags: ['React', 'Next.js', 'Development', 'Web App', 'Project'],
-    category: 'project',
-    status: 'published',
-    content: [
-      {
-        type: 'heading',
-        content: 'The Beginning',
-        level: 2
-      },
-      {
-        type: 'paragraph',
-        content: 'It all started with a simple problem I encountered during my daily workflow. I needed a better way to organize and manage my development resources, and existing solutions didn\'t quite fit my needs.'
-      },
-      {
-        type: 'image',
-        content: '/journey/fern-initial-sketch.jpg',
-        alt: 'Initial sketches and wireframes for Fern'
-      },
-      {
-        type: 'heading',
-        content: 'Technical Decisions',
-        level: 2
-      },
-      {
-        type: 'paragraph',
-        content: 'Choosing the right tech stack was crucial. After evaluating several options, I decided to go with:'
-      },
-      {
-        type: 'list',
-        items: [
-          'Next.js 14 for the framework',
-          'TypeScript for type safety',
-          'Tailwind CSS for styling',
-          'Supabase for backend services',
-          'Vercel for deployment'
-        ]
-      },
-      {
-        type: 'heading',
-        content: 'Challenges Faced',
-        level: 2
-      },
-      {
-        type: 'paragraph',
-        content: 'The development wasn\'t without its challenges. The biggest hurdle was implementing real-time synchronization across multiple devices while maintaining performance.'
-      },
-      {
-        type: 'code',
-        content: `// Real-time sync implementation
-const handleRealtimeUpdates = useCallback((payload) => {
-  if (payload.eventType === 'INSERT') {
-    setData(prev => [...prev, payload.new]);
-  } else if (payload.eventType === 'UPDATE') {
-    setData(prev => prev.map(item => 
-      item.id === payload.new.id ? payload.new : item
-    ));
-  }
-}, []);`,
-        language: 'typescript'
-      },
-      {
-        type: 'heading',
-        content: 'Lessons Learned',
-        level: 2
-      },
-      {
-        type: 'quote',
-        content: 'The best code is not the cleverest code, but the code that solves the problem most effectively and can be easily understood by others.'
-      },
-      {
-        type: 'paragraph',
-        content: 'This project taught me the importance of user feedback early in the development process. Regular testing with real users helped shape the final product significantly.'
-      }
-    ]
-  },
+// Sample journey posts (raw data)
+const rawJourneyPosts: JourneyPost[] = [
+{
+  id: 'fern',
+  projectId: 'fern',
+  eventId: 'timeline-30 May 2025',
+  title: 'Building Fern',
+  subtitle: 'The complete journey of developing a modern web graphics library',
+  description: 'A deep dive into the development of Fern — a zero-dependency, Wasm-powered graphics and UI library built in C and C++. From early pixel buffers to a Flutter-like layout engine, this post documents the entire story.',
+  slug: 'fern',
+  publishedDate: '2024-03-15',
+//   readTime: 12,
+  tags: ['C++', 'Wasm', 'Graphics', 'UI', 'Layout Engine'],
+  category: 'project',
+  status: 'published',
+  content: [
+    {
+      type: 'heading',
+      content: 'Chapter 1',
+      level: 2
+    },
+    {
+      type: 'paragraph',
+      content: 'So it all started with a simple idea, to make a graphing library that was flexible and easy to use, which can make simple shapes on a canvas, and export it to image. I got into some work, made a simple implementation by spinning up a simple C project, and made some example scenes out of it. Here is one of them.'
+    },
+    {
+      type: 'image',
+      content: '/journey/fern/fern-initial.png',
+      alt: 'Initial sketches and wireframes for Fern'
+    },
+    {
+      type: 'paragraph',
+      content: 'Initially you could just export the image to PPM format, which is a simple image format. This is the first tweet I made about it:'
+    },
+    {
+      type: 'tweetImage',
+      content: '/journey/fern/tweets/t1.png',
+      alt: 'Tweet by @rishi2220 about Fern',
+      tweetUrl: 'https://twitter.com/rishi2220/status/1234567890123456789'
+    },
+    {
+      type: 'paragraph',
+      content: 'The response was better than expected. 12 people starred the project on GitHub. I wanted to develop it further, so I started working on it. I made a simple canvas renderer, which could render basic shapes like lines, circles, rectangles, and text. After basic bitmap-based rasterization made the project look complete, I was genuinely excited. This was the first image I created after adding features like gradients and text rendering.'
+    },
+    {
+      type: 'image',
+      content: '/journey/fern/cyberpunk.png',
+      alt: 'First render of Fern with basic shapes and text'
+    },
+    {
+      type: 'paragraph',
+      content: 'After that I thought about taking the same concept and rendering it on the web using Wasm. It worked, and I found some amazing use cases. It felt like I was making an interactive website but using my own written library. The syntax was inspired by Flutter, and I made it that way on purpose.'
+    },
+    {
+      type: 'tweetImage',
+      content: '/journey/fern/tweets/t2.png',
+      alt: 'Tweet by @rishi2220 about Fern',
+      tweetUrl: 'https://x.com/Rishi2220/status/1921201566410846390'
+    },
+    {
+      type: 'paragraph',
+      content: 'Eventually I made a life simulator using Fern. It was kind of amazing to see it come together. Zero dependency, interactive, and built using raw C compiled to Wasm. The name "Fern" is also inspired from Flutter. Here is the link to that life simulator:'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'Fern Life Simulator',
+      content: 'https://fern-life.web.app'
+    },
+    {
+      type: 'paragraph',
+      content: 'It was time to make it public. Yes, it wasn’t polished, but it worked. There was already a lot of proof of work. I quickly built a CLI, a documentation site, and a landing page. Here’s the page you might have seen if you know Fern:'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'Fern Documentation',
+      content: 'https://fern.rishia.in'
+    },
+    {
+      type: 'heading',
+      content: 'Chapter 2',
+      level: 2
+    },
+    {
+      type: 'paragraph',
+      content: 'I concluded the project for a while, but it always felt like there was more. During a random discussion, someone told me, “Till then, you’ll make a whole DSL.” And it hit me. I already had one — it just wasn’t well structured. So I decided to take it seriously. I started porting it to C++ to make it more robust and scalable. Proper widget systems, layout managers, just like how Flutter does it. And this was the starting point.'
+    },
+    {
+      type: 'paragraph',
+      content: 'Here’s a small gist of the syntax if you haven’t seen it yet.'
+    },
+    {
+      type: 'code',
+      content: `void draw() {
+    Draw::fill(Colors::DarkGray);
+    TextWidget(Point(50, 50), "Button Demo", 3, Colors::White);
+    std::string counterText = "Count: " + std::to_string(clickCount);
+    TextWidget(Point(50, 400), counterText.c_str(), 2, Colors::White);
+}
+
+int main() {
+    Fern::initialize(pixels, 800, 600);
+    setupUI();
+    Fern::setDrawCallback(draw);
+    Fern::startRenderLoop();
+    return 0;
+}`,
+      language: 'cpp'
+    },
+    {
+      type: 'paragraph',
+      content: 'I then wrote an actual layout engine. Before this, you had to manually place everything with coordinates, which meant no responsive design. With Row, Column, Expanded, Spacer — just like Flutter — Fern could now lay out widgets properly. This was the first working layout:'
+    },
+    {
+      type: 'image',
+      content: '/journey/fern/layout.png',
+      alt: 'Layouts in Fern'
+    },
+    {
+      type: 'paragraph',
+      content: 'I kept going. Can we make this cross-platform? Maybe web is not enough. What about desktop? So I made renderers for both Wasm and native Linux. And now it ran on Linux too. Then I got tired of the blocky bitmap fonts. I wanted real text — like proper font rendering. So I learned about font rasterization, built a tool, wrote a blog, plugged it into Fern, and suddenly we had native TTF support. Not perfect, but it worked.'
+    },
+    {
+      type: 'image',
+      content: '/journey/fern/hello.png',
+      alt: 'First TTF rasterized text in Fern'
+    },
+    {
+      type: 'paragraph',
+      content: 'This project taught me how design decisions directly impact developer experience. It also showed me the value of early feedback and quick iterations. But more importantly, it made me realize how deep and powerful even the simplest graphics systems can be when built from scratch.'
+    },
+    {
+      type: 'heading',
+      content: 'What Now?',
+      level: 2
+    },
+    {
+      type: 'paragraph',
+      content: 'Fern is not finished. In fact, I am still building it. Right now progress is slow. A lot of other things are taking time. But the goal is clear. Polish the CLI, refine the C++ API, make the docs better, and officially launch the whole project.'
+    },
+    {
+      type: 'paragraph',
+      content: 'If you have seen Fern before, know this. I am not done. The vision is still alive, and something better is coming soon.'
+    },
+  ]
+},
+
+{
+  id: 'openlearn',
+  projectId: 'openlearn',
+  eventId: 'timeline-13 Jun 2025',
+  title: 'Building OpenLearn',
+  subtitle: 'the complete journey of developing a modern cohort-based educational platform',
+  description: 'The story behind OpenLearn — a production-grade platform built for scalable, structured, and role-based education. This chapter traces how the first real version came to life in less than a week.',
+  slug: 'openlearn',
+  publishedDate: '2024-03-15',
+//   readTime: 10,
+  tags: ['TypeScript', 'Express', 'PostgreSQL', 'Prisma', 'Docker', 'Render', 'NeonDB'],
+  category: 'project',
+  status: 'published',
+  content: [
+    {
+      type: 'heading',
+      content: 'chapter 1',
+      level: 2
+    },
+    {
+      type: 'paragraph',
+      content: 'The idea for OpenLearn started in a casual conversation with a friend from IIT Kanpur. We discussed how seniors could actively involve juniors in real projects, creating a space where learning happens through doing. That evolved into something much bigger, a cohort-based, role-driven learning model built around structure, progress, and autonomy. This was the very first webpage that captured that early version.'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'Initial webpage for OpenLearn',
+      content: 'https://openlearnnitj.web.app/'
+    },
+    {
+      type: 'paragraph',
+      content: 'We wanted OpenLearn to focus on practical domains like finance and machine learning. The ones that don’t get enough attention in traditional classrooms. To test the idea, we launched ML Fest, a 3-day college-wide event. The turnout, retention, and response told us we were onto something real.'
+    },
+    {
+      type: 'carousel',
+      images: [
+        { src: '/journey/openlearn/mlfest/1.jpeg', alt: 'Workshop session at ML Fest' },
+        { src: '/journey/openlearn/mlfest/2.jpeg', alt: 'Live coding session' },
+        { src: '/journey/openlearn/mlfest/3.jpeg', alt: 'Team Q&A panel' }
+      ],
+      caption: 'snapshots from ML Fest'
+    },
+    {
+      type: 'paragraph',
+      content: 'The success of the event gave us momentum. On June 9, 2025, we held an offline orientation at NIT Jalandhar. Over 70 students attended, and the first OpenLearn cohort was officially live.'
+    },
+    {
+      type: 'carousel',
+      images: [
+        { src: '/journey/openlearn/mlfest/1.jpeg', alt: 'Students during orientation' },
+        { src: '/journey/openlearn/mlfest/2.jpeg', alt: 'Cohort introduction session' },
+        { src: '/journey/openlearn/mlfest/3.jpeg', alt: 'OpenLearn kickoff' }
+      ],
+      caption: 'cohort commencement'
+    },
+    {
+      type: 'paragraph',
+      content: 'We could have managed everything on WhatsApp and Google Sheets. But we knew we needed to build it the right way — a real system with logins, access control, learning paths, submissions, and real-time progress tracking. Two of us sat through the night and built it. OpenLearn was coded, tested, and deployed in under half a week.'    },
+    {
+      type: 'paragraph',
+      content: 'The backend was built with TypeScript, Express.js, and Prisma, running on PostgreSQL. Over 25 tables were designed, 100+ endpoints written, all containerized with Docker. We used Render for deployment, NeonDB for the database, and Vercel for the frontend.'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'OpenLearn live platform',
+      content: 'https://openlearn.org.in/'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'OpenLearn GitHub',
+      content: 'https://github.com/openlearnnitj/'
+    },
+    {
+      type: 'paragraph',
+      content: 'Everything ran smoother than expected. The platform handled live traffic from 120+ users, with a complete status system, zero downtime, and full observability from day one.'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'OpenLearn Status Page',
+      content: 'https://api.openlearn.org.in/status-page'
+    },
+    {
+      type: 'paragraph',
+      content: 'Eventually, we hit NeonDB’s free-tier limits. But even that didn’t break us. We migrated the entire system — data, users, progress — to a new PostgreSQL instance with zero downtime. It was the first major incident, and it proved the resilience of the system.'
+    },
+    {
+      type: 'image',
+      content: '/journey/openlearn/neondb.png',
+      alt: 'NeonDB usage warning'
+    },
+    {
+      type: 'paragraph',
+      content: 'To scale properly, we moved to a self-managed EC2 server. We hardened the deployment, added Redis caching, wrote CI/CD pipelines, and added a real health monitoring layer. Now, OpenLearn runs on a stable, high-performance infrastructure built for real education at scale. Here are some images while development of the LMS:'
+    },
+    {
+      type: 'carousel',
+      images: [
+        { src: '/journey/openlearn/dev1.jpeg', alt: 'Students during orientation' },
+        { src: '/journey/openlearn/dev2.jpeg', alt: 'Cohort introduction session' },
+      ],
+      caption: 'Development images'
+    },
+    {
+      type: 'paragraph',
+      content: 'Looking back, the only reason this came together was because we had a small, high-agency, high-vision team. That’s what it takes. Not just code, not just deadlines, clarity of purpose and people who execute.'
+    },
+    {
+      type: 'paragraph',
+      content: 'We are now preparing for our biggest project yet — a large-scale, nationwide college hackathon powered by OpenLearn. The announcement will be coming soon.'
+    },
+    {
+      type: 'paragraph',
+      content: 'This is just chapter 1. More stories from behind the scenes are coming soon.'
+    }
+  ]
+},
+
+
+
   {
     id: 'conduit-http-client-journey',
     eventId: 'timeline-20 May 2025',
@@ -466,5 +722,96 @@ type UserResponse = ApiResponse<DeepReadonly<User>>;`,
         language: 'typescript'
       }
     ]
+  },
+  {
+    id: 'nextjs-documentation',
+    title: 'Next.js Documentation',
+    subtitle: 'The React Framework for Production',
+    description: 'Next.js gives you the best developer experience with all the features you need for production.',
+    slug: 'nextjs-documentation',
+    publishedDate: '2024-01-10',
+    readTime: 5,
+    coverImage: '/journey/nextjs-docs.jpg',
+    tags: ['Next.js', 'React', 'Documentation', 'Web Development'],
+    category: 'learning',
+    status: 'published',
+    content: [
+      {
+        type: 'heading',
+        content: 'Introduction to Next.js',
+        level: 2
+      },
+      {
+        type: 'paragraph',
+        content: 'Next.js is a React framework that enables functionality such as server-side rendering and generating static websites for React-based web applications.'
+      },
+      {
+        type: 'linkEmbed',
+        content: 'https://nextjs.org/docs',
+        title: 'Next.js Documentation',
+        description: 'The React Framework for Production. Next.js gives you the best developer experience with all the features you need for production.',
+        image: 'https://nextjs.org/static/blog/next-13/twitter-card.png',
+        domain: 'nextjs.org'
+      },
+      {
+        type: 'heading',
+        content: 'Getting Started',
+        level: 2
+      },
+      {
+        type: 'paragraph',
+        content: 'To get started with Next.js, you can follow the official documentation which provides a comprehensive guide on setting up a new Next.js project.'
+      },
+      {
+        type: 'code',
+        content: `npx create-next-app@latest my-nextjs-app
+cd my-nextjs-app
+npm run dev`,
+        language: 'bash'
+      },
+      {
+        type: 'heading',
+        content: 'Key Features',
+        level: 2
+      },
+      {
+        type: 'list',
+        items: [
+          'Server-side rendering',
+          'Static site generation',
+          'API routes',
+          'Incremental static regeneration',
+          'Built-in CSS and Sass support'
+        ]
+      },
+      {
+        type: 'heading',
+        content: 'Conclusion',
+        level: 2
+      },
+      {
+        type: 'paragraph',
+        content: 'Next.js is a powerful React framework that provides a rich set of features to build production-ready web applications. Its flexibility and performance make it a popular choice among developers.'
+      }
+    ]
   }
 ];
+
+// Process journey posts to calculate read time automatically
+export const processedJourneyPosts: JourneyPost[] = rawJourneyPosts.map((post: JourneyPost) => ({
+  ...post,
+  readTime: post.readTime || calculateReadTime(post.content)
+}));
+
+// Export processed posts as main export
+export const journeyPosts = processedJourneyPosts;
+
+// Helper function to get a journey post by slug with calculated read time
+export function getJourneyPostBySlug(slug: string): JourneyPost | undefined {
+  return processedJourneyPosts.find(post => post.slug === slug);
+}
+
+// Helper function to get all published journey posts with calculated read time
+export function getPublishedJourneyPosts(): JourneyPost[] {
+  return processedJourneyPosts.filter(post => post.status === 'published');
+}

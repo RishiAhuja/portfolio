@@ -62,6 +62,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Twitter Widget Script for Twitter Embeds */}
+        <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+      </head>
       <body className={`${ptMono.variable} ${inter.variable} ${playfair.variable} bg-codGray text-quillGray dark:bg-bgShades-dark dark:text-quillGray transition-colors duration-300`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
