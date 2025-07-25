@@ -39,7 +39,6 @@ export interface PostUrlData {
 
 export const fetchHashnodePosts = async (username: string, limit: number = 10): Promise<HashnodePost[]> => {
   try {
-    console.log(`🚀 NEW API: Fetching latest posts for ${username}`);
     
     const query = `
       query PublicationPosts($host: String!, $first: Int!) {
@@ -81,7 +80,6 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
       first: limit,
     };
     
-    console.log('📡 Making fresh request to Hashnode v2 API...');
     
     // Use current timestamp to force fresh request
     const timestamp = Date.now();
@@ -105,7 +103,6 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     }
     
     const data = await response.json();
-    console.log('📦 Fresh API response received');
     
     if (data.errors) {
       console.error('❌ GraphQL errors:', data.errors);
@@ -123,7 +120,6 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     }
     
     const edges = data.data.publication.posts.edges;
-    console.log(`📝 Processing ${edges.length} fresh posts from API`);
     
     // Transform the data with proper URL construction
     const posts = edges.map(({ node }: { node: HashnodeGraphQLNode }) => {
@@ -139,7 +135,6 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
         directUrl: node.url,
       };
       
-      console.log(`📄 Fresh post: "${post.title}" published: ${post.dateAdded}`);
       return post;
     });
     
@@ -149,16 +144,11 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
       const dateB = new Date(b.dateAdded).getTime();
       return dateB - dateA;
     });
-    
-    console.log(`✅ Successfully fetched ${posts.length} fresh posts`);
-    if (posts.length > 0) {
-      console.log(`📅 Latest post: "${posts[0].title}" (${posts[0].dateAdded})`);
-    }
+
     
     return posts;
     
   } catch (error) {
-    console.error('❌ Error fetching latest Hashnode posts:', error);
     throw error;
   }
 };

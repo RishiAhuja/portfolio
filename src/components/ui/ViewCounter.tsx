@@ -25,7 +25,6 @@ const ViewCounter: React.FC<ViewCounterProps> = ({ projectId, viewCount = 0 }) =
         );
         
         if (viewedProjects.includes(projectId)) {
-          console.log('Project already viewed in this session');
           setIsLoading(false);
           return; // Already viewed
         }
@@ -34,7 +33,6 @@ const ViewCounter: React.FC<ViewCounterProps> = ({ projectId, viewCount = 0 }) =
         viewedProjects.push(projectId);
         sessionStorage.setItem('viewed_projects', JSON.stringify(viewedProjects));
         
-        console.log('Incrementing view for project', projectId);
         
         // Use the API route to increment and get the updated count
         const response = await fetch('/api/project-view', {
@@ -47,7 +45,6 @@ const ViewCounter: React.FC<ViewCounterProps> = ({ projectId, viewCount = 0 }) =
         const result = await response.json();
         
         if (response.ok && result.view_count) {
-          console.log('View count updated:', result.view_count);
           setCount(result.view_count);
         } else {
           console.error('Failed to update view count:', result);

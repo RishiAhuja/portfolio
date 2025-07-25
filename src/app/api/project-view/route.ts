@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log(`API: Incrementing view for project ${projectId}`);
 
     // Increment the view count
     const { error, data } = await supabase.rpc('increment_project_view', { 
@@ -25,7 +24,6 @@ export async function POST(request: NextRequest) {
     });
     
     if (error) {
-      console.error('Failed to increment view count:', error);
       
       // Fallback
       const result = await supabase
@@ -60,7 +58,6 @@ export async function POST(request: NextRequest) {
       view_count: updatedProject?.view_count
     });
   } catch (error) {
-    console.error('Error processing view increment:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

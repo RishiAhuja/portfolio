@@ -26,16 +26,12 @@ const BlogPosts: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      console.log('🔄 Loading fresh blog posts...');
       
       const data = await fetchHashnodePosts(USERNAME, 10);
-      console.log('✅ Fresh blog posts loaded:', data.length);
       
       if (data && data.length > 0) {
         setPosts(data);
-        console.log('📅 Latest post loaded:', data[0]?.title);
       } else {
-        console.warn('⚠️ No blog posts received from API');
         setError('No blog posts found. Please check back later.');
       }
     } catch (err) {

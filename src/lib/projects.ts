@@ -66,7 +66,6 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
   try {
     // Use regular supabase client which has environment variables properly set
     const timestamp = Date.now(); // Add timestamp for logging
-    console.log(`Fetching project with slug ${slug} at ${timestamp}`);
     
     const { data, error } = await supabase
       .from('projects')
@@ -75,24 +74,13 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
       .single();
 
     if (error) {
-      console.error(`Error fetching project with slug "${slug}":`, error);
       throw error;
     }
 
     if (!data) {
-      console.log(`No project found with slug "${slug}"`);
       return null;
     }
 
-    // We'll handle view counting separately in a client component
-    // This avoids the sessionStorage error in server components
-    
-    console.log(`Fetched project ${slug} at ${timestamp}:`, {
-      id: data.id,
-      title: data.title,
-      slug: data.slug,
-      viewCount: data.view_count
-    });
 
     return data;
   } catch (error) {
@@ -117,12 +105,10 @@ export const incrementProjectView = async (projectId: string): Promise<void> => 
     );
     
     if (viewedProjects.includes(projectId)) {
-      console.log('Project already viewed in this session, skipping increment');
       return; // Already viewed in this session
     }
     
-    console.log('Incrementing view count for project', projectId);
-    
+   
     // Add to viewed projects
     viewedProjects.push(projectId);
     sessionStorage.setItem('viewed_projects', JSON.stringify(viewedProjects));
@@ -139,9 +125,6 @@ export const incrementProjectView = async (projectId: string): Promise<void> => 
         .update({ view_count: supabase.rpc('increment', { value: 'view_count' }) })
         .eq('id', projectId);
         
-      console.log('Fallback update result:', result);
-    } else {
-      console.log('View incremented successfully:', data);
     }
   } catch (error) {
     console.error('Error incrementing project view:', error);
@@ -191,13 +174,7 @@ export const debugListAllProjects = async () => {
       console.error('Error fetching projects for debug:', error);
       return;
     }
-    
-    console.log('=== ALL PROJECTS IN DATABASE ===');
-    data.forEach(project => {
-      console.log(`ID: ${project.id}, Title: ${project.title}, Slug: ${project.slug || 'NO SLUG'}`);
-    });
-    console.log('================================');
-    
+     
     return data;
   } catch (error) {
     console.error('Error in debug function:', error);

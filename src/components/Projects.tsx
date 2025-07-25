@@ -23,7 +23,6 @@ const Projects: React.FC = () => {
         
         // Filter out projects without slugs to avoid navigation errors
         const validProjects = data.filter(project => !!project.slug);
-        console.log(`Projects loaded: ${data.length}, valid projects with slugs: ${validProjects.length}`);
         
         setProjects(validProjects);
       } catch (err) {

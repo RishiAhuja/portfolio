@@ -40,13 +40,19 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
   if (images.length === 1) {
     return (
       <div className="mb-8">
-        <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ minHeight: '200px' }}>
+        <div 
+          className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10 flex items-center justify-center"
+          style={{ 
+            height: '400px', // Fixed height for consistency
+            aspectRatio: '16/10'
+          }}
+        >
           <Image
             src={images[0].src}
             alt={images[0].alt}
             width={800}
             height={600}
-            className="w-full h-auto object-contain"
+            className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
           />
         </div>
@@ -61,18 +67,22 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
 
   return (
     <div className="mb-8">
-      <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ minHeight: '200px' }}>
+      <div 
+        className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10 flex items-center justify-center"
+        style={{ 
+          height: '400px', // Fixed height for consistency
+          aspectRatio: '16/10'
+        }}
+      >
         {/* Main Image */}
-        <div className="relative w-full h-auto">
-          <Image
-            src={images[currentIndex].src}
-            alt={images[currentIndex].alt}
-            width={800}
-            height={600}
-            className="w-full h-auto object-contain"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-          />
-        </div>
+        <Image
+          src={images[currentIndex].src}
+          alt={images[currentIndex].alt}
+          width={800}
+          height={600}
+          className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+        />
 
         {/* Navigation Arrows */}
         <button

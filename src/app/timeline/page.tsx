@@ -661,11 +661,8 @@ const Timeline: React.FC = () => {
 
   // Find related journey post for an event
   const findJourneyPost = (eventTitle: string, eventId?: string): JourneyPost | undefined => {
-    return journeyPosts.find(post => 
-      post.eventId === eventId || 
-      post.title.toLowerCase().includes(eventTitle.toLowerCase().split(' ')[0]) ||
-      eventTitle.toLowerCase().includes(post.title.toLowerCase().split(' ')[0])
-    );
+    // Only use exact eventId matching to avoid false positives
+    return journeyPosts.find(post => post.eventId === eventId);
   };
 
   return (

@@ -135,7 +135,7 @@ export default function Home() {
         <div className="h-8" />
         
         {/* Quick Links Section */}
-        <section id="explore">
+        {/* <section id="explore">
           <FadeInSection delay={200}>
             <div className="flex flex-col">
               <ExpandedContainer text="Explore More" />
@@ -146,9 +146,9 @@ export default function Home() {
                   className="group relative border border-darkGrey/30 rounded-sm p-6 transition-all duration-300
                     hover:border-accent/50 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.15)] hover:transform hover:-translate-y-0.5"
                   style={{ backgroundColor: '#191919' }}
-                >
+                > */}
                   {/* Accent corner */}
-                  <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
+                  {/* <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
                     border-t-[20px] border-r-[20px] 
                     group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
                   </div>
@@ -169,40 +169,13 @@ export default function Home() {
                 </Link>
 
                 <Link 
-                  href="/bucket-list"
-                  className="group relative border border-darkGrey/30 rounded-sm p-6 transition-all duration-300
-                    hover:border-accent/50 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.15)] hover:transform hover:-translate-y-0.5"
-                  style={{ backgroundColor: '#191919' }}
-                >
-                  {/* Accent corner */}
-                  <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
-                    border-t-[20px] border-r-[20px] 
-                    group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
-                  </div>
-                  
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-accent/10 rounded-sm flex items-center justify-center">
-                      <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                      </svg>
-                    </div>
-                    <h3 className="font-ptMono text-lg font-semibold text-quillGray group-hover:text-accent transition-colors">
-                      Bucket List
-                    </h3>
-                  </div>
-                  <p className="text-gunSmoke leading-relaxed font-ptMono text-sm">
-                    Goals, dreams, and aspirations I'm working towards in tech, travel, and personal growth.
-                  </p>
-                </Link>
-
-                <Link 
                   href="/timeline"
                   className="group relative border border-darkGrey/30 rounded-sm p-6 transition-all duration-300
                     hover:border-accent/50 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.15)] hover:transform hover:-translate-y-0.5"
                   style={{ backgroundColor: '#191919' }}
-                >
+                > */}
                   {/* Accent corner */}
-                  <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
+                  {/* <div className="absolute top-0 right-0 w-0 h-0 transition-all duration-300
                     border-t-[20px] border-r-[20px] 
                     group-hover:border-t-accent group-hover:border-r-accent border-t-transparent border-r-transparent">
                   </div>
@@ -224,7 +197,7 @@ export default function Home() {
               </div>
             </div>
           </FadeInSection>
-        </section>
+        </section> */}
 
         <Footer />
       </div>

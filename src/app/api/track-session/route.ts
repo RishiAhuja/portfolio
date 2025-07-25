@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
       }]);
       
     if (error) {
-      console.error('Error tracking session:', error);
       return NextResponse.json(
         { success: false, message: 'Database error' },
         { status: 500 }
@@ -45,7 +44,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
     
   } catch (error) {
-    console.error('Error in track-session API route:', error);
     return NextResponse.json(
       { success: false, message: 'Server error' },
       { status: 500 }

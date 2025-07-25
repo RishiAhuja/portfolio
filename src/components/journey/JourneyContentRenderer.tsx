@@ -52,13 +52,19 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
       case 'image':
         return (
           <div key={index} className="mb-8">
-            <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ minHeight: '200px' }}>
+            <div 
+              className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10 flex items-center justify-center"
+              style={{ 
+                height: '400px', // Fixed height for consistency
+                aspectRatio: '16/10'
+              }}
+            >
               <Image
-                src={item.content!}
+                src={(item.content!)}
                 alt={item.alt || 'Journey image'}
                 width={800}
                 height={600}
-                className="w-full h-auto object-contain"
+                className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
               />
             </div>
@@ -148,13 +154,19 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
       case 'tweetImage':
         return (
           <div key={index} className="mb-8">
-            <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10" style={{ minHeight: '200px' }}>
+            <div 
+              className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10 flex items-center justify-center"
+              style={{ 
+                height: '400px', // Fixed height for consistency
+                aspectRatio: '16/10'
+              }}
+            >
               <Image
                 src={item.content!}
                 alt={item.alt || 'Tweet screenshot'}
                 width={800}
                 height={600}
-                className="w-full h-auto object-contain"
+                className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
               />
             </div>

@@ -1,75 +1,5 @@
+import { BLOB_PATTERNS } from '@/lib/blobStorage';
 import { calculateReadTime } from '@/lib/readTime';
-
-// Journey/Timeline blog data structure
-// 
-// HOW TO ADD TWITTER CONTENT (AD-FREE):
-// Option 1: Screenshot + Link (Recommended)
-// 1. Take a screenshot of the tweet
-// 2. Save it in /public/journey/ folder
-// 3. Add as image with tweet link:
-//    {
-//      type: 'tweetImage',
-//      content: '/journey/tweet-screenshot.jpg',
-//      alt: 'Tweet by @username about...',
-//      tweetUrl: 'https://twitter.com/username/status/1234567890123456789'
-//    }
-//
-// Option 2: Live embed (has ads):
-//    {
-//      type: 'twitter',
-//      tweetId: '1234567890123456789'
-//    }
-//
-// HOW TO ADD IMAGES:
-// 1. Place your image in the /public/journey/ folder
-// 2. Reference it in your content like this:
-//    {
-//      type: 'image',
-//      content: '/journey/your-image.jpg',
-//      alt: 'Description of your image'
-//    }
-//
-// HOW TO ADD LINK EMBEDS:
-// 1. Add a link preview card like this:
-//    {
-//      type: 'linkEmbed',
-//      content: 'https://example.com/article',
-//      title: 'Article Title',
-//      description: 'Brief description of the link content',
-//      image: 'https://example.com/preview.jpg', // optional
-//      domain: 'example.com' // optional, auto-extracted if not provided
-//    }
-//
-// HOW TO ADD VIDEOS:
-// 1. For local videos, place them in /public/journey/ folder:
-//    {
-//      type: 'video',
-//      content: '/journey/demo-video.mp4',
-//      alt: 'Demo video showing the application',
-//      poster: '/journey/video-thumbnail.jpg' // optional poster image
-//    }
-// 2. For YouTube videos:
-//    {
-//      type: 'video',
-//      content: 'https://www.youtube.com/watch?v=VIDEO_ID',
-//      alt: 'YouTube video description'
-//    }
-//
-// HOW TO ADD IMAGE CAROUSEL/GALLERY:
-// 1. Place your images in the /public/journey/ folder
-// 2. Add multiple images in a single carousel:
-//    {
-//      type: 'carousel',
-//      images: [
-//        { src: '/journey/image1.jpg', alt: 'First image description' },
-//        { src: '/journey/image2.jpg', alt: 'Second image description' },
-//        { src: '/journey/image3.jpg', alt: 'Third image description' }
-//      ],
-//      caption: 'Optional caption for the entire carousel'
-//    }
-//
-// Images and videos maintain their original aspect ratio without cropping!
-// Read time is now calculated automatically based on content!
 
 export interface JourneyContent {
   type: 'paragraph' | 'heading' | 'image' | 'code' | 'quote' | 'list' | 'twitter' | 'tweetImage' | 'linkEmbed' | 'carousel' | 'video';
@@ -115,43 +45,7 @@ export interface JourneyCategory {
   color: string;
 }
 
-export const journeyCategories: JourneyCategory[] = [
-  {
-    id: 'project',
-    name: 'Project Journey',
-    description: 'Stories behind the projects and their development',
-    icon: '',
-    color: 'accent'
-  },
-  {
-    id: 'learning',
-    name: 'Learning Path',
-    description: 'Educational experiences and skill development',
-    icon: '',
-    color: 'accent-light'
-  },
-  {
-    id: 'experience',
-    name: 'Experience',
-    description: 'Work experiences and professional growth',
-    icon: '',
-    color: 'accent-dark'
-  },
-  {
-    id: 'achievement',
-    name: 'Achievement',
-    description: 'Milestones and accomplishments',
-    icon: '',
-    color: 'accent'
-  },
-  {
-    id: 'reflection',
-    name: 'Reflection',
-    description: 'Thoughts, insights, and personal reflections',
-    icon: '',
-    color: 'accent-light'
-  }
-];
+
 
 // Sample journey posts (raw data)
 const rawJourneyPosts: JourneyPost[] = [
@@ -163,7 +57,7 @@ const rawJourneyPosts: JourneyPost[] = [
   subtitle: 'The complete journey of developing a modern web graphics library',
   description: 'A deep dive into the development of Fern — a zero-dependency, Wasm-powered graphics and UI library built in C and C++. From early pixel buffers to a Flutter-like layout engine, this post documents the entire story.',
   slug: 'fern',
-  publishedDate: '2024-03-15',
+  publishedDate: '2025-07-23',
 //   readTime: 12,
   tags: ['C++', 'Wasm', 'Graphics', 'UI', 'Layout Engine'],
   category: 'project',
@@ -180,7 +74,7 @@ const rawJourneyPosts: JourneyPost[] = [
     },
     {
       type: 'image',
-      content: '/journey/fern/fern-initial.png',
+      content: BLOB_PATTERNS.BASE + "/fern/fern-initial.png",
       alt: 'Initial sketches and wireframes for Fern'
     },
     {
@@ -189,7 +83,7 @@ const rawJourneyPosts: JourneyPost[] = [
     },
     {
       type: 'tweetImage',
-      content: '/journey/fern/tweets/t1.png',
+      content: BLOB_PATTERNS.BASE + '/fern/tweets/t1.png',
       alt: 'Tweet by @rishi2220 about Fern',
       tweetUrl: 'https://twitter.com/rishi2220/status/1234567890123456789'
     },
@@ -199,7 +93,7 @@ const rawJourneyPosts: JourneyPost[] = [
     },
     {
       type: 'image',
-      content: '/journey/fern/cyberpunk.png',
+      content: BLOB_PATTERNS.BASE + '/fern/cyberpunk.png',
       alt: 'First render of Fern with basic shapes and text'
     },
     {
@@ -208,7 +102,7 @@ const rawJourneyPosts: JourneyPost[] = [
     },
     {
       type: 'tweetImage',
-      content: '/journey/fern/tweets/t2.png',
+      content: BLOB_PATTERNS.BASE + '/fern/tweets/t2.png',
       alt: 'Tweet by @rishi2220 about Fern',
       tweetUrl: 'https://x.com/Rishi2220/status/1921201566410846390'
     },
@@ -267,7 +161,7 @@ int main() {
     },
     {
       type: 'image',
-      content: '/journey/fern/layout.png',
+      content: BLOB_PATTERNS.BASE + '/fern/layout.png',
       alt: 'Layouts in Fern'
     },
     {
@@ -276,7 +170,7 @@ int main() {
     },
     {
       type: 'image',
-      content: '/journey/fern/hello.png',
+      content: BLOB_PATTERNS.BASE + '/fern/hello.png',
       alt: 'First TTF rasterized text in Fern'
     },
     {
@@ -307,8 +201,7 @@ int main() {
   subtitle: 'the complete journey of developing a modern cohort-based educational platform',
   description: 'The story behind OpenLearn — a production-grade platform built for scalable, structured, and role-based education. This chapter traces how the first real version came to life in less than a week.',
   slug: 'openlearn',
-  publishedDate: '2024-03-15',
-//   readTime: 10,
+  publishedDate: '2025-07-24',
   tags: ['TypeScript', 'Express', 'PostgreSQL', 'Prisma', 'Docker', 'Render', 'NeonDB'],
   category: 'project',
   status: 'published',
@@ -334,9 +227,9 @@ int main() {
     {
       type: 'carousel',
       images: [
-        { src: '/journey/openlearn/mlfest/1.jpeg', alt: 'Workshop session at ML Fest' },
-        { src: '/journey/openlearn/mlfest/2.jpeg', alt: 'Live coding session' },
-        { src: '/journey/openlearn/mlfest/3.jpeg', alt: 'Team Q&A panel' }
+        { src: BLOB_PATTERNS.BASE + '/openlearn/mlfest/1.jpeg', alt: 'Workshop session at ML Fest' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/mlfest/2.jpeg', alt: 'Live coding session' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/mlfest/3.jpeg', alt: 'Team Q&A panel' }
       ],
       caption: 'snapshots from ML Fest'
     },
@@ -347,9 +240,9 @@ int main() {
     {
       type: 'carousel',
       images: [
-        { src: '/journey/openlearn/mlfest/1.jpeg', alt: 'Students during orientation' },
-        { src: '/journey/openlearn/mlfest/2.jpeg', alt: 'Cohort introduction session' },
-        { src: '/journey/openlearn/mlfest/3.jpeg', alt: 'OpenLearn kickoff' }
+        { src: BLOB_PATTERNS.BASE + '/openlearn/mlfest/1.jpeg', alt: 'Students during orientation' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/mlfest/2.jpeg', alt: 'Cohort introduction session' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/mlfest/3.jpeg', alt: 'OpenLearn kickoff' }
       ],
       caption: 'cohort commencement'
     },
@@ -395,9 +288,9 @@ int main() {
     {
       type: 'carousel',
       images: [
-        { src: '/journey/openlearn/dev1.jpeg', alt: 'Students during orientation' },
-        { src: '/journey/openlearn/dev2.jpeg', alt: 'Cohort introduction session' },
-        { src: '/journey/openlearn/dev3.jpeg', alt: 'Cohort introduction session' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/dev1.jpeg', alt: 'Students during orientation' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/dev2.jpeg', alt: 'Cohort introduction session' },
+        { src: BLOB_PATTERNS.BASE + '/openlearn/dev3.jpeg', alt: 'Cohort introduction session' },
       ],
       caption: 'Development images'
     },
@@ -415,57 +308,123 @@ int main() {
     }
   ]
 },
-  {
-    id: 'supermind-hack',
-    eventId: 'timeline-19 Jan 2025',
-    title: 'Level Supermind Hackathon Mumbai',
-    subtitle: 'Understanding cryptography through implementation',
-    description: 'Building a complete AES encryption implementation in C to understand the mathematics and algorithms behind modern cryptography.',
-    slug: 'level-supermind-hackathon',
-    publishedDate: '2024-03-29',
-    readTime: 12,
-    tags: ['Cryptography', 'AES', 'C', 'Security', 'Mathematics'],
-    category: 'project',
-    status: 'published',
-    content: [
-      {
-        type: 'heading',
-        content: 'Chapter 1',
-        level: 2
-      },
-      {
-        type: 'paragraph',
-        content: 'We as a team were working on a project, but one of us found out about this hackathon in Mumbai, which was organized by big names like Hitesh Choudhary, Ranveer Allahbadia and his company Level Supermind. There was a online assignment, which was to build Social Media Analyzer tool using langflow and AstraDB who were the sponsors too. We thought to participate, registered the team and started building the product, everyone was in winter vacation, so we took 30 somethings hours to make the whole product and make a decently edited youtube video for it. The tool was named Insightly, and we were the very few people who submitted the assignment very early. I still remember the date, it was 31st of december, 2024. Here is the link to the original product demo of insightly: '
-      },
-          {
-      type: 'linkEmbed',
-      title: 'Original product demo of Insightly',
-      content: 'https://www.youtube.com/watch?v=TGx_P_ZqODM'
+{
+  "id": "supermind-hack",
+  "eventId": "timeline-19 Jan 2025",
+  "title": "Our Journey to the Level Supermind Hackathon in Mumbai",
+  "subtitle": "From a last-minute entry to a second-place victory, and the chaotic journey back home.",
+  "description": "This is the story of how our team participated in the Level Supermind Hackathon, from the initial online qualifier to the final round in Mumbai. We built a social media analyzer, traveled across the country, coded for 12 hours straight, and even missed our train back home. It's a story of teamwork, perseverance, and a little bit of bad luck.",
+  "slug": "level-supermind-hackathon",
+  "publishedDate": "2025-07-25",
+  "readTime": 15,
+  "tags": ["Hackathon", "Mumbai", "Level Supermind", "Insightly", "SoulBuddy", "Travel"],
+  "category": "project",
+  "status": "published",
+  "content": [
+    {
+      "type": "heading",
+      "content": "The Hackathon Journey",
+      "level": 2
     },
-      {
-        type: 'paragraph',
-        content: 'Apparantly, because we submitted the assignment early, some people (not some) started copying our product, people were so desperate they even forgot to change the team name from the readme on there github repos, even same deployment links. Eventually we got to know that we were selected for the hackathon, and we were invited to Mumbai for the final round. We started booking our train and stay tickets, and we were all set to go. The hackathon was on 19th of January, 2025.'
-      },
-      {
-        type: 'paragraph',
-        content: 'We started thinking what could be the problem statement according to the companies who were sponsoring the hackathon, and deduced down some UI designs and components to save some time during hack. A beautiful lime neobrutalist app\'s UI was designed.',
-  
-      },
-      {
-        type: 'paragraph',
-        content: 'Here are some images traveling on Paschim Express for 30 hours to Bombay.'
-      },
-       {
-      type: 'carousel',
-      images: [
-        { src: '/journey/openlearn/dev1.jpeg', alt: 'Students during orientation' },
-        { src: '/journey/openlearn/dev2.jpeg', alt: 'Cohort introduction session' },
-        { src: '/journey/openlearn/dev3.jpeg', alt: 'Cohort introduction session' },
+    {
+      "type": "paragraph",
+      "content": "While working on another project, a member of our team discovered a hackathon in Mumbai organized by prominent figures like Hitesh Choudhary and Ranveer Allahbadia's company, Level Supermind. The initial challenge was an online assignment to build a Social Media Analyzer tool using Langflow and AstraDB, who were also sponsors. We decided to participate, registered our team, and began developing the product during our winter vacation. In about 30 hours, we built the entire tool, named 'Insightly,' and created a well-edited YouTube video to demonstrate it. We were among the first to submit our project on December 31, 2024. Here is the link to the original product demo of Insightly:"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "Original product demo of Insightly",
+      "content": "https://www.youtube.com/watch?v=TGx_P_ZqODM"
+    },
+    {
+      "type": "paragraph",
+      "content": "Due to our early submission, we noticed that some other participants began to copy our project, with some even forgetting to change our team name in their GitHub repositories. Despite this, we were thrilled to learn that we had been selected for the final round and were invited to Mumbai. We quickly booked our train and accommodation, ready for the main event on January 19, 2025."
+    },
+    {
+      "type": "paragraph",
+      "content": "In preparation, we anticipated potential problem statements based on the sponsoring companies and designed some UI components in a neobrutalist style to save time during the hackathon. Our 30-hour train journey on the Paschim Express to Mumbai was an adventure in itself."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        { "src": BLOB_PATTERNS.BASE + "/supermind/travel/1.jpg", "alt": "Travel image 1" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/travel/2.jpg", "alt": "Travel image 2" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/travel/3.jpg", "alt": "Travel image 3" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/travel/4.jpg", "alt": "Travel image 4" }
       ],
-      caption: 'Development images'
+      "caption": "Traveling to Mumbai on the Paschim Express"
     },
-    ]
-  },
+    {
+      "type": "paragraph",
+      "content": "The hackathon began with introductions from the sponsors and a briefing on the problem statements. We chose the final task and had just 12 hours to develop a complete product, a promotional video, a landing page, and a presentation. The problem statement was:"
+    },
+    {
+      "type": "quote",
+      "content": "Task 3: SoulBuddy - AI-Powered Spiritual Guide"
+    },
+    {
+      "type": "paragraph",
+      "content": "Here are some images from the hackathon:"
+    },
+    {
+      "type": "carousel",
+      "images": [
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/1.jpg", "alt": "Hackathon image 1" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/2.jpg", "alt": "Hackathon image 2" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/3.jpg", "alt": "Hackathon image 3" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/4.jpg", "alt": "Hackathon image 4" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/5.jpeg", "alt": "Hackathon image 5" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/6.jpeg", "alt": "Hackathon image 6" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/hack-time/7.jpg", "alt": "Hackathon image 7" }
+      ],
+      "caption": "Images from the hackathon"
+    },
+    {
+      "type": "paragraph",
+      "content": "We successfully built the product, created the video, and prepared our presentation. As the second team to present, we impressed the judges and confidently answered all their questions. Our hard work paid off when we secured second place and a cash prize of 50,000 rupees. Afterward, we celebrated by exploring some of Mumbai's famous landmarks, including Versova, Marine Drive, Churchgate, and Juhu."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/1.jpg", "alt": "Post-hackathon image 1" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/2.jpg", "alt": "Post-hackathon image 2" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/3.jpg", "alt": "Post-hackathon image 3" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/4.jpg", "alt": "Post-hackathon image 4" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/5.jpg", "alt": "Post-hackathon image 5" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/6.jpg", "alt": "Post-hackathon image 6" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/7.jpg", "alt": "Post-hackathon image 7" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/8.jpg", "alt": "Post-hackathon image 8" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/post-hack/9.jpg", "alt": "Post-hackathon image 9" }
+      ],
+      "caption": "Exploring Mumbai after the hackathon"
+    },
+    {
+      "type": "paragraph",
+      "content": "Our journey took an unexpected turn when we got stuck in heavy traffic and missed our train back to Jalandhar by just five minutes. We made a frantic effort to catch it at the next station by taking a local train, but all our attempts were unsuccessful. Exhausted and stranded in Borivali, we eventually booked plane tickets to Amritsar for a total of 42,000 rupees, using up most of our prize money after a student discount. It was an ironic end to our trip, but a memorable one nonetheless."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/1.jpg", "alt": "Return journey image 1" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/2.jpg", "alt": "Return journey image 2" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/3.jpg", "alt": "Return journey image 3" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/4.jpg", "alt": "Return journey image 4" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/5.jpg", "alt": "Return journey image 5" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/6.jpg", "alt": "Return journey image 6" },
+        { "src": BLOB_PATTERNS.BASE + "/supermind/plane/7.jpg", "alt": "Return journey image 7" }
+      ],
+      "caption": "The unexpected flight back home"
+    },
+    {
+        "type": "heading",
+        "content": "Conclusion",
+        "level": 3
+      },
+      {
+        "type": "paragraph",
+        "content": "The Level Supermind Hackathon was an unforgettable experience. From the initial excitement of being selected to the intense 12-hour coding session and the thrill of winning, it was a rollercoaster of emotions. Even the chaotic journey back home added to the adventure. We learned a lot, pushed our limits, and created memories that will last a lifetime. It was a testament to our teamwork and resilience, and we are proud of what we accomplished."
+      }
+  ]
+}
  
 ];
 

@@ -10,7 +10,7 @@ const AboutMe: React.FC = () => {
   // Resume download handler - updated to use Google Drive link
   const handleResumeDownload = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.open('https://drive.google.com/file/d/149tt5kv90MXOGTkKCJY9c4m3j33FSR7D/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1ykDOtit6ye03exYDyp_1jw9OzKvzHrXx/view?usp=sharing', '_blank');
   };
 
   return (

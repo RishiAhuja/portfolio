@@ -27,8 +27,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   
   const { slug } = params;
 
-  console.log(`Trying to load project with slug: "${slug}"`);
-
   // Use the projects library function which handles the Supabase connection correctly
   const project = await getProjectBySlug(slug);
     
@@ -37,12 +35,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
   
-  console.log('Project found:', { 
-    id: project.id, 
-    title: project.title, 
-    slug: project.slug,
-    viewCount: project.view_count
-  });
   
   // Get related projects - also dynamic
   const relatedProjects = await getRelatedProjects(

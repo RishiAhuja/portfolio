@@ -8,8 +8,9 @@ const TechStacks: React.FC = () => {
     'JavaScript', 'TypeScript', 'React', 'Next.js', 'Recoil',
     'HTML', 'CSS', 'Node.js', 'Express.js', 'MongoDB',
     'PostgreSQL', 'Prisma', 'Supabase', 'AppWrite', 'NeonDB',
+    'Ngrok', 'Nginx', 'AWS', 'Docker', 'Solidity',
     'C', 'C++', 'Make', 'CMake', 'Python', 'Bash',
-    'Git', 'GitHub', 'Linux', 'Arch Linux', 'Android Studio', 'Markdown', 'Notion', 'Obsidian', 'Ngrok', 'Nginx', 'AWS',
+    'Git', 'GitHub', 'Linux', 'Arch Linux', 'Android Studio', 'Markdown', 'Notion', 'Obsidian',
   ];
 
   return (
