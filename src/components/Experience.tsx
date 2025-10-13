@@ -9,11 +9,21 @@ const Experience: React.FC = () => {
       <div className="h-4" />
       <div>
         <ExperienceCard
+          role="Enterpreneur in Residence"
+          company="iHub AWaDH IIT Ropar"
+          type="Full-time"
+          startDate={new Date(2025, 5)} // April 2025
+          endDate={new Date(2025, 9)} // Oct 2025
+          location="Hybrid"
+          
+        />
+        <ExperienceCard
           role="Research Intern"
           company="Annam AI IIT Ropar"
           type="Internship"
           startDate={new Date(2025, 5)} // April 2025
-          location="Remote"
+          endDate={new Date(2025, 9)} // Oct 2025
+          location="Hybrid"
           
         />
 
