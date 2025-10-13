@@ -12,8 +12,7 @@ const Experience: React.FC = () => {
           role="Enterpreneur in Residence"
           company="iHub AWaDH IIT Ropar"
           type="Full-time"
-          startDate={new Date(2025, 5)} // April 2025
-          endDate={new Date(2025, 9)} // Oct 2025
+          startDate={new Date(2025, 9)} // April 2025
           location="Hybrid"
           
         />
