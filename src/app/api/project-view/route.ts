@@ -8,6 +8,12 @@ export const revalidate = 0;
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is properly configured at runtime
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.warn('Supabase not configured, returning mock view count');
+      return NextResponse.json({ view_count: 0 }); // Return mock data to avoid client errors
+    }
+
     const { projectId } = await request.json();
     
     if (!projectId) {

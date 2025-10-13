@@ -10,6 +10,12 @@ import { supabase } from '@/lib/supabase';
  */
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is properly configured at runtime
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.warn('Supabase not configured, skipping session tracking');
+      return NextResponse.json({ success: true }); // Return success to avoid client errors
+    }
+
     // Parse form data (sendBeacon sends FormData)
     const formData = await request.formData();
     const sessionId = formData.get('session_id') as string;
