@@ -16,6 +16,24 @@ const projectsCollection = defineCollection({
   }),
 });
 
+const journeyCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    description: z.string(),
+    publishedDate: z.date(),
+    readTime: z.number().optional(),
+    coverImage: z.string().optional(),
+    tags: z.array(z.string()),
+    category: z.enum(['project', 'learning', 'experience', 'achievement', 'reflection']),
+    projectId: z.string().optional(),
+    eventId: z.string().optional(),
+    relatedPosts: z.array(z.string()).optional(),
+  }),
+});
+
 export const collections = {
   projects: projectsCollection,
+  journey: journeyCollection,
 };

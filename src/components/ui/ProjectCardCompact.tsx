@@ -23,7 +23,7 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
   const cardContent = (
     <div 
       className={`
-        border rounded-sm transition-all duration-300 h-full
+        relative border rounded-sm transition-all duration-300 h-full
         ${isHovered ? 'border-accent-light shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] transform -translate-y-1' : 'border-darkGrey'}
         flex flex-col cursor-pointer
       `}
@@ -118,10 +118,14 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
 
   // If project has a valid slug, wrap it in a Link component, otherwise just return the card
   return hasValidSlug ? (
-    <a href={`/projects/${project.slug}`}>
+    <a href={`/projects/${project.slug}`} className="block">
       {cardContent}
     </a>
-  ) : cardContent;
+  ) : (
+    <div className="block">
+      {cardContent}
+    </div>
+  );
 };
 
 export default ProjectCardCompact;

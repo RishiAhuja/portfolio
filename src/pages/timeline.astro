@@ -1,0 +1,127 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ExpandedContainer from '../components/ui/ExpandedContainer.astro';
+import BackToTop from '../components/ui/BackToTop';
+
+// Get all journey posts and sort by date
+const journeyPosts = await getCollection('journey');
+const sortedPosts = journeyPosts.sort((a, b) => 
+  b.data.publishedDate.getTime() - a.data.publishedDate.getTime()
+);
+
+// Group posts by category
+const categories = {
+  project: sortedPosts.filter(p => p.data.category === 'project'),
+  learning: sortedPosts.filter(p => p.data.category === 'learning'),
+  experience: sortedPosts.filter(p => p.data.category === 'experience'),
+  achievement: sortedPosts.filter(p => p.data.category === 'achievement'),
+  reflection: sortedPosts.filter(p => p.data.category === 'reflection'),
+};
+
+const categoryIcons: Record<string, string> = {
+  project: '🚀',
+  learning: '📚',
+  experience: '💼',
+  achievement: '🏆',
+  reflection: '💭',
+};
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+};
+---
+
+<BaseLayout 
+  title="Journey | Rishi Ahuja"
+  description="A timeline of my projects, learnings, and experiences"
+>
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+      <a 
+        href="/"
+        class="inline-flex items-center gap-2 text-sm font-ptMono text-quillGray hover:text-accent-light transition-colors mb-6"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span>Back to Home</span>
+      </a>
+      
+      <ExpandedContainer text="Year One: The Journey" />
+      <p class="mt-4 text-base font-ptMono text-gunSmoke">
+        A collection of stories, projects, and reflections from my development journey.
+      </p>
+    </div>
+
+    {Object.entries(categories).map(([category, posts]) => (
+      posts.length > 0 && (
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold font-ptMono text-quillGray mb-6 flex items-center gap-2">
+            <span>{categoryIcons[category]}</span>
+            <span class="capitalize">{category}</span>
+          </h2>
+          
+          <div class="space-y-6">
+            {posts.map((post) => (
+              <a 
+                href={`/journey/${post.slug}`}
+                class="block group"
+              >
+                <article class="border border-darkGrey rounded-sm p-6 hover:border-accent-light transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)]">
+                  <div class="flex justify-between items-start gap-4 mb-3">
+                    <h3 class="text-xl font-bold font-ptMono text-quillGray group-hover:text-accent-light transition-colors">
+                      {post.data.title}
+                    </h3>
+                    <span class="text-xs font-ptMono text-gunSmoke whitespace-nowrap">
+                      {formatDate(post.data.publishedDate)}
+                    </span>
+                  </div>
+                  
+                  {post.data.subtitle && (
+                    <p class="text-sm font-ptMono text-gray-400 italic mb-3">
+                      {post.data.subtitle}
+                    </p>
+                  )}
+                  
+                  <p class="text-base font-ptMono text-gunSmoke mb-4">
+                    {post.data.description}
+                  </p>
+                  
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    {post.data.tags.slice(0, 5).map((tag: string) => (
+                      <span class="text-xs font-ptMono text-accent-light bg-darkGrey/50 px-2 py-1 rounded-sm">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div class="flex items-center text-sm font-ptMono text-quillGray group-hover:text-accent-light transition-colors">
+                    <span>Read more</span>
+                    <svg class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                </article>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    ))}
+
+    {sortedPosts.length === 0 && (
+      <div class="text-center py-12">
+        <p class="text-lg font-ptMono text-gray-400">
+          No journey posts yet. Check back soon!
+        </p>
+      </div>
+    )}
+
+    <BackToTop client:idle />
+  </main>
+</BaseLayout>

@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackToTop from '../../components/ui/BackToTop';
+
+export const getStaticPaths = (async () => {
+  const journeyPosts = await getCollection('journey');
+  return journeyPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+};
+
+// Get related posts if projectId matches
+const allPosts = await getCollection('journey');
+const relatedPosts = post.data.projectId 
+  ? allPosts
+      .filter(p => p.slug !== post.slug && p.data.projectId === post.data.projectId)
+      .slice(0, 3)
+  : [];
+---
+
+<BaseLayout 
+  title={`${post.data.title} | Rishi Ahuja`}
+  description={post.data.description}
+>
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <a 
+      href="/timeline"
+      class="inline-flex items-center gap-2 text-sm font-ptMono text-quillGray hover:text-accent-light transition-colors mb-8"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span>Back to Timeline</span>
+    </a>
+
+    <article class="prose prose-invert prose-lg max-w-none">
+      {/* Header */}
+      <header class="mb-8 pb-8 border-b border-darkGrey">
+        <h1 class="text-4xl md:text-5xl font-bold font-ptMono text-quillGray mb-4">
+          {post.data.title}
+        </h1>
+        
+        {post.data.subtitle && (
+          <p class="text-xl font-ptMono text-gray-400 italic mb-4">
+            {post.data.subtitle}
+          </p>
+        )}
+        
+        <div class="flex flex-wrap items-center gap-4 text-sm font-ptMono text-gunSmoke">
+          <time datetime={post.data.publishedDate.toISOString()}>
+            {formatDate(post.data.publishedDate)}
+          </time>
+          
+          {post.data.readTime && (
+            <>
+              <span>•</span>
+              <span>{post.data.readTime} min read</span>
+            </>
+          )}
+          
+          <span>•</span>
+          <span class="capitalize">{post.data.category}</span>
+        </div>
+        
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-4">
+            {post.data.tags.map((tag: string) => (
+              <span class="text-xs font-ptMono text-accent-light bg-darkGrey/50 px-2 py-1 rounded-sm">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      {/* Content */}
+      <div class="journey-content font-ptMono text-quillGray leading-relaxed">
+        <Content />
+      </div>
+
+      {/* Related Posts */}
+      {relatedPosts.length > 0 && (
+        <div class="mt-16 pt-8 border-t border-darkGrey">
+          <h2 class="text-2xl font-bold font-ptMono text-quillGray mb-6">
+            Related Posts
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {relatedPosts.map((relatedPost) => (
+              <a 
+                href={`/journey/${relatedPost.slug}`}
+                class="block group border border-darkGrey rounded-sm p-4 hover:border-accent-light transition-all"
+              >
+                <h3 class="text-lg font-bold font-ptMono text-quillGray group-hover:text-accent-light transition-colors mb-2">
+                  {relatedPost.data.title}
+                </h3>
+                <p class="text-sm font-ptMono text-gunSmoke">
+                  {relatedPost.data.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </article>
+
+    <BackToTop client:idle />
+  </main>
+</BaseLayout>
+
+<style>
+  /* Journey content styling */
+  .journey-content :global(h2) {
+    @apply text-3xl font-bold font-ptMono text-quillGray mt-12 mb-6;
+  }
+  
+  .journey-content :global(h3) {
+    @apply text-2xl font-bold font-ptMono text-quillGray mt-8 mb-4;
+  }
+  
+  .journey-content :global(p) {
+    @apply text-base font-ptMono text-gunSmoke leading-relaxed mb-6;
+  }
+  
+  .journey-content :global(a) {
+    @apply text-accent-light underline decoration-1 decoration-accent-light/50 hover:decoration-accent-light transition-all;
+  }
+  
+  .journey-content :global(strong) {
+    @apply text-quillGray font-bold;
+  }
+  
+  .journey-content :global(img) {
+    @apply rounded-sm border border-darkGrey my-8;
+  }
+  
+  .journey-content :global(blockquote) {
+    @apply border-l-4 border-accent-light pl-4 italic text-gray-400 my-6;
+  }
+  
+  .journey-content :global(code) {
+    @apply bg-darkGrey/50 px-1.5 py-0.5 rounded-sm text-accent-light text-sm;
+  }
+  
+  .journey-content :global(pre) {
+    @apply bg-darkGrey/30 p-4 rounded-sm overflow-x-auto my-6;
+  }
+  
+  .journey-content :global(pre code) {
+    @apply bg-transparent p-0;
+  }
+  
+  .journey-content :global(ul), 
+  .journey-content :global(ol) {
+    @apply ml-6 mb-6 space-y-2;
+  }
+  
+  .journey-content :global(li) {
+    @apply text-base font-ptMono text-gunSmoke;
+  }
+</style>
