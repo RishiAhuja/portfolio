@@ -1,6 +1,6 @@
 import React from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import SmallContainer from '@/components/ui/SmallContainer';
+import ExpandedContainer from './ui/ExpandedContainer.tsx';
+import SmallContainer from './ui/SmallContainer.tsx';
 
 const TechStacks: React.FC = () => {
   const technologyCategories = [

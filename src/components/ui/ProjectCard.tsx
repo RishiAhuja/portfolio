@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import SmallContainer from '@/components/ui/SmallContainer';
+import SmallContainer from '../ui/SmallContainer.tsx';
 import { FaGithub } from 'react-icons/fa';
 
 interface ProjectCardProps {

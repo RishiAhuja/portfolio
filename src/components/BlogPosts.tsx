@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import BlogPostItem from '@/components/ui/BlogPostItem';
-import { fetchHashnodePosts, formatPostDate, getPostUrl } from '@/lib/hashnode';
+import ExpandedContainer from './ui/ExpandedContainer.tsx';
+import BlogPostItem from './ui/BlogPostItem';
+import { fetchHashnodePosts, formatPostDate, getPostUrl } from '../lib/hashnode';
 
 // Define a type for our component's state
 interface Post {

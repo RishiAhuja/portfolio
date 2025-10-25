@@ -1,6 +1,6 @@
 import React from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import ExperienceCard from '@/components/ui/ExperienceCard';
+import ExpandedContainer from './ui/ExpandedContainer.tsx';
+import ExperienceCard from './ui/ExperienceCard';
 
 const Experience: React.FC = () => {
   return (

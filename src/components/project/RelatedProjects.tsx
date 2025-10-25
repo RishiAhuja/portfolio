@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Project } from '@/lib/projects';
+import { Project } from '../../lib/projects';
 
 interface RelatedProjectsProps {
   projects: Project[];

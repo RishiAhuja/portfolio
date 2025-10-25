@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 
-import { JourneyContent } from '@/data/journey';
+import { JourneyContent } from '../../data/journey';
 import ImageCarousel from './ImageCarousel';
 
 interface JourneyContentRendererProps {

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 
-import { GalleryImage } from '@/data/gallery';
+import { GalleryImage } from '../../data/gallery';
 
 interface ImageModalProps {
   image: GalleryImage | null;

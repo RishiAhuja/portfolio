@@ -1,7 +1,7 @@
 // components/ui/ViewCounter.tsx
 
 import React, { useEffect, useState } from 'react';
-import { incrementProjectView } from '@/lib/projects';
+import { incrementProjectView } from '../../lib/projects';
 
 interface ViewCounterProps {
   projectId: string;

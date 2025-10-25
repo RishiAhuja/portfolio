@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
+import ExpandedContainer from './ui/ExpandedContainer.tsx';
 import { TypeAnimation } from 'react-type-animation';
 
 const AboutMe: React.FC = () => {

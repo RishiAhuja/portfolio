@@ -2,7 +2,7 @@
 import React from 'react';
 
 
-import { JourneyPost } from '@/data/journey';
+import { JourneyPost } from '../../data/journey';
 
 interface JourneyCardProps {
   post: JourneyPost;

@@ -1,8 +1,8 @@
 // components/Projects.tsx
 
 import React, { useState, useEffect } from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import { getAllProjects, Project, debugListAllProjects } from '@/lib/projects';
+import ExpandedContainer from './ui/ExpandedContainer.tsx';
+import { getAllProjects, Project, debugListAllProjects } from '../lib/projects';
 import ProjectCardCompact from './ui/ProjectCardCompact';
 
 const Projects: React.FC = () => {

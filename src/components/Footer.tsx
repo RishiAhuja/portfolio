@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../lib/supabase';
 
 const VisitorCounter: React.FC = () => {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);

@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 
-import { JourneyPost } from '@/data/journey';
+import { JourneyPost } from '../../data/journey';
 import JourneyContentRenderer from './JourneyContentRenderer';
 
 interface JourneyModalProps {
