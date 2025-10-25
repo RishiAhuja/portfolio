@@ -1,0 +1,54 @@
+---
+import ExpandedContainer from './ui/ExpandedContainer.astro';
+import ExperienceCard from './ui/ExperienceCard';
+---
+
+<div class="flex flex-col">
+  <ExpandedContainer text="Experiences & Responsibilities" />
+  <div class="h-4"></div>
+  <div>
+    <ExperienceCard
+      role="Enterpreneur in Residence"
+      company="iHub AWaDH IIT Ropar"
+      type="Full-time"
+      startDate={new Date(2025, 9)}
+      location="Hybrid"
+      client:load
+    />
+    <ExperienceCard
+      role="Research Intern"
+      company="Annam AI IIT Ropar"
+      type="Internship"
+      startDate={new Date(2025, 5)}
+      endDate={new Date(2025, 9)}
+      location="Hybrid"
+      client:load
+    />
+    <ExperienceCard
+      role="Flutter Intern"
+      company="Stack Wealth (YC S21)"
+      type="Internship"
+      startDate={new Date(2025, 3)}
+      endDate={new Date(2025, 4)}
+      location="Remote"
+      client:load
+    />
+    <ExperienceCard
+      role="Frontend Intern"
+      company="Level SuperMind"
+      type="Internship"
+      startDate={new Date(2025, 0)}
+      endDate={new Date(2025, 1)}
+      location="Remote"
+      client:load
+    />
+    <ExperienceCard
+      role="Core member—Mobile Development"
+      company="Google Developers Group on Campus - NIT Jalandhar"
+      type="Self-employed"
+      startDate={new Date(2024, 10)}
+      location="Jalandhar, Punjab, India"
+      client:load
+    />
+  </div>
+</div>

@@ -6,9 +6,9 @@ import ThemeToggle from '../components/ui/ThemeToggle.astro';
 // Import React components (will be hydrated as islands)
 import AboutMe from '../components/AboutMe';
 import TechStacks from '../components/TechStacks';
-import Projects from '../components/Projects';
+import Projects from '../components/Projects.astro';
 import BlogPosts from '../components/BlogPosts';
-import Experience from '../components/Experience';
+import Experience from '../components/Experience.astro';
 import EducationTimeline from '../components/EducationTimeline';
 import ContactSocial from '../components/ContactSocial';
 import Footer from '../components/Footer';
@@ -96,7 +96,7 @@ const schema = {
       
       <section id="projects">
         <FadeInSection client:visible delay={100}>
-          <Projects client:visible />
+          <Projects />
         </FadeInSection>
       </section>
       
@@ -112,7 +112,7 @@ const schema = {
       
       <section id="experience">
         <FadeInSection client:visible delay={200}>
-          <Experience client:visible />
+          <Experience />
         </FadeInSection>
       </section>
       
