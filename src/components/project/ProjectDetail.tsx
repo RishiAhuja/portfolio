@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+
 import { Project } from '@/lib/projects';
 import SmallContainer from '@/components/ui/SmallContainer';
 import ViewCounter from '../ui/ViewCounter';
@@ -13,7 +13,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
     <article className="animate-fade-in">
       {/* Navigation */}
       <div className="mb-8">
-        <Link 
+        <a 
           href="/"
           className="flex items-center text-gunSmoke hover:text-accent-light transition-colors"
         >
@@ -26,7 +26,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           <span className="font-ptMono">Back to home</span>
-        </Link>
+        </a>
       </div>
       
       {/* Project header */}

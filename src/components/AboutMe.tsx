@@ -1,4 +1,3 @@
-'use client';
 
 import React, { useState } from 'react';
 import ExpandedContainer from '@/components/ui/ExpandedContainer';

@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from '@/components/ui/ExpandedContainer';
 import BlogPostItem from '@/components/ui/BlogPostItem';

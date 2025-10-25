@@ -1,8 +1,7 @@
-'use client';
 
 import React, { useState } from 'react';
 import { format, differenceInDays, differenceInMonths, differenceInYears } from 'date-fns';
-import Image from 'next/image';
+
 
 interface ExperienceCardProps {
   role: string;
@@ -113,7 +112,7 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({
           {companyLogo && (
             <div className="hidden md:block mr-6 mt-1">
               <div className="w-12 h-12 bg-darkGrey/30 rounded-sm overflow-hidden flex items-center justify-center">
-                <Image 
+                <img 
                   src={companyLogo}
                   alt={`${company} logo`}
                   width={36}

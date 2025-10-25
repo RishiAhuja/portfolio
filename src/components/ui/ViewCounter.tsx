@@ -1,5 +1,4 @@
 // components/ui/ViewCounter.tsx
-'use client';
 
 import React, { useEffect, useState } from 'react';
 import { incrementProjectView } from '@/lib/projects';

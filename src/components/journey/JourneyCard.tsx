@@ -1,8 +1,7 @@
-'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+
+
 import { JourneyPost } from '@/data/journey';
 
 interface JourneyCardProps {
@@ -11,7 +10,7 @@ interface JourneyCardProps {
 
 const JourneyCard: React.FC<JourneyCardProps> = ({ post }) => {
   return (
-    <Link href={`/journey/${post.slug}`}>
+    <a href={`/journey/${post.slug}`}>
       <article className="group border border-darkGrey/30 rounded-sm overflow-hidden hover:border-accent/50 transition-all duration-300" style={{ backgroundColor: '#191919' }}>
         {/* Cover Image */}
         {post.coverImage && (
@@ -70,7 +69,7 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ post }) => {
           </div>
         </div>
       </article>
-    </Link>
+    </a>
   );
 };
 

@@ -1,4 +1,3 @@
-'use client';
 
 import React, { useState } from 'react';
 import SmallContainer from '@/components/ui/SmallContainer';

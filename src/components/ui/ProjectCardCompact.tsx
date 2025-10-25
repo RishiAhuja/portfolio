@@ -1,7 +1,6 @@
-'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
+
 import { Project } from '@/lib/projects';
 
 interface ProjectCardCompactProps {
@@ -119,9 +118,9 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
 
   // If project has a valid slug, wrap it in a Link component, otherwise just return the card
   return hasValidSlug ? (
-    <Link href={`/projects/${project.slug}`} passHref>
+    <a href={`/projects/${project.slug}`}>
       {cardContent}
-    </Link>
+    </a>
   ) : cardContent;
 };
 

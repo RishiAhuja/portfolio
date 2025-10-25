@@ -1,5 +1,4 @@
 // components/JsonLd.tsx
-'use client';
 
 import { useEffect } from 'react';
 
