@@ -1,6 +1,6 @@
 import React from 'react';
-import ExpandedContainer from './ui/ExpandedContainer.tsx';
-import SmallContainer from './ui/SmallContainer.tsx';
+import ExpandedContainer from './ui/ExpandedContainer';
+import SmallContainer from './ui/SmallContainer';
 import CalendarSchedule from './ui/CalendarSchedule';
 
 const ContactSocial: React.FC = () => {

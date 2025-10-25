@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import ExpandedContainer from './ui/ExpandedContainer.tsx';
+import ExpandedContainer from './ui/ExpandedContainer';
 
 interface TimelineItemProps {
   duration: string;
