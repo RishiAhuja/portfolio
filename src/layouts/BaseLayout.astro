@@ -59,6 +59,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Twitter Widget Script -->
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+    <!-- Additional head elements from pages -->
+    <slot name="head" />
+
     <!-- Theme Script (runs before page load to prevent flash) -->
     <script is:inline>
       // Prevent FOUC (Flash of Unstyled Content)

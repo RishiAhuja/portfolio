@@ -14,8 +14,10 @@ marked.use(markedKatex({
 
 // Configure marked renderer for code highlighting
 const renderer = new marked.Renderer();
-const originalCode = renderer.code.bind(renderer);
-renderer.code = function(code: string, language: string | undefined) {
+renderer.code = function({ text, lang, escaped }: { text: string; lang?: string; escaped?: boolean }) {
+  const code = text;
+  const language = lang;
+  
   if (language && hljs.getLanguage(language)) {
     try {
       const highlighted = hljs.highlight(code, { language }).value;
@@ -69,9 +71,8 @@ const htmlContent = marked(post.content.markdown);
   title={`${post.title} | Rishi Ahuja`}
   description={post.brief}
 >
-  <!-- Add KaTeX and Highlight.js CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" slot="head">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" slot="head">
+  <link slot="head" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <link slot="head" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   
   <main class="min-h-screen" style="background-color: #191919;">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
