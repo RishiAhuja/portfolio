@@ -1,0 +1,47 @@
+---
+import { getProjectBySlug, getAllProjects, getRelatedProjects } from '../../lib/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectDetail from '../../components/project/ProjectDetail';
+import RelatedProjects from '../../components/project/RelatedProjects';
+import BackToTop from '../../components/ui/BackToTop';
+
+export async function getStaticPaths() {
+  const projects = await getAllProjects();
+  
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { slug } = Astro.params;
+const { project } = Astro.props;
+
+if (!project) {
+  return Astro.redirect('/404');
+}
+
+// Get related projects
+const relatedProjects = await getRelatedProjects(
+  project.id,
+  project.category,
+  3
+);
+
+const title = `${project.title} | Rishi Ahuja`;
+const description = project.description || 'Project by Rishi Ahuja';
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-codGray">
+    <ProjectDetail project={project} client:load />
+
+    {relatedProjects.length > 0 && (
+      <div class="mt-16 mb-8">
+        <RelatedProjects projects={relatedProjects} client:visible />
+      </div>
+    )}
+
+    <BackToTop client:idle />
+  </div>
+</BaseLayout>

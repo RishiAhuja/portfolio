@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ExpandedContainer from '../components/ui/ExpandedContainer.astro';
+import GalleryGrid from '../components/gallery/GalleryGrid';
+import ImageModal from '../components/gallery/ImageModal';
+import { galleryImages } from '../data/gallery';
+
+// Sort images by date (most recent first)
+const sortedImages = [...galleryImages].sort((a, b) => 
+  new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+---
+
+<BaseLayout title="Gallery | Rishi Ahuja" description="A collection of moments, projects, and experiences captured through my lens">
+  <main class="min-h-screen bg-bgShades-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Header -->
+      <div class="mb-12">
+        <a 
+          href="/"
+          class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent transition-colors mb-6 font-ptMono text-sm"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Home
+        </a>
+        
+        <ExpandedContainer text="Gallery" />
+        
+        <div class="h-4" />
+        
+        <p class="text-base font-ptMono text-gunSmoke">
+          A curated collection of moments, projects, and experiences.
+        </p>
+      </div>
+
+      <!-- Gallery Grid -->
+      <GalleryGrid images={sortedImages} client:load />
+    </div>
+  </main>
+</BaseLayout>
