@@ -26,7 +26,7 @@ const BlogPosts: React.FC = () => {
       setIsLoading(true);
       setError(null);
       
-      const data = await fetchHashnodePosts(USERNAME, 10);
+      const data = await fetchHashnodePosts(USERNAME, 50); // Fetch all posts
       
       if (data && data.length > 0) {
         setPosts(data);

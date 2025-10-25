@@ -30,6 +30,12 @@ renderer.code = function({ text, lang, escaped }: { text: string; lang?: string;
   return `<pre><code class="hljs">${highlighted}</code></pre>`;
 };
 
+// Ensure images render properly
+renderer.image = function({ href, title, text }: { href: string; title?: string | null; text: string }) {
+  const titleAttr = title ? ` title="${title}"` : '';
+  return `<img src="${href}" alt="${text}"${titleAttr} class="w-full h-auto rounded-sm border border-darkGrey my-8" />`;
+};
+
 marked.setOptions({
   renderer,
   breaks: true,
@@ -64,7 +70,23 @@ const formatDate = (dateString: string) => {
 };
 
 // Render markdown to HTML
-const htmlContent = marked(post.content.markdown);
+let markdownContent = typeof post.content === 'string' ? post.content : post.content.markdown;
+
+// Pre-process Hashnode's custom markdown syntax
+// Convert Hashnode's image syntax: ![](url align="center") to standard markdown: ![](url)
+// Also handles: ![alt](url align="center")
+markdownContent = markdownContent.replace(/!\[([^\]]*)\]\(([^)]+)\s+align="[^"]+"\)/g, '![$1]($2)');
+
+const htmlContent = await marked.parse(markdownContent);
+
+// Wrap tables in a responsive container for horizontal scrolling
+const responsiveHtmlContent = htmlContent.replace(
+  /<table>/g,
+  '<div class="table-wrapper"><table>'
+).replace(
+  /<\/table>/g,
+  '</table></div>'
+);
 ---
 
 <BaseLayout 
@@ -140,7 +162,7 @@ const htmlContent = marked(post.content.markdown);
         </header>
 
         {/* Blog Content */}
-        <div class="blog-content font-ptMono text-quillGray leading-relaxed" set:html={htmlContent}>
+        <div class="blog-content font-ptMono text-quillGray leading-relaxed" set:html={responsiveHtmlContent}>
         </div>
 
         {/* Footer */}
@@ -231,12 +253,23 @@ const htmlContent = marked(post.content.markdown);
     @apply list-decimal;
   }
   
+  /* Table wrapper for horizontal scrolling on mobile */
+  .blog-content :global(.table-wrapper) {
+    @apply overflow-x-auto -mx-4 px-4 my-6;
+  }
+  
+  @media (min-width: 768px) {
+    .blog-content :global(.table-wrapper) {
+      @apply mx-0 px-0;
+    }
+  }
+  
   .blog-content :global(table) {
-    @apply w-full border-collapse my-6;
+    @apply w-full border-collapse min-w-full;
   }
   
   .blog-content :global(th) {
-    @apply border border-darkGrey bg-darkGrey/30 px-4 py-2 text-left font-bold text-quillGray;
+    @apply border border-darkGrey bg-darkGrey/30 px-4 py-2 text-left font-bold text-quillGray whitespace-nowrap;
   }
   
   .blog-content :global(td) {
