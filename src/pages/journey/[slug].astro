@@ -1,21 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import JourneyContentRenderer from '../../components/journey/JourneyContentRenderer';
 import BackToTop from '../../components/ui/BackToTop';
+import { journeyPosts } from '../../data/journey';
 
 export const getStaticPaths = (async () => {
-  const journeyPosts = await getCollection('journey');
-  return journeyPosts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return journeyPosts
+    .filter(post => post.status === 'published')
+    .map((post) => ({
+      params: { slug: post.slug },
+      props: { post },
+    }));
 }) satisfies GetStaticPaths;
 
 const { post } = Astro.props;
-const { Content } = await post.render();
 
-const formatDate = (date: Date) => {
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
   return date.toLocaleDateString('en-US', { 
     year: 'numeric', 
     month: 'long', 
@@ -23,23 +25,20 @@ const formatDate = (date: Date) => {
   });
 };
 
-// Get related posts if projectId matches
-const allPosts = await getCollection('journey');
-const relatedPosts = post.data.projectId 
-  ? allPosts
-      .filter(p => p.slug !== post.slug && p.data.projectId === post.data.projectId)
-      .slice(0, 3)
+// Get related posts
+const relatedPosts = post.relatedPosts 
+  ? journeyPosts.filter(p => post.relatedPosts?.includes(p.id) && p.status === 'published')
   : [];
 ---
 
 <BaseLayout 
-  title={`${post.data.title} | Rishi Ahuja`}
-  description={post.data.description}
+  title={`${post.title} | Rishi Ahuja`}
+  description={post.description}
 >
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="background-color: #191919;">
     <a 
       href="/timeline"
-      class="inline-flex items-center gap-2 text-sm font-ptMono text-quillGray hover:text-accent-light transition-colors mb-8"
+      class="inline-flex items-center gap-2 text-sm font-ptMono text-accent hover:text-accent transition-colors mb-8"
     >
       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -51,35 +50,35 @@ const relatedPosts = post.data.projectId
       {/* Header */}
       <header class="mb-8 pb-8 border-b border-darkGrey">
         <h1 class="text-4xl md:text-5xl font-bold font-ptMono text-quillGray mb-4">
-          {post.data.title}
+          {post.title}
         </h1>
         
-        {post.data.subtitle && (
+        {post.subtitle && (
           <p class="text-xl font-ptMono text-gray-400 italic mb-4">
-            {post.data.subtitle}
+            {post.subtitle}
           </p>
         )}
         
         <div class="flex flex-wrap items-center gap-4 text-sm font-ptMono text-gunSmoke">
-          <time datetime={post.data.publishedDate.toISOString()}>
-            {formatDate(post.data.publishedDate)}
+          <time datetime={post.publishedDate}>
+            {formatDate(post.publishedDate)}
           </time>
           
-          {post.data.readTime && (
+          {post.readTime && (
             <>
               <span>•</span>
-              <span>{post.data.readTime} min read</span>
+              <span>{post.readTime} min read</span>
             </>
           )}
           
           <span>•</span>
-          <span class="capitalize">{post.data.category}</span>
+          <span class="capitalize">{post.category}</span>
         </div>
         
-        {post.data.tags.length > 0 && (
+        {post.tags.length > 0 && (
           <div class="flex flex-wrap gap-2 mt-4">
-            {post.data.tags.map((tag: string) => (
-              <span class="text-xs font-ptMono text-accent-light bg-darkGrey/50 px-2 py-1 rounded-sm">
+            {post.tags.map((tag: string) => (
+              <span class="text-xs font-ptMono text-accent bg-darkGrey/50 px-2 py-1 rounded-sm">
                 {tag}
               </span>
             ))}
@@ -87,9 +86,9 @@ const relatedPosts = post.data.projectId
         )}
       </header>
 
-      {/* Content */}
+      {/* Content - Render with JourneyContentRenderer */}
       <div class="journey-content font-ptMono text-quillGray leading-relaxed">
-        <Content />
+        <JourneyContentRenderer content={post.content} client:load />
       </div>
 
       {/* Related Posts */}
@@ -102,13 +101,13 @@ const relatedPosts = post.data.projectId
             {relatedPosts.map((relatedPost) => (
               <a 
                 href={`/journey/${relatedPost.slug}`}
-                class="block group border border-darkGrey rounded-sm p-4 hover:border-accent-light transition-all"
+                class="block group border border-darkGrey rounded-sm p-4 hover:border-accent transition-all"
               >
-                <h3 class="text-lg font-bold font-ptMono text-quillGray group-hover:text-accent-light transition-colors mb-2">
-                  {relatedPost.data.title}
+                <h3 class="text-lg font-bold font-ptMono text-quillGray group-hover:text-accent transition-colors mb-2">
+                  {relatedPost.title}
                 </h3>
                 <p class="text-sm font-ptMono text-gunSmoke">
-                  {relatedPost.data.description}
+                  {relatedPost.description}
                 </p>
               </a>
             ))}

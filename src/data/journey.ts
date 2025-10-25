@@ -1,5 +1,5 @@
-import { BLOB_PATTERNS } from '@/lib/blobStorage';
-import { calculateReadTime } from '@/lib/readTime';
+import { BLOB_PATTERNS } from '../lib/blobStorage';
+import { calculateReadTime } from '../lib/readTime';
 
 export interface JourneyContent {
   type: 'paragraph' | 'heading' | 'image' | 'code' | 'quote' | 'list' | 'twitter' | 'tweetImage' | 'linkEmbed' | 'carousel' | 'video';

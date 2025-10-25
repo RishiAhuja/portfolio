@@ -1,4 +1,4 @@
-import { JourneyContent } from '@/data/journey';
+import { JourneyContent } from '../data/journey';
 
 // Reading speed constants (words per minute)
 const AVERAGE_READING_SPEED = 200; // Average adult reading speed
