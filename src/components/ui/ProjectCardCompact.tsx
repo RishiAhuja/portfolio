@@ -1,7 +1,7 @@
+'use client';
 
 import React, { useState } from 'react';
-
-import { Project } from '../../lib/projects';
+import type { Project } from '../../lib/projects';
 
 interface ProjectCardCompactProps {
   project: Project;

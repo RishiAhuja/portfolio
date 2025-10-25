@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Project } from '../../lib/projects';
+import type { Project } from '../../lib/projects';
 import SmallContainer from '../ui/SmallContainer.tsx';
 import ViewCounter from '../ui/ViewCounter';
 

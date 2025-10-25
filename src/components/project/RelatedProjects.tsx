@@ -1,8 +1,9 @@
 // components/project/RelatedProjects.tsx
 
 import React from 'react';
-
-import { Project } from '../../lib/projects';
+import ProjectCardCompact from '../ui/ProjectCardCompact';
+import ExpandedContainer from '../ui/ExpandedContainer';
+import type { Project } from '../../lib/projects';
 
 interface RelatedProjectsProps {
   projects: Project[];

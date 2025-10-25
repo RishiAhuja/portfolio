@@ -12,19 +12,24 @@ marked.use(markedKatex({
   output: 'html'
 }));
 
-// Configure code highlighting
-marked.setOptions({
-  highlight: function(code, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(code, { language: lang }).value;
-      } catch (err) {
-        console.error('Highlight error:', err);
-      }
+// Configure marked renderer for code highlighting
+const renderer = new marked.Renderer();
+const originalCode = renderer.code.bind(renderer);
+renderer.code = function(code: string, language: string | undefined) {
+  if (language && hljs.getLanguage(language)) {
+    try {
+      const highlighted = hljs.highlight(code, { language }).value;
+      return `<pre><code class="hljs language-${language}">${highlighted}</code></pre>`;
+    } catch (err) {
+      console.error('Highlight error:', err);
     }
-    return hljs.highlightAuto(code).value;
-  },
-  langPrefix: 'hljs language-',
+  }
+  const highlighted = hljs.highlightAuto(code).value;
+  return `<pre><code class="hljs">${highlighted}</code></pre>`;
+};
+
+marked.setOptions({
+  renderer,
   breaks: true,
   gfm: true,
 });
