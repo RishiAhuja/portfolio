@@ -1,7 +1,7 @@
-'use client';
 
 import React from 'react';
-import { GalleryCategory, galleryCategories } from '@/data/gallery';
+import type { GalleryCategory } from '../../data/gallery';
+import { galleryCategories } from '../../data/gallery';
 
 interface CategoryFilterProps {
   selectedCategory: string | null;

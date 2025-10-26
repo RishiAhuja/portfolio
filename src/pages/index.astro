@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
+
+// Import React components (will be hydrated as islands)
+import AboutMe from '../components/AboutMe';
+import TechStacks from '../components/TechStacks';
+import Projects from '../components/Projects.astro';
+import BlogPosts from '../components/BlogPosts';
+import Experience from '../components/Experience.astro';
+import EducationTimeline from '../components/EducationTimeline';
+import ContactSocial from '../components/ContactSocial';
+import Footer from '../components/Footer';
+import Navigation from '../components/Navigation';
+import BackToTop from '../components/ui/BackToTop';
+import FadeInSection from '../components/ui/FadeInSection';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Rishi Ahuja",
+  "url": "https://rishia.in",
+  "jobTitle": "Full Flutter Stack Developer",
+  "sameAs": [
+    "https://github.com/RishiAhuja",
+    "https://www.linkedin.com/in/rishi-ahuja-b1a224310",
+    "https://twitter.com/Rishi2220"
+  ],
+  "knowsAbout": ["Web Development", "Mobile Development", "UI/UX Design", "Flutter", "React", "TypeScript"],
+  "workExample": [
+    {
+      "@type": "CreativeWork",
+      "name": "Fern",
+      "url": "https://fern.rishia.in"
+    },
+    {
+      "@type": "CreativeWork",
+      "name": "Nexus",
+      "url": "https://nexus.rishia.in"
+    }
+  ]
+};
+---
+
+<BaseLayout>
+  <JsonLd data={schema} />
+  <Navigation client:load />
+  
+  <!-- Timeline Navigation - Non-fixed -->
+  <div class="absolute top-0 right-0 z-40">
+    <a 
+      href="/timeline" 
+      class="group flex items-center gap-2 bg-bgShades-light/80 backdrop-blur-sm border-l border-b border-darkGrey/30 px-4 py-3 text-quillGray hover:text-accent transition-all duration-300 font-ptMono text-sm"
+    >
+      <span>Timeline</span>
+      <svg class="w-4 h-4 transition-all duration-300 group-hover:translate-x-1 opacity-70 group-hover:opacity-100" 
+        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg>
+    </a>
+  </div>
+  
+  <main class="flex min-h-screen flex-col items-center">
+    <script>
+      // Handle responsive width
+      function updateWidth() {
+        const main = document.querySelector('main > div');
+        if (main) {
+          const isMobile = window.innerWidth < 800;
+          main.classList.toggle('w-full', isMobile);
+          main.classList.toggle('w-[65%]', !isMobile);
+        }
+      }
+      
+      updateWidth();
+      window.addEventListener('resize', updateWidth);
+    </script>
+    
+    <div class="w-[65%] p-8">
+      <section id="about">
+        <AboutMe client:load />
+      </section>
+      
+      <div class="h-8" />
+      
+      <section id="tech">
+        <FadeInSection client:visible>
+          <TechStacks client:visible />
+        </FadeInSection>
+      </section>
+      
+      <div class="h-8" />
+      
+      <section id="projects">
+        <FadeInSection client:visible delay={100}>
+          <Projects />
+        </FadeInSection>
+      </section>
+      
+      <div class="h-8" />
+      
+      <section id="blog">
+        <FadeInSection client:visible delay={150}>
+          <BlogPosts client:visible />
+        </FadeInSection>
+      </section>
+      
+      <div class="h-8" />
+      
+      <section id="experience">
+        <FadeInSection client:visible delay={200}>
+          <Experience />
+        </FadeInSection>
+      </section>
+      
+      <div class="h-8" />
+      
+      <section id="education">
+        <FadeInSection client:visible delay={250}>
+          <EducationTimeline client:visible />
+        </FadeInSection>
+      </section>
+      
+      <div class="h-8" />
+      
+      <section id="contact">
+        <FadeInSection client:visible delay={300}>
+          <ContactSocial client:visible />
+        </FadeInSection>
+      </section>
+      
+      <div class="h-8" />
+      
+      <Footer client:load />
+    </div>
+    
+    <BackToTop client:idle />
+  </main>
+</BaseLayout>

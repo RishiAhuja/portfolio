@@ -1,0 +1,27 @@
+---
+interface Props {
+  text: string;
+  clickLink?: string;
+}
+
+const { text, clickLink } = Astro.props;
+---
+
+{clickLink ? (
+  <a 
+    href={clickLink}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="px-4 py-2 transition-all duration-200 rounded-sm bg-transparent border-darkGrey border hover:bg-darkGrey hover:border-accent-light cursor-pointer underline decoration-accent-light decoration-1 inline-block"
+  >
+    <span class="font-ptMono text-quillGray hover:text-accent-light text-lg md:text-xl transition-colors duration-200">
+      {text}
+    </span>
+  </a>
+) : (
+  <div class="px-4 py-2 transition-all duration-200 rounded-sm bg-transparent border-darkGrey border hover:bg-darkGrey hover:border-accent-light inline-block">
+    <span class="font-ptMono text-quillGray hover:text-accent-light text-lg md:text-xl transition-colors duration-200">
+      {text}
+    </span>
+  </div>
+)}

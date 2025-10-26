@@ -1,9 +1,9 @@
 // components/project/RelatedProjects.tsx
-'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { Project } from '@/lib/projects';
+import ProjectCardCompact from '../ui/ProjectCardCompact';
+import ExpandedContainer from '../ui/ExpandedContainer';
+import type { Project } from '../../lib/projects';
 
 interface RelatedProjectsProps {
   projects: Project[];
@@ -18,7 +18,7 @@ const RelatedProjects: React.FC<RelatedProjectsProps> = ({ projects }) => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <Link 
+          <a 
             key={project.id} 
             href={`/projects/${project.slug}`}
             className="block border border-darkGrey rounded-sm p-4 hover:border-accent-light hover:bg-accent/5 transition-all group"
@@ -46,7 +46,7 @@ const RelatedProjects: React.FC<RelatedProjectsProps> = ({ projects }) => {
                 </span>
               )}
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

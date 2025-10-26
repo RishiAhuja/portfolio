@@ -1,7 +1,7 @@
 import React from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import SmallContainer from '@/components/ui/SmallContainer';
-import CalendarSchedule from '@/components/ui/CalendarSchedule';
+import ExpandedContainer from './ui/ExpandedContainer';
+import SmallContainer from './ui/SmallContainer';
+import CalendarSchedule from './ui/CalendarSchedule';
 
 const ContactSocial: React.FC = () => {
   const socialLinks = [

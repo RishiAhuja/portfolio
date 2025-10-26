@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import ExpandedContainer from './ui/ExpandedContainer.astro';
+import ProjectCardCompact from './ui/ProjectCardCompact';
+
+// Get all projects from content collection
+const allProjects = await getCollection('projects');
+
+// Sort by date (newest first) and transform to match component expectations
+const projects = allProjects
+  .sort((a, b) => b.data.created_at.getTime() - a.data.created_at.getTime())
+  .map(project => ({
+    id: project.slug,
+    slug: project.slug,
+    title: project.data.title,
+    description: project.data.description,
+    tech_stack: project.data.tech_stack,
+    features: project.data.features,
+    github_url: project.data.github_url,
+    live_url: project.data.live_url,
+    image_url: project.data.image_url,
+    category: project.data.category,
+    is_featured: project.data.is_featured,
+    created_at: project.data.created_at.toISOString(),
+  }));
+---
+
+<div class="flex flex-col">
+  <ExpandedContainer text="Projects" />
+  <div class="h-4"></div>
+  
+  {projects.length === 0 ? (
+    <div class="py-8 text-center">
+      <p class="text-lg font-ptMono text-gray-400">
+        No projects found. Check back soon!
+      </p>
+    </div>
+  ) : (
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      {projects.map((project) => (
+        <div class="h-full">
+          <ProjectCardCompact
+            project={project}
+            client:load
+          />
+        </div>
+      ))}
+    </div>
+  )}
+</div>

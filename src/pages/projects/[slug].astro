@@ -1,0 +1,90 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectDetail from '../../components/project/ProjectDetail';
+import BackToTop from '../../components/ui/BackToTop';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+
+// Transform project data to match component expectations
+const projectData = {
+  id: project.slug,
+  slug: project.slug,
+  title: project.data.title,
+  description: project.data.description,
+  full_description: project.body,
+  tech_stack: project.data.tech_stack,
+  features: project.data.features,
+  github_url: project.data.github_url,
+  live_url: project.data.live_url,
+  image_url: project.data.image_url,
+  category: project.data.category,
+  created_at: project.data.created_at.toISOString(),
+  is_featured: project.data.is_featured,
+};
+
+// Get all projects for related projects filtering
+const allProjects = await getCollection('projects');
+const relatedProjectsData = allProjects
+  .filter(p => p.slug !== project.slug && p.data.category === project.data.category)
+  .slice(0, 3)
+  .map(p => ({
+    id: p.slug,
+    slug: p.slug,
+    title: p.data.title,
+    description: p.data.description,
+    tech_stack: p.data.tech_stack,
+    category: p.data.category,
+    is_featured: p.data.is_featured,
+    github_url: p.data.github_url,
+    live_url: p.data.live_url,
+  }));
+---
+
+<BaseLayout 
+  title={`${projectData.title} | Rishi Ahuja`}
+  description={projectData.description}
+>
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <ProjectDetail project={projectData} client:load />
+    
+    {relatedProjectsData.length > 0 && (
+      <div class="mt-16">
+        <h2 class="text-2xl font-bold font-ptMono text-quillGray mb-6">Related Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedProjectsData.map(relatedProject => (
+            <a 
+              href={`/projects/${relatedProject.slug}`}
+              class="group block p-6 bg-bgShades-light border border-darkGrey rounded-sm hover:border-accent-light transition-all"
+            >
+              <h3 class="text-xl font-bold font-ptMono text-quillGray group-hover:text-accent-light transition-colors mb-2">
+                {relatedProject.title}
+              </h3>
+              <p class="text-sm font-ptMono text-gunSmoke mb-4">
+                {relatedProject.description}
+              </p>
+              <div class="flex flex-wrap gap-2">
+                {relatedProject.tech_stack.slice(0, 3).map(tech => (
+                  <span class="text-xs font-ptMono text-accent-light bg-darkGrey px-2 py-1 rounded-sm">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+    
+    <BackToTop client:idle />
+  </main>
+</BaseLayout>

@@ -1,7 +1,6 @@
-'use client';
 
 import React, { useState } from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
+import ExpandedContainer from './ui/ExpandedContainer';
 
 interface TimelineItemProps {
   duration: string;

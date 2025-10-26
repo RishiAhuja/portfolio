@@ -1,8 +1,7 @@
-'use client';
 import React, { useState, useEffect } from 'react';
-import ExpandedContainer from '@/components/ui/ExpandedContainer';
-import BlogPostItem from '@/components/ui/BlogPostItem';
-import { fetchHashnodePosts, formatPostDate, getPostUrl } from '@/lib/hashnode';
+import ExpandedContainer from './ui/ExpandedContainer';
+import BlogPostItem from './ui/BlogPostItem';
+import { fetchHashnodePosts, formatPostDate } from '../lib/hashnode';
 
 // Define a type for our component's state
 interface Post {
@@ -27,7 +26,7 @@ const BlogPosts: React.FC = () => {
       setIsLoading(true);
       setError(null);
       
-      const data = await fetchHashnodePosts(USERNAME, 10);
+      const data = await fetchHashnodePosts(USERNAME, 50); // Fetch all posts
       
       if (data && data.length > 0) {
         setPosts(data);
@@ -70,7 +69,7 @@ const BlogPosts: React.FC = () => {
             if (!post) return null;
             
             const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
-            const link = getPostUrl(post);
+            const link = post.slug ? `/blogs/${post.slug}` : '#';
             const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
             
             // Use slug as key for uniqueness, fallback to index

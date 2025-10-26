@@ -2,11 +2,9 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}',
   ],
-  darkMode: 'class', // Add this for dark mode support
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -15,7 +13,7 @@ const config: Config = {
         playfair: ['var(--font-playfair)'],
       },
       colors: {
-        backgroundColor: '#181a1b', // Fixed spelling
+        backgroundColor: '#181a1b',
         darkGrey: '#363b3d',
         quillGray: '#e2e2dd',
         codGray: '#1d1d1d',

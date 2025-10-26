@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
+
 
 interface CarouselImage {
   src: string;
@@ -16,13 +16,17 @@ interface ImageCarouselProps {
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const goToPrevious = () => {
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setCurrentIndex((prevIndex) => 
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
 
-  const goToNext = () => {
+  const goToNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setCurrentIndex((prevIndex) => 
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
@@ -47,13 +51,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
             aspectRatio: '16/10'
           }}
         >
-          <Image
+          <img
             src={images[0].src}
             alt={images[0].alt}
-            width={800}
-            height={600}
             className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
           />
         </div>
         {(images[0].alt || caption) && (
@@ -75,38 +76,37 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
         }}
       >
         {/* Main Image */}
-        <Image
+        <img
           src={images[currentIndex].src}
           alt={images[currentIndex].alt}
-          width={800}
-          height={600}
-          className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+          className="max-w-full max-h-full object-contain"
         />
 
         {/* Navigation Arrows */}
         <button
           onClick={goToPrevious}
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-darkGrey/80 hover:bg-darkGrey text-quillGray rounded-full p-2 transition-colors"
+          type="button"
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-darkGrey/80 hover:bg-darkGrey text-quillGray rounded-full p-2 transition-colors cursor-pointer"
           aria-label="Previous image"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
 
         <button
           onClick={goToNext}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-darkGrey/80 hover:bg-darkGrey text-quillGray rounded-full p-2 transition-colors"
+          type="button"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-darkGrey/80 hover:bg-darkGrey text-quillGray rounded-full p-2 transition-colors cursor-pointer"
           aria-label="Next image"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
 
         {/* Image Counter */}
-        <div className="absolute top-2 right-2 bg-darkGrey/80 text-quillGray px-2 py-1 rounded text-xs font-ptMono">
+        <div className="absolute top-2 right-2 bg-darkGrey/80 text-quillGray px-2 py-1 rounded text-xs font-ptMono z-10">
           {currentIndex + 1} / {images.length}
         </div>
       </div>
@@ -116,8 +116,13 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
         {images.map((_, index) => (
           <button
             key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-2 h-2 rounded-full transition-colors ${
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              goToSlide(index);
+            }}
+            type="button"
+            className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
               index === currentIndex 
                 ? 'bg-accent' 
                 : 'bg-darkGrey/50 hover:bg-darkGrey/80'
@@ -140,19 +145,22 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption }) => {
           {images.map((image, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
-              className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-colors ${
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                goToSlide(index);
+              }}
+              type="button"
+              className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-colors cursor-pointer ${
                 index === currentIndex 
                   ? 'border-accent' 
                   : 'border-darkGrey/30 hover:border-darkGrey/60'
               }`}
             >
-              <Image
+              <img
                 src={image.src}
                 alt={`Thumbnail ${index + 1}`}
-                width={64}
-                height={48}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover pointer-events-none"
               />
             </button>
           ))}

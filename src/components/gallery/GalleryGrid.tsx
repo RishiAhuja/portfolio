@@ -1,8 +1,6 @@
-'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import { GalleryImage } from '@/data/gallery';
+import type { GalleryImage } from '../../data/gallery';
 
 interface GalleryGridProps {
   images: GalleryImage[];

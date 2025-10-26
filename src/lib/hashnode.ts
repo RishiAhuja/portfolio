@@ -10,6 +10,19 @@ export interface HashnodePost {
   directUrl: string;
 }
 
+export interface HashnodePostDetail extends HashnodePost {
+  content: {
+    markdown: string;
+  };
+  readTimeInMinutes: number;
+  tags: Array<{ name: string; slug: string }>;
+  author: {
+    name: string;
+    username: string;
+    profilePicture?: string;
+  };
+}
+
 // Define a type for node from GraphQL v2 API
 interface HashnodeGraphQLNode {
   id: string;
@@ -203,4 +216,96 @@ export const getPostUrl = (post: PostUrlData | null | undefined): string => {
   }
   
   return '#';
+};
+
+/**
+ * Fetch a single blog post with full content
+ */
+export const fetchHashnodePostBySlug = async (username: string, slug: string): Promise<HashnodePostDetail | null> => {
+  try {
+    const query = `
+      query PostBySlug($host: String!, $slug: String!) {
+        publication(host: $host) {
+          post(slug: $slug) {
+            id
+            title
+            brief
+            slug
+            publishedAt
+            updatedAt
+            readTimeInMinutes
+            reactionCount
+            responseCount
+            views
+            url
+            content {
+              markdown
+            }
+            coverImage {
+              url
+            }
+            author {
+              name
+              username
+              profilePicture
+            }
+            tags {
+              name
+              slug
+            }
+          }
+        }
+      }
+    `;
+    
+    const variables = {
+      host: `${username}.hashnode.dev`,
+      slug: slug,
+    };
+    
+    const response = await fetch('https://gql.hashnode.com/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Hashnode API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.errors) {
+      throw new Error(`GraphQL error: ${data.errors[0]?.message}`);
+    }
+    
+    const post = data.data?.publication?.post;
+    
+    if (!post) {
+      return null;
+    }
+    
+    return {
+      _id: post.id,
+      title: post.title,
+      brief: post.brief,
+      slug: post.slug,
+      dateAdded: post.publishedAt,
+      totalReactions: post.reactionCount || 0,
+      responseCount: post.responseCount || 0,
+      coverImage: post.coverImage,
+      directUrl: post.url,
+      content: post.content,
+      readTimeInMinutes: post.readTimeInMinutes,
+      tags: post.tags || [],
+      author: post.author,
+    };
+    
+  } catch (error) {
+    console.error('Error fetching Hashnode post:', error);
+    throw error;
+  }
 };

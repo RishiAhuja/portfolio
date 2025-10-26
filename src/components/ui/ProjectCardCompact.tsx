@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { Project } from '@/lib/projects';
+import type { Project } from '../../lib/projects';
 
 interface ProjectCardCompactProps {
   project: Project;
@@ -20,16 +19,26 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
   // Check if project has a valid slug
   const hasValidSlug = !!project.slug;
   
-  // Create the card content
-  const cardContent = (
+  const handleCardClick = () => {
+    if (hasValidSlug) {
+      window.location.href = `/projects/${project.slug}`;
+    }
+  };
+
+  const handleGithubClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+  };
+
+  return (
     <div 
       className={`
-        border rounded-sm transition-all duration-300 h-full
+        relative border rounded-sm transition-all duration-300 h-full
         ${isHovered ? 'border-accent-light shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] transform -translate-y-1' : 'border-darkGrey'}
-        flex flex-col cursor-pointer
+        flex flex-col ${hasValidSlug ? 'cursor-pointer' : ''}
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       {/* Accent corner */}
       <div className={`absolute top-0 right-0 w-0 h-0 transition-all duration-300
@@ -71,7 +80,7 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
         
         {/* Bottom Actions */}
         <div className="flex justify-between items-center mt-auto">
-          {/* Link to project details */}
+          {/* Project status indicator */}
           <div
             className={`
               flex items-center font-ptMono text-sm 
@@ -99,9 +108,9 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
               href={project.github_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gunSmoke hover:text-accent-light transition-colors"
+              className="text-gunSmoke hover:text-accent-light transition-colors z-10"
               aria-label="View on GitHub"
-              onClick={(e) => e.stopPropagation()} // Prevent card click when clicking GitHub link
+              onClick={handleGithubClick}
             >
               <svg 
                 className="w-5 h-5" 
@@ -116,13 +125,6 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
       </div>
     </div>
   );
-
-  // If project has a valid slug, wrap it in a Link component, otherwise just return the card
-  return hasValidSlug ? (
-    <Link href={`/projects/${project.slug}`} passHref>
-      {cardContent}
-    </Link>
-  ) : cardContent;
 };
 
 export default ProjectCardCompact;

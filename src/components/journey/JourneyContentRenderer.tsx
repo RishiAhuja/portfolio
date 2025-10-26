@@ -1,8 +1,5 @@
-'use client';
-
 import React, { useEffect } from 'react';
-import Image from 'next/image';
-import { JourneyContent } from '@/data/journey';
+import type { JourneyContent } from '../../data/journey';
 import ImageCarousel from './ImageCarousel';
 
 interface JourneyContentRendererProps {
@@ -59,13 +56,10 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
                 aspectRatio: '16/10'
               }}
             >
-              <Image
+              <img
                 src={(item.content!)}
                 alt={item.alt || 'Journey image'}
-                width={800}
-                height={600}
                 className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
               />
             </div>
             {item.alt && (
@@ -161,13 +155,10 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
                 aspectRatio: '16/10'
               }}
             >
-              <Image
+              <img
                 src={item.content!}
                 alt={item.alt || 'Tweet screenshot'}
-                width={800}
-                height={600}
                 className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
               />
             </div>
             <div className="text-center mt-3">
@@ -204,11 +195,9 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
               <div className="flex">
                 {item.image && (
                   <div className="w-32 h-24 flex-shrink-0">
-                    <Image
+                    <img
                       src={item.image}
                       alt={item.title || 'Link preview'}
-                      width={128}
-                      height={96}
                       className="w-full h-full object-cover"
                     />
                   </div>

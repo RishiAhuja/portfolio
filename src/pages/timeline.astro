@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TimelineView from '../components/TimelineView.tsx';
+---
+
+<BaseLayout 
+  title="Timeline | Rishi Ahuja"
+  description="A chronological record of development milestones, projects, and achievements"
+>
+  <TimelineView client:load />
+</BaseLayout>
