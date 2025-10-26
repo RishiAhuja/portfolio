@@ -16,24 +16,72 @@ export interface TimelineEvent {
 }
 
 export const timelineData: Record<string, TimelineEvent[]> = {
-  '2024-25': [
+  '2025-26': [
     {
-      date: '5 July 2025',
-      title: 'Shamir\'s Secret Sharing Scheme and Multi Party Computation.',
-      type: 'blog',
-      description: 'Mathematical Blog (21 min read) exploring Shamir\'s Secret Sharing Scheme and Multi Party Computation for private key management.',
-      year: '2024-25',
+      date: '17 Oct 2025',
+      title: 'Started Entrepreneur-in-Residence (EIR)',
+      type: 'community',
+      description: 'Began role as an Entrepreneur-in-Residence at iHub AwaDH, IIT Ropar, supporting and mentoring technology startups.',
+      link: 'https://ihub-awadh.in/',
+      status: 'ongoing',
+      year: '2025-26', 
       buttons: [
-        { label: 'Read Blog', link: 'https://rishi2220.hashnode.dev/shamirs-secret-sharing-scheme-and-multi-party-computation', icon: 'blog' }
+        {
+          label: 'Visit iHub AwaDH',
+          link: 'https://ihub-awadh.in/',
+          icon: 'external'
+        }
       ]
     },
+    {
+      date: '6 Sept 2025',
+      title: 'Bit N Build Punjab Mentor',
+      type: 'community',
+      description: 'Invited as a mentor for the Bit n Build Punjab Round hackathon at Thapar University, Patiala. Guided and advised over 30 participating teams during the event held on September 6, 2025, which hosted 120+ participants in collaboration with Genesoc Society.',
+      year: '2025-26',
+      buttons: [
+        { label: 'View Event Details', link: 'https://www.openlearn.org.in/events/hackathon-1', icon: 'external' }
+      ]
+    },
+    {
+      date: '25 Aug 2025',
+      title: 'You Don\'t Know WebSockets. Yet.',
+      type: 'blog',
+      description: 'Deep dive technical blog exploring WebSocket protocol, real-time communication patterns, and bidirectional data flow in modern web applications.',
+      year: '2025-26',
+      buttons: [
+        { label: 'Read Blog', link: '/blogs/you-dont-know-websockets-yet', icon: 'blog' }
+      ]
+    },
+    {
+      date: '3 Aug 2025',
+      title: 'Go Beneath the Abstraction: Building Interactive UIs with FernKit',
+      type: 'blog',
+      description: 'Technical deep dive into FernKit UI toolkit, exploring low-level rendering, widget systems, and building UIs from scratch with C++.',
+      year: '2025-26',
+      buttons: [
+        { label: 'Read Blog', link: '/blogs/go-beneath-the-abstraction-building-interactive-uis-with-fernkit', icon: 'blog' }
+      ]
+    },
+  ],
+  '2024-25': [
     {
       date: '10 Jul 2025',
       title: 'Mess ERP with 6-way Infrastructure',
       type: 'project',
       description: 'Currently developing comprehensive ERP system for NITJ with 6-way infrastructure, targeting 5000+ users for mess management and operations.',
       status: 'ongoing',
-      year: '2025',
+      year: '2025-26',
+    },
+    {
+      date: '5 July 2025',
+      title: 'Shamir\'s Secret Sharing Scheme and Multi Party Computation.',
+      type: 'blog',
+      description: 'Mathematical Blog (21 min read) exploring Shamir\'s Secret Sharing Scheme and Multi Party Computation for private key management.',
+      year: '2025-26',
+      buttons: [
+        { label: 'Read Blog', link: '/blogs/shamirs-secret-sharing-scheme-and-multi-party-computation', icon: 'blog' }
+      ]
     },
     {
       date: '14 Jun 2025',
@@ -42,7 +90,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       description: 'Deep technical blog (32 min read) exploring TTF file format and text rendering fundamentals.',
       year: '2024-25',
       buttons: [
-        { label: 'Read Blog', link: 'https://rishi2220.hashnode.dev/your-hardest-hello-world-text-rasterization-1', icon: 'blog' }
+        { label: 'Read Blog', link: '/blogs/your-hardest-hello-world-text-rasterization-1', icon: 'blog' }
       ]
     },
     {

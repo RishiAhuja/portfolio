@@ -187,8 +187,9 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
 
 const TimelineView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const selectedYear = '2024-25';
-  const currentData = timelineData[selectedYear] || [];
+  
+  // Get all years sorted in descending order
+  const years = Object.keys(timelineData).sort((a, b) => b.localeCompare(a));
 
   useEffect(() => {
     const checkMobile = () => {
@@ -230,52 +231,66 @@ const TimelineView: React.FC = () => {
           <div className="w-24 h-px bg-accent mx-auto"></div>
         </div>
 
-        {/* Year Selector */}
-        <div className="text-center mb-8">
-          <span className="text-gunSmoke text-sm px-3 py-1 border border-darkGrey/50 rounded-sm">
-            Academic Year 2024-25
-          </span>
-        </div>
-
-        {/* Timeline */}
-        <div>
-          <ExpandedContainer text="Timeline Events" />
-          <div className="h-8" />
+        {/* Iterate through all years */}
+        {years.map((year, yearIndex) => {
+          const currentData = timelineData[year] || [];
           
-          <div className="relative">
-            {/* Vertical timeline line - positioned at the dot location */}
-            <div 
-              className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-darkGrey/20 via-darkGrey/40 to-darkGrey/20"
-              style={{ left: isMobile ? '5px' : '6px' }}
-            >
-              {/* Accent gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/10 to-transparent"></div>
-              {/* Animated flow effect */}
-              <div 
-                className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-accent/30 via-accent/10 to-transparent"
-                style={{
-                  animation: 'timeline-flow 15s ease-in-out infinite',
-                }}
-              ></div>
-            </div>
-            
-            <div className="space-y-0">
-              {currentData.length > 0 ? currentData.map((item, index) => (
-                <TimelineCard 
-                  key={index} 
-                  item={item} 
-                  index={index}
-                />
-              )) : (
-                <div className="text-center py-12">
-                  <p className="text-lg font-ptMono text-gunSmoke">
-                    No timeline events found.
-                  </p>
+          return (
+            <div key={year} className="mb-16">
+              {/* Year Separator */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-darkGrey/50 to-transparent"></div>
+                <div className="relative">
+                  <span className="text-accent text-sm px-4 py-2 border border-accent/30 rounded-sm bg-codGray/50 backdrop-blur-sm font-ptMono">
+                    Academic Year {year}
+                  </span>
+                  {/* Corner accents */}
+                  <div className="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-accent/50"></div>
+                  <div className="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-accent/50"></div>
                 </div>
-              )}
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-darkGrey/50 to-transparent"></div>
+              </div>
+
+              {/* Timeline for this year */}
+              <div>
+                <ExpandedContainer text="Timeline Events" />
+                <div className="h-8" />
+                
+                <div className="relative">
+                  {/* Vertical timeline line */}
+                  <div 
+                    className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-darkGrey/20 via-darkGrey/40 to-darkGrey/20"
+                    style={{ left: isMobile ? '5px' : '6px' }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/10 to-transparent"></div>
+                    <div 
+                      className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-accent/30 via-accent/10 to-transparent"
+                      style={{
+                        animation: 'timeline-flow 15s ease-in-out infinite',
+                      }}
+                    ></div>
+                  </div>
+            
+                  <div className="space-y-0">
+                    {currentData.length > 0 ? currentData.map((item, index) => (
+                      <TimelineCard 
+                        key={index} 
+                        item={item} 
+                        index={index}
+                      />
+                    )) : (
+                      <div className="text-center py-12">
+                        <p className="text-lg font-ptMono text-gunSmoke">
+                          No timeline events found.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       <style>{`

@@ -21,19 +21,45 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <link rel="apple-touch-icon" href="/favicon.jpg" />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content="developer, portfolio, web development, mobile development, React, Next.js, Flutter" />
+    <meta name="keywords" content="Rishi Ahuja, developer portfolio, full stack developer, web development, mobile development, Flutter, React, Astro, TypeScript, C++, FernKit, OpenLearn, software engineer, NITJ, technical blogs, WebSockets, text rendering, system programming" />
     <meta name="author" content="Rishi Ahuja" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#191919" />
+    
+    <!-- Verification Tags (add your verification codes when available) -->
+    <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_CODE" /> -->
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Rishi Ahuja",
+      "url": Astro.site,
+      "image": new URL(image, Astro.site),
+      "sameAs": [
+        "https://github.com/RishiAhuja",
+        "https://www.linkedin.com/in/rishi-ahuja-b1a224310",
+        "https://twitter.com/Rishi2220",
+        "https://rishi2220.hashnode.dev"
+      ],
+      "jobTitle": "Full Stack Developer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "OpenLearn"
+      },
+      "alumniOf": {
+        "@type": "Organization",
+        "name": "Dr. B.R. Ambedkar National Institute of Technology Jalandhar"
+      },
+      "knowsAbout": ["Web Development", "Mobile Development", "System Programming", "UI/UX Design", "Flutter", "React", "TypeScript", "C++", "Python"],
+    })} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -41,11 +67,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.site)} />
-    <meta property="og:site_name" content="Rishi Ahuja" />
+    <meta property="og:site_name" content="Rishi Ahuja - Developer Portfolio" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@rishi2220" />
     <meta name="twitter:creator" content="@rishi2220" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

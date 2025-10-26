@@ -1,7 +1,6 @@
 
 import React from 'react';
-
-import { GalleryImage } from '../../data/gallery';
+import type { GalleryImage } from '../../data/gallery';
 
 interface GalleryGridProps {
   images: GalleryImage[];
