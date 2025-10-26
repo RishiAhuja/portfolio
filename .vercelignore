@@ -29,6 +29,8 @@ Thumbs.db
 coverage/
 
 # Misc
+# Ignore markdown by default but allow content collection markdown so Astro can build projects
 *.md
 !README.md
+!src/content/**/*.md
 .git/
