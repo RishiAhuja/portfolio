@@ -21,7 +21,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       date: '10 Nov 2025',
       title: '1st Place Winner: Qyrus Track @ HackCBS 8.0',
       type: 'achievement',
-      description: 'Secured First Place in the qAPI by Qyrus sponsor track at the HackCBS 8.0 hackathon in Delhi. Our project, StepWise.AI, was awarded the top prize (Ray-Ban Meta smart glasses) by the Qyrus leadership team.',
+      description: 'Secured First Place in the qAPI by Qyrus sponsor track at the HackCBS 8.0 hackathon in Delhi. Our project, Swasya.AI, was awarded the top prize (Ray-Ban Meta smart glasses) by the Qyrus leadership team.',
       year: '2025-26', 
       buttons: [
         {

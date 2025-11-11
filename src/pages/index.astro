@@ -50,10 +50,10 @@ const schema = {
   <!-- Timeline Navigation - Non-fixed -->
   <div class="absolute top-0 right-0 z-40">
     <a 
-      href="/timeline" 
+      href="/ledger" 
       class="group flex items-center gap-2 bg-bgShades-light/80 backdrop-blur-sm border-l border-b border-darkGrey/30 px-4 py-3 text-quillGray hover:text-accent transition-all duration-300 font-ptMono text-sm"
     >
-      <span>Timeline</span>
+      <span>ledger</span>
       <svg class="w-4 h-4 transition-all duration-300 group-hover:translate-x-1 opacity-70 group-hover:opacity-100" 
         fill="none" stroke="currentColor" viewBox="0 0 24 24"
       >
@@ -90,20 +90,20 @@ const schema = {
           <TechStacks client:visible />
         </FadeInSection>
       </section>
+
+      <div class="h-8" />
+      
+      <section id="blog">
+        <FadeInSection client:visible delay={150}>
+          <BlogPosts client:visible />
+        </FadeInSection>
+      </section>
       
       <div class="h-8" />
       
       <section id="projects">
         <FadeInSection client:visible delay={100}>
           <Projects />
-        </FadeInSection>
-      </section>
-      
-      <div class="h-8" />
-      
-      <section id="blog">
-        <FadeInSection client:visible delay={150}>
-          <BlogPosts client:visible />
         </FadeInSection>
       </section>
       

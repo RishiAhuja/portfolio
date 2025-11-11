@@ -223,7 +223,7 @@ const TimelineView: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12 relative">
           <h1 className="text-5xl font-bold font-ptMono text-quillGray mb-4">
-            Timeline
+            Life Ledger
           </h1>
           <p className="text-lg text-gunSmoke font-ptMono mb-6">
             A chronological record of development milestones
