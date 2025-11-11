@@ -30,7 +30,7 @@ const AboutMe: React.FC = () => {
       <div className="text-lg font-ptMono text-gray-400">
         {nameTyped && (
           <TypeAnimation
-            sequence={['Flutter Developer']}
+            sequence={['I experiment with things that fascinate me.']}
             speed={40}
             cursor={false}
           />

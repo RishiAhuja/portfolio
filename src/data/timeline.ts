@@ -18,6 +18,44 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: '10 Nov 2025',
+      title: '1st Place Winner: Qyrus Track @ HackCBS 8.0',
+      type: 'achievement',
+      description: 'Secured First Place in the qAPI by Qyrus sponsor track at the HackCBS 8.0 hackathon in Delhi. Our project, StepWise.AI, was awarded the top prize (Ray-Ban Meta smart glasses) by the Qyrus leadership team.',
+      year: '2025-26', 
+      buttons: [
+        {
+          label: 'View Sponsor (Qyrus)',
+          link: 'https://qyrus.com/',
+          icon: 'external'
+        },
+        {
+          label: 'View HackCBS',
+          link: 'https://hackcbs.tech/',
+          icon: 'external'
+        }
+      ]
+    },
+    {
+      date: '3 Nov 2025',
+      title: 'Product Presentation to GOI & MeitY Delegation',
+      type: 'community',
+      description: 'Presented our Agri-Tech innovations to a high-level delegation in a 4-hour strategic meeting and luncheon. The audience included the Chief AI Officer (Ministry of Agriculture), the Director of IIT Ropar, officials from the Ministry of Education, and leadership from MeitY.',
+      year: '2025-26', 
+      buttons: [
+        {
+          label: 'View Post (MeitY)',
+          link: 'https://www.linkedin.com/posts/nicmeity_artificialintelligence-agriculture-nicmeity-activity-7391430381838721024-JoFY/',
+          icon: 'external'
+        },
+        {
+          label: 'View Post (Annam AI)',
+          link: 'https://www.linkedin.com/posts/annam-ai_iitropar-annamai-agritech-activity-7391777407919214592-TGyh/',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '17 Oct 2025',
       title: 'Started Entrepreneur-in-Residence (EIR)',
       type: 'community',
