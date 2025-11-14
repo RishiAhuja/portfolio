@@ -128,13 +128,13 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({
             <div className="flex flex-col md:flex-row md:items-baseline md:justify-between">
               <div>
                 {/* Role title with hover effect */}
-                <h3 className={`text-xl md:text-2xl font-bold font-ptMono transition-colors duration-200 ${
+                <h3 className={`text-lg md:text-2xl font-bold font-ptMono transition-colors duration-200 ${
                   isHovered ? 'text-accent-light' : 'text-quillGray'
                 }`}>
                   {role}
                 </h3>
                 
-                <p className="text-lg font-ptMono text-quillGray mt-1">
+                <p className="text-base md:text-lg font-ptMono text-quillGray mt-1">
                   {company}
                 </p>
               </div>
@@ -152,7 +152,7 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({
             
             {/* Date information for mobile */}
             <div className="md:hidden mt-2">
-              <p className="text-base font-ptMono text-gray-400">
+              <p className="text-sm font-ptMono text-gray-400">
                 {formatDateRange()} · {calculateDuration()}
               </p>
             </div>

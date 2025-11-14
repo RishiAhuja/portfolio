@@ -8,6 +8,9 @@ import AboutMe from '../components/AboutMe';
 import TechStacks from '../components/TechStacks';
 import Projects from '../components/Projects.astro';
 import BlogPosts from '../components/BlogPosts';
+import PapersReading from '../components/PapersReading';
+import Upstream from '../components/Upstream';
+import SideQuests from '../components/SideQuests';
 import Experience from '../components/Experience.astro';
 import EducationTimeline from '../components/EducationTimeline';
 import ContactSocial from '../components/ContactSocial';
@@ -83,13 +86,13 @@ const schema = {
         <AboutMe client:load />
       </section>
       
-      <div class="h-8" />
+      <!-- <div class="h-8" /> -->
       
-      <section id="tech">
+      <!-- <section id="tech">
         <FadeInSection client:visible>
           <TechStacks client:visible />
         </FadeInSection>
-      </section>
+      </section> -->
 
       <div class="h-8" />
       
@@ -101,12 +104,20 @@ const schema = {
       
       <div class="h-8" />
       
-      <section id="projects">
-        <FadeInSection client:visible delay={100}>
-          <Projects />
+      <section id="papers">
+        <FadeInSection client:visible delay={175}>
+          <PapersReading client:visible />
         </FadeInSection>
       </section>
+
+      <div class="h-8" />
       
+      <section id="sidequests">
+        <FadeInSection client:visible delay={275}>
+          <SideQuests client:visible />
+        </FadeInSection>
+      </section>
+
       <div class="h-8" />
       
       <section id="experience">
@@ -114,7 +125,21 @@ const schema = {
           <Experience />
         </FadeInSection>
       </section>
+
+      <div class="h-8" />
+      <section id="upstream">
+        <FadeInSection client:visible delay={125}>
+          <Upstream client:visible />
+        </FadeInSection>
+      </section>
+
+      <div class="h-8" />
       
+      <section id="projects">
+        <FadeInSection client:visible delay={100}>
+          <Projects />
+        </FadeInSection>
+      </section>
       <div class="h-8" />
       
       <section id="education">

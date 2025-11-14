@@ -30,7 +30,7 @@ const AboutMe: React.FC = () => {
       <div className="text-lg font-ptMono text-gray-400">
         {nameTyped && (
           <TypeAnimation
-            sequence={['I experiment with things that fascinate me.']}
+            sequence={["A builder's logbook."]}
             speed={40}
             cursor={false}
           />
@@ -50,10 +50,45 @@ const AboutMe: React.FC = () => {
       <div className="h-3" />
       
       <p className="text-base font-ptMono text-quillGray">
-        Hi, I&apos;m Rishi, a tech enthusiast from Punjab, India. I work with Flutter mainly. 
-        You can find me on Twitter, usually shitposting and writing blogs on hashnode. 
-        I&apos;m open to <span className="text-accent-light font-semibold">work</span>!
-        {" "}Check out my{" "}
+        Hi, I&apos;m Rishi. I&apos;m an 18-year-old Entrepreneur-in-Residence (EIR) at{" "}
+        <span className="text-accent-light font-semibold">iHub AwaDH, IIT Ropar</span>, where I&apos;m building AI-powered platforms for Indian agriculture.
+      </p>
+      
+      <div className="h-3" />
+      
+      <p className="text-base font-ptMono text-quillGray">
+        We recently presented our work to a delegation from the{" "}
+        <span className="text-accent-light font-semibold">Government of India and MeitY</span>.
+      </p>
+      
+      <div className="h-3" />
+      
+      <p className="text-base font-ptMono text-quillGray">
+        By day, I&apos;m a B.Tech IT student at NIT Jalandhar, but I love to get my hands dirty and build things from scratch.
+      </p>
+      
+      <div className="h-3" />
+      
+      <p className="text-base font-ptMono text-quillGray">
+        I write about my process on{" "}
+        <a 
+          href="https://hashnode.com/@rishi2220" 
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent-light underline decoration-1 decoration-accent-light/50 hover:decoration-accent-light transition-all"
+        >
+          Hashnode
+        </a>
+        {" "}and shitpost on{" "}
+        <a 
+          href="https://twitter.com/Rishi2220" 
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent-light underline decoration-1 decoration-accent-light/50 hover:decoration-accent-light transition-all"
+        >
+          Twitter
+        </a>
+        . Check out my work below or see my{" "}
         <a 
           href="#" 
           onClick={handleResumeDownload}

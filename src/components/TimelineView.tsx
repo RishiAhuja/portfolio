@@ -114,11 +114,11 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
             <div className={`flex items-start justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
               <div className="flex-1 pr-3">
                 <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
-                  ${isMobile ? 'text-lg mb-2' : 'text-xl mb-2'}`}>
+                  ${isMobile ? 'text-base mb-2' : 'text-xl mb-2'}`}>
                   {item.title}
                 </h3>
                 <p className={`text-gunSmoke leading-relaxed font-ptMono
-                  ${isMobile ? 'text-sm' : 'text-base'}`}>
+                  ${isMobile ? 'text-xs' : 'text-base'}`}>
                   {item.description}
                 </p>
               </div>
@@ -221,14 +221,15 @@ const TimelineView: React.FC = () => {
 
       <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto py-8 relative`}>
         {/* Header */}
-        <div className="text-center mb-12 relative">
-          <h1 className="text-5xl font-bold font-ptMono text-quillGray mb-4">
+        <div className="mb-12 relative">
+          <h1 className={`font-bold font-ptMono text-quillGray mb-3 ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
             Life Ledger
           </h1>
-          <p className="text-lg text-gunSmoke font-ptMono mb-6">
-            A chronological record of development milestones
+          <p className={`text-gunSmoke font-ptMono mb-6 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl`}>
+            A running log of things I've built, learned, and shipped. Some projects took months, some took days. 
+            All of them taught me something. This is where I keep track of the journey—one commit, one project, one late night at a time.
           </p>
-          <div className="w-24 h-px bg-accent mx-auto"></div>
+          <div className="w-24 h-px bg-accent mx-auto hidden md:block"></div>
         </div>
 
         {/* Iterate through all years */}

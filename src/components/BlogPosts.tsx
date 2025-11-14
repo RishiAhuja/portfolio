@@ -19,6 +19,7 @@ const BlogPosts: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
   const USERNAME = "rishi2220";
   
   const loadBlogPosts = async (forceRefresh = false) => {
@@ -64,28 +65,39 @@ const BlogPosts: React.FC = () => {
           No blog posts found. Check back soon!
         </div>
       ) : (
-        <div className="space-y-2 md:space-y-4">
-          {posts.map((post, index) => {
-            if (!post) return null;
-            
-            const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
-            const link = post.slug ? `/blogs/${post.slug}` : '#';
-            const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
-            
-            // Use slug as key for uniqueness, fallback to index
-            const uniqueKey = post.slug || post._id || `post-${index}`;
-            
-            return (
-              <BlogPostItem
-                key={uniqueKey}
-                title={title}
-                link={link}
-                date={date}
-                readTime={undefined} // Remove brief/readTime
-              />
-            );
-          })}
-        </div>
+        <>
+          <div className="space-y-2 md:space-y-4">
+            {(showAll ? posts : posts.slice(0, 5)).map((post, index) => {
+              if (!post) return null;
+              
+              const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
+              const link = post.slug ? `/blogs/${post.slug}` : '#';
+              const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
+              
+              // Use slug as key for uniqueness, fallback to index
+              const uniqueKey = post.slug || post._id || `post-${index}`;
+              
+              return (
+                <BlogPostItem
+                  key={uniqueKey}
+                  title={title}
+                  link={link}
+                  date={date}
+                  readTime={undefined} // Remove brief/readTime
+                />
+              );
+            })}
+          </div>
+          
+          {posts.length > 5 && (
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="mt-4 w-full py-3 font-ptMono text-sm text-accent-light border border-darkGrey/40 hover:border-accent-light/30 rounded-sm transition-all duration-300 hover:bg-darkGrey/20"
+            >
+              {showAll ? 'Show Less' : `Show All (${posts.length})`}
+            </button>
+          )}
+        </>
       )}
     </div>
   );
