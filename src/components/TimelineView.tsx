@@ -109,7 +109,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
             ${isHovered ? 'border-t-accent border-r-accent' : 'border-t-transparent border-r-transparent'}`}>
           </div>
           
-          <div className={isMobile ? "p-4" : "p-6"}>
+          <div className={isMobile ? "p-3" : "p-6"}>
             {/* Header with Journey Link on the right */}
             <div className={`flex items-start justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
               <div className="flex-1 pr-3">
@@ -221,13 +221,12 @@ const TimelineView: React.FC = () => {
 
       <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto py-8 relative`}>
         {/* Header */}
-        <div className="mb-12 relative">
+        <div className="mb-12 relative text-center">
           <h1 className={`font-bold font-ptMono text-quillGray mb-3 ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
             Life Ledger
           </h1>
-          <p className={`text-gunSmoke font-ptMono mb-6 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl`}>
-            A running log of things I've built, learned, and shipped. Some projects took months, some took days. 
-            All of them taught me something. This is where I keep track of the journey—one commit, one project, one late night at a time.
+          <p className={`text-gunSmoke font-ptMono mb-6 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl mx-auto`}>
+            A running log of things happened to me.
           </p>
           <div className="w-24 h-px bg-accent mx-auto hidden md:block"></div>
         </div>

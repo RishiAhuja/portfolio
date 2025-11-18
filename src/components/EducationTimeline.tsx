@@ -104,7 +104,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
 const EducationTimeline: React.FC = () => {
   return (
     <div>
-      <ExpandedContainer text="Education" />
+      <ExpandedContainer text="Academics" />
       <div className="h-6" />
       <div className="pl-2">
         <TimelineItem

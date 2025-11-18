@@ -29,7 +29,7 @@ const ContactSocial: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <ExpandedContainer text="Contact & Social" />
+      <ExpandedContainer text="Ping Me" />
       <div className="h-4" />
       
       {/* Calendar Scheduling */}
