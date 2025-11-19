@@ -16,69 +16,39 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
       className={`
         cursor-pointer transition-all duration-200 rounded-sm
         ${isHovered ? 'bg-darkGrey/30 border-accent-light' : 'bg-transparent border-transparent'}
-        border p-2.5 md:p-4
+        border p-3 md:p-3.5
         block w-full
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => window.open(item.url, '_blank')}
     >
-      {/* Mobile Layout - Stacked */}
-      <div className="flex md:hidden flex-col gap-2">
-        <div className="flex items-start gap-2">
-          <span className={`flex-shrink-0 px-1.5 py-0.5 text-[10px] font-ptMono rounded border ${getStateBadge(item.state)}`}>
-            {getStateLabel(item.state)}
-          </span>
-          <span className={`
-            font-ptMono text-sm
+      {/* Mobile & Desktop - Two-line layout */}
+      <div className="flex flex-col gap-2">
+        {/* First line: Title with arrow */}
+        <div className="flex items-start justify-between gap-3">
+          <h3 className={`
+            font-ptMono text-sm md:text-base font-medium flex-1
             ${isHovered ? 'text-accent-light' : 'text-quillGray'}
             transition-colors duration-200
-            flex-1
           `}>
             {item.title}
-          </span>
-        </div>
-        
-        <div className="flex items-center justify-between pl-0">
-          <span className="text-xs text-gunSmoke/60 font-ptMono">
-            {item.repo}
-          </span>
+          </h3>
           <div className={`
-            transition-all duration-200
+            flex-shrink-0 transition-all duration-200 mt-0.5
             ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
           `}>
-            <span className="text-accent-light text-sm">→</span>
+            <span className="text-accent-light text-base md:text-lg">→</span>
           </div>
         </div>
-      </div>
-
-      {/* Desktop Layout - Horizontal */}
-      <div className="hidden md:flex md:items-center md:justify-between md:gap-4">
-        <div className="flex items-center flex-1 min-w-0 gap-3">
-          <span className={`flex-shrink-0 px-2 py-0.5 text-xs font-ptMono rounded border ${getStateBadge(item.state)}`}>
+        
+        {/* Second line: Badge • Repo • (optional: date) */}
+        <div className="flex items-center gap-2 text-xs font-ptMono text-gunSmoke">
+          <span className={`px-2 py-0.5 text-[10px] rounded border ${getStateBadge(item.state)}`}>
             {getStateLabel(item.state)}
           </span>
-          
-          <div className="flex-1 min-w-0">
-            <span className={`
-              font-ptMono text-base
-              ${isHovered ? 'text-accent-light' : 'text-quillGray'}
-              transition-colors duration-200
-              block truncate
-            `}>
-              {item.title}
-            </span>
-            <span className="text-xs text-gunSmoke/60 font-ptMono block mt-0.5">
-              {item.repo}
-            </span>
-          </div>
-        </div>
-
-        <div className={`
-          flex-shrink-0 transition-all duration-200
-          ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
-        `}>
-          <span className="text-accent-light text-lg">→</span>
+          <span className="opacity-40">•</span>
+          <span className="opacity-60">{item.repo}</span>
         </div>
       </div>
     </div>
@@ -204,7 +174,7 @@ const Upstream: React.FC = () => {
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab('prs')}
-          className={`px-4 py-2 font-ptMono text-sm rounded-sm transition-all duration-300 ${activeTab === 'prs'
+          className={`px-3 py-1.5 font-ptMono text-xs md:text-sm rounded-sm transition-all duration-300 ${activeTab === 'prs'
             ? 'bg-accent-light/10 text-accent-light border border-accent-light/30'
             : 'bg-darkGrey/20 text-gunSmoke border border-darkGrey/40 hover:border-darkGrey/60'
             }`}
@@ -213,7 +183,7 @@ const Upstream: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveTab('issues')}
-          className={`px-4 py-2 font-ptMono text-sm rounded-sm transition-all duration-300 ${activeTab === 'issues'
+          className={`px-3 py-1.5 font-ptMono text-xs md:text-sm rounded-sm transition-all duration-300 ${activeTab === 'issues'
             ? 'bg-accent-light/10 text-accent-light border border-accent-light/30'
             : 'bg-darkGrey/20 text-gunSmoke border border-darkGrey/40 hover:border-darkGrey/60'
             }`}

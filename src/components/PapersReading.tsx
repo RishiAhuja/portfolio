@@ -46,7 +46,7 @@ const PapersReading: React.FC = () => {
     <div className="flex flex-col">
       <ExpandedContainer text="Things I'm figuring out" />
       <div className="h-4" />
-      <div className="flex flex-col">
+      <div className="flex flex-col space-y-2 md:space-y-4">
         {papers.map((paper, index) => {
           const [isHovered, setIsHovered] = useState(false);
 

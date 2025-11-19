@@ -8,8 +8,8 @@ const allProjects = await getCollection('projects');
 
 // Sort by date (newest first) and transform to match component expectations
 const projects = allProjects
-  .sort((a, b) => b.data.created_at.getTime() - a.data.created_at.getTime())
-  .map(project => ({
+  .sort((a: any, b: any) => b.data.created_at.getTime() - a.data.created_at.getTime())
+  .map((project: any) => ({
     id: project.slug,
     slug: project.slug,
     title: project.data.title,
@@ -25,7 +25,7 @@ const projects = allProjects
   }));
 ---
 
-<div class="flex flex-col">
+<div class="flex flex-col" id="projects-section">
   <ExpandedContainer text="Things I've Built" />
   <div class="h-4"></div>
   
@@ -36,15 +36,58 @@ const projects = allProjects
       </p>
     </div>
   ) : (
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 group/grid">
-      {projects.map((project) => (
-        <div class="h-full transition-all duration-500 hover:!opacity-100 group-hover/grid:opacity-50">
-          <ProjectCardCompact
-            project={project}
-            client:load
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 group/grid">
+        {projects.map((project: any, index: number) => (
+          <div class={`project-card h-full transition-all duration-500 hover:!opacity-100 group-hover/grid:opacity-50 ${index >= 4 ? 'hidden' : ''}`}>
+            <ProjectCardCompact
+              project={project}
+              client:load
+            />
+          </div>
+        ))}
+      </div>
+      
+      {projects.length > 4 && (
+        <button
+          id="show-more-projects"
+          class="mt-6 font-ptMono text-sm text-accent-light hover:text-accent transition-colors duration-200 mx-auto block"
+        >
+          Show {Math.min(projects.length - 4, 4)} more →
+        </button>
+      )}
+    </>
   )}
 </div>
+
+<script>
+  const showMoreBtn = document.getElementById('show-more-projects');
+  
+  if (showMoreBtn) {
+    let visibleCount = 4;
+    const allProjects = Array.from(document.querySelectorAll('.project-card'));
+    const totalProjects = allProjects.length;
+    
+    showMoreBtn.addEventListener('click', () => {
+      const remaining = totalProjects - visibleCount;
+      const toShow = Math.min(remaining, 4);
+      
+      // Show next batch
+      for (let i = visibleCount; i < visibleCount + toShow; i++) {
+        if (allProjects[i]) {
+          allProjects[i].classList.remove('hidden');
+        }
+      }
+      
+      visibleCount += toShow;
+      
+      // Update button text or hide it
+      if (visibleCount >= totalProjects) {
+        showMoreBtn.style.display = 'none';
+      } else {
+        const newRemaining = totalProjects - visibleCount;
+        showMoreBtn.textContent = `Show ${Math.min(newRemaining, 4)} more →`;
+      }
+    });
+  }
+</script>
