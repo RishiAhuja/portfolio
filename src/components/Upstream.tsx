@@ -16,43 +16,33 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
       className={`
         cursor-pointer transition-all duration-200 rounded-sm
         ${isHovered ? 'bg-darkGrey/30 border-accent-light' : 'bg-transparent border-transparent'}
-        border p-3 md:p-4
+        border p-2.5 md:p-4
         block w-full
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => window.open(item.url, '_blank')}
     >
-      {/* Mobile Layout */}
-      <div className="block md:hidden">
-        <div className="flex items-start gap-2 mb-2">
-          <div
-            className={`
-              ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
-              rounded-full bg-accent-light transition-all duration-200
-              flex-shrink-0 mt-1.5
-            `}
-          />
+      {/* Mobile Layout - Stacked */}
+      <div className="flex md:hidden flex-col gap-2">
+        <div className="flex items-start gap-2">
+          <span className={`flex-shrink-0 px-1.5 py-0.5 text-[10px] font-ptMono rounded border ${getStateBadge(item.state)}`}>
+            {getStateLabel(item.state)}
+          </span>
           <span className={`
-            font-ptMono text-quillGray 
-            text-sm leading-tight
-            ${isHovered ? 'text-accent-light' : ''}
+            font-ptMono text-sm
+            ${isHovered ? 'text-accent-light' : 'text-quillGray'}
             transition-colors duration-200
-            break-words flex-1
+            flex-1
           `}>
             {item.title}
           </span>
         </div>
-
-        <div className="flex items-center justify-between pl-4 gap-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className={`px-2 py-0.5 text-xs font-ptMono rounded border ${getStateBadge(item.state)}`}>
-              {getStateLabel(item.state)}
-            </span>
-            <span className="text-xs text-gunSmoke font-ptMono">
-              {item.repo}
-            </span>
-          </div>
+        
+        <div className="flex items-center justify-between pl-0">
+          <span className="text-xs text-gunSmoke/60 font-ptMono">
+            {item.repo}
+          </span>
           <div className={`
             transition-all duration-200
             ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
@@ -62,43 +52,33 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
         </div>
       </div>
 
-      {/* Desktop Layout */}
+      {/* Desktop Layout - Horizontal */}
       <div className="hidden md:flex md:items-center md:justify-between md:gap-4">
         <div className="flex items-center flex-1 min-w-0 gap-3">
-          <div
-            className={`
-              ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
-              rounded-full bg-accent-light transition-all duration-200
-              flex-shrink-0
-            `}
-          />
-
-          <span className={`
-            font-ptMono text-quillGray 
-            text-base lg:text-lg
-            ${isHovered ? 'text-accent-light' : ''}
-            transition-colors duration-200
-            leading-normal
-            truncate
-          `}>
-            {item.title}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <span className={`px-2 py-0.5 text-xs font-ptMono rounded border ${getStateBadge(item.state)}`}>
+          <span className={`flex-shrink-0 px-2 py-0.5 text-xs font-ptMono rounded border ${getStateBadge(item.state)}`}>
             {getStateLabel(item.state)}
           </span>
-          <span className="text-sm text-gunSmoke font-ptMono whitespace-nowrap">
-            {item.repo}
-          </span>
-
-          <div className={`
-            transition-all duration-200
-            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
-          `}>
-            <span className="text-accent-light text-lg">→</span>
+          
+          <div className="flex-1 min-w-0">
+            <span className={`
+              font-ptMono text-base
+              ${isHovered ? 'text-accent-light' : 'text-quillGray'}
+              transition-colors duration-200
+              block truncate
+            `}>
+              {item.title}
+            </span>
+            <span className="text-xs text-gunSmoke/60 font-ptMono block mt-0.5">
+              {item.repo}
+            </span>
           </div>
+        </div>
+
+        <div className={`
+          flex-shrink-0 transition-all duration-200
+          ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
+        `}>
+          <span className="text-accent-light text-lg">→</span>
         </div>
       </div>
     </div>
@@ -111,7 +91,7 @@ const Upstream: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'prs' | 'issues'>('prs');
-  const [showAll, setShowAll] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
     const loadUpstreamData = async () => {
@@ -137,6 +117,11 @@ const Upstream: React.FC = () => {
     loadUpstreamData();
   }, []);
 
+  // Reset visible count when tab changes
+  useEffect(() => {
+    setVisibleCount(5);
+  }, [activeTab]);
+
   const getStateBadge = (state: string) => {
     switch (state) {
       case 'open':
@@ -155,9 +140,9 @@ const Upstream: React.FC = () => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="space-y-2 md:space-y-4">
+        <div className="space-y-1 md:space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="bg-darkGrey/30 h-16 md:h-20 rounded-sm animate-pulse"></div>
+            <div key={i} className="bg-darkGrey/30 h-12 md:h-20 rounded-sm animate-pulse"></div>
           ))}
         </div>
       );
@@ -181,22 +166,29 @@ const Upstream: React.FC = () => {
       );
     }
 
-    const displayItems = showAll ? items : items.slice(0, 5);
-
     return (
       <>
         <div className="space-y-2 md:space-y-4">
-          {displayItems.map((item) => (
+          {items.slice(0, visibleCount).map((item) => (
             <UpstreamItem key={item.id} item={item} getStateBadge={getStateBadge} getStateLabel={getStateLabel} />
           ))}
         </div>
 
-        {items.length > 5 && (
+        {visibleCount < items.length && (
           <button
-            onClick={() => setShowAll(!showAll)}
-            className="mt-4 w-full py-3 font-ptMono text-sm text-accent-light border border-darkGrey/40 hover:border-accent-light/30 rounded-sm transition-all duration-300 hover:bg-darkGrey/20"
+            onClick={() => setVisibleCount(prev => Math.min(items.length, prev + 5))}
+            className="mt-4 font-ptMono text-sm text-accent-light hover:text-accent transition-colors duration-200 mx-auto block"
           >
-            {showAll ? 'Show Less' : `Show All (${items.length})`}
+            Show {Math.min(items.length - visibleCount, 5)} more →
+          </button>
+        )}
+        
+        {visibleCount >= items.length && items.length > 5 && (
+          <button
+            onClick={() => setVisibleCount(5)}
+            className="mt-4 font-ptMono text-sm text-gunSmoke hover:text-accent-light transition-colors duration-200 mx-auto block"
+          >
+            Show less
           </button>
         )}
       </>

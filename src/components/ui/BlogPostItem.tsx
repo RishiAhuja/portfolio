@@ -21,14 +21,39 @@ const BlogPostItem: React.FC<BlogPostItemProps> = ({
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block w-full py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
+      className="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex items-baseline gap-4 md:gap-8">
+      {/* Mobile Layout - Stacked */}
+      <div className="flex md:hidden flex-col gap-1.5">
+        <h3 className={`
+          font-ptMono text-sm font-medium
+          ${ isHovered ? 'text-accent-light' : 'text-quillGray'}
+          transition-colors duration-300
+        `}>
+          {title}
+        </h3>
+        {date && (
+          <div className="flex items-center justify-between">
+            <span className="font-ptMono text-xs text-gunSmoke">
+              {date}
+            </span>
+            <div className={`
+              transform transition-all duration-300
+              ${isHovered ? 'translate-x-0 opacity-100 text-accent-light' : '-translate-x-2 opacity-0'}
+            `}>
+              →
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Layout - Horizontal */}
+      <div className="hidden md:flex items-baseline gap-3 md:gap-8">
         {/* Date Column - Fixed width on desktop */}
         {date && (
-          <div className="flex-shrink-0 w-24 md:w-32 font-ptMono text-xs md:text-sm text-gunSmoke group-hover:text-quillGray transition-colors duration-300">
+          <div className="flex-shrink-0 w-32 font-ptMono text-xs text-gunSmoke group-hover:text-quillGray transition-colors duration-300">
             {date}
           </div>
         )}

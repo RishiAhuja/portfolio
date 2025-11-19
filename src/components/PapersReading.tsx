@@ -56,13 +56,36 @@ const PapersReading: React.FC = () => {
               href={paper.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block w-full py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
+              className="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <div className="flex items-baseline gap-4 md:gap-8">
+              {/* Mobile Layout - Stacked */}
+              <div className="flex md:hidden flex-col gap-1.5">
+                <h3 className={`
+                  font-ptMono text-sm font-medium
+                  ${isHovered ? 'text-accent-light' : 'text-quillGray'}
+                  transition-colors duration-300
+                `}>
+                  {paper.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="font-ptMono text-xs text-accent-light/80">
+                    arXiv: {paper.arxivId}
+                  </span>
+                  <div className={`
+                    transform transition-all duration-300
+                    ${isHovered ? 'translate-x-0 opacity-100 text-accent-light' : '-translate-x-2 opacity-0'}
+                  `}>
+                    →
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout - Horizontal */}
+              <div className="hidden md:flex items-baseline gap-3 md:gap-8">
                 {/* ID Column - Fixed width */}
-                <div className="flex-shrink-0 w-32 md:w-40 font-ptMono text-xs md:text-sm text-accent-light/80 group-hover:text-accent-light transition-colors duration-300">
+                <div className="flex-shrink-0 w-40 font-ptMono text-xs text-accent-light/80 group-hover:text-accent-light transition-colors duration-300">
                   arXiv: {paper.arxivId}
                 </div>
 

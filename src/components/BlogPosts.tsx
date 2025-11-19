@@ -19,7 +19,7 @@ const BlogPosts: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAll, setShowAll] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(5);
   const USERNAME = "rishi2220";
 
   const loadBlogPosts = async (forceRefresh = false) => {
@@ -67,7 +67,7 @@ const BlogPosts: React.FC = () => {
       ) : (
         <>
           <div className="space-y-2 md:space-y-4">
-            {(showAll ? posts : posts.slice(0, 5)).map((post, index) => {
+            {posts.slice(0, visibleCount).map((post, index) => {
               if (!post) return null;
 
               const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
@@ -89,12 +89,21 @@ const BlogPosts: React.FC = () => {
             })}
           </div>
 
-          {posts.length > 5 && (
+          {visibleCount < posts.length && (
             <button
-              onClick={() => setShowAll(!showAll)}
-              className="mt-4 w-full py-3 font-ptMono text-sm text-accent-light border border-darkGrey/40 hover:border-accent-light/30 rounded-sm transition-all duration-300 hover:bg-darkGrey/20"
+              onClick={() => setVisibleCount(prev => Math.min(posts.length, prev + 5))}
+              className="mt-4 font-ptMono text-sm text-accent-light hover:text-accent transition-colors duration-200 mx-auto block"
             >
-              {showAll ? 'Show Less' : `Show All (${posts.length})`}
+              Show {Math.min(posts.length - visibleCount, 5)} more →
+            </button>
+          )}
+          
+          {visibleCount >= posts.length && posts.length > 5 && (
+            <button
+              onClick={() => setVisibleCount(5)}
+              className="mt-4 font-ptMono text-sm text-gunSmoke hover:text-accent-light transition-colors duration-200 mx-auto block"
+            >
+              Show less
             </button>
           )}
         </>
