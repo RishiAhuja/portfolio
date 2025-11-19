@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { marked } from 'marked';
 
 import type { Project } from '../../lib/projects';
 import SmallContainer from '../ui/SmallContainer.tsx';
@@ -9,6 +10,18 @@ interface ProjectDetailProps {
 }
 
 const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
+  const [renderedMarkdown, setRenderedMarkdown] = useState('');
+
+  useEffect(() => {
+    if (project.full_description) {
+      const parseMarkdown = async () => {
+        const html = await marked.parse(project.full_description || '');
+        setRenderedMarkdown(html);
+      };
+      parseMarkdown();
+    }
+  }, [project.full_description]);
+
   return (
     <article className="animate-fade-in">
       {/* Navigation */}
@@ -78,13 +91,19 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
             About the Project
           </h2>
           
-          <div className="prose prose-invert prose-accent max-w-none">
-            {project.full_description.split('\n\n').map((paragraph, index) => (
-              <p key={index} className="text-base text-quillGray font-ptMono leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            ))}
-          </div>
+          <div 
+            className="prose prose-invert prose-accent max-w-none font-ptMono text-quillGray
+              prose-headings:font-ptMono prose-headings:text-quillGray
+              prose-p:text-quillGray prose-p:leading-relaxed
+              prose-a:text-accent-light prose-a:no-underline hover:prose-a:underline
+              prose-code:text-accent-light prose-code:bg-darkGrey/40 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+              prose-pre:bg-darkGrey/40 prose-pre:border prose-pre:border-darkGrey
+              prose-ul:text-quillGray prose-ol:text-quillGray
+              prose-li:text-quillGray prose-li:marker:text-accent-light
+              prose-strong:text-quillGray prose-strong:font-bold
+              prose-blockquote:text-gunSmoke prose-blockquote:border-l-accent-light"
+            dangerouslySetInnerHTML={{ __html: renderedMarkdown }}
+          />
         </div>
       )}
       
