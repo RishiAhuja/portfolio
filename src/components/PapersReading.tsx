@@ -46,94 +46,46 @@ const PapersReading: React.FC = () => {
     <div className="flex flex-col">
       <ExpandedContainer text="Things I'm figuring out" />
       <div className="h-4" />
-      <div className="space-y-2 md:space-y-4">
+      <div className="flex flex-col">
         {papers.map((paper, index) => {
           const [isHovered, setIsHovered] = useState(false);
-          
+
           return (
-            <div
+            <a
               key={index}
-              className={`
-                cursor-pointer transition-all duration-200 rounded-sm
-                ${isHovered ? 'bg-darkGrey/30 border-accent-light' : 'bg-transparent border-transparent'}
-                border p-3 md:p-4
-                block w-full
-              `}
+              href={paper.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block w-full py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              onClick={() => window.open(paper.link, '_blank')}
             >
-              {/* Mobile Layout */}
-              <div className="block md:hidden">
-                <div className="flex items-start gap-2 mb-3">
-                  <div 
-                    className={`
-                      ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
-                      rounded-full bg-accent-light transition-all duration-200
-                      flex-shrink-0 mt-1.5
-                    `}
-                  />
-                  <span className={`
-                    font-ptMono text-quillGray 
-                    text-sm leading-tight
-                    ${isHovered ? 'text-accent-light' : ''}
-                    transition-colors duration-200
-                    break-words flex-1
-                  `}>
-                    {paper.title}
-                  </span>
+              <div className="flex items-baseline gap-4 md:gap-8">
+                {/* ID Column - Fixed width */}
+                <div className="flex-shrink-0 w-32 md:w-40 font-ptMono text-xs md:text-sm text-accent-light/80 group-hover:text-accent-light transition-colors duration-300">
+                  arXiv: {paper.arxivId}
                 </div>
-                
-                <div className="flex items-center justify-between pl-4">
-                  <span className="text-xs text-gunSmoke font-ptMono px-2 py-1 bg-darkGrey/20 rounded-sm">
-                    arXiv: {paper.arxivId}
-                  </span>
-                  <div className={`
-                    transition-all duration-200
-                    ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
-                  `}>
-                    <span className="text-accent-light text-sm">→</span>
-                  </div>
-                </div>
-              </div>
 
-              {/* Desktop Layout */}
-              <div className="hidden md:flex md:items-center md:justify-between md:gap-4">
-                <div className="flex items-center flex-1 min-w-0 gap-3">
-                  <div 
-                    className={`
-                      ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
-                      rounded-full bg-accent-light transition-all duration-200
-                      flex-shrink-0
-                    `}
-                  />
-                  
-                  <span className={`
-                    font-ptMono text-quillGray 
-                    text-base lg:text-lg
-                    ${isHovered ? 'text-accent-light' : ''}
-                    transition-colors duration-200
-                    leading-normal
-                    truncate
+                {/* Content Column */}
+                <div className="flex-grow flex items-baseline justify-between gap-4 min-w-0">
+                  <h3 className={`
+                    font-ptMono text-sm md:text-base font-medium truncate
+                    ${isHovered ? 'text-accent-light' : 'text-quillGray'}
+                    transition-colors duration-300
                   `}>
                     {paper.title}
-                  </span>
-                </div>
-                
-                <div className="flex items-center gap-4 flex-shrink-0">
-                  <span className="text-sm text-gunSmoke font-ptMono px-2 py-1 bg-darkGrey/20 rounded-sm whitespace-nowrap">
-                    arXiv: {paper.arxivId}
-                  </span>
-                  
+                  </h3>
+
+                  {/* Arrow */}
                   <div className={`
-                    transition-all duration-200
-                    ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
+                    flex-shrink-0 transform transition-all duration-300
+                    ${isHovered ? 'translate-x-0 opacity-100 text-accent-light' : '-translate-x-2 opacity-0'}
                   `}>
-                    <span className="text-accent-light text-lg">→</span>
+                    →
                   </div>
                 </div>
               </div>
-            </div>
+            </a>
           );
         })}
       </div>

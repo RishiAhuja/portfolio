@@ -21,14 +21,14 @@ const BlogPosts: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
   const USERNAME = "rishi2220";
-  
+
   const loadBlogPosts = async (forceRefresh = false) => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const data = await fetchHashnodePosts(USERNAME, 50); // Fetch all posts
-      
+
       if (data && data.length > 0) {
         setPosts(data);
       } else {
@@ -41,11 +41,11 @@ const BlogPosts: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     loadBlogPosts();
   }, []);
-  
+
   return (
     <div className="flex flex-col">
       <ExpandedContainer text="Things I've figured out" />
@@ -69,14 +69,14 @@ const BlogPosts: React.FC = () => {
           <div className="space-y-2 md:space-y-4">
             {(showAll ? posts : posts.slice(0, 5)).map((post, index) => {
               if (!post) return null;
-              
+
               const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
               const link = post.slug ? `/blogs/${post.slug}` : '#';
               const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
-              
+
               // Use slug as key for uniqueness, fallback to index
               const uniqueKey = post.slug || post._id || `post-${index}`;
-              
+
               return (
                 <BlogPostItem
                   key={uniqueKey}
@@ -88,7 +88,7 @@ const BlogPosts: React.FC = () => {
               );
             })}
           </div>
-          
+
           {posts.length > 5 && (
             <button
               onClick={() => setShowAll(!showAll)}

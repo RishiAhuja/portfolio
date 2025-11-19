@@ -18,7 +18,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div 
+    <div
       className="flex items-start"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -27,8 +27,8 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
       <div className={`
         rounded-full border transition-all duration-300
         flex items-center justify-center w-6 h-6
-        ${isHovered 
-          ? 'border-accent-light transform scale-110' 
+        ${isHovered
+          ? 'border-accent-light transform scale-110'
           : 'border-darkGrey'}
       `}>
         <svg
@@ -53,7 +53,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
           />
         </svg>
       </div>
-      
+
       {/* Content */}
       <div className={`
         ml-6 transition-all duration-300
@@ -62,13 +62,13 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
         {/* Duration */}
         <div className={`
           inline-block px-3 py-1 mb-3 border text-sm font-ptMono transition-all duration-300
-          ${isHovered 
-            ? 'border-accent-light/50 text-accent-light bg-accent/5' 
+          ${isHovered
+            ? 'border-accent-light/50 text-accent-light bg-accent/5'
             : 'border-darkGrey text-gray-400'}
         `}>
           {duration}
         </div>
-        
+
         {/* Institute */}
         <h3 className={`
           text-xl font-bold font-ptMono transition-colors duration-300
@@ -76,16 +76,16 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
         `}>
           {institute}
         </h3>
-        
+
         <div className="h-2" />
-        
+
         {/* Department */}
         <p className="text-base font-ptMono text-quillGray">
           {department}
         </p>
-        
+
         <div className="h-2" />
-        
+
         {/* Achievement */}
         <div className="flex items-center mb-8">
           <div className={`

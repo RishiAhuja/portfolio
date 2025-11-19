@@ -8,105 +8,51 @@ interface BlogPostItemProps {
   readTime?: string;
 }
 
-const BlogPostItem: React.FC<BlogPostItemProps> = ({ 
-  title, 
-  link, 
+const BlogPostItem: React.FC<BlogPostItemProps> = ({
+  title,
+  link,
   date,
-  readTime 
+  readTime
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div
-      className={`
-        cursor-pointer transition-all duration-200 rounded-sm
-        ${isHovered ? 'bg-darkGrey/30 border-accent-light' : 'bg-transparent border-transparent'}
-        border p-3 md:p-4
-        block w-full
-      `}
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block w-full py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => window.open(link, '_blank')}
     >
-      {/* Mobile Layout - Stacked */}
-      <div className="block md:hidden">
-        {/* Title for mobile */}
-        <div className="flex items-start gap-2 mb-3">
-          <div 
-            className={`
-              ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
-              rounded-full bg-accent-light transition-all duration-200
-              flex-shrink-0 mt-1.5
-            `}
-          />
-          <span className={`
-            font-ptMono text-quillGray 
-            text-sm leading-tight
-            ${isHovered ? 'text-accent-light' : ''}
-            transition-colors duration-200
-            break-words flex-1
-          `}>
-            {title}
-          </span>
-        </div>
-        
-        {/* Date and arrow for mobile */}
-        <div className="flex items-center justify-between pl-4">
-          {date && (
-            <span className="text-xs text-gunSmoke font-ptMono px-2 py-1 bg-darkGrey/20 rounded-sm">
-              {date}
-            </span>
-          )}
-          <div className={`
-            transition-all duration-200
-            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
-          `}>
-            <span className="text-accent-light text-sm">→</span>
+      <div className="flex items-baseline gap-4 md:gap-8">
+        {/* Date Column - Fixed width on desktop */}
+        {date && (
+          <div className="flex-shrink-0 w-24 md:w-32 font-ptMono text-xs md:text-sm text-gunSmoke group-hover:text-quillGray transition-colors duration-300">
+            {date}
           </div>
-        </div>
-      </div>
+        )}
 
-      {/* Desktop Layout - Horizontal */}
-      <div className="hidden md:flex md:items-center md:justify-between md:gap-4">
-        {/* Title section for desktop */}
-        <div className="flex items-center flex-1 min-w-0 gap-3">
-          <div 
-            className={`
-              ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
-              rounded-full bg-accent-light transition-all duration-200
-              flex-shrink-0
-            `}
-          />
-          
-          <span className={`
-            font-ptMono text-quillGray 
-            text-lg lg:text-xl
-            ${isHovered ? 'text-accent-light' : ''}
-            transition-colors duration-200
-            leading-normal
-            truncate
+        {/* Content Column */}
+        <div className="flex-grow flex items-baseline justify-between gap-4 min-w-0">
+          <h3 className={`
+            font-ptMono text-sm md:text-base font-medium truncate
+            ${isHovered ? 'text-accent-light' : 'text-quillGray'}
+            transition-colors duration-300
           `}>
             {title}
-          </span>
-        </div>
-        
-        {/* Date and arrow for desktop */}
-        <div className="flex items-center gap-4 flex-shrink-0">
-          {date && (
-            <span className="text-sm text-gunSmoke font-ptMono px-2 py-1 bg-darkGrey/20 rounded-sm whitespace-nowrap">
-              {date}
-            </span>
-          )}
-          
+          </h3>
+
+          {/* Arrow */}
           <div className={`
-            transition-all duration-200
-            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}
+            flex-shrink-0 transform transition-all duration-300
+            ${isHovered ? 'translate-x-0 opacity-100 text-accent-light' : '-translate-x-2 opacity-0'}
           `}>
-            <span className="text-accent-light text-lg">→</span>
+            →
           </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

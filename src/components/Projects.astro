@@ -36,9 +36,9 @@ const projects = allProjects
       </p>
     </div>
   ) : (
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 group/grid">
       {projects.map((project) => (
-        <div class="h-full">
+        <div class="h-full transition-all duration-500 hover:!opacity-100 group-hover/grid:opacity-50">
           <ProjectCardCompact
             project={project}
             client:load

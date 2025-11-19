@@ -26,7 +26,7 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
       {/* Mobile Layout */}
       <div className="block md:hidden">
         <div className="flex items-start gap-2 mb-2">
-          <div 
+          <div
             className={`
               ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
               rounded-full bg-accent-light transition-all duration-200
@@ -43,7 +43,7 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
             {item.title}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between pl-4 gap-2">
           <div className="flex items-center gap-2 flex-wrap">
             <span className={`px-2 py-0.5 text-xs font-ptMono rounded border ${getStateBadge(item.state)}`}>
@@ -65,14 +65,14 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
       {/* Desktop Layout */}
       <div className="hidden md:flex md:items-center md:justify-between md:gap-4">
         <div className="flex items-center flex-1 min-w-0 gap-3">
-          <div 
+          <div
             className={`
               ${isHovered ? 'w-2 h-2' : 'w-1.5 h-1.5'} 
               rounded-full bg-accent-light transition-all duration-200
               flex-shrink-0
             `}
           />
-          
+
           <span className={`
             font-ptMono text-quillGray 
             text-base lg:text-lg
@@ -84,7 +84,7 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
             {item.title}
           </span>
         </div>
-        
+
         <div className="flex items-center gap-3 flex-shrink-0">
           <span className={`px-2 py-0.5 text-xs font-ptMono rounded border ${getStateBadge(item.state)}`}>
             {getStateLabel(item.state)}
@@ -92,7 +92,7 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
           <span className="text-sm text-gunSmoke font-ptMono whitespace-nowrap">
             {item.repo}
           </span>
-          
+
           <div className={`
             transition-all duration-200
             ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
@@ -207,26 +207,24 @@ const Upstream: React.FC = () => {
     <div className="flex flex-col">
       <ExpandedContainer text="Upstream" />
       <div className="h-4" />
-      
+
       {/* Tab Navigation */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab('prs')}
-          className={`px-4 py-2 font-ptMono text-sm rounded-sm transition-all duration-300 ${
-            activeTab === 'prs'
-              ? 'bg-accent-light/10 text-accent-light border border-accent-light/30'
-              : 'bg-darkGrey/20 text-gunSmoke border border-darkGrey/40 hover:border-darkGrey/60'
-          }`}
+          className={`px-4 py-2 font-ptMono text-sm rounded-sm transition-all duration-300 ${activeTab === 'prs'
+            ? 'bg-accent-light/10 text-accent-light border border-accent-light/30'
+            : 'bg-darkGrey/20 text-gunSmoke border border-darkGrey/40 hover:border-darkGrey/60'
+            }`}
         >
           Pull Requests ({prs.length})
         </button>
         <button
           onClick={() => setActiveTab('issues')}
-          className={`px-4 py-2 font-ptMono text-sm rounded-sm transition-all duration-300 ${
-            activeTab === 'issues'
-              ? 'bg-accent-light/10 text-accent-light border border-accent-light/30'
-              : 'bg-darkGrey/20 text-gunSmoke border border-darkGrey/40 hover:border-darkGrey/60'
-          }`}
+          className={`px-4 py-2 font-ptMono text-sm rounded-sm transition-all duration-300 ${activeTab === 'issues'
+            ? 'bg-accent-light/10 text-accent-light border border-accent-light/30'
+            : 'bg-darkGrey/20 text-gunSmoke border border-darkGrey/40 hover:border-darkGrey/60'
+            }`}
         >
           Issues ({issues.length})
         </button>

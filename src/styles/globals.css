@@ -35,7 +35,11 @@
 }
 
 body {
-  @apply bg-[rgb(var(--background))] text-[rgb(var(--foreground))];
+  @apply bg-[rgb(var(--background))] text-[rgb(var(--foreground))] font-inter;
+}
+
+h1, h2, h3, h4, h5, h6, code, pre, .font-mono {
+  @apply font-ptMono;
 }
 
 /* Subtle background gradient for section transitions */
