@@ -15,7 +15,14 @@ export default defineConfig({
     sitemap(),
   ],
   output: 'hybrid',
-  adapter: vercel(),
+  adapter: vercel({
+    functionPerRoute: false,
+    edgeMiddleware: false,
+    imageService: true,
+    webAnalytics: {
+      enabled: true
+    }
+  }),
   site: 'https://rishia.in',
   vite: {
     ssr: {
