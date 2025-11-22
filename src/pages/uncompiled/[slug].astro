@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { uncompiledData } from '../../data/uncompiled';
+
+export async function getStaticPaths() {
+  return uncompiledData.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<BaseLayout 
+  title={`${entry.title} | Uncompiled`}
+  description={entry.content.slice(0, 160) + '...'}
+  image={`/og?title=${encodeURIComponent(entry.title)}&description=Uncompiled&type=blog`}
+>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+    
+    .uncompiled-container {
+      font-family: 'Lora', Georgia, serif;
+      line-height: 1.8;
+    }
+    
+    .uncompiled-content p {
+      margin-bottom: 1.5rem;
+    }
+    
+    .uncompiled-content strong {
+      font-weight: 600;
+      color: rgb(var(--foreground));
+    }
+  </style>
+
+  <main class="min-h-screen bg-codGray text-quillGray uncompiled-container">
+    <!-- Back to Uncompiled -->
+    <div class="pt-8 pb-4 px-4 md:px-8">
+      <div class="max-w-3xl mx-auto">
+        <a 
+          href="/uncompiled" 
+          class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent-light transition-colors text-sm"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Uncompiled
+        </a>
+      </div>
+    </div>
+
+    <article class="px-4 md:px-8 py-16">
+      <div class="max-w-3xl mx-auto">
+        {/* Header */}
+        <header class="mb-12">
+          <time class="text-sm text-gunSmoke/70 font-mono mb-3 block">
+            {entry.date}
+          </time>
+          <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-8 leading-tight">
+            {entry.title}
+          </h1>
+          <div class="h-px bg-darkGrey/50"></div>
+        </header>
+
+        {/* Content */}
+        <div class="uncompiled-content text-base md:text-lg text-gunSmoke space-y-6">
+          {entry.content.split('\n\n').map((paragraph) => (
+            <p set:html={paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
+          ))}
+        </div>
+
+        {/* Footer */}
+        <footer class="mt-16 pt-8 border-t border-darkGrey/50">
+          <a
+            href="/uncompiled"
+            class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent-light transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to all entries
+          </a>
+        </footer>
+      </div>
+    </article>
+  </main>
+</BaseLayout>

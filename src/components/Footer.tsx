@@ -208,8 +208,25 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          <div className="flex justify-center text-xs font-ptMono text-gunSmoke opacity-70">
-            © {year} All rights reserved
+          <div className="flex justify-between items-center text-xs font-ptMono text-gunSmoke opacity-70">
+            <a 
+              href="/uncompiled" 
+              className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
+            >
+              <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
+                Uncompiled
+              </span>
+              <svg 
+                className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </a>
+            <div>© {year} All rights reserved</div>
           </div>
         </div>
       )}

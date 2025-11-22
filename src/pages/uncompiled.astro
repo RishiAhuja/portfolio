@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { uncompiledData } from '../data/uncompiled';
+
+const manifesto = `The code is deterministic; the writer is not. While the main site tracks the tangible progress of my engineering, this log tracks the intangible drift of my philosophy. A collection of notes on ambition, ego, and the continuous search for a center of gravity in a noisy world.`;
+---
+
+<BaseLayout 
+  title="Uncompiled | Rishi Ahuja"
+  description="Raw thoughts on building, philosophy, and the intersection of code and life"
+  image="/og?title=Uncompiled&description=Raw%20thoughts%20from%20a%20Stoic%20Builder&type=default"
+>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+    
+    .uncompiled-container {
+      font-family: 'Lora', Georgia, serif;
+      line-height: 1.8;
+    }
+    
+    .uncompiled-container h1,
+    .uncompiled-container h2 {
+      font-family: 'Lora', Georgia, serif;
+    }
+  </style>
+
+  <main class="min-h-screen bg-codGray text-quillGray uncompiled-container">
+    <!-- Back to Home - Minimal -->
+    <div class="pt-8 pb-4 px-4 md:px-8">
+      <div class="max-w-3xl mx-auto">
+        <a 
+          href="/" 
+          class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent-light transition-colors text-sm"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Home
+        </a>
+      </div>
+    </div>
+
+    <div class="px-4 md:px-8 py-16">
+      <div class="max-w-3xl mx-auto">
+        {/* Header */}
+        <header class="mb-16">
+          <h1 class="text-5xl md:text-7xl font-bold text-quillGray mb-4">
+            Uncompiled.
+          </h1>
+        </header>
+
+        {/* Manifesto */}
+        <div class="mb-12 pb-12 border-b border-darkGrey/50">
+          <p class="text-base md:text-lg text-gunSmoke italic leading-relaxed">
+            {manifesto}
+          </p>
+        </div>
+
+        {/* Log List */}
+        <div class="space-y-6">
+          {uncompiledData.map((entry) => (
+            <a
+              href={`/uncompiled/${entry.slug}`}
+              class="block group"
+            >
+              <div class="flex flex-col md:flex-row md:items-baseline md:gap-4">
+                <time class="text-sm text-gunSmoke/70 font-mono mb-1 md:mb-0 md:min-w-[120px]">
+                  {entry.date}
+                </time>
+                <h2 class="text-xl md:text-2xl text-quillGray group-hover:text-accent-light transition-colors duration-200">
+                  {entry.title}
+                </h2>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
