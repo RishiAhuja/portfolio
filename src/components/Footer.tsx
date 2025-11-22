@@ -62,7 +62,7 @@ const VisitorCounter: React.FC = () => {
       href="/stats"
       className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
     >
-      <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors">
+      <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
         Visitor #{visitorCount || '?'}
       </span>
       <svg 
