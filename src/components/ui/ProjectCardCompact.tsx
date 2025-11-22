@@ -11,9 +11,12 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   // Truncate description for preview
-  const truncateDescription = (text: string, maxLength: number = 100): string => {
+  const truncateDescription = (text: string, maxLength: number = 150): string => {
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    // Find the last space before maxLength to avoid cutting words
+    const lastSpace = text.lastIndexOf(' ', maxLength);
+    const cutPoint = lastSpace > 0 ? lastSpace : maxLength;
+    return text.substring(0, cutPoint) + '...';
   };
 
   // Check if project has a valid slug
@@ -58,7 +61,7 @@ const ProjectCardCompact: React.FC<ProjectCardCompactProps> = ({ project }) => {
 
         {/* Brief description */}
         <p className="text-sm text-gray-400 font-ptMono leading-relaxed mb-4">
-          {truncateDescription(project.description, 120)}
+          {truncateDescription(project.description, 150)}
         </p>
 
         {/* Tech pills */}

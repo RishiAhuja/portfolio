@@ -87,11 +87,17 @@ const responsiveHtmlContent = htmlContent.replace(
   /<\/table>/g,
   '</table></div>'
 );
+
+// Determine OG image: use Hashnode cover if available, otherwise generate one
+const ogImage = post.coverImage?.url 
+  ? post.coverImage.url
+  : `/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.brief)}&type=blog`;
 ---
 
 <BaseLayout 
   title={`${post.title} | Rishi Ahuja`}
   description={post.brief}
+  image={ogImage}
 >
   <link slot="head" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
   <link slot="head" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -150,7 +156,7 @@ const responsiveHtmlContent = htmlContent.replace(
             <div class="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <span class="text-xs font-ptMono text-accent bg-darkGrey/50 px-2 py-1 rounded-sm">
-                  {tag.name}
+                  {tag.name.toLowerCase()}
                 </span>
               ))}
             </div>

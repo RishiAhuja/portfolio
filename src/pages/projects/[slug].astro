@@ -48,11 +48,17 @@ const relatedProjectsData = allProjects
     github_url: p.data.github_url,
     live_url: p.data.live_url,
   }));
+
+// Generate OG image URL for project
+const ogImage = projectData.image_url 
+  ? projectData.image_url
+  : `/og?title=${encodeURIComponent(projectData.title)}&description=${encodeURIComponent(projectData.description)}&type=project`;
 ---
 
 <BaseLayout 
   title={`${projectData.title} | Rishi Ahuja`}
   description={projectData.description}
+  image={ogImage}
 >
   <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <ProjectDetail project={projectData} client:load />

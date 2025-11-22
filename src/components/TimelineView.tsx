@@ -226,7 +226,7 @@ const TimelineView: React.FC = () => {
             Life Ledger
           </h1>
           <p className={`text-gunSmoke font-ptMono mb-6 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl mx-auto`}>
-            A running log of things happened to me.
+            A running log of my life events.
           </p>
           <div className="w-24 h-px bg-accent mx-auto hidden md:block"></div>
         </div>
@@ -242,7 +242,7 @@ const TimelineView: React.FC = () => {
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-darkGrey/50 to-transparent"></div>
                 <div className="relative">
                   <span className="text-accent text-sm px-4 py-2 border border-accent/30 rounded-sm bg-codGray/50 backdrop-blur-sm font-ptMono">
-                    Academic Year {year}
+                    {year}
                   </span>
                   {/* Corner accents */}
                   <div className="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-accent/50"></div>
