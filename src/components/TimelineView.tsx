@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { timelineData, type TimelineEvent } from '../data/timeline';
 import ExpandedContainer from './ui/ExpandedContainer';
+import CommandPalette from './ui/CommandPalette';
 
 const getButtonIcon = (iconType: string) => {
   switch (iconType) {
@@ -95,6 +96,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
       {/* Timeline card */}
       <div className="flex-1 mb-2">
         <div 
+          data-event-id={`${item.date}-${item.title}`}
           className={`
             border rounded-sm transition-all duration-300 relative group
             ${isHovered ? 'border-accent shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] transform -translate-y-1' : 'border-darkGrey/30'}
@@ -187,9 +189,14 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
 
 const TimelineView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const selectedItemRef = useRef<HTMLDivElement>(null);
   
   // Get all years sorted in descending order
   const years = Object.keys(timelineData).sort((a, b) => b.localeCompare(a));
+  
+  // Flatten all timeline items for search
+  const allItems = years.flatMap(year => timelineData[year] || []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -202,8 +209,46 @@ const TimelineView: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Handle Cmd+K / Ctrl+K shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleSelectItem = (item: TimelineEvent) => {
+    // Find the element with the matching date and title
+    const elements = document.querySelectorAll('[data-event-id]');
+    for (const el of elements) {
+      const eventId = el.getAttribute('data-event-id');
+      if (eventId === `${item.date}-${item.title}`) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Highlight the element briefly
+        el.classList.add('ring-2', 'ring-accent-light', 'ring-offset-2', 'ring-offset-codGray');
+        setTimeout(() => {
+          el.classList.remove('ring-2', 'ring-accent-light', 'ring-offset-2', 'ring-offset-codGray');
+        }, 2000);
+        break;
+      }
+    }
+  };
+
   return (
     <main className="min-h-screen text-quillGray" style={{ backgroundColor: '#191919' }}>
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        items={allItems}
+        onSelectItem={handleSelectItem}
+      />
+
       {/* Back to Home - Fixed positioning */}
       <div className="pt-8 pb-4">
         <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto`}>
@@ -225,10 +270,27 @@ const TimelineView: React.FC = () => {
           <h1 className={`font-bold font-ptMono text-quillGray mb-3 ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
             Life Ledger
           </h1>
-          <p className={`text-gunSmoke font-ptMono mb-6 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl mx-auto`}>
+          <p className={`text-gunSmoke font-ptMono mb-8 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl mx-auto`}>
             A running log of my life events.
           </p>
-          <div className="w-24 h-px bg-accent mx-auto hidden md:block"></div>
+          
+          <div className="w-24 h-px bg-accent mx-auto mb-8 hidden md:block"></div>
+          
+          {/* Search Button */}
+          <button
+            onClick={() => setIsCommandPaletteOpen(true)}
+            className="inline-flex items-center gap-3 px-4 py-2.5 bg-darkGrey/50 border border-gunSmoke/30 rounded-sm 
+              text-gunSmoke hover:text-accent-light hover:border-accent-light/50 transition-all duration-200 
+              font-ptMono text-sm group mx-auto"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span>Search events</span>
+            <kbd className="hidden sm:inline-block px-2 py-0.5 bg-codGray border border-gunSmoke/30 rounded text-xs text-gunSmoke/70 group-hover:text-accent-light/70 transition-colors">
+              ⌘K
+            </kbd>
+          </button>
         </div>
 
         {/* Iterate through all years */}
