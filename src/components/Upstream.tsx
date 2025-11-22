@@ -38,7 +38,7 @@ const UpstreamItem: React.FC<UpstreamItemProps> = ({ item, getStateBadge, getSta
             flex-shrink-0 transition-all duration-200 mt-0.5
             ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-70 -translate-x-1'}
           `}>
-            <span className="text-accent-light text-base md:text-lg inline-block rotate-45">→</span>
+            <span className="text-accent-light text-base md:text-lg inline-block -rotate-45">→</span>
           </div>
         </div>
         

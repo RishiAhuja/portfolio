@@ -1,6 +1,11 @@
 import { ImageResponse } from '@vercel/og';
 import type { APIRoute } from 'astro';
 
+// Return empty array since we're using this as a dynamic endpoint
+export function getStaticPaths() {
+  return [];
+}
+
 export const GET: APIRoute = async ({ params, request }) => {
   const url = new URL(request.url);
   
