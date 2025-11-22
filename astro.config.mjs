@@ -13,7 +13,7 @@ export default defineConfig({
     }),
     sitemap(),
   ],
-  output: 'static',
+  output: 'hybrid',
   site: 'https://rishia.in',
   vite: {
     ssr: {
