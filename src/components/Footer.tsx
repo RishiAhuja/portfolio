@@ -12,16 +12,29 @@ const VisitorCounter: React.FC = () => {
     setMounted(true);
     const updateVisitorCount = async () => {
       try {
-        // Increment the visitor count
-        const { data, error } = await supabase.rpc('increment_visitor_count');
+        // Get or create session ID
+        let sessionId = sessionStorage.getItem('visitor_session_id');
+        if (!sessionId) {
+          sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+          sessionStorage.setItem('visitor_session_id', sessionId);
+        }
+
+        // Log the visit with page path and session ID
+        await supabase.rpc('log_visit', {
+          p_page_path: window.location.pathname,
+          p_session_id: sessionId
+        });
+        
+        // Get total visitor count
+        const { data, error } = await supabase.rpc('get_total_visitors');
         
         if (error) {
-          console.error('Error incrementing visitor count:', error);
+          console.error('Error getting visitor count:', error);
           return;
         }
         
-        // Set the visitor count
-        setVisitorCount(data);
+        // Add legacy visitor count (5747) to new system
+        setVisitorCount((data || 0) + 5747);
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -45,9 +58,23 @@ const VisitorCounter: React.FC = () => {
   }
 
   return (
-    <span className="text-sm font-ptMono text-gunSmoke">
-      Visitor #{visitorCount || '?'}
-    </span>
+    <a 
+      href="/stats"
+      className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
+    >
+      <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors">
+        Visitor #{visitorCount || '?'}
+      </span>
+      <svg 
+        className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor"
+        strokeWidth={2.5}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </a>
   );
 };
 
@@ -170,7 +197,7 @@ const Footer: React.FC = () => {
       ) : (
         <div className="flex flex-col">
           <div className="flex justify-between items-center mb-3">
-            <div className="flex space-x-5">
+            <div className="flex items-center space-x-5">
               <VisitorCounter />
               <TimeSpentWidget />
             </div>

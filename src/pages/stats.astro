@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatsView from '../components/StatsView.tsx';
+---
+
+<BaseLayout 
+  title="Analytics | Rishi Ahuja"
+  description="Portfolio analytics and visitor statistics"
+  image="/og?title=Analytics&description=Portfolio%20visitor%20statistics&type=default"
+>
+  <StatsView client:load />
+</BaseLayout>
