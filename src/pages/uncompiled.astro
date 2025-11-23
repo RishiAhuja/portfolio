@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { uncompiledData } from '../data/uncompiled';
+import { getPublishedEntries } from '../lib/admin';
 
 const manifesto = `The code is deterministic; the writer is not. While the main site tracks the tangible progress of my engineering, this log tracks the intangible drift of my philosophy. A collection of notes on ambition, ego, and the continuous search for a center of gravity in a noisy world.`;
+
+// Fetch published entries from Supabase
+const entries = await getPublishedEntries();
 ---
 
 <BaseLayout 
@@ -58,7 +61,7 @@ const manifesto = `The code is deterministic; the writer is not. While the main 
 
         {/* Log List */}
         <div class="space-y-6">
-          {uncompiledData.map((entry) => (
+          {entries.map((entry) => (
             <a
               href={`/uncompiled/${entry.slug}`}
               class="block group"

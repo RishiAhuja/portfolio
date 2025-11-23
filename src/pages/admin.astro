@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdminApp from '../components/admin/AdminApp';
+---
+
+<BaseLayout 
+  title="Admin Panel | Uncompiled"
+  description="Admin management panel for Uncompiled entries"
+>
+  <AdminApp client:load />
+</BaseLayout>

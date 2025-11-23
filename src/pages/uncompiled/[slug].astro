@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { uncompiledData } from '../../data/uncompiled';
+import { getPublishedEntries } from '../../lib/admin';
 
 export async function getStaticPaths() {
-  return uncompiledData.map((entry) => ({
+  const entries = await getPublishedEntries();
+  return entries.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
