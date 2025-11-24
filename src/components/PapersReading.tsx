@@ -9,12 +9,27 @@ interface Paper {
 }
 
 const PapersReading: React.FC = () => {
+  const [visibleCount, setVisibleCount] = useState(5);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
   const papers: Paper[] = [
     {
-      title: "Advanced Real-Time Fraud Detection Using RAG-Based LLMs",
-      arxivId: "2501.15290",
-      year: "2025",
-      link: "https://arxiv.org/abs/2501.15290"
+      title: "Don’t Do RAG: When Cache-Augmented Generation is All You Need for Knowledge Tasks",
+      arxivId: "2412.15605",
+      year: "2024",
+      link: "https://arxiv.org/abs/2412.15605"
+    },
+    {
+      title: "Enhancing Cache-Augmented Generation (CAG) with Adaptive Contextual Compression for Scalable Knowledge Integration",
+      arxivId: "2505.08261",
+      year: "2024",
+      link: "https://arxiv.org/abs/2505.08261"
+    },
+    {
+      title: "Efficient Memory Management for Large Language Model Serving with PagedAttention",
+      arxivId: "2309.06180",
+      year: "2024",
+      link: "https://arxiv.org/abs/2309.06180"
     },
     {
       title: "TeleAntiFraud-28k: An Audio-Text Slow-Thinking Dataset for Telecom Fraud Detection",
@@ -27,6 +42,12 @@ const PapersReading: React.FC = () => {
       arxivId: "2411.08249",
       year: "2024/25",
       link: "https://arxiv.org/abs/2411.08249"
+    },
+    {
+      title: "Attention Is All You Need",
+      arxivId: "1706.03762",
+      year: "2017",
+      link: "https://arxiv.org/abs/1706.03762"
     },
     {
       title: "Dense Passage Retrieval for Open-Domain Question Answering",
@@ -47,8 +68,8 @@ const PapersReading: React.FC = () => {
       <ExpandedContainer text="Things I'm figuring out" />
       <div className="h-4" />
       <div className="flex flex-col space-y-2 md:space-y-4">
-        {papers.map((paper, index) => {
-          const [isHovered, setIsHovered] = useState(false);
+        {papers.slice(0, visibleCount).map((paper, index) => {
+          const isHovered = hoveredIndex === index;
 
           return (
             <a
@@ -57,8 +78,8 @@ const PapersReading: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
             >
               {/* Mobile Layout - Stacked */}
               <div className="flex md:hidden flex-col gap-1.5">
@@ -112,6 +133,15 @@ const PapersReading: React.FC = () => {
           );
         })}
       </div>
+
+      {visibleCount < papers.length && (
+        <button
+          onClick={() => setVisibleCount(prev => Math.min(papers.length, prev + 5))}
+          className="mt-6 font-ptMono text-sm text-accent-light hover:text-accent transition-colors duration-200 mx-auto block"
+        >
+          Show {Math.min(papers.length - visibleCount, 5)} more →
+        </button>
+      )}
     </div>
   );
 };
