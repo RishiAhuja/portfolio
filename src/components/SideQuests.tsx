@@ -1,16 +1,50 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ExpandedContainer from './ui/ExpandedContainer';
 import RadarChart from './ui/RadarChart';
+import { getSideQuests, type SideQuest } from '../lib/admin';
 
 const SideQuests: React.FC = () => {
-  const stats = [
-    { label: "Bench", value: 40, max: 100 },
-    { label: "Squat", value: 45, max: 100 },
-    { label: "Leg Press", value: 120, max: 200 },
-    { label: "Shoulder", value: 30, max: 80 },
-    { label: "Curl", value: 20, max: 60 }
-  ];
+  const [stats, setStats] = useState<Array<{ label: string; value: number; max: number }>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await getSideQuests();
+        const formattedStats = data.map((quest: SideQuest) => ({
+          label: quest.label,
+          value: quest.value,
+          max: quest.max_value
+        }));
+        setStats(formattedStats);
+      } catch (error) {
+        console.error('Error fetching side quests:', error);
+        // Fallback to default data
+        setStats([
+          { label: "Bench", value: 45, max: 100 },
+          { label: "Squat", value: 45, max: 100 },
+          { label: "Leg Press", value: 130, max: 200 },
+          { label: "Shoulder", value: 30, max: 80 },
+          { label: "Curl", value: 25, max: 60 }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col">
+        <ExpandedContainer text="Side Quests" />
+        <div className="h-4" />
+        <div className="text-gunSmoke text-center">Loading stats...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">

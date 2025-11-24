@@ -18,6 +18,24 @@ export interface AdminSession {
   token: string;
 }
 
+export interface SideQuest {
+  id: string;
+  label: string;
+  value: number;
+  max_value: number;
+  sort_order: number;
+}
+
+export interface SideQuestHistory {
+  value: number;
+  max_value: number;
+  recorded_at: string;
+}
+
+export interface SideQuestWithHistory extends SideQuest {
+  history: SideQuestHistory[];
+}
+
 // Generate secure random token
 const generateToken = () => {
   return `${Date.now()}_${Math.random().toString(36).substring(2)}_${Math.random().toString(36).substring(2)}`;
@@ -229,6 +247,111 @@ export const togglePublishEntry = async (token: string, id: string, published: b
     .eq('id', id);
 
   return !error;
+};
+
+// ============ Side Quests Functions ============
+
+// Get all side quests (public)
+export const getSideQuests = async (): Promise<SideQuest[]> => {
+  const { data, error } = await supabase.rpc('get_side_quests');
+
+  if (error) {
+    console.error('Error fetching side quests:', error);
+    return [];
+  }
+
+  return data as SideQuest[];
+};
+
+// Get all side quests for admin (includes IDs)
+export const getAllSideQuests = async (token: string): Promise<SideQuest[]> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase
+    .from('side_quests')
+    .select('*')
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching side quests:', error);
+    return [];
+  }
+
+  return data as SideQuest[];
+};
+
+// Update side quest (admin only)
+export const updateSideQuest = async (
+  token: string,
+  id: string,
+  updates: Partial<Omit<SideQuest, 'id'>>
+): Promise<SideQuest | null> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase
+    .from('side_quests')
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating side quest:', error);
+    return null;
+  }
+
+  // Record history if value or max_value changed
+  if (updates.value !== undefined || updates.max_value !== undefined) {
+    await supabase
+      .from('side_quests_history')
+      .insert({
+        side_quest_id: id,
+        value: data.value,
+        max_value: data.max_value
+      });
+  }
+
+  return data as SideQuest;
+};
+
+// Get side quest history
+export const getSideQuestHistory = async (questId: string): Promise<SideQuestHistory[]> => {
+  const { data, error } = await supabase.rpc('get_side_quest_history', {
+    p_side_quest_id: questId
+  });
+
+  if (error) {
+    console.error('Error fetching side quest history:', error);
+    return [];
+  }
+
+  return data as SideQuestHistory[];
+};
+
+// Get all side quests with history (admin)
+export const getSideQuestsWithHistory = async (token: string): Promise<SideQuestWithHistory[]> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase.rpc('get_side_quests_with_history');
+
+  if (error) {
+    console.error('Error fetching side quests with history:', error);
+    return [];
+  }
+
+  return data as SideQuestWithHistory[];
 };
 
 // Helper: Create admin user (run this once manually or via script)

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllEntries, createEntry, updateEntry, deleteEntry, togglePublishEntry, adminLogout, type UncompiledEntry } from '../../lib/admin';
+import SideQuestsEditor from './SideQuestsEditor';
 
 interface AdminDashboardProps {
   token: string;
@@ -8,6 +9,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout }) => {
+  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests'>('uncompiled');
   const [entries, setEntries] = useState<UncompiledEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditor, setShowEditor] = useState(false);
@@ -217,35 +219,66 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl font-bold font-ptMono text-quillGray">Uncompiled Admin</h1>
+            <h1 className="text-2xl font-bold font-ptMono text-quillGray">Admin Panel</h1>
             <p className="text-sm text-gunSmoke font-ptMono mt-1">Logged in as {email}</p>
           </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleNewEntry}
-              className="px-4 py-2 bg-accent-light/10 border border-accent-light/40 rounded-sm
-                text-accent-light font-ptMono text-sm hover:bg-accent-light hover:text-codGray
-                transition-all duration-200"
-            >
-              + New Entry
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-darkGrey border border-gunSmoke/30 rounded-sm text-gunSmoke
-                hover:border-red-400 hover:text-red-400 transition-colors font-ptMono text-sm"
-            >
-              Logout
-            </button>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-darkGrey border border-gunSmoke/30 rounded-sm text-gunSmoke
+              hover:border-red-400 hover:text-red-400 transition-colors font-ptMono text-sm"
+          >
+            Logout
+          </button>
         </div>
 
-        {/* Entries List */}
-        {isLoading ? (
-          <div className="text-center py-12">
-            <p className="text-gunSmoke font-ptMono">Loading entries...</p>
-          </div>
-        ) : entries.length === 0 ? (
-          <div className="text-center py-12">
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6 border-b border-darkGrey/50">
+          <button
+            onClick={() => setActiveTab('uncompiled')}
+            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
+              activeTab === 'uncompiled'
+                ? 'text-accent-light border-b-2 border-accent-light'
+                : 'text-gunSmoke hover:text-quillGray'
+            }`}
+          >
+            Uncompiled
+          </button>
+          <button
+            onClick={() => setActiveTab('sidequests')}
+            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
+              activeTab === 'sidequests'
+                ? 'text-accent-light border-b-2 border-accent-light'
+                : 'text-gunSmoke hover:text-quillGray'
+            }`}
+          >
+            Side Quests
+          </button>
+        </div>
+
+        {/* Content */}
+        {activeTab === 'sidequests' ? (
+          <SideQuestsEditor token={token} />
+        ) : (
+          <>
+            {/* New Entry Button */}
+            <div className="mb-6">
+              <button
+                onClick={handleNewEntry}
+                className="px-4 py-2 bg-accent-light/10 border border-accent-light/40 rounded-sm
+                  text-accent-light font-ptMono text-sm hover:bg-accent-light hover:text-codGray
+                  transition-all duration-200"
+              >
+                + New Entry
+              </button>
+            </div>
+
+            {/* Entries List */}
+            {isLoading ? (
+              <div className="text-center py-12">
+                <p className="text-gunSmoke font-ptMono">Loading entries...</p>
+              </div>
+            ) : entries.length === 0 ? (
+              <div className="text-center py-12">
             <p className="text-gunSmoke font-ptMono mb-4">No entries yet</p>
             <button
               onClick={handleNewEntry}
@@ -309,6 +342,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
               </div>
             ))}
           </div>
+        )}
+          </>
         )}
       </div>
     </div>
