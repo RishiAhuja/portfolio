@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getFeaturedGalleryEvents, type GalleryEventWithCount } from '../lib/gallery';
+import { getAllGalleryEvents, type GalleryEventWithCount } from '../lib/gallery';
 
-const featuredEvents = await getFeaturedGalleryEvents();
+const allEvents = await getAllGalleryEvents('');
 ---
 
 <BaseLayout 
@@ -99,12 +99,11 @@ const featuredEvents = await getFeaturedGalleryEvents();
         <button class="filter-btn" data-category="casual">Casual</button>
       </div>
 
-      <!-- Featured Events Grid -->
-      {featuredEvents.length > 0 && (
+      <!-- Events Grid -->
+      {allEvents.length > 0 ? (
         <div class="mb-16">
-          <h2 class="text-2xl font-bold text-quillGray mb-6">Featured</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="galleryGrid">
-            {featuredEvents.map((event: GalleryEventWithCount) => (
+            {allEvents.map((event: GalleryEventWithCount) => (
               <a
                 href={`/gallery/${event.slug}`}
                 class="event-card block rounded-lg overflow-hidden bg-darkGrey/20 h-80 relative"
@@ -143,9 +142,7 @@ const featuredEvents = await getFeaturedGalleryEvents();
             ))}
           </div>
         </div>
-      )}
-
-      {featuredEvents.length === 0 && (
+      ) : (
         <div class="text-center py-24">
           <div class="text-6xl mb-4">📸</div>
           <p class="text-lg text-gunSmoke mb-2">No events yet</p>
@@ -171,10 +168,11 @@ const featuredEvents = await getFeaturedGalleryEvents();
         // Filter events
         eventCards.forEach(card => {
           const cardCategory = card.getAttribute('data-category');
+          const htmlCard = card as HTMLElement;
           if (category === 'all' || cardCategory === category) {
-            card.style.display = 'block';
+            htmlCard.style.display = 'block';
           } else {
-            card.style.display = 'none';
+            htmlCard.style.display = 'none';
           }
         });
       });

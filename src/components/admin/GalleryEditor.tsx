@@ -86,7 +86,7 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
   const handleSelectEvent = async (event: GalleryEventWithCount) => {
     setSelectedEvent(event);
     // Fetch images for this event
-    const { default: { supabase } } = await import('../../lib/supabase');
+    const { supabase } = await import('../../lib/supabase');
     const { data } = await supabase
       .from('gallery_images')
       .select('*')
