@@ -18,6 +18,20 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: '15 Nov 2025',
+      title: 'SMX Tour - Chandigarh',
+      type: 'community',
+      description: 'Attended the Seedhe Maut SMX Tour in Chandigarh. Witnessed the raw energy of the duo live—jumping into the moshpit and screaming lyrics with thousands of fans was an unmatched experience.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'Spotify', 
+          link: 'https://open.spotify.com/artist/2oBG74gAocPMFv6Ij9ykdo?si=-BooK2k5St-woUhw3O7Csw',
+          icon: 'external' 
+        }
+      ]
+    },
+    {
       date: '10 Nov 2025',
       title: '1st Place Winner: Qyrus Track @ HackCBS 8.0',
       type: 'achievement',

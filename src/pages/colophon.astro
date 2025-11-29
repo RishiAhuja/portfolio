@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Colophon | Rishi Ahuja"
+  description="How this site was built"
+>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+    
+    .colophon-container {
+      font-family: 'PT Mono', monospace;
+      line-height: 1.8;
+    }
+    
+    .section-title {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, rgb(var(--accent-light)) 0%, transparent 100%);
+    }
+
+    .tech-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(var(--accent-light), 0.1);
+      border: 1px solid rgba(var(--accent-light), 0.3);
+      border-radius: 4px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+    
+    .tech-badge:hover {
+      background: rgba(var(--accent-light), 0.2);
+      border-color: rgb(var(--accent-light));
+      transform: translateY(-1px);
+    }
+    
+    .version-badge {
+      color: rgb(var(--accent-light));
+      font-weight: 500;
+    }
+  </style>
+
+  <main class="min-h-screen bg-codGray text-quillGray colophon-container">
+    <div class="max-w-4xl mx-auto px-4 md:px-8 py-16">
+      <!-- Header -->
+      <header class="mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4">
+          Colophon
+        </h1>
+        <p class="text-lg text-gunSmoke">
+          A technical retrospective on how this site was crafted.
+        </p>
+      </header>
+
+      <!-- Core Stack -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Core Stack
+        </h2>
+        <div class="space-y-4">
+          <div class="flex flex-wrap gap-3">
+            <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="tech-badge">
+              <span>Astro</span>
+              <span class="version-badge">4.16</span>
+            </a>
+            <a href="https://react.dev" target="_blank" rel="noopener noreferrer" class="tech-badge">
+              <span>React</span>
+              <span class="version-badge">18.3</span>
+            </a>
+            <a href="https://www.typescriptlang.org" target="_blank" rel="noopener noreferrer" class="tech-badge">
+              <span>TypeScript</span>
+              <span class="version-badge">5.6</span>
+            </a>
+            <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer" class="tech-badge">
+              <span>Tailwind CSS</span>
+              <span class="version-badge">3.4</span>
+            </a>
+          </div>
+          <p class="text-sm text-gunSmoke mt-4">
+            Built with Astro for optimal performance and hybrid rendering. React components hydrate only where needed. TypeScript ensures type safety across the codebase.
+          </p>
+        </div>
+      </section>
+
+      <!-- Infrastructure -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Infrastructure
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-medium text-accent-light mb-2">Deployment</h3>
+            <p class="text-sm text-gunSmoke">
+              Hosted on <a href="https://vercel.com" target="_blank" class="underline hover:text-accent-light transition-colors">Vercel</a> with automatic deployments from the main branch. Edge functions handle dynamic routes.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-medium text-accent-light mb-2">Database</h3>
+            <p class="text-sm text-gunSmoke">
+              <a href="https://supabase.com" target="_blank" class="underline hover:text-accent-light transition-colors">Supabase</a> powers analytics, visitor tracking, and the CMS for dynamic content. PostgreSQL with RLS policies for security.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-medium text-accent-light mb-2">Content</h3>
+            <p class="text-sm text-gunSmoke">
+              Blog posts fetched from <a href="https://hashnode.com" target="_blank" class="underline hover:text-accent-light transition-colors">Hashnode</a> API. Philosophical writings managed via custom admin panel.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-medium text-accent-light mb-2">Assets</h3>
+            <p class="text-sm text-gunSmoke">
+              Images optimized with Astro's built-in image optimization. OG images generated dynamically with @vercel/og.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Typography -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Typography
+        </h2>
+        <div class="space-y-4">
+          <div class="p-4 bg-darkGrey/20 rounded border border-gunSmoke/20">
+            <h3 class="text-lg font-medium text-accent-light mb-2 font-ptMono">PT Mono</h3>
+            <p class="text-sm text-gunSmoke">
+              Primary typeface for UI, navigation, and code. Monospace font gives the site its technical, minimalist character.
+            </p>
+          </div>
+          <div class="p-4 bg-darkGrey/20 rounded border border-gunSmoke/20">
+            <h3 class="text-lg font-medium text-accent-light mb-2" style="font-family: 'Lora', serif;">Lora</h3>
+            <p class="text-sm text-gunSmoke">
+              Serif typeface exclusively for the "Uncompiled" section. Provides contrast and signals a different mode of content—philosophical rather than technical.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Design Philosophy -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Design Philosophy
+        </h2>
+        <div class="space-y-3 text-sm text-gunSmoke">
+          <p>
+            <span class="text-accent-light">→</span> <strong class="text-quillGray">Minimalism over decoration.</strong> Every element serves a purpose. No visual noise.
+          </p>
+          <p>
+            <span class="text-accent-light">→</span> <strong class="text-quillGray">Performance first.</strong> Lighthouse score of 100. Hybrid rendering for optimal speed.
+          </p>
+          <p>
+            <span class="text-accent-light">→</span> <strong class="text-quillGray">Typography as hierarchy.</strong> Font choices signal content type and importance.
+          </p>
+          <p>
+            <span class="text-accent-light">→</span> <strong class="text-quillGray">Dark mode by default.</strong> Easier on the eyes for extended reading.
+          </p>
+          <p>
+            <span class="text-accent-light">→</span> <strong class="text-quillGray">Mobile-first responsive.</strong> Optimized for all devices without compromising desktop experience.
+          </p>
+        </div>
+      </section>
+
+      <!-- Special Features -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Notable Features
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
+            <h3 class="text-accent-light font-medium mb-2">Command Palette</h3>
+            <p class="text-sm text-gunSmoke">Cmd+K search for Life Ledger timeline with keyboard navigation.</p>
+          </div>
+          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
+            <h3 class="text-accent-light font-medium mb-2">Admin CMS</h3>
+            <p class="text-sm text-gunSmoke">Mobile-friendly admin panel for managing philosophical writings and gym stats.</p>
+          </div>
+          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
+            <h3 class="text-accent-light font-medium mb-2">Analytics Dashboard</h3>
+            <p class="text-sm text-gunSmoke">Privacy-focused visitor tracking with device/browser insights.</p>
+          </div>
+          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
+            <h3 class="text-accent-light font-medium mb-2">Progress Tracking</h3>
+            <p class="text-sm text-gunSmoke">Gym stats with historical data visualization and trend analysis.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tech Choices -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Why These Technologies?
+        </h2>
+        <div class="space-y-4 text-sm text-gunSmoke">
+          <div>
+            <h3 class="text-quillGray font-medium mb-1">Astro</h3>
+            <p>Chosen for its island architecture—ship zero JavaScript by default, hydrate only interactive components. Perfect for a content-heavy portfolio.</p>
+          </div>
+          <div>
+            <h3 class="text-quillGray font-medium mb-1">React</h3>
+            <p>Used selectively for stateful UI (command palette, admin dashboard). Familiar ecosystem with excellent TypeScript support.</p>
+          </div>
+          <div>
+            <h3 class="text-quillGray font-medium mb-1">Tailwind CSS</h3>
+            <p>Rapid prototyping without context switching. Utility-first approach keeps styles co-located with markup.</p>
+          </div>
+          <div>
+            <h3 class="text-quillGray font-medium mb-1">Supabase</h3>
+            <p>Postgres + RLS gives production-grade security with minimal backend code. Perfect for a solo developer.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Source & Version -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Source & Version
+        </h2>
+        <div class="space-y-3 text-sm text-gunSmoke">
+          <p>
+            <span class="text-accent-light">Repository:</span> 
+            <a href="https://github.com/rishiahuja/portfolio" target="_blank" rel="noopener noreferrer" class="underline hover:text-accent-light transition-colors ml-2">
+              github.com/rishiahuja/portfolio
+            </a>
+          </p>
+          <p>
+            <span class="text-accent-light">Version:</span> 
+            <span class="ml-2">0.3.0</span>
+          </p>
+          <p>
+            <span class="text-accent-light">Last Updated:</span> 
+            <span class="ml-2">November 2025</span>
+          </p>
+          <p>
+            <span class="text-accent-light">License:</span> 
+            <span class="ml-2">All rights reserved</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Acknowledgments -->
+      <section class="mb-12">
+        <h2 class="section-title text-2xl font-semibold text-quillGray">
+          Inspiration
+        </h2>
+        <p class="text-sm text-gunSmoke">
+          Design influenced by brutalist web design principles, terminal aesthetics, and the belief that portfolios should be functional tools, not just visual showcases.
+        </p>
+      </section>
+
+      <!-- Footer -->
+      <footer class="pt-8 border-t border-gunSmoke/20">
+        <p class="text-xs text-gunSmoke/70 text-center">
+          This colophon is maintained as a living document and updated with each significant release.
+        </p>
+      </footer>
+    </div>
+  </main>
+</BaseLayout>
