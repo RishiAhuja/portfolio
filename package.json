@@ -17,6 +17,8 @@
     "@astrojs/react": "^3.6.2",
     "@astrojs/tailwind": "^5.1.1",
     "@astrojs/vercel": "^7.8.2",
+    "@aws-sdk/client-s3": "^3.940.0",
+    "@aws-sdk/s3-request-presigner": "^3.940.0",
     "@supabase/supabase-js": "^2.49.7",
     "@tailwindcss/typography": "^0.5.16",
     "@types/bcryptjs": "^2.4.6",
@@ -36,6 +38,7 @@
     "react-type-animation": "^3.2.0",
     "recharts": "^3.4.1",
     "tailwindcss": "^3.4.1",
+    "tslib": "^2.8.1",
     "typescript": "^5.6.3",
     "ua-parser-js": "^2.0.3"
   },

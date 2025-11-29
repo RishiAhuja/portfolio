@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getGalleryEventBySlug, getAllGalleryEvents, type GalleryEventWithImages } from '../../lib/gallery';
+
+export async function getStaticPaths() {
+  const events = await getAllGalleryEvents('');
+  return events.map((event) => ({
+    params: { slug: event.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const eventData = await getGalleryEventBySlug(slug);
+
+if (!eventData) {
+  return Astro.redirect('/gallery');
+}
+
+const event: GalleryEventWithImages = eventData;
+---
+
+<BaseLayout 
+  title={`${event.title} | Gallery`}
+  description={event.description || `Photos from ${event.title}`}
+  image={event.cover_image_url || undefined}
+>
+  <style>
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .lightbox.active {
+      display: flex;
+    }
+    
+    .lightbox-image {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .lightbox-prev {
+      left: 2rem;
+    }
+    
+    .lightbox-next {
+      right: 2rem;
+    }
+    
+    .image-grid-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .image-grid-item:hover {
+      transform: scale(1.02);
+    }
+    
+    .image-grid-item img {
+      transition: transform 0.3s ease;
+    }
+    
+    .image-grid-item:hover img {
+      transform: scale(1.1);
+    }
+  </style>
+
+  <main class="min-h-screen bg-codGray text-quillGray font-ptMono">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-16">
+      <!-- Back Button -->
+      <a 
+        href="/gallery" 
+        class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent-light transition-colors mb-8"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Gallery
+      </a>
+
+      <!-- Event Header -->
+      <header class="mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="px-3 py-1 text-sm bg-accent-light/10 text-accent-light border border-accent-light/30 rounded">
+            {event.category}
+          </span>
+          <span class="text-sm text-gunSmoke">
+            {new Date(event.event_date).toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })}
+          </span>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4">
+          {event.title}
+        </h1>
+        
+        {event.location && (
+          <p class="text-lg text-gunSmoke mb-4">
+            📍 {event.location}
+          </p>
+        )}
+        
+        {event.description && (
+          <p class="text-base text-gunSmoke max-w-3xl">
+            {event.description}
+          </p>
+        )}
+        
+        <p class="text-sm text-gunSmoke/70 mt-4">
+          {event.images.length} {event.images.length === 1 ? 'photo' : 'photos'}
+        </p>
+      </header>
+
+      <!-- Images Grid -->
+      {event.images.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {event.images.map((image, index) => (
+            <div 
+              class="image-grid-item aspect-square rounded-lg overflow-hidden bg-darkGrey/20"
+              data-index={index}
+            >
+              <img
+                src={image.r2_url}
+                alt={image.title || `Photo ${index + 1}`}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-24 text-gunSmoke">
+          <p class="text-lg">No photos yet</p>
+        </div>
+      )}
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+      <button class="lightbox-close" id="lightboxClose">×</button>
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+      <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+      <img id="lightboxImage" class="lightbox-image" src="" alt="" />
+    </div>
+  </main>
+
+  <script define:vars={{ images: event.images }}>
+    let currentIndex = 0;
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const imageItems = document.querySelectorAll('.image-grid-item');
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightboxImage.src = images[currentIndex].r2_url;
+      lightboxImage.alt = images[currentIndex].title || `Photo ${currentIndex + 1}`;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImage.src = images[currentIndex].r2_url;
+      lightboxImage.alt = images[currentIndex].title || `Photo ${currentIndex + 1}`;
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImage.src = images[currentIndex].r2_url;
+      lightboxImage.alt = images[currentIndex].title || `Photo ${currentIndex + 1}`;
+    }
+
+    // Event listeners
+    imageItems.forEach((item, index) => {
+      item.addEventListener('click', () => openLightbox(index));
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', showPrev);
+    lightboxNext.addEventListener('click', showNext);
+    
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    });
+  </script>
+</BaseLayout>

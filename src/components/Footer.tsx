@@ -207,6 +207,12 @@ const Footer: React.FC = () => {
             >
               Colophon
             </a>
+            <a 
+              href="/gallery" 
+              className="text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors underline decoration-gunSmoke/40 hover:decoration-accent-light underline-offset-2"
+            >
+              Gallery
+            </a>
           </div>
           <div className="text-sm font-ptMono text-quillGray flex items-center space-x-1">
             <span>made with</span>
@@ -255,6 +261,12 @@ const Footer: React.FC = () => {
                 className="text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors underline decoration-gunSmoke/40 hover:decoration-accent-light underline-offset-2"
               >
                 Colophon
+              </a>
+              <a 
+                href="/gallery" 
+                className="text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors underline decoration-gunSmoke/40 hover:decoration-accent-light underline-offset-2"
+              >
+                Gallery
               </a>
             </div>
             <div>© {year} All rights reserved</div>

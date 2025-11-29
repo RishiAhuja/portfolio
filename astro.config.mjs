@@ -27,6 +27,10 @@ export default defineConfig({
   vite: {
     ssr: {
       noExternal: ['react-icons', 'react-type-animation'],
+      external: ['@aws-sdk/client-s3', '@aws-sdk/s3-request-presigner'],
+    },
+    optimizeDeps: {
+      exclude: ['@aws-sdk/client-s3', '@aws-sdk/s3-request-presigner'],
     },
   },
   image: {

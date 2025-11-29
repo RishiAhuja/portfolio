@@ -1,0 +1,183 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getFeaturedGalleryEvents, type GalleryEventWithCount } from '../lib/gallery';
+
+const featuredEvents = await getFeaturedGalleryEvents();
+---
+
+<BaseLayout 
+  title="Gallery | Rishi Ahuja"
+  description="A visual journey through hackathons, trips, conferences, and moments that shaped my path"
+>
+  <style>
+    .gallery-container {
+      font-family: 'PT Mono', monospace;
+    }
+    
+    .event-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .event-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .event-card:hover::before {
+      opacity: 1;
+    }
+    
+    .event-card:hover .event-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .event-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .category-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      background: rgba(var(--accent-light), 0.2);
+      color: rgb(var(--accent-light));
+      border: 1px solid rgba(var(--accent-light), 0.3);
+    }
+    
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(var(--gunSmoke), 0.3);
+      background: transparent;
+      color: rgb(var(--gunSmoke));
+      transition: all 0.2s ease;
+      font-size: 0.875rem;
+    }
+    
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: rgba(var(--accent-light), 0.1);
+      border-color: rgb(var(--accent-light));
+      color: rgb(var(--accent-light));
+    }
+  </style>
+
+  <main class="min-h-screen bg-codGray text-quillGray gallery-container">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-16">
+      <!-- Header -->
+      <header class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4">
+          Gallery
+        </h1>
+        <p class="text-lg text-gunSmoke max-w-2xl">
+          A visual journal of experiences—hackathons, trips, conferences, and everyday moments that matter.
+        </p>
+      </header>
+
+      <!-- Category Filters -->
+      <div class="flex flex-wrap gap-3 mb-12" id="categoryFilters">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="hackathon">Hackathons</button>
+        <button class="filter-btn" data-category="trip">Trips</button>
+        <button class="filter-btn" data-category="delegation">Delegations</button>
+        <button class="filter-btn" data-category="conference">Conferences</button>
+        <button class="filter-btn" data-category="casual">Casual</button>
+      </div>
+
+      <!-- Featured Events Grid -->
+      {featuredEvents.length > 0 && (
+        <div class="mb-16">
+          <h2 class="text-2xl font-bold text-quillGray mb-6">Featured</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="galleryGrid">
+            {featuredEvents.map((event: GalleryEventWithCount) => (
+              <a
+                href={`/gallery/${event.slug}`}
+                class="event-card block rounded-lg overflow-hidden bg-darkGrey/20 h-80 relative"
+                data-category={event.category}
+              >
+                {event.cover_image_url ? (
+                  <img
+                    src={event.cover_image_url}
+                    alt={event.title}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center bg-darkGrey/40">
+                    <span class="text-gunSmoke text-6xl">📷</span>
+                  </div>
+                )}
+                
+                <div class="event-info">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="category-badge">{event.category}</span>
+                    <span class="text-xs text-gunSmoke">
+                      {event.image_count} {event.image_count === 1 ? 'photo' : 'photos'}
+                    </span>
+                  </div>
+                  <h3 class="text-xl font-bold text-quillGray mb-1">{event.title}</h3>
+                  <p class="text-sm text-gunSmoke">
+                    {new Date(event.event_date).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                    {event.location && ` • ${event.location}`}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {featuredEvents.length === 0 && (
+        <div class="text-center py-24">
+          <div class="text-6xl mb-4">📸</div>
+          <p class="text-lg text-gunSmoke mb-2">No events yet</p>
+          <p class="text-sm text-gunSmoke/70">Check back soon for new memories!</p>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <script>
+    // Category filtering
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const eventCards = document.querySelectorAll('.event-card');
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category');
+        
+        // Update active state
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Filter events
+        eventCards.forEach(card => {
+          const cardCategory = card.getAttribute('data-category');
+          if (category === 'all' || cardCategory === category) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>
