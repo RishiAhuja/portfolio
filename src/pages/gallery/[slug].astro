@@ -17,241 +17,341 @@ if (!eventData) {
 }
 
 const event: GalleryEventWithImages = eventData;
+
+// Generate hex addresses for images
+const imagesWithHex = event.images.map((img, index) => ({
+  ...img,
+  hexAddress: `0x${(index * 0x40 + 0x1000).toString(16).toUpperCase().padStart(4, '0')}`,
+  index
+}));
 ---
 
 <BaseLayout 
-  title={`${event.title} | Gallery`}
-  description={event.description || `Photos from ${event.title}`}
+  title={`${event.title} | Artifacts`}
+  description={event.description || `Memory tape from ${event.title}`}
   image={event.cover_image_url || undefined}
 >
   <style>
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.95);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .lightbox.active {
-      display: flex;
-    }
-    
-    .lightbox-image {
-      max-width: 90vw;
-      max-height: 90vh;
-      object-fit: contain;
-    }
-    
-    .lightbox-close {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .lightbox-close:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.1);
-    }
-    
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .lightbox-nav:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-50%) scale(1.1);
-    }
-    
-    .lightbox-prev {
-      left: 2rem;
-    }
-    
-    .lightbox-next {
-      right: 2rem;
-    }
-    
-    .image-grid-item {
+    .tape-container {
+      font-family: 'PT Mono', monospace;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
       position: relative;
+      height: 100vh;
+      background: var(--codGray);
+    }
+    
+    .tape-container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .tape-track {
+      display: flex;
+      height: 100%;
+      width: max-content;
+      padding: 0 50vw;
+    }
+    
+    .tape-cell {
+      flex-shrink: 0;
+      width: 80vw;
+      max-width: 600px;
+      height: 100%;
+      scroll-snap-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .tape-cell.inactive {
+      opacity: 0.3;
+      transform: scale(0.9);
+    }
+    
+    .tape-cell.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .read-head {
+      position: fixed;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent-light);
+      transform: translateX(-1px);
+      z-index: 100;
+      pointer-events: none;
+      box-shadow: 0 0 20px rgba(var(--accent-light-rgb), 0.5);
+    }
+    
+    .read-head::before,
+    .read-head::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .read-head::before {
+      top: 2rem;
+    }
+    
+    .read-head::after {
+      bottom: 2rem;
+    }
+    
+    .metadata-display {
+      position: fixed;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(var(--codGray-rgb), 0.95);
+      border: 1px solid var(--gunSmoke);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.85rem;
+      color: var(--quillGray);
+      z-index: 99;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      min-width: 300px;
+      text-align: center;
+    }
+    
+    .hex-label {
+      color: var(--accent-light);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    
+    .image-frame {
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 4/3;
+      background: rgba(var(--darkGrey-rgb), 0.3);
+      border: 1px solid var(--gunSmoke);
       overflow: hidden;
+      position: relative;
+    }
+    
+    .image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .image-caption {
+      margin-top: 1rem;
+      color: var(--gunSmoke);
+      font-size: 0.875rem;
+      text-align: center;
+      max-width: 500px;
+    }
+    
+    .tape-controls {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 1rem;
+      z-index: 99;
+      background: rgba(var(--codGray-rgb), 0.95);
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--gunSmoke);
+      backdrop-filter: blur(10px);
+    }
+    
+    .tape-controls button {
+      background: transparent;
+      border: 1px solid var(--gunSmoke);
+      color: var(--quillGray);
+      padding: 0.5rem 1rem;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: all 0.2s ease;
+      font-family: 'PT Mono', monospace;
+      font-size: 0.875rem;
     }
     
-    .image-grid-item:hover {
-      transform: scale(1.02);
+    .tape-controls button:hover {
+      border-color: var(--accent-light);
+      color: var(--accent-light);
     }
     
-    .image-grid-item img {
-      transition: transform 0.3s ease;
+    .back-link {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      color: var(--gunSmoke);
+      text-decoration: none;
+      font-size: 0.875rem;
+      z-index: 99;
+      transition: color 0.2s ease;
     }
     
-    .image-grid-item:hover img {
-      transform: scale(1.1);
+    .back-link:hover {
+      color: var(--accent-light);
+    }
+    
+    .position-indicator {
+      font-size: 0.75rem;
+      color: var(--gunSmoke);
+      margin-top: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .tape-cell {
+        width: 90vw;
+        padding: 1rem;
+      }
+      
+      .metadata-display {
+        min-width: auto;
+        width: calc(100vw - 4rem);
+      }
+      
+      .tape-controls {
+        width: calc(100vw - 4rem);
+        justify-content: space-between;
+      }
     }
   </style>
 
-  <main class="min-h-screen bg-codGray text-quillGray font-ptMono">
-    <div class="max-w-7xl mx-auto px-4 md:px-8 py-16">
-      <!-- Back Button -->
-      <a 
-        href="/gallery" 
-        class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent-light transition-colors mb-8"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back to Gallery
-      </a>
-
-      <!-- Event Header -->
-      <header class="mb-12">
-        <div class="flex items-center gap-3 mb-4">
-          <span class="px-3 py-1 text-sm bg-accent-light/10 text-accent-light border border-accent-light/30 rounded">
-            {event.category}
-          </span>
-          <span class="text-sm text-gunSmoke">
-            {new Date(event.event_date).toLocaleDateString('en-GB', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            })}
-          </span>
-        </div>
-        
-        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4">
-          {event.title}
-        </h1>
-        
-        {event.location && (
-          <p class="text-lg text-gunSmoke mb-4">
-            📍 {event.location}
-          </p>
-        )}
-        
-        {event.description && (
-          <p class="text-base text-gunSmoke max-w-3xl">
-            {event.description}
-          </p>
-        )}
-        
-        <p class="text-sm text-gunSmoke/70 mt-4">
-          {event.images.length} {event.images.length === 1 ? 'photo' : 'photos'}
-        </p>
-      </header>
-
-      <!-- Images Grid -->
-      {event.images.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {event.images.map((image, index) => (
-            <div 
-              class="image-grid-item aspect-square rounded-lg overflow-hidden bg-darkGrey/20"
-              data-index={index}
-            >
+  <main class="relative">
+    <a href="/gallery" class="back-link">← Back to Gallery</a>
+    
+    <div class="read-head"></div>
+    
+    <div id="metadataDisplay" class="metadata-display">
+      <div class="hex-label" id="hexLabel">0x0000</div>
+      <div id="eventTitle">{event.title}</div>
+      <div class="position-indicator" id="positionIndicator">0 / {imagesWithHex.length}</div>
+    </div>
+    
+    <div class="tape-container" id="tapeContainer">
+      <div class="tape-track">
+        {imagesWithHex.map((image) => (
+          <div class="tape-cell" data-hex={image.hexAddress} data-index={image.index}>
+            <div class="image-frame">
               <img
                 src={image.r2_url}
-                alt={image.title || `Photo ${index + 1}`}
-                class="w-full h-full object-cover"
+                alt={image.title || `Memory block ${image.hexAddress}`}
                 loading="lazy"
               />
             </div>
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-24 text-gunSmoke">
-          <p class="text-lg">No photos yet</p>
-        </div>
-      )}
+            {image.description && (
+              <div class="image-caption">{image.description}</div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
-
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox">
-      <button class="lightbox-close" id="lightboxClose">×</button>
-      <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
-      <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
-      <img id="lightboxImage" class="lightbox-image" src="" alt="" />
+    
+    <div class="tape-controls">
+      <button id="prevBtn">← Prev</button>
+      <button id="nextBtn">Next →</button>
     </div>
   </main>
 
-  <script define:vars={{ images: event.images }}>
-    let currentIndex = 0;
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.getElementById('lightboxImage');
-    const lightboxClose = document.getElementById('lightboxClose');
-    const lightboxPrev = document.getElementById('lightboxPrev');
-    const lightboxNext = document.getElementById('lightboxNext');
-    const imageItems = document.querySelectorAll('.image-grid-item');
-
-    function openLightbox(index) {
-      currentIndex = index;
-      lightboxImage.src = images[currentIndex].r2_url;
-      lightboxImage.alt = images[currentIndex].title || `Photo ${currentIndex + 1}`;
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    function showPrev() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      lightboxImage.src = images[currentIndex].r2_url;
-      lightboxImage.alt = images[currentIndex].title || `Photo ${currentIndex + 1}`;
-    }
-
-    function showNext() {
-      currentIndex = (currentIndex + 1) % images.length;
-      lightboxImage.src = images[currentIndex].r2_url;
-      lightboxImage.alt = images[currentIndex].title || `Photo ${currentIndex + 1}`;
-    }
-
-    // Event listeners
-    imageItems.forEach((item, index) => {
-      item.addEventListener('click', () => openLightbox(index));
-    });
-
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightboxPrev.addEventListener('click', showPrev);
-    lightboxNext.addEventListener('click', showNext);
+  <script define:vars={{ images: imagesWithHex }}>
+    const container = document.getElementById('tapeContainer');
+    const cells = document.querySelectorAll('.tape-cell');
+    const hexLabel = document.getElementById('hexLabel');
+    const positionIndicator = document.getElementById('positionIndicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
+    let currentIndex = 0;
+    
+    function updateActiveCell() {
+      const containerRect = container.getBoundingClientRect();
+      const centerX = containerRect.left + containerRect.width / 2;
+      
+      let closestCell = null;
+      let closestDistance = Infinity;
+      let closestIndex = 0;
+      
+      cells.forEach((cell, index) => {
+        const rect = cell.getBoundingClientRect();
+        const cellCenterX = rect.left + rect.width / 2;
+        const distance = Math.abs(cellCenterX - centerX);
+        
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestCell = cell;
+          closestIndex = index;
+        }
+        
+        if (distance < rect.width / 3) {
+          cell.classList.remove('inactive');
+          cell.classList.add('active');
+        } else {
+          cell.classList.remove('active');
+          cell.classList.add('inactive');
+        }
+      });
+      
+      if (closestCell && closestIndex !== currentIndex) {
+        currentIndex = closestIndex;
+        const hexAddress = closestCell.getAttribute('data-hex');
+        hexLabel.textContent = hexAddress;
+        positionIndicator.textContent = `${currentIndex + 1} / ${images.length}`;
+        
+        // Haptic feedback (if supported)
+        if ('vibrate' in navigator) {
+          navigator.vibrate(10);
+        }
+      }
+    }
+    
+    function scrollToIndex(index) {
+      if (index < 0 || index >= cells.length) return;
+      
+      const cell = cells[index];
+      const containerRect = container.getBoundingClientRect();
+      const cellRect = cell.getBoundingClientRect();
+      const scrollAmount = cellRect.left - containerRect.left - containerRect.width / 2 + cellRect.width / 2;
+      
+      container.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+    
+    // Event listeners
+    container.addEventListener('scroll', updateActiveCell);
+    
+    prevBtn.addEventListener('click', () => {
+      scrollToIndex(currentIndex - 1);
     });
-
+    
+    nextBtn.addEventListener('click', () => {
+      scrollToIndex(currentIndex + 1);
+    });
+    
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('active')) return;
-      
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') showPrev();
-      if (e.key === 'ArrowRight') showNext();
+      if (e.key === 'ArrowLeft') {
+        scrollToIndex(currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        scrollToIndex(currentIndex + 1);
+      }
     });
+    
+    // Initial update
+    updateActiveCell();
   </script>
 </BaseLayout>
