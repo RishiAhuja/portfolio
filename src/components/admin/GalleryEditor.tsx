@@ -55,7 +55,10 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
 
   const handleCreateEvent = async () => {
     try {
-      const newEvent = await createGalleryEvent(token, formData);
+      const newEvent = await createGalleryEvent(token, {
+        ...formData,
+        cover_image_url: null
+      });
       if (newEvent) {
         await loadEvents();
         setShowNewEventForm(false);

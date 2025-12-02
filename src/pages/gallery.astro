@@ -1,181 +1,318 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAllGalleryEvents, type GalleryEventWithCount } from '../lib/gallery';
+import { getAllGalleryEvents } from '../lib/gallery';
 
 const allEvents = await getAllGalleryEvents('');
+
+// Sort events by date (newest first)
+const sortedEvents = allEvents.sort((a, b) => 
+  new Date(b.event_date).getTime() - new Date(a.event_date).getTime()
+);
+
+// Format date
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
 ---
 
 <BaseLayout 
-  title="Gallery | Rishi Ahuja"
-  description="A visual journey through hackathons, trips, conferences, and moments that shaped my path"
+  title="Artifacts | Rishi Ahuja"
+  description="Image archive"
 >
   <style>
     .gallery-container {
       font-family: 'PT Mono', monospace;
+      background: var(--codGray);
+      color: var(--quillGray);
+      min-height: 100vh;
+      padding: 2rem;
     }
     
-    .event-card {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
+    .gallery-header {
+      max-width: 1200px;
+      margin: 0 auto 3rem;
     }
     
-    .event-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    .gallery-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--quillGray);
+      margin-bottom: 0.5rem;
     }
     
-    .event-card:hover::before {
-      opacity: 1;
+    .gallery-subtitle {
+      color: var(--gunSmoke);
+      font-size: 0.9rem;
     }
     
-    .event-card:hover .event-info {
-      transform: translateY(0);
-      opacity: 1;
+    .gallery-listing {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .event-row {
+      display: block;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(var(--gunSmoke-rgb), 0.15);
+      transition: all 0.2s ease;
+    }
+    
+    .event-header {
+      display: grid;
+      grid-template-columns: 110px 1fr auto;
+      gap: 1.5rem;
+      padding: 1.25rem 0;
+      cursor: pointer;
+      align-items: center;
+    }
+    
+    .event-row:hover .event-header {
+      background: rgba(var(--darkGrey-rgb), 0.2);
+      border-left: 2px solid var(--accent-light);
+      padding-left: calc(1rem - 2px);
+    }
+    
+    .event-date {
+      color: var(--gunSmoke);
+      font-size: 0.85rem;
     }
     
     .event-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 1.5rem;
-      transform: translateY(20px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    
+    .event-title {
+      color: var(--quillGray);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .event-location {
+      color: var(--gunSmoke);
+      font-size: 0.8rem;
+    }
+    
+    .event-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--gunSmoke);
+      font-size: 0.85rem;
     }
     
     .category-badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      font-size: 0.75rem;
-      border-radius: 4px;
-      background: rgba(var(--accent-light), 0.2);
-      color: rgb(var(--accent-light));
-      border: 1px solid rgba(var(--accent-light), 0.3);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--gunSmoke);
+      color: var(--gunSmoke);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     
-    .filter-btn {
-      padding: 0.5rem 1rem;
-      border: 1px solid rgba(var(--gunSmoke), 0.3);
-      background: transparent;
-      color: rgb(var(--gunSmoke));
-      transition: all 0.2s ease;
-      font-size: 0.875rem;
+    .image-count {
+      color: var(--gunSmoke);
     }
     
-    .filter-btn:hover,
-    .filter-btn.active {
-      background: rgba(var(--accent-light), 0.1);
-      border-color: rgb(var(--accent-light));
-      color: rgb(var(--accent-light));
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--gunSmoke);
+    }
+    
+    @media (max-width: 768px) {
+      .event-header {
+        grid-template-columns: 90px 1fr;
+        gap: 1rem;
+      }
+      
+      .event-meta {
+        display: none;
+      }
+      
+      .images-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.75rem;
+      }
     }
   </style>
 
-  <main class="min-h-screen bg-codGray text-quillGray gallery-container">
-    <div class="max-w-7xl mx-auto px-4 md:px-8 py-16">
-      <!-- Header -->
-      <header class="mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4">
-          Gallery
-        </h1>
-        <p class="text-lg text-gunSmoke max-w-2xl">
-          A visual journal of experiences—hackathons, trips, conferences, and everyday moments that matter.
-        </p>
-      </header>
+  <main class="gallery-container">
+    <header class="gallery-header">
+      <h1 class="gallery-title">Artifacts</h1>
+      <p class="gallery-subtitle">
+        {sortedEvents.length} {sortedEvents.length === 1 ? 'event' : 'events'}
+      </p>
+    </header>
 
-      <!-- Category Filters -->
-      <div class="flex flex-wrap gap-3 mb-12" id="categoryFilters">
-        <button class="filter-btn active" data-category="all">All</button>
-        <button class="filter-btn" data-category="hackathon">Hackathons</button>
-        <button class="filter-btn" data-category="trip">Trips</button>
-        <button class="filter-btn" data-category="delegation">Delegations</button>
-        <button class="filter-btn" data-category="conference">Conferences</button>
-        <button class="filter-btn" data-category="casual">Casual</button>
-      </div>
-
-      <!-- Events Grid -->
-      {allEvents.length > 0 ? (
-        <div class="mb-16">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="galleryGrid">
-            {allEvents.map((event: GalleryEventWithCount) => (
-              <a
-                href={`/gallery/${event.slug}`}
-                class="event-card block rounded-lg overflow-hidden bg-darkGrey/20 h-80 relative"
-                data-category={event.category}
-              >
-                {event.cover_image_url ? (
-                  <img
-                    src={event.cover_image_url}
-                    alt={event.title}
-                    class="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div class="w-full h-full flex items-center justify-center bg-darkGrey/40">
-                    <span class="text-gunSmoke text-6xl">📷</span>
-                  </div>
+    {allEvents.length > 0 ? (
+      <div class="gallery-listing">
+        {sortedEvents.map((event) => (
+          <a href={`/gallery/${event.slug}`} class="event-row" data-event-id={event.id}>
+            <div class="event-header">
+              <span class="event-date">{formatDate(event.event_date)}</span>
+              <div class="event-info">
+                <span class="event-title">{event.title}</span>
+                {event.location && (
+                  <span class="event-location">{event.location}</span>
                 )}
-                
-                <div class="event-info">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="category-badge">{event.category}</span>
-                    <span class="text-xs text-gunSmoke">
-                      {event.image_count} {event.image_count === 1 ? 'photo' : 'photos'}
-                    </span>
-                  </div>
-                  <h3 class="text-xl font-bold text-quillGray mb-1">{event.title}</h3>
-                  <p class="text-sm text-gunSmoke">
-                    {new Date(event.event_date).toLocaleDateString('en-GB', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric'
-                    })}
-                    {event.location && ` • ${event.location}`}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div class="text-center py-24">
-          <div class="text-6xl mb-4">📸</div>
-          <p class="text-lg text-gunSmoke mb-2">No events yet</p>
-          <p class="text-sm text-gunSmoke/70">Check back soon for new memories!</p>
-        </div>
-      )}
+              </div>
+              <div class="event-meta">
+                <span class="category-badge">{event.category}</span>
+                <span class="image-count">{event.image_count || 0} photos</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <h2>No events yet</h2>
+        <p>Check back soon.</p>
+      </div>
+    )}
+    
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose">ESC</button>
+        <img src="" alt="" id="modalImage" />
+      </div>
     </div>
   </main>
 
   <script>
-    // Category filtering
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const eventCards = document.querySelectorAll('.event-card');
+    const eventHeaders = document.querySelectorAll('.event-header');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalImage = document.getElementById('modalImage') as HTMLImageElement;
+    const modalClose = document.getElementById('modalClose');
     
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const category = btn.getAttribute('data-category');
+    // Track loaded events
+    const loadedEvents = new Set<string>();
+    
+    // Format bytes
+    function formatBytes(bytes: number): string {
+      if (bytes < 1024) return bytes + 'B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + 'K';
+      return (bytes / (1024 * 1024)).toFixed(1) + 'M';
+    }
+    
+    // Fetch images for an event
+    async function loadImages(eventId: string, container: HTMLElement) {
+      if (loadedEvents.has(eventId)) return;
+      
+      try {
+        const response = await fetch(`/api/gallery/images?eventId=${eventId}`);
+        if (!response.ok) {
+          container.innerHTML = '<div class="loading">Failed to load images</div>';
+          return;
+        }
         
-        // Update active state
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        const images = await response.json();
         
-        // Filter events
-        eventCards.forEach(card => {
-          const cardCategory = card.getAttribute('data-category');
-          const htmlCard = card as HTMLElement;
-          if (category === 'all' || cardCategory === category) {
-            htmlCard.style.display = 'block';
-          } else {
-            htmlCard.style.display = 'none';
+        if (images.length === 0) {
+          container.innerHTML = '<div class="loading">No images found</div>';
+          return;
+        }
+        
+        const grid = document.createElement('div');
+        grid.className = 'images-grid';
+        
+        images.forEach((img: any) => {
+          const item = document.createElement('div');
+          item.className = 'image-item';
+          item.dataset.imageUrl = img.r2_url;
+          
+          const image = document.createElement('img');
+          image.src = img.r2_url;
+          image.alt = img.title || 'Image';
+          image.loading = 'lazy';
+          
+          const overlay = document.createElement('div');
+          overlay.className = 'image-overlay';
+          
+          if (img.title) {
+            const title = document.createElement('div');
+            title.className = 'image-title';
+            title.textContent = img.title;
+            overlay.appendChild(title);
           }
+          
+          item.appendChild(image);
+          item.appendChild(overlay);
+          
+          // Click to open modal
+          item.addEventListener('click', () => {
+            if (modalImage && modalOverlay) {
+              modalImage.src = img.r2_url;
+              modalOverlay.classList.add('open');
+            }
+          });
+          
+          grid.appendChild(item);
         });
+        
+        container.innerHTML = '';
+        container.appendChild(grid);
+        loadedEvents.add(eventId);
+      } catch (error) {
+        console.error('Error loading images:', error);
+        container.innerHTML = '<div class="loading">Error loading images</div>';
+      }
+    }
+    
+    // Event header click handler
+    eventHeaders.forEach((header) => {
+      header.addEventListener('click', () => {
+        const eventRow = header.closest('.event-row') as HTMLElement;
+        const imagesContainer = eventRow?.querySelector('.images-container') as HTMLElement;
+        const eventId = eventRow?.dataset.eventId;
+        
+        if (!imagesContainer || !eventId) return;
+        
+        const isOpen = imagesContainer.classList.contains('open');
+        
+        // Close all other events
+        document.querySelectorAll('.images-container').forEach(ic => {
+          ic.classList.remove('open');
+        });
+        document.querySelectorAll('.event-header').forEach(eh => {
+          eh.classList.remove('expanded');
+        });
+        
+        if (!isOpen) {
+          imagesContainer.classList.add('open');
+          header.classList.add('expanded');
+          
+          // Load images if not loaded
+          if (!loadedEvents.has(eventId)) {
+            loadImages(eventId, imagesContainer);
+          }
+        }
       });
+    });
+    
+    // Modal close handlers
+    modalClose?.addEventListener('click', () => {
+      modalOverlay?.classList.remove('open');
+    });
+    
+    modalOverlay?.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('open');
+      }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay?.classList.contains('open')) {
+        modalOverlay.classList.remove('open');
+      }
     });
   </script>
 </BaseLayout>
