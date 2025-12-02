@@ -18,12 +18,26 @@ if (!eventData) {
 
 const event: GalleryEventWithImages = eventData;
 
-// Generate hex addresses for images
-const imagesWithHex = event.images.map((img, index) => ({
-  ...img,
-  hexAddress: `0x${(index * 0x40 + 0x1000).toString(16).toUpperCase().padStart(4, '0')}`,
-  index
-}));
+// Generate hex addresses for images - base address is 0x10000000, increment by file size
+const BASE_ADDRESS = 0x10000000;
+let cumulativeSize = 0;
+const imagesWithHex = event.images.map((img, index) => {
+  const hexAddress = `0x${(BASE_ADDRESS + cumulativeSize).toString(16).toUpperCase().padStart(8, '0')}`;
+  const currentSize = img.file_size || 1024 * 1024; // Default to 1MB if size not available
+  
+  const result = {
+    ...img,
+    hexAddress,
+    index,
+    offsetBytes: cumulativeSize,
+    sizeBytes: currentSize
+  };
+  
+  // Add current image size to cumulative for next iteration
+  cumulativeSize += currentSize;
+  
+  return result;
+});
 ---
 
 <BaseLayout 
@@ -32,6 +46,25 @@ const imagesWithHex = event.images.map((img, index) => ({
   image={event.cover_image_url || undefined}
 >
   <style>
+    main {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--codGray);
+    }
+    
+    main::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+    
     .tape-container {
       font-family: 'PT Mono', monospace;
       overflow-x: auto;
@@ -42,7 +75,8 @@ const imagesWithHex = event.images.map((img, index) => ({
       scrollbar-width: none;
       position: relative;
       height: 100vh;
-      background: var(--codGray);
+      background: transparent;
+      scroll-padding: 0;
     }
     
     .tape-container::-webkit-scrollbar {
@@ -53,12 +87,26 @@ const imagesWithHex = event.images.map((img, index) => ({
       display: flex;
       height: 100%;
       width: max-content;
-      padding: 0 50vw;
+      padding: 0 calc(50vw - 30vw) 0 50vw;
+      position: relative;
+    }
+    
+    .tape-track::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 0;
+      border-bottom: 2px dashed #333;
+      transform: translateY(-50%);
+      z-index: 0;
+      pointer-events: none;
     }
     
     .tape-cell {
       flex-shrink: 0;
-      width: 80vw;
+      width: 60vw;
       max-width: 600px;
       height: 100%;
       scroll-snap-align: center;
@@ -69,49 +117,81 @@ const imagesWithHex = event.images.map((img, index) => ({
       padding: 2rem;
       position: relative;
       transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 2;
     }
     
     .tape-cell.inactive {
-      opacity: 0.3;
-      transform: scale(0.9);
+      opacity: 0.5;
+      transform: scale(0.92);
     }
     
     .tape-cell.active {
       opacity: 1;
       transform: scale(1);
+      z-index: 3;
     }
     
     .read-head {
       position: fixed;
       left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--accent-light);
-      transform: translateX(-1px);
-      z-index: 100;
+      top: 50%;
+      width: 50vw;
+      max-width: 560px;
+      height: 42vh;
+      max-height: 480px;
+      transform: translate(-50%, -50%);
+      z-index: 101;
       pointer-events: none;
-      box-shadow: 0 0 20px rgba(var(--accent-light-rgb), 0.5);
     }
     
-    .read-head::before,
-    .read-head::after {
-      content: '';
+    .bracket {
       position: absolute;
-      left: 50%;
-      width: 12px;
-      height: 12px;
-      background: var(--accent-light);
-      border-radius: 50%;
-      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgb(var(--accent-light));
+      box-shadow: 0 0 20px rgba(var(--accent-light), 0.6);
     }
     
-    .read-head::before {
-      top: 2rem;
+    .bracket-tl {
+      top: 0;
+      left: 0;
+      border-right: none;
+      border-bottom: none;
     }
     
-    .read-head::after {
-      bottom: 2rem;
+    .bracket-tr {
+      top: 0;
+      right: 0;
+      border-left: none;
+      border-bottom: none;
+    }
+    
+    .bracket-bl {
+      bottom: 0;
+      left: 0;
+      border-right: none;
+      border-top: none;
+    }
+    
+    .bracket-br {
+      bottom: 0;
+      right: 0;
+      border-left: none;
+      border-top: none;
+    }
+    
+    @media (max-width: 768px) {
+      .read-head {
+        width: 85vw;
+        max-width: 100%;
+        height: 60vh;
+      }
+      
+      .bracket {
+        width: 50px;
+        height: 50px;
+        border-width: 4px;
+      }
     }
     
     .metadata-display {
@@ -124,17 +204,82 @@ const imagesWithHex = event.images.map((img, index) => ({
       padding: 0.75rem 1.5rem;
       font-size: 0.85rem;
       color: var(--quillGray);
-      z-index: 99;
+      z-index: 102;
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
       min-width: 300px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .metadata-display:hover .address-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .hex-label:hover .address-tooltip {
+      opacity: 1;
+      visibility: visible;
     }
     
     .hex-label {
-      color: var(--accent-light);
+      color: rgb(var(--accent-light));
       font-weight: 600;
       letter-spacing: 0.05em;
+      position: relative;
+      cursor: help;
+    }
+    
+    .address-tooltip {
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: 1rem;
+      background: #1d1d1d;
+      border: 1px solid rgb(var(--accent-light));
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 1000;
+    }
+    
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 0.25rem 0;
+    }
+    
+    .tooltip-label {
+      color: var(--gunSmoke);
+    }
+    
+    .tooltip-value {
+      color: rgb(var(--accent-light));
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .address-tooltip {
+        left: 50%;
+        top: 100%;
+        transform: translateX(-50%);
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
+      
+      .metadata-display {
+        top: 1rem;
+        padding: 0.5rem 1rem;
+        min-width: auto;
+        font-size: 0.75rem;
+      }
     }
     
     .image-frame {
@@ -195,21 +340,72 @@ const imagesWithHex = event.images.map((img, index) => ({
       position: fixed;
       top: 2rem;
       left: 2rem;
-      color: var(--gunSmoke);
+      color: var(--quillGray);
+      background: rgba(var(--codGray-rgb), 0.95);
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--gunSmoke);
       text-decoration: none;
       font-size: 0.875rem;
-      z-index: 99;
-      transition: color 0.2s ease;
+      z-index: 103;
+      transition: all 0.2s ease;
     }
     
     .back-link:hover {
-      color: var(--accent-light);
+      color: rgb(var(--accent-light));
+      border-color: rgb(var(--accent-light));
+    }
+    
+    @media (max-width: 768px) {
+      .back-link {
+        backdrop-filter: none;
+        background: var(--codGray);
+        top: 1rem;
+        left: 1rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+      }
     }
     
     .position-indicator {
       font-size: 0.75rem;
       color: var(--gunSmoke);
-      margin-top: 0.5rem;
+    }
+    
+    .event-title-display {
+      font-size: 0.9rem;
+      color: var(--quillGray);
+    }
+    
+    .memory-bar {
+      position: fixed;
+      bottom: 6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 600px;
+      height: 8px;
+      background: rgba(var(--darkGrey-rgb), 0.5);
+      border: 1px solid var(--gunSmoke);
+      z-index: 99;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    .memory-segment {
+      height: 100%;
+      background: rgba(var(--gunSmoke-rgb), 0.3);
+      border-right: 1px solid var(--codGray);
+      transition: all 0.3s ease;
+    }
+    
+    .memory-segment.active {
+      background: rgb(var(--accent-light));
+      box-shadow: 0 0 8px rgba(var(--accent-light), 0.6);
+    }
+    
+    .memory-segment.active {
+      background: var(--accent-light);
+      box-shadow: 0 0 10px rgba(var(--accent-light-rgb), 0.5);
     }
     
     @media (max-width: 768px) {
@@ -230,21 +426,44 @@ const imagesWithHex = event.images.map((img, index) => ({
     }
   </style>
 
-  <main class="relative">
-    <a href="/gallery" class="back-link">← Back to Gallery</a>
-    
+  <main class="relative">    
     <div class="read-head"></div>
     
     <div id="metadataDisplay" class="metadata-display">
-      <div class="hex-label" id="hexLabel">0x0000</div>
+      <div class="hex-label">
+        <span id="hexLabel">0x00000000</span>
+        <div class="address-tooltip" id="addressTooltip">
+          <div class="tooltip-row">
+            <span class="tooltip-label">Base:</span>
+            <span class="tooltip-value">0x10000000</span>
+          </div>
+          <div class="tooltip-row">
+            <span class="tooltip-label">Offset:</span>
+            <span class="tooltip-value" id="tooltipOffset">+0 bytes</span>
+          </div>
+          <div class="tooltip-row">
+            <span class="tooltip-label">Size:</span>
+            <span class="tooltip-value" id="tooltipSize">0 KB</span>
+          </div>
+        </div>
+      </div>
       <div id="eventTitle">{event.title}</div>
       <div class="position-indicator" id="positionIndicator">0 / {imagesWithHex.length}</div>
+    </div>
+    
+    <a href="/gallery" class="back-link">← Gallery</a>
+    
+    <div class="read-head">
+      <div class="bracket bracket-tl"></div>
+      <div class="bracket bracket-tr"></div>
+      <div class="bracket bracket-bl"></div>
+      <div class="bracket bracket-br"></div>
     </div>
     
     <div class="tape-container" id="tapeContainer">
       <div class="tape-track">
         {imagesWithHex.map((image) => (
-          <div class="tape-cell" data-hex={image.hexAddress} data-index={image.index}>
+          <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index}>
             <div class="image-frame">
               <img
                 src={image.r2_url}
@@ -264,17 +483,44 @@ const imagesWithHex = event.images.map((img, index) => ({
       <button id="prevBtn">← Prev</button>
       <button id="nextBtn">Next →</button>
     </div>
+    
+    <div class="memory-bar" id="memoryBar">
+      {imagesWithHex.map((image, idx) => {
+        const totalSize = imagesWithHex.reduce((sum, img) => sum + (img.sizeBytes || 0), 0);
+        const widthPercent = ((image.sizeBytes || 0) / totalSize) * 100;
+        return (
+          <div 
+            class="memory-segment" 
+            data-index={idx}
+            style={`width: ${widthPercent}%`}
+          />
+        );
+      })}
+    </div>
   </main>
 
   <script define:vars={{ images: imagesWithHex }}>
     const container = document.getElementById('tapeContainer');
     const cells = document.querySelectorAll('.tape-cell');
     const hexLabel = document.getElementById('hexLabel');
+    const addressTooltip = document.getElementById('addressTooltip');
+    const tooltipOffset = document.getElementById('tooltipOffset');
+    const tooltipSize = document.getElementById('tooltipSize');
     const positionIndicator = document.getElementById('positionIndicator');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const memorySegments = document.querySelectorAll('.memory-segment');
     
     let currentIndex = 0;
+    
+    // Calculate total size
+    const totalSize = images.reduce((sum, img) => sum + (img.file_size || 1024 * 1024), 0);
+    
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
     
     function updateActiveCell() {
       const containerRect = container.getBoundingClientRect();
@@ -294,8 +540,11 @@ const imagesWithHex = event.images.map((img, index) => ({
           closestCell = cell;
           closestIndex = index;
         }
-        
-        if (distance < rect.width / 3) {
+      });
+      
+      // Update active/inactive classes
+      cells.forEach((cell, index) => {
+        if (index === closestIndex) {
           cell.classList.remove('inactive');
           cell.classList.add('active');
         } else {
@@ -307,8 +556,29 @@ const imagesWithHex = event.images.map((img, index) => ({
       if (closestCell && closestIndex !== currentIndex) {
         currentIndex = closestIndex;
         const hexAddress = closestCell.getAttribute('data-hex');
+        const currentImage = images[closestIndex];
+        const imageSize = currentImage.sizeBytes || 1024 * 1024;
+        const offsetSize = currentImage.offsetBytes || 0;
+        
+        // Update hex address
         hexLabel.textContent = hexAddress;
+        
+        // Update tooltip content
+        if (tooltipOffset && tooltipSize) {
+          tooltipOffset.textContent = `+${formatBytes(offsetSize)}`;
+          tooltipSize.textContent = formatBytes(imageSize);
+        }
+        
         positionIndicator.textContent = `${currentIndex + 1} / ${images.length}`;
+        
+        // Update memory bar highlighting
+        memorySegments.forEach((seg, idx) => {
+          if (idx === currentIndex) {
+            seg.classList.add('active');
+          } else {
+            seg.classList.remove('active');
+          }
+        });
         
         // Haptic feedback (if supported)
         if ('vibrate' in navigator) {
@@ -332,7 +602,33 @@ const imagesWithHex = event.images.map((img, index) => ({
     }
     
     // Event listeners
-    container.addEventListener('scroll', updateActiveCell);
+    let isScrolling;
+    container.addEventListener('scroll', () => {
+      clearTimeout(isScrolling);
+      isScrolling = setTimeout(updateActiveCell, 50);
+    });
+    
+    // Add touch/swipe feedback
+    let startX = 0;
+    let scrollStarted = false;
+    
+    container.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      scrollStarted = true;
+    });
+    
+    container.addEventListener('touchend', (e) => {
+      if (scrollStarted) {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        // Stronger haptic feedback for swipe
+        if (Math.abs(diff) > 50 && 'vibrate' in navigator) {
+          navigator.vibrate(15);
+        }
+        scrollStarted = false;
+      }
+    });
     
     prevBtn.addEventListener('click', () => {
       scrollToIndex(currentIndex - 1);
@@ -351,7 +647,35 @@ const imagesWithHex = event.images.map((img, index) => ({
       }
     });
     
-    // Initial update
-    updateActiveCell();
+    // Initial update - make sure first cell is active
+    if (cells.length > 0) {
+      cells[0].classList.add('active');
+      cells[0].classList.remove('inactive');
+      currentIndex = 0;
+      
+      const firstImage = images[0];
+      hexLabel.textContent = firstImage.hexAddress;
+      if (tooltipOffset && tooltipSize) {
+        tooltipOffset.textContent = `+${formatBytes(firstImage.offsetBytes || 0)}`;
+        tooltipSize.textContent = formatBytes(firstImage.sizeBytes || 1024 * 1024);
+      }
+      positionIndicator.textContent = `1 / ${images.length}`;
+      if (memorySegments.length > 0) {
+        memorySegments[0].classList.add('active');
+      }
+      
+      // Scroll first image to center
+      const firstCell = cells[0];
+      const containerRect = container.getBoundingClientRect();
+      const cellRect = firstCell.getBoundingClientRect();
+      const scrollAmount = cellRect.left - containerRect.left - containerRect.width / 2 + cellRect.width / 2;
+      container.scrollBy({
+        left: scrollAmount,
+        behavior: 'auto'
+      });
+    }
+    
+    // Run update after a brief delay for scroll position
+    setTimeout(updateActiveCell, 100);
   </script>
 </BaseLayout>
