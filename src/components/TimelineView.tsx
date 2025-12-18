@@ -112,7 +112,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
           </div>
           
           <div className={isMobile ? "p-3" : "p-6"}>
-            {/* Header with Journey Link on the right */}
+            {/* Header with Journey/Gallery Links on the right */}
             <div className={`flex items-start justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
               <div className="flex-1 pr-3">
                 <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
@@ -125,16 +125,30 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
                 </p>
               </div>
               
-              {/* Journey Link - Subtle and on the right */}
-              {item.journeySlug && (
-                <a
-                  href={`/journey/${item.journeySlug}`}
-                  className={`flex-shrink-0 font-ptMono text-gunSmoke hover:text-accent 
-                    transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5 mt-1
-                    ${isMobile ? 'text-xs' : 'text-xs'}`}
-                >
-                  Read Journey →
-                </a>
+              {/* Journey and Gallery Links - Subtle and on the right */}
+              {(item.journeySlug || item.gallerySlug) && (
+                <div className="flex-shrink-0 flex flex-col gap-2 items-end">
+                  {item.journeySlug && (
+                    <a
+                      href={`/journey/${item.journeySlug}`}
+                      className={`font-ptMono text-gunSmoke hover:text-accent 
+                        transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5
+                        ${isMobile ? 'text-xs' : 'text-xs'}`}
+                    >
+                      Read Blurb →
+                    </a>
+                  )}
+                  {item.gallerySlug && (
+                    <a
+                      href={`/gallery/${item.gallerySlug}`}
+                      className={`font-ptMono text-gunSmoke hover:text-accent 
+                        transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5
+                        ${isMobile ? 'text-xs' : 'text-xs'}`}
+                    >
+                      View Artifacts →
+                    </a>
+                  )}
+                </div>
               )}
             </div>
             

@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import ExpandedContainer from './ui/ExpandedContainer';
 import { TypeAnimation } from 'react-type-animation';
 
 const AboutMe: React.FC = () => {
@@ -9,7 +8,7 @@ const AboutMe: React.FC = () => {
   // Resume download handler
   const handleResumeDownload = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.open('https://drive.google.com/file/d/1SpP3eBDUF2afMULBGsiF682-dN5kww0a/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/16paBtFuAfVC34CCNgM-266I6e4X_SxKu/view?usp=sharing', '_blank');
   };
 
   return (
