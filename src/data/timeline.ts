@@ -19,6 +19,20 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: '25 Dec 2025',
+      title: 'Bought iPhone 17 256GB',
+      type: 'achievement',
+      description: 'Purchased my first iPhone (17 256GB) entirely with money I earned from my company work. A personal milestone representing months of hard work and financial independence.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'View Post',
+          link: 'https://x.com/Rishi2220/status/2004201889257377871?s=20',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '13 Dec 2025',
       title: '1st Place Winner: AWS Partner Track @ HackCBS 8.0',
       type: 'achievement',
@@ -104,6 +118,34 @@ export const timelineData: Record<string, TimelineEvent[]> = {
         {
           label: 'Visit iHub AwaDH',
           link: 'https://ihub-awadh.in/',
+          icon: 'external'
+        }
+      ]
+    },
+    {
+      date: '3 Oct 2025',
+      title: 'Turned 18 Years Old!',
+      type: 'achievement',
+      description: 'Celebrated my 18th birthday—officially an adult! Reflecting on an incredible journey of building projects, winning hackathons, contributing to open source, and learning from amazing mentors. Excited for what the next chapter brings.',
+      year: '2025-26', 
+      buttons: [
+        {
+          label: 'View Post',
+          link: 'https://x.com/Rishi2220/status/1973828768633688467?s=20',
+          icon: 'external'
+        }
+      ]
+    },
+    {
+      date: '1 Oct 2025',
+      title: 'Got MacBook Pro M4',
+      type: 'achievement',
+      description: 'Upgraded to a MacBook Pro with M4 chip—a game-changer for development work. The performance boost has significantly improved my productivity for building cross-platform apps, compiling C++ projects, and running ML workloads.',
+      year: '2025-26', 
+      buttons: [
+        {
+          label: 'View Post',
+          link: 'https://x.com/Rishi2220/status/1973395794108493886?s=20',
           icon: 'external'
         }
       ]
