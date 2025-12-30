@@ -112,9 +112,9 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
           </div>
           
           <div className={isMobile ? "p-3" : "p-6"}>
-            {/* Header with Journey/Gallery Links on the right */}
-            <div className={`flex items-start justify-between ${isMobile ? 'mb-3' : 'mb-4'}`}>
-              <div className="flex-1 pr-3">
+            {/* Header with Journey/Gallery Links */}
+            <div className={`flex items-start ${isMobile ? 'flex-col' : 'justify-between'} gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
+              <div className={isMobile ? 'w-full' : 'flex-1 min-w-0'}>
                 <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
                   ${isMobile ? 'text-base mb-2' : 'text-xl mb-2'}`}>
                   {item.title}
@@ -125,15 +125,15 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
                 </p>
               </div>
               
-              {/* Journey and Gallery Links - Subtle and on the right */}
+              {/* Journey and Gallery Links - Prominent styling */}
               {(item.journeySlug || item.gallerySlug) && (
-                <div className="flex-shrink-0 flex flex-col gap-2 items-end">
+                <div className={`flex-shrink-0 flex gap-3 ${isMobile ? 'flex-row items-start mt-3' : 'flex-col gap-2 items-end'}`}>
                   {item.journeySlug && (
                     <a
                       href={`/journey/${item.journeySlug}`}
-                      className={`font-ptMono text-gunSmoke hover:text-accent 
-                        transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5
-                        ${isMobile ? 'text-xs' : 'text-xs'}`}
+                      className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
+                        transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
+                        ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}
                     >
                       Read Blurb →
                     </a>
@@ -141,28 +141,14 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
                   {item.gallerySlug && (
                     <a
                       href={`/gallery/${item.gallerySlug}`}
-                      className={`font-ptMono text-gunSmoke hover:text-accent 
-                        transition-colors duration-200 border-b border-transparent hover:border-accent/30 pb-0.5
-                        ${isMobile ? 'text-xs' : 'text-xs'}`}
+                      className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
+                        transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
+                        ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}
                     >
                       View Artifacts →
                     </a>
                   )}
                 </div>
-              )}
-            </div>
-            
-            {/* Type and status pills */}
-            <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
-              <span className={`text-xs bg-darkGrey/30 text-gunSmoke rounded-sm font-ptMono
-                ${isMobile ? 'px-2 py-1' : 'px-3 py-1.5'}`}>
-                {item.type}
-              </span>
-              {item.status && (
-                <span className={`text-xs bg-accent/10 text-accent rounded-sm font-ptMono border border-accent/20
-                  ${isMobile ? 'px-2 py-1' : 'px-3 py-1.5'}`}>
-                  {item.status}
-                </span>
               )}
             </div>
             
@@ -265,7 +251,7 @@ const TimelineView: React.FC = () => {
 
       {/* Back to Home - Fixed positioning */}
       <div className="pt-8 pb-4">
-        <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto`}>
+        <div className={`${isMobile ? 'w-full px-4' : 'w-[50%] px-8'} mx-auto`}>
           <a 
             href="/" 
             className="inline-flex items-center gap-2 text-accent hover:text-accent transition-colors font-ptMono text-sm"
@@ -278,7 +264,7 @@ const TimelineView: React.FC = () => {
         </div>
       </div>
 
-      <div className={`${isMobile ? 'w-full px-4' : 'w-[65%] px-8'} mx-auto py-8 relative`}>
+      <div className={`${isMobile ? 'w-full px-4' : 'w-[50%] px-8'} mx-auto py-8 relative`}>
         {/* Header */}
         <div className="mb-12 relative text-center">
           <h1 className={`font-bold font-ptMono text-quillGray mb-3 ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
