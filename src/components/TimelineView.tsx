@@ -8,7 +8,7 @@ const getButtonIcon = (iconType: string) => {
     case 'github':
       return (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
         </svg>
       );
     case 'demo':
@@ -71,31 +71,31 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-    
+
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
   return (
     <div className="relative flex items-start">
       {/* Timeline dot with glow */}
-      <div 
+      <div
         className={`relative z-10 bg-accent rounded-full border-2 border-codGray shadow-[0_0_8px_rgba(100,178,188,0.3)]
           ${isMobile ? 'w-2.5 h-2.5 mt-4 mr-4' : 'w-3 h-3 mt-6 mr-6'}`}
-        style={{ 
+        style={{
           animation: `dot-pulse 3s ease-in-out infinite ${index * 0.2}s`,
         }}
       >
         {/* Subtle ring animation */}
-        <div className="absolute -inset-1 border border-accent/20 rounded-full animate-ping" 
+        <div className="absolute -inset-1 border border-accent/20 rounded-full animate-ping"
           style={{ animationDuration: '4s', animationDelay: `${index * 0.3}s` }}></div>
       </div>
-      
+
       {/* Timeline card */}
       <div className="flex-1 mb-2">
-        <div 
+        <div
           data-event-id={`${item.date}-${item.title}`}
           className={`
             border rounded-sm transition-all duration-300 relative group
@@ -110,7 +110,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
             ${isMobile ? 'border-t-[12px] border-r-[12px]' : 'border-t-[20px] border-r-[20px]'}
             ${isHovered ? 'border-t-accent border-r-accent' : 'border-t-transparent border-r-transparent'}`}>
           </div>
-          
+
           <div className={isMobile ? "p-3" : "p-6"}>
             {/* Header with Journey/Gallery Links */}
             <div className={`flex items-start ${isMobile ? 'flex-col' : 'justify-between'} gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
@@ -124,7 +124,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
                   {item.description}
                 </p>
               </div>
-              
+
               {/* Journey and Gallery Links - Prominent styling */}
               {(item.journeySlug || item.gallerySlug) && (
                 <div className={`flex-shrink-0 flex gap-3 ${isMobile ? 'flex-row items-start mt-3' : 'flex-col gap-2 items-end'}`}>
@@ -151,7 +151,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
                 </div>
               )}
             </div>
-            
+
             {/* Action Buttons */}
             {item.buttons && item.buttons.length > 0 && (
               <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
@@ -191,10 +191,10 @@ const TimelineView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const selectedItemRef = useRef<HTMLDivElement>(null);
-  
+
   // Get all years sorted in descending order
   const years = Object.keys(timelineData).sort((a, b) => b.localeCompare(a));
-  
+
   // Flatten all timeline items for search
   const allItems = years.flatMap(year => timelineData[year] || []);
 
@@ -202,10 +202,10 @@ const TimelineView: React.FC = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 800);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -258,30 +258,14 @@ const TimelineView: React.FC = () => {
           <p className={`text-gunSmoke font-ptMono mb-8 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl mx-auto`}>
             A running log of my life events.
           </p>
-          
-          <div className="w-24 h-px bg-accent mx-auto mb-8 hidden md:block"></div>
-          
-          {/* Search Button */}
-          <button
-            onClick={() => setIsCommandPaletteOpen(true)}
-            className="inline-flex items-center gap-3 px-4 py-2.5 bg-darkGrey/50 border border-gunSmoke/30 rounded-sm 
-              text-gunSmoke hover:text-accent-light hover:border-accent-light/50 transition-all duration-200 
-              font-ptMono text-sm group mx-auto"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span>Search events</span>
-            <kbd className="hidden sm:inline-block px-2 py-0.5 bg-codGray border border-gunSmoke/30 rounded text-xs text-gunSmoke/70 group-hover:text-accent-light/70 transition-colors">
-              ⌘K
-            </kbd>
-          </button>
+
+
         </div>
 
         {/* Iterate through all years */}
         {years.map((year, yearIndex) => {
           const currentData = timelineData[year] || [];
-          
+
           return (
             <div key={year} className="mb-16">
               {/* Year Separator */}
@@ -300,29 +284,49 @@ const TimelineView: React.FC = () => {
 
               {/* Timeline for this year */}
               <div>
-                <ExpandedContainer text="Timeline Events" />
+                <ExpandedContainer
+                  text="Timeline Events"
+                  rightContent={
+                    yearIndex === 0 ? (
+                      <button
+                        onClick={() => setIsCommandPaletteOpen(true)}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-darkGrey/50 border border-gunSmoke/30 rounded-sm 
+                          text-gunSmoke hover:text-accent-light hover:border-accent-light/50 transition-all duration-200 
+                          font-ptMono text-xs group"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <span className="hidden sm:inline">Search events</span>
+                        <kbd className="hidden sm:inline-block px-1.5 py-0.5 bg-codGray border border-gunSmoke/30 rounded text-[10px] text-gunSmoke/70 group-hover:text-accent-light/70 transition-colors">
+                          ⌘K
+                        </kbd>
+                      </button>
+                    ) : undefined
+                  }
+                />
                 <div className="h-8" />
-                
+
                 <div className="relative">
                   {/* Vertical timeline line */}
-                  <div 
+                  <div
                     className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-darkGrey/20 via-darkGrey/40 to-darkGrey/20"
                     style={{ left: isMobile ? '5px' : '6px' }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/10 to-transparent"></div>
-                    <div 
+                    <div
                       className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-accent/30 via-accent/10 to-transparent"
                       style={{
                         animation: 'timeline-flow 15s ease-in-out infinite',
                       }}
                     ></div>
                   </div>
-            
+
                   <div className="space-y-0">
                     {currentData.length > 0 ? currentData.map((item, index) => (
-                      <TimelineCard 
-                        key={index} 
-                        item={item} 
+                      <TimelineCard
+                        key={index}
+                        item={item}
                         index={index}
                       />
                     )) : (

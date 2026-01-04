@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import { getBootcampLectures } from '../lib/admin';
+import ExpandedContainer from '../components/ui/ExpandedContainer.astro';
+import CommunityCard from '../components/ui/CommunityCard';
 
 const bootcampLectures = await getBootcampLectures();
 
@@ -12,14 +14,11 @@ const breadcrumbs = [
 
 const communityActivities = [
   {
-    title: 'Flutter Bootcamp - 14 Day Journey',
+    title: 'Flutter Bootcamp - 14 Days',
     role: 'Instructor & Creator',
     date: 'Ongoing - 2025',
     description: 'Teaching a comprehensive 14-day Flutter bootcamp covering fundamentals to advanced concepts with slides, resources, and hands-on projects.',
     stats: [
-      { label: 'Lectures', value: bootcampLectures.length },
-      { label: 'Days', value: '14' },
-      { label: 'Topics', value: 'State, APIs, Firebase' }
     ],
     link: '/flutter-bootcamp',
     icon: 'flutter'
@@ -30,9 +29,6 @@ const communityActivities = [
     date: '6 Sept 2025',
     description: 'Mentored at Bit n Build Punjab hackathon at Thapar University, guiding 30+ teams through the event with 120+ participants.',
     stats: [
-      { label: 'Teams', value: '30+' },
-      { label: 'Participants', value: '120+' },
-      { label: 'Location', value: 'Thapar' }
     ],
     link: 'https://www.openlearn.org.in/events/hackathon-1',
     external: true,
@@ -44,9 +40,6 @@ const communityActivities = [
     date: '2024 - Present',
     description: 'Leading mobile development initiatives, organizing workshops, conducting Flutter sessions, and interviewing new members at GDSC NITJ.',
     stats: [
-      { label: 'Workshops', value: 'Multiple' },
-      { label: 'Focus', value: 'Mobile Dev' },
-      { label: 'Community', value: 'NITJ Students' }
     ],
     icon: 'community'
   }
@@ -73,74 +66,32 @@ const communityActivities = [
         </p>
       </div>
 
-      <!-- Activities Grid -->
-      <div class="grid md:grid-cols-2 gap-6">
-        {communityActivities.map((activity, index) => (
-          <div 
-            key={index}
-            class="group bg-bgShades-light border border-darkGrey/30 rounded-lg p-5 hover:border-accent-light/40 transition-all duration-300 hover:-translate-y-1 flex flex-col"
-          >
-            <!-- Header -->
-            <div class="mb-4">
-              <div class="flex items-center gap-2.5 mb-2.5">
-                {activity.icon === 'flutter' && (
-                  <svg class="w-4 h-4 text-accent-light" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/>
-                  </svg>
-                )}
-                {activity.icon === 'mentor' && (
-                  <svg class="w-4 h-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                )}
-                {activity.icon === 'community' && (
-                  <svg class="w-4 h-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                )}
-                <h2 class="text-base md:text-lg font-bold text-quillGray font-ptMono group-hover:text-accent-light transition-colors">
-                  {activity.title}
-                </h2>
-              </div>
-              <div class="flex flex-col gap-1 text-xs font-ptMono mb-3">
-                <span class="text-accent-light">{activity.role}</span>
-                <span class="text-gunSmoke/70">{activity.date}</span>
-              </div>
-              <p class="text-xs text-gunSmoke font-ptMono leading-relaxed">
-                {activity.description}
-              </p>
-            </div>
+      <!-- Community Activities List -->
+      <div class="space-y-4">
+        <ExpandedContainer text="Active Involvements" />
+        
+        <div class="h-2"></div>
 
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-3 mb-4 pb-4 border-b border-darkGrey/20 flex-1">
-              {activity.stats.map((stat, statIndex) => (
-                <div key={statIndex} class="text-center md:text-left">
-                  <div class="text-sm md:text-base font-bold text-accent-light font-ptMono mb-0.5">
-                    {stat.value}
-                  </div>
-                  <div class="text-[10px] text-gunSmoke/60 font-ptMono">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
+        <div class="border-l border-darkGrey/30 ml-3 md:ml-4 pl-6 md:pl-8 py-2 space-y-8">
+          {communityActivities.map((activity, index) => (
+            <div class="relative">
+              {/* Timeline dot */}
+              <div class="absolute -left-[31px] md:-left-[39px] top-8 w-2.5 h-2.5 rounded-full bg-darkGrey border border-gunSmoke transition-all duration-300 group-hover:bg-accent-light group-hover:border-accent-light shadow-[0_0_0_4px_rgba(26,26,26,1)] z-10"></div>
+              
+              <CommunityCard
+                client:load
+                title={activity.title}
+                role={activity.role}
+                date={activity.date}
+                description={activity.description}
+                stats={activity.stats}
+                link={activity.link}
+                external={activity.external}
+                icon={activity.icon as any}
+              />
             </div>
-
-            <!-- CTA -->
-            {activity.link && (
-              <a
-                href={activity.link}
-                target={activity.external ? '_blank' : undefined}
-                rel={activity.external ? 'noopener noreferrer' : undefined}
-                class="inline-flex items-center gap-2 text-accent-light hover:text-accent transition-colors font-ptMono text-sm mt-auto"
-              >
-                <span>{activity.external ? 'View Details' : 'Explore Bootcamp'}</span>
-                <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={activity.external ? "M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" : "M17 8l4 4m0 0l-4 4m4-4H3"} />
-                </svg>
-              </a>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <!-- Footer CTA -->
