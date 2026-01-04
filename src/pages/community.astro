@@ -15,9 +15,11 @@ const communityActivities = [
     title: 'Flutter Bootcamp - 14 Day Journey',
     role: 'Instructor & Creator',
     date: 'Ongoing - 2025',
+    description: 'Teaching a comprehensive 14-day Flutter bootcamp covering fundamentals to advanced concepts with slides, resources, and hands-on projects.',
     stats: [
       { label: 'Lectures', value: bootcampLectures.length },
-      { label: 'Days', value: '14' }
+      { label: 'Days', value: '14' },
+      { label: 'Topics', value: 'State, APIs, Firebase' }
     ],
     link: '/flutter-bootcamp',
     icon: 'flutter'
@@ -26,9 +28,11 @@ const communityActivities = [
     title: 'Bit N Build Punjab Mentor',
     role: 'Technical Mentor',
     date: '6 Sept 2025',
+    description: 'Mentored at Bit n Build Punjab hackathon at Thapar University, guiding 30+ teams through the event with 120+ participants.',
     stats: [
       { label: 'Teams', value: '30+' },
-      { label: 'Participants', value: '120+' }
+      { label: 'Participants', value: '120+' },
+      { label: 'Location', value: 'Thapar' }
     ],
     link: 'https://www.openlearn.org.in/events/hackathon-1',
     external: true,
@@ -38,9 +42,11 @@ const communityActivities = [
     title: 'GDSC NITJ - Core Member',
     role: 'Mobile Development Lead',
     date: '2024 - Present',
+    description: 'Leading mobile development initiatives, organizing workshops, conducting Flutter sessions, and interviewing new members at GDSC NITJ.',
     stats: [
+      { label: 'Workshops', value: 'Multiple' },
       { label: 'Focus', value: 'Mobile Dev' },
-      { label: 'Community', value: 'NITJ' }
+      { label: 'Community', value: 'NITJ Students' }
     ],
     icon: 'community'
   }
@@ -68,15 +74,15 @@ const communityActivities = [
       </div>
 
       <!-- Activities Grid -->
-      <div class="grid md:grid-cols-3 gap-4">
+      <div class="grid md:grid-cols-2 gap-6">
         {communityActivities.map((activity, index) => (
           <div 
             key={index}
-            class="group bg-bgShades-light border border-darkGrey/30 rounded-lg p-4 hover:border-accent-light/40 transition-all duration-300 hover:-translate-y-1 flex flex-col"
+            class="group bg-bgShades-light border border-darkGrey/30 rounded-lg p-5 hover:border-accent-light/40 transition-all duration-300 hover:-translate-y-1 flex flex-col"
           >
             <!-- Header -->
-            <div class="mb-3">
-              <div class="flex items-center gap-2 mb-2">
+            <div class="mb-4">
+              <div class="flex items-center gap-2.5 mb-2.5">
                 {activity.icon === 'flutter' && (
                   <svg class="w-4 h-4 text-accent-light" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/>
@@ -92,24 +98,27 @@ const communityActivities = [
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 )}
-                <h2 class="text-sm font-bold text-quillGray font-ptMono group-hover:text-accent-light transition-colors">
+                <h2 class="text-base md:text-lg font-bold text-quillGray font-ptMono group-hover:text-accent-light transition-colors">
                   {activity.title}
                 </h2>
               </div>
-              <div class="flex flex-col gap-0.5 text-[10px] font-ptMono">
+              <div class="flex flex-col gap-1 text-xs font-ptMono mb-3">
                 <span class="text-accent-light">{activity.role}</span>
                 <span class="text-gunSmoke/70">{activity.date}</span>
               </div>
+              <p class="text-xs text-gunSmoke font-ptMono leading-relaxed">
+                {activity.description}
+              </p>
             </div>
 
             <!-- Stats -->
-            <div class="grid grid-cols-2 gap-2 mb-3 flex-1">
+            <div class="grid grid-cols-3 gap-3 mb-4 pb-4 border-b border-darkGrey/20 flex-1">
               {activity.stats.map((stat, statIndex) => (
-                <div key={statIndex}>
-                  <div class="text-base font-bold text-accent-light font-ptMono">
+                <div key={statIndex} class="text-center md:text-left">
+                  <div class="text-sm md:text-base font-bold text-accent-light font-ptMono mb-0.5">
                     {stat.value}
                   </div>
-                  <div class="text-[9px] text-gunSmoke/60 font-ptMono">
+                  <div class="text-[10px] text-gunSmoke/60 font-ptMono">
                     {stat.label}
                   </div>
                 </div>
@@ -122,10 +131,10 @@ const communityActivities = [
                 href={activity.link}
                 target={activity.external ? '_blank' : undefined}
                 rel={activity.external ? 'noopener noreferrer' : undefined}
-                class="inline-flex items-center gap-1.5 text-accent-light hover:text-accent transition-colors font-ptMono text-xs mt-auto"
+                class="inline-flex items-center gap-2 text-accent-light hover:text-accent transition-colors font-ptMono text-sm mt-auto"
               >
-                <span>{activity.external ? 'Details' : 'Explore'}</span>
-                <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span>{activity.external ? 'View Details' : 'Explore Bootcamp'}</span>
+                <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={activity.external ? "M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" : "M17 8l4 4m0 0l-4 4m4-4H3"} />
                 </svg>
               </a>
@@ -156,7 +165,7 @@ const communityActivities = [
             <span>DM on Twitter</span>
           </a>
           <a
-            href="mailto:contact@rishia.in"
+            href="mailto:rishia2220@gmail.com"
             class="inline-flex items-center gap-2 px-6 py-3 border border-darkGrey/50 rounded-sm text-quillGray hover:border-accent-light/50 hover:text-accent-light transition-all font-ptMono text-sm"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

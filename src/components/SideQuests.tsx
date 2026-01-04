@@ -41,7 +41,27 @@ const SideQuests: React.FC = () => {
       <div className="flex flex-col">
         <ExpandedContainer text="Side Quests" />
         <div className="h-4" />
-        <div className="text-gunSmoke text-center">Loading stats...</div>
+        <div className="font-ptMono text-sm md:text-base">
+          <div className="h-6 bg-darkGrey/20 rounded w-32 mb-8 animate-pulse" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* Chart Skeleton */}
+            <div className="w-full flex justify-center md:justify-start">
+              <div className="w-80 h-80 bg-darkGrey/20 rounded-full animate-pulse" />
+            </div>
+            {/* Stats Skeleton */}
+            <div className="space-y-4 hidden md:block">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="space-y-1">
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-darkGrey/20 rounded w-24 animate-pulse" />
+                    <div className="h-4 bg-darkGrey/20 rounded w-16 animate-pulse" />
+                  </div>
+                  <div className="h-1.5 bg-darkGrey/20 rounded-full animate-pulse" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

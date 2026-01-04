@@ -105,25 +105,11 @@ const breadcrumbs = [
   title={`${post.title} | Rishi Ahuja`}
   description={post.brief}
   image={ogImage}
->readcrumbs */}
+>
+  <main class="min-h-screen bg-codGray">
+    <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
+      {/* Breadcrumbs */}
       <Breadcrumbs client:load items={breadcrumbs} />
-      
-      {/* Back button */}
-      <a 
-        href="/blogs"
-        class="inline-flex items-center gap-2 text-sm font-ptMono text-accent hover:text-accent transition-colors mb-8"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back to Blogs
-        class="inline-flex items-center gap-2 text-sm font-ptMono text-accent hover:text-accent transition-colors mb-8"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back to Home
-      </a>
 
       <article class="prose prose-invert prose-lg max-w-none">
         {/* Header */}
@@ -192,6 +178,7 @@ const breadcrumbs = [
       </article>
     </div>
   </main>
+</BaseLayout>
 </BaseLayout>
 
 <style>

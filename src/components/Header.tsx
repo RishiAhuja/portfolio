@@ -13,7 +13,6 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
     { label: 'Blogs', href: '/blogs' },
     { label: 'Artifacts', href: '/gallery' },
     { label: 'Ledger', href: '/ledger' },
-    { label: 'Uncompiled', href: '/uncompiled' },
     { label: 'Community', href: '/community' },
   ];
 
