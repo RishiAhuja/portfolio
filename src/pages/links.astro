@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { LinkCard } from '../components/LinkCard';
+
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase';
+
+const links = [
+  {
+    category: 'Connect',
+    items: [
+      {
+        title: 'Schedule a Call' as IconName,
+        description: 'Book a 30-minute chat with me',
+        url: 'https://cal.com/rishi2220',
+        primary: true
+      },
+      {
+        title: 'Email' as IconName,
+        description: 'rishia2220@gmail.com',
+        url: 'mailto:rishia2220@gmail.com'
+      },
+      {
+        title: 'Twitter' as IconName,
+        description: '@Rishi2220 - Where I shitpost',
+        url: 'https://twitter.com/Rishi2220'
+      }
+    ]
+  },
+  {
+    category: 'Professional',
+    items: [
+      {
+        title: 'Resume' as IconName,
+        description: 'Download my latest resume',
+        url: 'https://drive.google.com/file/d/16paBtFuAfVC34CCNgM-266I6e4X_SxKu/view?usp=sharing',
+        primary: true
+      },
+      {
+        title: 'LinkedIn' as IconName,
+        description: 'Professional network',
+        url: 'https://www.linkedin.com/in/rishi-ahuja-b1a224310'
+      },
+      {
+        title: 'GitHub' as IconName,
+        description: '@RishiAhuja - Code & projects',
+        url: 'https://github.com/RishiAhuja'
+      }
+    ]
+  },
+  {
+    category: 'Content',
+    items: [
+      {
+        title: 'Technical Blog' as IconName,
+        description: 'Deep dives on Hashnode',
+        url: 'https://hashnode.com/@rishi2220'
+      },
+      {
+        title: 'Portfolio' as IconName,
+        description: 'Full portfolio & projects',
+        url: 'https://risha.in'
+      }
+    ]
+  },
+  {
+    category: 'Current Work',
+    items: [
+      {
+        title: 'iHub AWaDH' as IconName,
+        description: 'Entrepreneur-in-Residence at IIT Ropar',
+        url: 'https://ihub-awadh.in/'
+      },
+      {
+        title: 'Zenbase' as IconName,
+        description: 'Founding DevOps Engineer',
+        url: '#zenbase'
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout 
+  title="Links | Rishi Ahuja"
+  description="All my important links in one place - connect, collaborate, and follow my work."
+  image="/og?title=Links&description=Connect%20with%20me&type=default"
+>
+  <main class="min-h-screen bg-codGray">
+    <div class="max-w-2xl mx-auto px-4 py-12 md:py-16">
+      <!-- Header -->
+      <header class="text-center mb-12">
+        <div class="mb-6">
+          <img 
+            src="https://artifacts.rishia.in/avatar.jpg" 
+            alt="Rishi Ahuja" 
+            class="w-36 h-36 mx-auto rounded-2xl object-cover border-2 border-accent-light/30"
+          />
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-quillGray mb-3 font-ptMono">
+          Rishi Ahuja
+        </h1>
+        <p class="text-sm md:text-base text-gunSmoke font-ptMono max-w-md mx-auto">
+          18-year-old. DevOps at Zenbase, EIR at IIT Ropar.
+        </p>
+      </header>
+
+      <!-- Links -->
+      {links.map((section) => (
+        <section class="mb-8">
+          <h2 class="text-sm font-bold text-accent-light mb-4 font-ptMono uppercase tracking-wider">
+            {section.category}
+          </h2>
+          <div class="space-y-3">
+            {section.items.map((link) => (
+              <LinkCard
+                client:load
+                title={link.title}
+                description={link.description}
+                url={link.url}
+                primary={link.primary}
+              />
+            ))}
+          </div>
+          </div>
+        </section>
+      ))}
+
+      <!-- Footer -->
+      <footer class="mt-12 pt-8 border-t border-darkGrey/20 text-center">
+        <p class="text-xs text-gunSmoke/70 font-ptMono mb-4">
+          Made with intentional simplicity
+        </p>
+        <a 
+          href="/"
+          class="inline-flex items-center gap-2 text-sm text-accent-light hover:text-accent transition-colors font-ptMono"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          View Full Portfolio
+        </a>
+      </footer>
+    </div>
+  </main>
+</BaseLayout>

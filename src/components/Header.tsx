@@ -6,7 +6,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -14,17 +13,8 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
     { label: 'Artifacts', href: '/gallery' },
     { label: 'Ledger', href: '/ledger' },
     { label: 'Community', href: '/community' },
+    { label: 'Links', href: '/links' },
   ];
-
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Close menu on escape key
   useEffect(() => {
@@ -114,16 +104,20 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <div 
-          className="fixed inset-0 z-40 md:hidden"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-codGray/98 backdrop-blur-sm" />
+        <>
+          {/* Backdrop with click handler */}
+          <div 
+            className="fixed inset-0 z-40 md:hidden bg-codGray/98 backdrop-blur-sm"
+            onClick={() => setIsMenuOpen(false)}
+            onKeyDown={(e) => e.key === 'Enter' && setIsMenuOpen(false)}
+            role="button"
+            tabIndex={0}
+            aria-label="Close menu"
+          />
           
-          {/* Menu Content */}5
-          <div className="relative h-full flex flex-col items-center justify-center">
-            <nav className="space-y-8">
+          {/* Menu Content */}
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center md:hidden pointer-events-none">
+            <nav className="space-y-8 pointer-events-auto">
               {/* Home Link */}
               <a
                 href="/"
@@ -159,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
               </p>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

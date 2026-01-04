@@ -1,269 +1,297 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Colophon' }
+];
+
+const techStack = [
+  { name: 'Astro', version: '4.16', url: 'https://astro.build' },
+  { name: 'React', version: '18.3', url: 'https://react.dev' },
+  { name: 'TypeScript', version: '5.6', url: 'https://www.typescriptlang.org' },
+  { name: 'Tailwind CSS', version: '3.4', url: 'https://tailwindcss.com' },
+  { name: 'Supabase', version: 'Latest', url: 'https://supabase.com' },
+  { name: 'Vercel', version: 'Edge', url: 'https://vercel.com' }
+];
+
+const colorPalette = [
+  { name: 'Background', hex: '#191919', rgb: '25, 25, 25', var: 'codGray' },
+  { name: 'Accent', hex: '#64B2BC', rgb: '100, 178, 188', var: 'accent' },
+  { name: 'Text Primary', hex: '#D3D0C9', rgb: '211, 208, 201', var: 'quillGray' },
+  { name: 'Text Secondary', hex: '#858585', rgb: '133, 133, 133', var: 'gunSmoke' }
+];
+
+const pages = [
+  { name: 'Home', path: '/', description: 'Landing page with introduction' },
+  { name: 'Blogs', path: '/blogs', description: 'Technical writing from Hashnode' },
+  { name: 'Artifacts', path: '/gallery', description: 'Photo gallery with memory addressing' },
+  { name: 'Ledger', path: '/ledger', description: 'Life timeline with searchable events' },
+  { name: 'Community', path: '/community', description: 'Teaching and mentoring activities' },
+  { name: 'Uncompiled', path: '/uncompiled', description: 'Philosophical writings' },
+  { name: 'Flutter Bootcamp', path: '/flutter-bootcamp', description: '14-day learning journey' },
+  { name: 'Stats', path: '/stats', description: 'Analytics dashboard' }
+];
 ---
 
 <BaseLayout 
   title="Colophon | Rishi Ahuja"
-  description="How this site was built"
+  description="Technical details, design philosophy, and architecture behind this portfolio site."
+  image="/og?title=Colophon&description=How%20This%20Site%20Was%20Built&type=default"
 >
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
-    
-    .colophon-container {
-      font-family: 'PT Mono', monospace;
-      line-height: 1.8;
-    }
-    
-    .section-title {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 1.5rem;
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, rgb(var(--accent-light)) 0%, transparent 100%);
-    }
-
-    .tech-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: rgba(var(--accent-light), 0.1);
-      border: 1px solid rgba(var(--accent-light), 0.3);
-      border-radius: 4px;
-      font-size: 0.875rem;
-      transition: all 0.2s ease;
-    }
-    
-    .tech-badge:hover {
-      background: rgba(var(--accent-light), 0.2);
-      border-color: rgb(var(--accent-light));
-      transform: translateY(-1px);
-    }
-    
-    .version-badge {
-      color: rgb(var(--accent-light));
-      font-weight: 500;
-    }
-  </style>
-
-  <main class="min-h-screen bg-codGray text-quillGray colophon-container">
-    <div class="max-w-4xl mx-auto px-4 md:px-8 py-16">
+  <main class="min-h-screen bg-codGray text-quillGray">
+    <div class="max-w-5xl mx-auto px-4 md:px-8 py-12">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs client:load items={breadcrumbs} />
+      
       <!-- Header -->
-      <header class="mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4">
-          Colophon
+      <header class="mb-12 mt-6">
+        <h1 class="text-3xl md:text-4xl font-bold text-quillGray mb-3 font-ptMono">
+          About This Site
         </h1>
-        <p class="text-lg text-gunSmoke">
-          A technical retrospective on how this site was crafted.
+        <p class="text-sm md:text-base text-gunSmoke font-ptMono max-w-3xl">
+          Technical details, design philosophy, and architecture behind this portfolio.
         </p>
       </header>
 
-      <!-- Core Stack -->
+      <!-- Tech Stack -->
       <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
-          Core Stack
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
+          Tech Stack
         </h2>
-        <div class="space-y-4">
-          <div class="flex flex-wrap gap-3">
-            <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              <span>Astro</span>
-              <span class="version-badge">4.16</span>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {techStack.map((tech) => (
+            <a
+              href={tech.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group bg-bgShades-light border border-darkGrey/30 rounded-lg p-4 hover:border-accent-light/40 transition-all duration-300"
+            >
+              <div class="text-sm font-bold text-quillGray font-ptMono group-hover:text-accent-light transition-colors mb-2">
+                {tech.name}
+              </div>
+              <div class="text-xs text-accent-light font-ptMono">
+                v{tech.version}
+              </div>
             </a>
-            <a href="https://react.dev" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              <span>React</span>
-              <span class="version-badge">18.3</span>
-            </a>
-            <a href="https://www.typescriptlang.org" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              <span>TypeScript</span>
-              <span class="version-badge">5.6</span>
-            </a>
-            <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              <span>Tailwind CSS</span>
-              <span class="version-badge">3.4</span>
-            </a>
-          </div>
-          <p class="text-sm text-gunSmoke mt-4">
-            Built with Astro for optimal performance and hybrid rendering. React components hydrate only where needed. TypeScript ensures type safety across the codebase.
-          </p>
-        </div>
-      </section>
-
-      <!-- Infrastructure -->
-      <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
-          Infrastructure
-        </h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div>
-            <h3 class="text-lg font-medium text-accent-light mb-2">Deployment</h3>
-            <p class="text-sm text-gunSmoke">
-              Hosted on <a href="https://vercel.com" target="_blank" class="underline hover:text-accent-light transition-colors">Vercel</a> with automatic deployments from the main branch. Edge functions handle dynamic routes.
-            </p>
-          </div>
-          <div>
-            <h3 class="text-lg font-medium text-accent-light mb-2">Database</h3>
-            <p class="text-sm text-gunSmoke">
-              <a href="https://supabase.com" target="_blank" class="underline hover:text-accent-light transition-colors">Supabase</a> powers analytics, visitor tracking, and the CMS for dynamic content. PostgreSQL with RLS policies for security.
-            </p>
-          </div>
-          <div>
-            <h3 class="text-lg font-medium text-accent-light mb-2">Content</h3>
-            <p class="text-sm text-gunSmoke">
-              Blog posts fetched from <a href="https://hashnode.com" target="_blank" class="underline hover:text-accent-light transition-colors">Hashnode</a> API. Philosophical writings managed via custom admin panel.
-            </p>
-          </div>
-          <div>
-            <h3 class="text-lg font-medium text-accent-light mb-2">Assets</h3>
-            <p class="text-sm text-gunSmoke">
-              Gallery images stored on <a href="https://cloudflare.com/products/r2" target="_blank" class="underline hover:text-accent-light transition-colors">Cloudflare R2</a>. OG images generated dynamically with @vercel/og. Site images optimized with Astro.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Typography -->
-      <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
-          Typography
-        </h2>
-        <div class="space-y-4">
-          <div class="p-4 bg-darkGrey/20 rounded border border-gunSmoke/20">
-            <h3 class="text-lg font-medium text-accent-light mb-2 font-ptMono">PT Mono</h3>
-            <p class="text-sm text-gunSmoke">
-              Primary typeface for UI, navigation, and code. Monospace font gives the site its technical, minimalist character.
-            </p>
-          </div>
-          <div class="p-4 bg-darkGrey/20 rounded border border-gunSmoke/20">
-            <h3 class="text-lg font-medium text-accent-light mb-2" style="font-family: 'Lora', serif;">Lora</h3>
-            <p class="text-sm text-gunSmoke">
-              Serif typeface exclusively for the "Uncompiled" section. Provides contrast and signals a different mode of content—philosophical rather than technical.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
       <!-- Design Philosophy -->
       <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
           Design Philosophy
         </h2>
-        <div class="space-y-3 text-sm text-gunSmoke">
-          <p>
-            <span class="text-accent-light">→</span> <strong class="text-quillGray">Minimalism over decoration.</strong> Every element serves a purpose. No visual noise.
+        <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-6 space-y-4">
+          <p class="text-sm text-gunSmoke font-ptMono leading-relaxed">
+            Every pixel on this site tells a story of <span class="text-accent-light">intentional choices</span>. I believe that great design isn't about adding more—it's about <span class="text-accent-light">knowing what to take away</span>.
           </p>
-          <p>
-            <span class="text-accent-light">→</span> <strong class="text-quillGray">Performance first.</strong> Lighthouse score of 100. Hybrid rendering for optimal speed.
-          </p>
-          <p>
-            <span class="text-accent-light">→</span> <strong class="text-quillGray">Typography as hierarchy.</strong> Font choices signal content type and importance.
-          </p>
-          <p>
-            <span class="text-accent-light">→</span> <strong class="text-quillGray">Dark mode by default.</strong> Easier on the eyes for extended reading.
-          </p>
-          <p>
-            <span class="text-accent-light">→</span> <strong class="text-quillGray">Mobile-first responsive.</strong> Optimized for all devices without compromising desktop experience.
-          </p>
+          <div class="space-y-3 text-sm font-ptMono">
+            <div class="flex gap-3">
+              <span class="text-accent-light">→</span>
+              <p class="text-gunSmoke"><span class="text-quillGray font-medium">Pure black background</span> (#191919) creates a sanctuary where your attention flows naturally to what matters.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-accent-light">→</span>
+              <p class="text-gunSmoke"><span class="text-quillGray font-medium">Cyan accent</span> (#64B2BC) punctuates the darkness—bright enough to guide, calm enough to maintain sophistication.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-accent-light">→</span>
+              <p class="text-gunSmoke"><span class="text-quillGray font-medium">Typography became my silent storyteller.</span> PT Mono carries the narrative with warmth and readability.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-accent-light">→</span>
+              <p class="text-gunSmoke"><span class="text-quillGray font-medium">Every animation is motion with meaning</span>—durations are brief (200-500ms) because I respect your time and attention.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- Special Features -->
+      <!-- Color Palette -->
       <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
+          Color Palette
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          {colorPalette.map((color) => (
+            <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-4 flex gap-4">
+              <div 
+                class="w-20 h-20 rounded border border-darkGrey/50 flex-shrink-0"
+                style={`background-color: ${color.hex}`}
+              ></div>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-bold text-quillGray mb-1 font-ptMono">{color.name}</div>
+                <div class="text-xs text-gunSmoke font-ptMono space-y-0.5">
+                  <div>{color.hex}</div>
+                  <div>rgb({color.rgb})</div>
+                  <div class="text-accent-light">{color.var}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Typography -->
+      <section class="mb-12">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
+          Typography
+        </h2>
+        <div class="space-y-4">
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5">
+            <div class="mb-4">
+              <h3 class="text-3xl font-ptMono text-quillGray mb-1">PT Mono</h3>
+              <p class="text-xs text-gunSmoke font-ptMono">HEADINGS & BODY TEXT</p>
+            </div>
+            <div class="space-y-2 text-sm font-ptMono text-gunSmoke">
+              <p class="text-2xl text-quillGray">Heading 1</p>
+              <p class="text-xl text-quillGray">Heading 2</p>
+              <p class="text-base text-gunSmoke">Regular paragraph - The quick brown fox jumps over the lazy dog</p>
+              <p class="text-sm text-gunSmoke/70">Small text - The quick brown fox jumps over the lazy dog</p>
+            </div>
+          </div>
+          
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5">
+            <div class="mb-4">
+              <h3 class="text-3xl font-playfair text-quillGray mb-1">Playfair Display</h3>
+              <p class="text-xs text-gunSmoke font-ptMono">SERIF FOR UNCOMPILED</p>
+            </div>
+            <p class="text-sm text-gunSmoke font-ptMono">
+              Serif typeface exclusively for the "Uncompiled" section—providing contrast and signaling philosophical rather than technical content.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Responsive Design -->
+      <section class="mb-12">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
+          Responsive Design
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-4">
+            <div class="text-sm font-bold text-quillGray mb-2 font-ptMono">Mobile</div>
+            <div class="text-xs text-gunSmoke font-ptMono mb-1">{'< 640px'}</div>
+            <div class="text-xs text-accent-light font-ptMono">sm breakpoint</div>
+          </div>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-4">
+            <div class="text-sm font-bold text-quillGray mb-2 font-ptMono">Tablet</div>
+            <div class="text-xs text-gunSmoke font-ptMono mb-1">768px+</div>
+            <div class="text-xs text-accent-light font-ptMono">md breakpoint</div>
+          </div>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-4">
+            <div class="text-sm font-bold text-quillGray mb-2 font-ptMono">Laptop</div>
+            <div class="text-xs text-gunSmoke font-ptMono mb-1">1024px+</div>
+            <div class="text-xs text-accent-light font-ptMono">lg breakpoint</div>
+          </div>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-4">
+            <div class="text-sm font-bold text-quillGray mb-2 font-ptMono">Desktop</div>
+            <div class="text-xs text-gunSmoke font-ptMono mb-1">1280px+</div>
+            <div class="text-xs text-accent-light font-ptMono">xl breakpoint</div>
+          </div>
+        </div>
+        <div class="mt-4 bg-bgShades-light border border-darkGrey/30 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-quillGray mb-2 font-ptMono">Design Approach</h3>
+          <ul class="space-y-1.5 text-xs text-gunSmoke font-ptMono">
+            <li class="flex gap-2"><span class="text-accent-light">•</span> Mobile-first responsive design strategy</li>
+            <li class="flex gap-2"><span class="text-accent-light">•</span> Fluid typography and spacing scales</li>
+            <li class="flex gap-2"><span class="text-accent-light">•</span> Touch-friendly interface for mobile devices</li>
+            <li class="flex gap-2"><span class="text-accent-light">•</span> Optimized images with responsive srcset</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Pages in Portfolio -->
+      <section class="mb-12">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
+          Pages in Portfolio
+        </h2>
+        <div class="grid md:grid-cols-2 gap-3">
+          {pages.map((page) => (
+            <a
+              href={page.path}
+              class="group bg-bgShades-light border border-darkGrey/30 rounded-lg p-4 hover:border-accent-light/40 transition-all duration-300 flex items-start justify-between gap-3"
+            >
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-bold text-quillGray mb-1 font-ptMono group-hover:text-accent-light transition-colors">
+                  {page.name}
+                </div>
+                <div class="text-xs text-gunSmoke font-ptMono truncate">
+                  {page.description}
+                </div>
+              </div>
+              <div class="text-xs text-gunSmoke/50 font-mono flex-shrink-0">
+                {page.path}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- Infrastructure & Features -->
+      <section class="mb-12">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
           Notable Features
         </h2>
         <div class="grid md:grid-cols-2 gap-4">
-          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
-            <h3 class="text-accent-light font-medium mb-2">Command Palette</h3>
-            <p class="text-sm text-gunSmoke">Cmd+K search for Life Ledger timeline with keyboard navigation.</p>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5">
+            <h3 class="text-sm font-bold text-accent-light mb-2 font-ptMono">Command Palette</h3>
+            <p class="text-xs text-gunSmoke font-ptMono leading-relaxed">
+              Cmd+K search for Life Ledger timeline with keyboard navigation and fuzzy matching.
+            </p>
           </div>
-          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
-            <h3 class="text-accent-light font-medium mb-2">Gallery System</h3>
-            <p class="text-sm text-gunSmoke">Turing Machine-inspired tape interface with memory-mapped hex addressing. Cloudflare R2 storage with Supabase metadata.</p>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5">
+            <h3 class="text-sm font-bold text-accent-light mb-2 font-ptMono">Gallery System</h3>
+            <p class="text-xs text-gunSmoke font-ptMono leading-relaxed">
+              Turing Machine-inspired interface with memory-mapped hex addressing. Images served from artifacts.rishia.in via Cloudflare R2.
+            </p>
           </div>
-          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
-            <h3 class="text-accent-light font-medium mb-2">Admin CMS</h3>
-            <p class="text-sm text-gunSmoke">Mobile-friendly admin panel for managing philosophical writings, gym stats, and gallery events.</p>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5">
+            <h3 class="text-sm font-bold text-accent-light mb-2 font-ptMono">Admin CMS</h3>
+            <p class="text-xs text-gunSmoke font-ptMono leading-relaxed">
+              Mobile-friendly admin panel for managing content, gym stats, and gallery events.
+            </p>
           </div>
-          <div class="p-4 bg-codGray border border-gunSmoke/20 rounded">
-            <h3 class="text-accent-light font-medium mb-2">Analytics Dashboard</h3>
-            <p class="text-sm text-gunSmoke">Privacy-focused visitor tracking with device/browser insights.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tech Choices -->
-      <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
-          Why These Technologies?
-        </h2>
-        <div class="space-y-4 text-sm text-gunSmoke">
-          <div>
-            <h3 class="text-quillGray font-medium mb-1">Astro</h3>
-            <p>Chosen for its island architecture—ship zero JavaScript by default, hydrate only interactive components. Perfect for a content-heavy portfolio.</p>
-          </div>
-          <div>
-            <h3 class="text-quillGray font-medium mb-1">React</h3>
-            <p>Used selectively for stateful UI (command palette, admin dashboard). Familiar ecosystem with excellent TypeScript support.</p>
-          </div>
-          <div>
-            <h3 class="text-quillGray font-medium mb-1">Tailwind CSS</h3>
-            <p>Rapid prototyping without context switching. Utility-first approach keeps styles co-located with markup.</p>
-          </div>
-          <div>
-            <h3 class="text-quillGray font-medium mb-1">Supabase</h3>
-            <p>Postgres + RLS gives production-grade security with minimal backend code. Perfect for a solo developer.</p>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5">
+            <h3 class="text-sm font-bold text-accent-light mb-2 font-ptMono">Analytics Dashboard</h3>
+            <p class="text-xs text-gunSmoke font-ptMono leading-relaxed">
+              Privacy-focused visitor tracking with real-time insights and device analytics.
+            </p>
           </div>
         </div>
       </section>
 
       <!-- Source & Version -->
       <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
+        <h2 class="text-xl font-bold text-quillGray mb-6 font-ptMono">
           Source & Version
         </h2>
-        <div class="space-y-3 text-sm text-gunSmoke">
-          <p>
-            <span class="text-accent-light">Repository:</span> 
-            <a href="https://github.com/rishiahuja/portfolio" target="_blank" rel="noopener noreferrer" class="underline hover:text-accent-light transition-colors ml-2">
-              github.com/rishiahuja/portfolio
-            </a>
-          </p>
-          <p>
-            <span class="text-accent-light">Version:</span> 
-            <span class="ml-2">0.4.0</span>
-          </p>
-          <p>
-            <span class="text-accent-light">Last Updated:</span> 
-            <span class="ml-2">December 2025</span>
-          </p>
-          <p>
-            <span class="text-accent-light">License:</span> 
-            <span class="ml-2">All rights reserved</span>
-          </p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5 text-center">
+            <h3 class="text-sm font-bold text-quillGray mb-3 font-ptMono">Version v4.0</h3>
+            <p class="text-xs text-gunSmoke font-ptMono">Last updated<br/>December 2025</p>
+          </div>
+          <div class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5 text-center">
+            <h3 class="text-sm font-bold text-quillGray mb-3 font-ptMono">Inspiration</h3>
+            <p class="text-xs text-gunSmoke font-ptMono">Brutalist Web Design<br/>& Terminal Aesthetics</p>
+          </div>
+          <a
+            href="https://github.com/rishiahuja/portfolio"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-bgShades-light border border-darkGrey/30 rounded-lg p-5 text-center hover:border-accent-light/40 transition-all duration-300 group"
+          >
+            <h3 class="text-sm font-bold text-quillGray mb-3 font-ptMono group-hover:text-accent-light">Source Code</h3>
+            <p class="text-xs text-accent-light font-ptMono">View on GitHub →</p>
+          </a>
         </div>
       </section>
 
-      <!-- Acknowledgments -->
-      <section class="mb-12">
-        <h2 class="section-title text-2xl font-semibold text-quillGray">
-          Inspiration
-        </h2>
-        <p class="text-sm text-gunSmoke">
-          Design influenced by brutalist web design principles, terminal aesthetics, and the belief that portfolios should be functional tools, not just visual showcases.
-        </p>
-      </section>
-
       <!-- Footer -->
-      <footer class="pt-8 border-t border-gunSmoke/20">
-        <p class="text-xs text-gunSmoke/70 text-center">
+      <footer class="pt-8 border-t border-darkGrey/20">
+        <p class="text-xs text-gunSmoke/70 text-center font-ptMono">
           This colophon is maintained as a living document and updated with each significant release.
         </p>
       </footer>

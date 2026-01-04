@@ -17,7 +17,7 @@ const SmallContainer: React.FC<SmallContainerProps> = ({ text, clickLink, icon }
         ${isHovered ? 'bg-darkGrey border-accent-light' : 'bg-transparent border-darkGrey'}
         border cursor-${clickLink ? 'pointer' : 'default'}
         ${clickLink ? 'underline decoration-accent-light decoration-1' : ''}
-        flex items-center gap-3
+        flex items-center gap-3 transform hover:scale-[1.02]
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

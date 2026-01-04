@@ -50,10 +50,10 @@ const breadcrumbs = [
             const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
             const link = post.slug ? `/blogs/${post.slug}` : '#';
             const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
+            const uniqueKey = post.slug || post._id || 'unknown';
 
             return (
               <BlogPostItem
-                key={post.slug || post._id}
                 title={title}
                 link={link}
                 date={date}

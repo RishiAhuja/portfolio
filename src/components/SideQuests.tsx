@@ -85,7 +85,7 @@ const SideQuests: React.FC = () => {
           {/* Data List Column */}
           <div className="space-y-4 hidden md:block">
             {stats.map((stat, index) => (
-              <div key={index} className="group">
+              <div key={`stat-${stat.label}-${index}`} className="group">
                 <div className="flex justify-between items-end mb-1">
                   <span className="text-quillGray group-hover:text-accent-light transition-colors duration-300">
                     {stat.label}

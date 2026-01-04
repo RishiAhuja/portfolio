@@ -76,10 +76,9 @@ const AboutMe: React.FC = () => {
             Twitter
           </a>
           . Check out my work below or see my{" "}
-          <a
-            href="#"
+          <button
             onClick={handleResumeDownload}
-            className="text-accent-light hover:text-accent-light/80 underline decoration-1 decoration-accent-light/30 hover:decoration-accent-light transition-all inline-flex items-center group font-medium"
+            className="text-accent-light hover:text-accent-light/80 underline decoration-1 decoration-accent-light/30 hover:decoration-accent-light transition-all inline-flex items-center group font-medium bg-transparent border-0 cursor-pointer p-0"
           >
             resume
             <svg
@@ -90,8 +89,7 @@ const AboutMe: React.FC = () => {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
             </svg>
-          </a>
-          .
+          </button>.
         </p>
       </div>
     </div>

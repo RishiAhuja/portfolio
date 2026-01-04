@@ -14,7 +14,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
     <nav aria-label="Breadcrumb" className="mb-6">
       <ol className="flex items-center gap-2 font-ptMono text-sm text-gunSmoke">
         {items.map((item, index) => (
-          <li key={index} className="flex items-center gap-2">
+          <li key={`breadcrumb-${item.label}-${index}`} className="flex items-center gap-2">
             {item.href ? (
               <a
                 href={item.href}

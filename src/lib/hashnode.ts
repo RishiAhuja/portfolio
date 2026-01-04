@@ -139,6 +139,7 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     return posts;
     
   } catch (error) {
+    console.error('Error fetching Hashnode posts:', error);
     throw error;
   }
 };
@@ -154,7 +155,7 @@ export const formatPostDate = (dateString: string): string => {
   try {
     const date = new Date(dateString);
     
-    if (isNaN(date.getTime())) {
+    if (Number.isNaN(date.getTime())) {
       return 'Date unavailable';
     }
     
