@@ -1,7 +1,7 @@
 ---
 title: "Open Learn"
-description: "OpenLearn is a production-ready, TypeScript-powered backend designed for scalable cohort-based educational platforms. It supports structured learning paths, hierarchical roles, gamification, and real-time progress tracking, deployed using modern DevOps and containerized infrastructure."
-tech_stack: ["TypeScript", "Node.js", "Express.js", "Prisma ORM", "PostgreSQL", "Redis", "JWT", "Docker", "Nginx", "AWS EC2", "Helmet.js", "SMTP", "GitHub Actions", "REST API"]
+description: "OpenLearn is a production-ready, TypeScript-powered backend designed for scalable cohort-based educational platforms. It supports structured learning paths, hierarchical roles, gamification, and real-time progress tracking, deployed using modern DevOps and containerized infrastructure with monitoring."
+tech_stack: ["TypeScript", "Node.js", "Express.js", "Prisma ORM", "PostgreSQL", "Redis", "JWT", "Docker", "Nginx", "AWS EC2", "Helmet.js", "SMTP", "GitHub Actions", "REST API", "Grafana", "Prometheus"]
 features:
   - "Robust TypeScript backend for cohort-based learning with hierarchical role management"
   - "Integrated progress tracking, gamification, analytics, and multi-format content delivery"

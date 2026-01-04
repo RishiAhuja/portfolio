@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-quillGray hover:text-accent-light transition-colors p-2"
+            className="md:hidden text-quillGray hover:text-accent-light transition-colors p-2 relative z-50"
             aria-label="Toggle menu"
           >
             <svg 
@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
         <>
           {/* Backdrop with click handler */}
           <div 
-            className="fixed inset-0 z-40 md:hidden bg-codGray/98 backdrop-blur-sm"
+            className="fixed inset-0 z-40 md:hidden bg-codGray/85 backdrop-blur-lg transition-all duration-300 ease-out"
             onClick={() => setIsMenuOpen(false)}
             onKeyDown={(e) => e.key === 'Enter' && setIsMenuOpen(false)}
             role="button"
@@ -117,21 +117,9 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
           
           {/* Menu Content */}
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center md:hidden pointer-events-none">
-            <nav className="space-y-8 pointer-events-auto">
-              {/* Home Link */}
-              <a
-                href="/"
-                className={`block font-ptMono text-2xl text-center transition-colors ${
-                  isActive('/')
-                    ? 'text-accent-light'
-                    : 'text-quillGray hover:text-accent-light'
-                }`}
-              >
-                Home
-              </a>
-
+            <nav className="space-y-8 pointer-events-auto animate-[fadeInScale_0.4s_ease-out]">
               {/* Main Pages */}
-              {navItems.map((item) => (
+              {navItems.map((item, index) => (
                 <a
                   key={item.href}
                   href={item.href}
@@ -140,6 +128,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
                       ? 'text-accent-light'
                       : 'text-quillGray hover:text-accent-light'
                   }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {item.label}
                 </a>

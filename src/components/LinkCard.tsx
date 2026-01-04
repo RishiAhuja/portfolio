@@ -31,7 +31,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({ title, description, url, pri
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group block bg-bgShades-light border ${primary ? 'border-accent-light/50' : 'border-darkGrey/30'} rounded-lg p-4 hover:border-accent-light/60 transition-all duration-300 hover:-translate-y-0.5`}
+      className={`group block bg-bgShades-light border ${primary ? 'border-accent-light/50' : 'border-darkGrey/30'} rounded-sm p-4 hover:border-accent-light/60 transition-all duration-300 hover:-translate-y-0.5`}
     >
       <div className="flex items-center gap-4">
         <div className="flex-shrink-0">
