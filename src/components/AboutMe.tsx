@@ -38,17 +38,22 @@ const AboutMe: React.FC = () => {
       {/* Bio Section */}
       <div className="w-full space-y-6 text-base md:text-lg font-ptMono text-quillGray leading-relaxed">
         <p>
-          Hi, I&apos;m Rishi. I&apos;m an 18-year-old <span className="text-accent-light">Entrepreneur-in-Residence (EIR)</span> at{" "}
-          <span className="text-accent-light">iHub AwaDH, IIT Ropar</span>, where I&apos;m building AI-powered platforms for Indian agriculture.
+          Hi, I&apos;m Rishi. I&apos;m an 18-year-old builder.
         </p>
 
         <p>
-          We recently presented our work to a delegation from the{" "}
-          <span className="text-accent-light">Government of India and MeitY</span>.
+          Currently, I serve as an <span className="text-accent-light">Entrepreneur-in-Residence (EIR)</span> at{" "}
+          <span className="text-accent-light">iHub AWaDH, IIT Ropar</span>, while simultaneously working as a{" "}
+          <span className="text-accent-light">Founding DevOps Engineer</span> at{" "}
+          <span className="text-accent-light">Zenbase (Singapore)</span> to build <em>Ninja</em>.
         </p>
 
         <p>
-          By day, I&apos;m a B.Tech IT student at NIT Jalandhar, but I love to get my hands dirty and build things from scratch.
+          From pitching AI pipelines to the <span className="text-accent-light">Government of India (MeitY)</span> to architecting global infrastructure, I like solving problems at scale.
+        </p>
+
+        <p>
+          By day, I&apos;m a B.Tech IT student at NIT Jalandhar, but I spend my nights managing cloud deployments and making flutter apps.
         </p>
 
         <p className="text-gunSmoke pt-2">

@@ -1,8 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
 import { getAllGalleryEvents } from '../lib/gallery';
 
 const allEvents = await getAllGalleryEvents('');
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Artifacts' }
+];
 
 // Sort events by date (newest first)
 const sortedEvents = allEvents.sort((a, b) => 

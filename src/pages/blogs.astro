@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
+import BlogPostItem from '../components/ui/BlogPostItem';
+import { fetchHashnodePosts, formatPostDate } from '../lib/hashnode';
+
+const USERNAME = "rishi2220";
+const posts = await fetchHashnodePosts(USERNAME, 100); // Fetch all posts
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Blogs' }
+];
+---
+
+<BaseLayout 
+  title="Technical Blogs | Rishi Ahuja"
+  description="Deep dives into WebSockets, text rendering, system programming, Flutter, and software engineering. Technical writing from a builder's perspective."
+  image="/og?title=Technical%20Blogs&description=Deep%20technical%20writing%20from%20a%20builder&type=default"
+>
+  <main class="min-h-screen bg-codGray py-12 px-4 md:px-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs client:load items={breadcrumbs} />
+      
+      <!-- Header -->
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4 font-ptMono">
+          Technical Blogs
+        </h1>
+        <p class="text-base md:text-lg text-gunSmoke font-ptMono leading-relaxed">
+          Deep dives into systems, protocols, and engineering. Writing about what I learn while building.
+        </p>
+        <div class="mt-4 flex items-center gap-2 text-sm text-gunSmoke font-ptMono">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>{posts.length} articles published</span>
+        </div>
+      </div>
+
+      <!-- Blog List -->
+      {posts.length === 0 ? (
+        <div class="text-base font-ptMono text-gunSmoke py-12 text-center">
+          No blog posts found. Check back soon!
+        </div>
+      ) : (
+        <div class="space-y-2 md:space-y-4">
+          {posts.map((post) => {
+            const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
+            const link = post.slug ? `/blogs/${post.slug}` : '#';
+            const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
+
+            return (
+              <BlogPostItem
+                key={post.slug || post._id}
+                title={title}
+                link={link}
+                date={date}
+              />
+            );
+          })}
+        </div>
+      )}
+
+      <!-- External Link to Hashnode -->
+      <div class="mt-12 pt-8 border-t border-darkGrey/30">
+        <p class="text-sm font-ptMono text-gunSmoke mb-4">
+          All articles are cross-posted on Hashnode for wider reach and community engagement.
+        </p>
+        <a
+          href="https://rishi2220.hashnode.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-accent-light hover:text-accent transition-colors font-ptMono text-sm group"
+        >
+          <span>Visit my Hashnode blog</span>
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

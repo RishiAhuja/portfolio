@@ -19,7 +19,7 @@
   }
 
   .dark {
-    --background: 29 29 29; /* #1d1d1d */
+    --background: 25 25 25; /* #191919 */
     --foreground: 226 226 221; /* #e2e2dd */
     
     --muted: 54 59 61; /* #363b3d */
@@ -31,6 +31,9 @@
     
     --card: 37 37 37; /* #252525 */
     --card-foreground: 226 226 221; /* #e2e2dd */
+    
+    /* Centralized background color */
+    --codGray: 25 25 25; /* #191919 */
   }
 }
 
@@ -44,7 +47,7 @@ h1, h2, h3, h4, h5, h6, code, pre, .font-mono {
 
 /* Subtle background gradient for section transitions */
 .section-gradient {
-  background-image: linear-gradient(to bottom, #1d1d1d, #191919, #1d1d1d);
+  background-image: linear-gradient(to bottom, #191919, #151515, #191919);
 }
 
 /* Accent underline animation */

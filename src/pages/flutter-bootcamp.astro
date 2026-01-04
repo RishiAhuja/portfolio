@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
+import { getBootcampLectures, type BootcampLecture } from '../lib/admin';
+
+const lectures = await getBootcampLectures();
+const totalLectures = lectures.length;
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Community', href: '/community' },
+  { label: 'Flutter Bootcamp' }
+];
+---
+
+<BaseLayout 
+  title="Flutter Bootcamp - 14 Day Journey | Rishi Ahuja"
+  description="Comprehensive 14-day Flutter bootcamp with slides, resources, and hands-on projects. Learn Flutter from fundamentals to advanced concepts."
+  image="/og/flutter-bootcamp.png"
+>
+  <main class="min-h-screen bg-codGray py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs client:load items={breadcrumbs} />
+      
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4 font-ptMono">
+          Flutter Bootcamp
+        </h1>
+        <p class="text-lg text-gunSmoke mb-2 font-ptMono">
+          14-Day Intensive Journey into Flutter Development
+        </p>
+        <div class="flex items-center justify-center gap-4 text-sm text-gunSmoke font-ptMono">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+            </svg>
+            {totalLectures} Lectures Published
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+            14 Days Total
+          </span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      {totalLectures > 0 && (
+        <div class="mb-12">
+          <div class="flex justify-between text-sm text-gunSmoke font-ptMono mb-2">
+            <span>Course Progress</span>
+            <span>{Math.round((totalLectures / 14) * 100)}%</span>
+          </div>
+          <div class="w-full h-2 bg-darkGrey rounded-full overflow-hidden">
+            <div 
+              class="h-full bg-accent-light transition-all duration-500"
+              style={`width: ${(totalLectures / 14) * 100}%`}
+            ></div>
+          </div>
+        </div>
+      )}
+
+      <!-- Lectures Grid -->
+      {totalLectures === 0 ? (
+        <div class="text-center py-20">
+          <div class="inline-block p-8 bg-darkGrey/20 rounded-lg">
+            <svg class="w-16 h-16 text-gunSmoke mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            <p class="text-gunSmoke font-ptMono text-lg">
+              No lectures published yet
+            </p>
+            <p class="text-gunSmoke/60 font-ptMono text-sm mt-2">
+              Check back soon for new content!
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div class="space-y-6">
+          {lectures.map((lecture: BootcampLecture) => (
+            <div 
+              class="bg-darkGrey/20 border border-darkGrey/50 rounded-lg p-6 hover:border-accent-light/30 transition-all duration-300"
+              data-lecture-id={lecture.id}
+            >
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class="inline-block px-3 py-1 bg-accent-light/10 text-accent-light rounded text-sm font-ptMono font-bold">
+                      Day {lecture.day_number}
+                    </span>
+                  </div>
+                  <h2 class="text-2xl font-bold text-quillGray mb-2 font-ptMono">
+                    {lecture.title}
+                  </h2>
+                  {lecture.description && (
+                    <p class="text-gunSmoke font-ptMono text-sm leading-relaxed">
+                      {lecture.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <!-- Resources -->
+              <div class="flex flex-wrap gap-3 mt-4">
+                {lecture.slides_url && (
+                  <a 
+                    href={lecture.slides_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-accent-light/10 border border-accent-light/40 rounded text-accent-light hover:bg-accent-light hover:text-codGray transition-all duration-200 font-ptMono text-sm"
+                  >
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd"></path>
+                    </svg>
+                    Download Slides
+                  </a>
+                )}
+                
+                {lecture.video_url && (
+                  <a 
+                    href={lecture.video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/40 rounded text-red-400 hover:bg-red-500 hover:text-white transition-all duration-200 font-ptMono text-sm"
+                  >
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                    </svg>
+                    Watch Video
+                  </a>
+                )}
+              </div>
+
+              {/* Additional Resources */}
+              {lecture.additional_resources && lecture.additional_resources.length > 0 && (
+                <div class="mt-4 pt-4 border-t border-darkGrey/50">
+                  <p class="text-sm text-gunSmoke font-ptMono mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                    </svg>
+                    Additional Resources:
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    {lecture.additional_resources.map((resource, index) => (
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1 px-3 py-1 bg-darkGrey/40 border border-gunSmoke/20 rounded text-gunSmoke hover:text-accent-light hover:border-accent-light/40 transition-all duration-200 font-ptMono text-xs"
+                      >
+                        {resource.label}
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                          <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+                        </svg>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <!-- Footer Note -->
+      <div class="mt-16 text-center">
+        <p class="text-sm text-gunSmoke/60 font-ptMono">
+          New lectures are published regularly. Bookmark this page to stay updated!
+        </p>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #444;
+  }
+</style>

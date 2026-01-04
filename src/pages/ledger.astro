@@ -1,6 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
 import TimelineView from '../components/TimelineView.tsx';
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Life Ledger' }
+];
 ---
 
 <BaseLayout 
@@ -8,5 +14,10 @@ import TimelineView from '../components/TimelineView.tsx';
   description="A running log of my life events"
   image="/og?title=Life%20Ledger&description=A%20running%20log%20of%20my%20life%20events&type=default"
 >
+  <div class="px-4 md:px-8 pt-12">
+    <div class="max-w-6xl mx-auto">
+      <Breadcrumbs client:load items={breadcrumbs} />
+    </div>
+  </div>
   <TimelineView client:load />
 </BaseLayout>

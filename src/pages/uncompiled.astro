@@ -1,11 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
 import { getPublishedEntries } from '../lib/admin';
 
 const manifesto = `The code is deterministic; the writer is not. While the main site tracks the tangible progress of my engineering, this log tracks the intangible drift of my philosophy. A collection of notes on ambition, ego, and the continuous search for a center of gravity in a noisy world.`;
 
 // Fetch published entries from Supabase
 const entries = await getPublishedEntries();
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Uncompiled' }
+];
 ---
 
 <BaseLayout 
@@ -28,18 +34,10 @@ const entries = await getPublishedEntries();
   </style>
 
   <main class="min-h-screen bg-codGray text-quillGray uncompiled-container">
-    <!-- Back to Home - Minimal -->
-    <div class="pt-8 pb-4 px-4 md:px-8">
+    <!-- Breadcrumbs -->
+    <div class="pt-8 px-4 md:px-8">
       <div class="max-w-3xl mx-auto">
-        <a 
-          href="/" 
-          class="inline-flex items-center gap-2 text-gunSmoke hover:text-accent-light transition-colors text-sm"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Home
-        </a>
+        <Breadcrumbs client:load items={breadcrumbs} />
       </div>
     </div>
 

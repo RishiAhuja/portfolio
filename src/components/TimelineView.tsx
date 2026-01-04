@@ -249,21 +249,6 @@ const TimelineView: React.FC = () => {
         onSelectItem={handleSelectItem}
       />
 
-      {/* Back to Home - Fixed positioning */}
-      <div className="pt-8 pb-4">
-        <div className={`${isMobile ? 'w-full px-4' : 'w-[50%] px-8'} mx-auto`}>
-          <a 
-            href="/" 
-            className="inline-flex items-center gap-2 text-accent hover:text-accent transition-colors font-ptMono text-sm"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </a>
-        </div>
-      </div>
-
       <div className={`${isMobile ? 'w-full px-4' : 'w-[50%] px-8'} mx-auto py-8 relative`}>
         {/* Header */}
         <div className="mb-12 relative text-center">

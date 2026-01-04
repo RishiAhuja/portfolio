@@ -52,21 +52,6 @@ const schema = {
   <JsonLd data={schema} />
   <Navigation client:load />
   
-  <!-- Timeline Navigation - Non-fixed -->
-  <div class="absolute top-0 right-0 z-40">
-    <a 
-      href="/ledger" 
-      class="group flex items-center gap-2 bg-bgShades-light/80 backdrop-blur-sm border-l border-b border-darkGrey/30 px-4 py-3 text-quillGray hover:text-accent transition-all duration-300 font-ptMono text-sm"
-    >
-      <span>life ledger</span>
-      <svg class="w-4 h-4 transition-all duration-300 group-hover:translate-x-1 opacity-70 group-hover:opacity-100" 
-        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-      </svg>
-    </a>
-  </div>
-  
   <main class="flex min-h-screen flex-col items-center">
     <script>
       // Handle responsive width

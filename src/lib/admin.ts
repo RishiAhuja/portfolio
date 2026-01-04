@@ -36,6 +36,19 @@ export interface SideQuestWithHistory extends SideQuest {
   history: SideQuestHistory[];
 }
 
+export interface BootcampLecture {
+  id: string;
+  day_number: number;
+  title: string;
+  description: string | null;
+  slides_url: string | null;
+  video_url: string | null;
+  additional_resources: { label: string; url: string }[];
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // Generate secure random token
 const generateToken = () => {
   return `${Date.now()}_${Math.random().toString(36).substring(2)}_${Math.random().toString(36).substring(2)}`;
@@ -373,3 +386,93 @@ export const createAdminUser = async (email: string, password: string): Promise<
     return false;
   }
 };
+
+// ============ Bootcamp Lectures Functions ============
+
+// Get all published bootcamp lectures (public)
+export const getBootcampLectures = async (): Promise<BootcampLecture[]> => {
+  const { data, error } = await supabase
+    .from('bootcamp_lectures')
+    .select('*')
+    .eq('is_published', true)
+    .order('day_number', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching bootcamp lectures:', error);
+    return [];
+  }
+
+  return data as BootcampLecture[];
+};
+
+// Get all bootcamp lectures for admin (includes unpublished)
+export const getAllBootcampLectures = async (token: string): Promise<BootcampLecture[]> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase
+    .from('bootcamp_lectures')
+    .select('*')
+    .order('day_number', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching all bootcamp lectures:', error);
+    return [];
+  }
+
+  return data as BootcampLecture[];
+};
+
+// Update bootcamp lecture (admin only)
+export const updateBootcampLecture = async (
+  token: string,
+  id: string,
+  updates: Partial<Omit<BootcampLecture, 'id' | 'created_at' | 'updated_at'>>
+): Promise<BootcampLecture | null> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase
+    .from('bootcamp_lectures')
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating bootcamp lecture:', error);
+    return null;
+  }
+
+  return data as BootcampLecture;
+};
+
+// Toggle publish status for bootcamp lecture (admin only)
+export const togglePublishBootcampLecture = async (
+  token: string,
+  id: string,
+  isPublished: boolean
+): Promise<boolean> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { error } = await supabase
+    .from('bootcamp_lectures')
+    .update({
+      is_published: isPublished,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id);
+
+  return !error;
+};
+

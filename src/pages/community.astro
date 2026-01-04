@@ -1,0 +1,188 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
+import { getBootcampLectures } from '../lib/admin';
+
+const bootcampLectures = await getBootcampLectures();
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Community' }
+];
+
+const communityActivities = [
+  {
+    title: 'Flutter Bootcamp - 14 Day Journey',
+    role: 'Instructor & Creator',
+    date: 'Ongoing - 2025',
+    description: 'Created and teaching a comprehensive 14-day Flutter bootcamp covering fundamentals to advanced concepts. Building a complete learning path with slides, resources, and hands-on projects for aspiring Flutter developers.',
+    stats: [
+      { label: 'Lectures', value: bootcampLectures.length },
+      { label: 'Days', value: '14' },
+      { label: 'Topics', value: 'Widgets, State, APIs, Firebase' }
+    ],
+    link: '/flutter-bootcamp',
+    color: 'accent-light',
+    icon: 'flutter'
+  },
+  {
+    title: 'Bit N Build Punjab Mentor',
+    role: 'Technical Mentor',
+    date: '6 Sept 2025',
+    description: 'Invited as a mentor for the Bit n Build Punjab Round hackathon at Thapar University, Patiala. Guided and advised over 30 participating teams during the event which hosted 120+ participants in collaboration with Genesoc Society.',
+    stats: [
+      { label: 'Teams Mentored', value: '30+' },
+      { label: 'Participants', value: '120+' },
+      { label: 'Location', value: 'Thapar University' }
+    ],
+    link: 'https://www.openlearn.org.in/events/hackathon-1',
+    external: true,
+    color: 'blue-400',
+    icon: 'mentor'
+  },
+  {
+    title: 'GDSC NITJ - Core Member',
+    role: 'Mobile Development Lead',
+    date: '2024 - Present',
+    description: 'Core member of Google Developer Student Club NITJ, focusing on Mobile Development. Organizing technical workshops, conducting sessions on Flutter and mobile app development, and leading induction interviews for new members.',
+    stats: [
+      { label: 'Workshops', value: 'Multiple' },
+      { label: 'Focus', value: 'Mobile Dev' },
+      { label: 'Community', value: 'NITJ Students' }
+    ],
+    color: 'green-400',
+    icon: 'community'
+  }
+];
+---
+
+<BaseLayout 
+  title="Community | Rishi Ahuja"
+  description="Teaching Flutter, mentoring at hackathons, and building developer communities. Giving back through workshops, bootcamps, and technical sessions."
+  image="/og?title=Community&description=Teaching%2C%20Mentoring%2C%20Building%20Communities&type=default"
+>
+  <main class="min-h-screen bg-codGray py-12 px-4 md:px-8">
+    <div class="max-w-5xl mx-auto">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs client:load items={breadcrumbs} />
+      
+      <!-- Header -->
+      <div class="mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-quillGray mb-4 font-ptMono">
+          Community
+        </h1>
+        <p class="text-base md:text-lg text-gunSmoke font-ptMono leading-relaxed max-w-3xl">
+          Beyond building software, I believe in building communities. Teaching, mentoring, and sharing knowledge with aspiring developers through bootcamps, hackathons, and technical workshops.
+        </p>
+      </div>
+
+      <!-- Activities Grid -->
+      <div class="space-y-8">
+        {communityActivities.map((activity, index) => (
+          <div 
+            key={index}
+            class="group bg-bgShades-light border border-darkGrey/30 rounded-lg p-6 md:p-8 hover:border-accent-light/50 transition-all duration-300"
+          >
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  {activity.icon === 'flutter' && (
+                    <svg class="w-6 h-6 text-accent-light" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z"/>
+                    </svg>
+                  )}
+                  {activity.icon === 'mentor' && (
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  )}
+                  {activity.icon === 'community' && (
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  )}
+                  <h2 class="text-xl md:text-2xl font-bold text-quillGray font-ptMono">
+                    {activity.title}
+                  </h2>
+                </div>
+                <div class="flex flex-wrap items-center gap-3 text-sm font-ptMono">
+                  <span class={`text-${activity.color}`}>{activity.role}</span>
+                  <span class="text-darkGrey">•</span>
+                  <span class="text-gunSmoke">{activity.date}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p class="text-base text-gunSmoke font-ptMono leading-relaxed mb-6">
+              {activity.description}
+            </p>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 mb-6 pb-6 border-b border-darkGrey/20">
+              {activity.stats.map((stat, statIndex) => (
+                <div key={statIndex} class="text-center md:text-left">
+                  <div class="text-xl md:text-2xl font-bold text-accent-light font-ptMono mb-1">
+                    {stat.value}
+                  </div>
+                  <div class="text-xs text-gunSmoke font-ptMono">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <!-- CTA -->
+            {activity.link && (
+              <a
+                href={activity.link}
+                target={activity.external ? '_blank' : undefined}
+                rel={activity.external ? 'noopener noreferrer' : undefined}
+                class="inline-flex items-center gap-2 text-accent-light hover:text-accent transition-colors font-ptMono text-sm group"
+              >
+                <span>{activity.external ? 'View Event Details' : 'Explore Bootcamp'}</span>
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={activity.external ? "M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" : "M17 8l4 4m0 0l-4 4m4-4H3"} />
+                </svg>
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="mt-16 pt-8 border-t border-darkGrey/30 text-center">
+        <h3 class="text-xl font-bold text-quillGray mb-3 font-ptMono">
+          Want to collaborate?
+        </h3>
+        <p class="text-gunSmoke font-ptMono mb-6 max-w-2xl mx-auto">
+          I'm always open to speaking at events, conducting workshops, or mentoring at hackathons. 
+          Let's build something together.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="https://twitter.com/Rishi2220"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-accent-light/10 border border-accent-light/30 rounded-sm text-accent-light hover:bg-accent-light/20 transition-all font-ptMono text-sm"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+            <span>DM on Twitter</span>
+          </a>
+          <a
+            href="mailto:contact@rishia.in"
+            class="inline-flex items-center gap-2 px-6 py-3 border border-darkGrey/50 rounded-sm text-quillGray hover:border-accent-light/50 hover:text-accent-light transition-all font-ptMono text-sm"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span>Send an Email</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

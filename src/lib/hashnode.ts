@@ -54,13 +54,9 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
   try {
     
     const query = `
-      query PublicationPosts($host: String!, $first: Int!) {
+      query Publication($host: String!) {
         publication(host: $host) {
-          id
-          title
-          url
-          posts(first: $first) {
-            totalDocuments
+          posts(first: 20) {
             edges {
               node {
                 id
@@ -68,19 +64,7 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
                 brief
                 slug
                 publishedAt
-                updatedAt
-                readTimeInMinutes
-                reactionCount
-                responseCount
-                views
                 url
-                coverImage {
-                  url
-                }
-                author {
-                  name
-                  username
-                }
               }
             }
           }
@@ -90,23 +74,16 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     
     const variables = {
       host: `${username}.hashnode.dev`,
-      first: limit,
     };
     
-    
-    // Use current timestamp to force fresh request
-    const timestamp = Date.now();
     const response = await fetch('https://gql.hashnode.com/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Timestamp': timestamp.toString(),
       },
       body: JSON.stringify({ 
-        query, 
+        query,
         variables,
-        timestamp // Include in body to ensure uniqueness
       }),
     });
 
@@ -135,16 +112,16 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     const edges = data.data.publication.posts.edges;
     
     // Transform the data with proper URL construction
-    const posts = edges.map(({ node }: { node: HashnodeGraphQLNode }) => {
+    const posts = edges.map(({ node }: { node: any }) => {
       const post = {
         _id: node.id,
         title: node.title,
-        brief: node.brief,
+        brief: node.brief || '',
         slug: node.slug,
         dateAdded: node.publishedAt,
-        totalReactions: node.reactionCount || 0,
-        responseCount: node.responseCount || 0,
-        coverImage: node.coverImage,
+        totalReactions: 0,
+        responseCount: 0,
+        coverImage: null,
         directUrl: node.url,
       };
       
@@ -295,7 +272,7 @@ export const fetchHashnodePostBySlug = async (username: string, slug: string): P
       slug: post.slug,
       dateAdded: post.publishedAt,
       totalReactions: post.reactionCount || 0,
-      responseCount: post.responseCount || 0,
+      responseCount: 0,
       coverImage: post.coverImage,
       directUrl: post.url,
       content: post.content,

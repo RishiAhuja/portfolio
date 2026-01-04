@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs';
 import { fetchHashnodePosts, fetchHashnodePostBySlug } from '../../lib/hashnode';
 import { marked } from 'marked';
 import markedKatex from 'marked-katex-extension';
@@ -92,21 +93,30 @@ const responsiveHtmlContent = htmlContent.replace(
 const ogImage = post.coverImage?.url 
   ? post.coverImage.url
   : `/og?title=${encodeURIComponent(post.title)}&description=${encodeURIComponent(post.brief)}&type=blog`;
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Blogs', href: '/blogs' },
+  { label: post.title }
+];
 ---
 
 <BaseLayout 
   title={`${post.title} | Rishi Ahuja`}
   description={post.brief}
   image={ogImage}
->
-  <link slot="head" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-  <link slot="head" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-  
-  <main class="min-h-screen" style="background-color: #191919;">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+>readcrumbs */}
+      <Breadcrumbs client:load items={breadcrumbs} />
+      
       {/* Back button */}
       <a 
-        href="/"
+        href="/blogs"
+        class="inline-flex items-center gap-2 text-sm font-ptMono text-accent hover:text-accent transition-colors mb-8"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Blogs
         class="inline-flex items-center gap-2 text-sm font-ptMono text-accent hover:text-accent transition-colors mb-8"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

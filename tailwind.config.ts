@@ -16,7 +16,7 @@ const config: Config = {
         backgroundColor: '#181a1b',
         darkGrey: '#363b3d',
         quillGray: '#e2e2dd',
-        codGray: '#1d1d1d',
+        codGray: '#191919', // Main background color
         gunSmoke: '#838484',
         accent: {
           light: '#8ecfd6',

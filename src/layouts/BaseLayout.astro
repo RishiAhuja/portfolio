@@ -1,5 +1,6 @@
 ---
 import '../styles/globals.css';
+import Header from '../components/Header';
 
 interface Props {
   title?: string;
@@ -14,6 +15,7 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -109,6 +111,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </style>
   </head>
   <body class="bg-codGray text-quillGray dark:bg-bgShades-dark dark:text-quillGray transition-colors duration-300">
+    <Header client:load currentPath={currentPath} />
     <slot />
   </body>
 </html>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getAllEntries, createEntry, updateEntry, deleteEntry, togglePublishEntry, adminLogout, type UncompiledEntry } from '../../lib/admin';
 import SideQuestsEditor from './SideQuestsEditor';
 import GalleryEditor from './GalleryEditor';
+import BootcampEditor from './BootcampEditor';
 
 interface AdminDashboardProps {
   token: string;
@@ -10,7 +11,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery'>('uncompiled');
+  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery' | 'bootcamp'>('uncompiled');
   const [entries, setEntries] = useState<UncompiledEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditor, setShowEditor] = useState(false);
@@ -264,10 +265,22 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
           >
             Gallery
           </button>
+          <button
+            onClick={() => setActiveTab('bootcamp')}
+            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
+              activeTab === 'bootcamp'
+                ? 'text-accent-light border-b-2 border-accent-light'
+                : 'text-gunSmoke hover:text-quillGray'
+            }`}
+          >
+            Bootcamp
+          </button>
         </div>
 
         {/* Content */}
-        {activeTab === 'gallery' ? (
+        {activeTab === 'bootcamp' ? (
+          <BootcampEditor token={token} />
+        ) : activeTab === 'gallery' ? (
           <GalleryEditor token={token} />
         ) : activeTab === 'sidequests' ? (
           <SideQuestsEditor token={token} />
