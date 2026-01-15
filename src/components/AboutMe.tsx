@@ -8,7 +8,7 @@ const AboutMe: React.FC = () => {
   // Resume download handler
   const handleResumeDownload = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.open('https://drive.google.com/file/d/16paBtFuAfVC34CCNgM-266I6e4X_SxKu/view?usp=sharing', '_blank');
+    window.open('https://drive.google.com/file/d/1CtMqPQK5GOgtc6o-gD3EEtdomaXN4POz/view?usp=sharing', '_blank');
   };
 
   return (
