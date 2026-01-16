@@ -767,6 +767,7 @@ const imagesWithHex = event.images.map((img, index) => {
       if (firstCaption && firstCaption.trim()) {
         setTimeout(() => {
           imageCaption.textContent = firstCaption;
+          imageCaption.classList.remove('hidden', 'exit');
           imageCaption.classList.add('visible');
         }, 300);
       }
