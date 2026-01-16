@@ -25,6 +25,7 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showNewEventForm, setShowNewEventForm] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [editingCaption, setEditingCaption] = useState<{ imageId: string; caption: string } | null>(null);
 
   // Form state for new/edit event
   const [formData, setFormData] = useState({
@@ -159,6 +160,17 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
       alert('Cover image updated!');
     } catch (error) {
       console.error('Error setting cover:', error);
+    }
+  };
+
+  const handleUpdateCaption = async (imageId: string, description: string) => {
+    try {
+      await updateGalleryImage(token, imageId, { description });
+      await handleSelectEvent(selectedEvent!);
+      setEditingCaption(null);
+    } catch (error) {
+      console.error('Error updating caption:', error);
+      alert('Failed to update caption');
     }
   };
 
@@ -364,20 +376,62 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                     Cover
                   </div>
                 )}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded flex flex-col items-center justify-center gap-2">
-                  <button
-                    onClick={() => handleSetCover(image)}
-                    className="px-3 py-1 bg-accent-light text-codGray rounded text-sm"
-                  >
-                    Set as Cover
-                  </button>
-                  <button
-                    onClick={() => handleDeleteImage(image.id)}
-                    className="px-3 py-1 bg-red-500 text-white rounded text-sm"
-                  >
-                    Delete
-                  </button>
-                </div>
+                
+                {/* Caption Display/Edit */}
+                {editingCaption?.imageId === image.id ? (
+                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-codGray/95">
+                    <textarea
+                      value={editingCaption.caption}
+                      onChange={(e) => setEditingCaption({ imageId: image.id, caption: e.target.value })}
+                      className="w-full px-2 py-1 bg-darkGrey text-quillGray text-xs rounded border border-gunSmoke/30 focus:border-accent-light focus:outline-none"
+                      rows={2}
+                      placeholder="Add a caption..."
+                      autoFocus
+                    />
+                    <div className="flex gap-2 mt-1">
+                      <button
+                        onClick={() => handleUpdateCaption(image.id, editingCaption.caption)}
+                        className="px-2 py-1 bg-accent-light text-codGray rounded text-xs"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditingCaption(null)}
+                        className="px-2 py-1 bg-gunSmoke/20 text-gunSmoke rounded text-xs"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {image.description && (
+                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/80 text-white text-xs">
+                        {image.description}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded flex flex-col items-center justify-center gap-2">
+                      <button
+                        onClick={() => setEditingCaption({ imageId: image.id, caption: image.description || '' })}
+                        className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
+                      >
+                        {image.description ? 'Edit Caption' : 'Add Caption'}
+                      </button>
+                      <button
+                        onClick={() => handleSetCover(image)}
+                        className="px-3 py-1 bg-accent-light text-codGray rounded text-sm"
+                      >
+                        Set as Cover
+                      </button>
+                      <button
+                        onClick={() => handleDeleteImage(image.id)}
+                        className="px-3 py-1 bg-red-500 text-white rounded text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>

@@ -53,22 +53,7 @@ const schema = {
   <Navigation client:load />
   
   <main class="flex min-h-screen flex-col items-center">
-    <script>
-      // Handle responsive width
-      function updateWidth() {
-        const main = document.querySelector('main > div');
-        if (main) {
-          const isMobile = window.innerWidth < 800;
-          main.classList.toggle('w-full', isMobile);
-          main.classList.toggle('w-[65%]', !isMobile);
-        }
-      }
-      
-      updateWidth();
-      window.addEventListener('resize', updateWidth);
-    </script>
-    
-    <div class="w-[65%] p-8">
+    <div class="w-full max-w-4xl px-4 md:px-8 py-8">
       <section id="about">
         <AboutMe client:load />
       </section>

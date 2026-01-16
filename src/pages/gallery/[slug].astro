@@ -1,5 +1,6 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/globals.css';
+import Breadcrumbs from '../../components/ui/Breadcrumbs';
 import { getGalleryEventBySlug, getAllGalleryEvents, type GalleryEventWithImages } from '../../lib/gallery';
 
 export async function getStaticPaths() {
@@ -17,6 +18,14 @@ if (!eventData) {
 }
 
 const event: GalleryEventWithImages = eventData;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Artifacts', href: '/gallery' },
+  { label: event.title }
+];
 
 // Generate hex addresses for images - base address is 0x10000000, increment by file size
 const BASE_ADDRESS = 0x10000000;
@@ -40,12 +49,60 @@ const imagesWithHex = event.images.map((img, index) => {
 });
 ---
 
-<BaseLayout 
-  title={`${event.title} | Artifacts`}
-  description={event.description || `Memory tape from ${event.title}`}
-  image={event.cover_image_url || undefined}
->
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <title>{event.title} | Artifacts</title>
+    <meta name="description" content={event.description || `Memory tape from ${event.title}`} />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={`${event.title} | Artifacts`} />
+    <meta property="og:description" content={event.description || `Memory tape from ${event.title}`} />
+    {event.cover_image_url && <meta property="og:image" content={event.cover_image_url} />}
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${event.title} | Artifacts`} />
+    <meta name="twitter:description" content={event.description || `Memory tape from ${event.title}`} />
+    {event.cover_image_url && <meta name="twitter:image" content={event.cover_image_url} />}
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <script is:inline>
+      const theme = localStorage.getItem('theme') || 
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    </script>
+  </head>
+  <body class="bg-codGray text-quillGray">
   <style>
+    .breadcrumb-wrapper {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      z-index: 104;
+      background: rgba(var(--codGray-rgb), 0.95);
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--gunSmoke);
+      backdrop-filter: blur(10px);
+    }
+    
+    @media (max-width: 768px) {
+      .breadcrumb-wrapper {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.5rem 0.75rem;
+      }
+    }
+    
     main {
       position: relative;
       height: 100vh;
@@ -87,7 +144,7 @@ const imagesWithHex = event.images.map((img, index) => {
       display: flex;
       height: 100%;
       width: max-content;
-      padding: 0 calc(50vw - 30vw) 0 50vw;
+      padding: 0 50vw;
       position: relative;
     }
     
@@ -299,11 +356,39 @@ const imagesWithHex = event.images.map((img, index) => {
     }
     
     .image-caption {
-      margin-top: 1rem;
-      color: var(--gunSmoke);
+      position: fixed;
+      bottom: 5.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--quillGray);
       font-size: 0.875rem;
       text-align: center;
       max-width: 500px;
+      padding: 0.5rem 1rem;
+      background: rgba(var(--codGray-rgb), 0.9);
+      border: 1px solid var(--gunSmoke);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                  transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+    
+    .image-caption.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .image-caption.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-15px);
+    }
+    
+    .image-caption.exit {
+      opacity: 0;
+      transform: translateX(-50%) translateY(15px);
     }
     
     .tape-controls {
@@ -336,35 +421,7 @@ const imagesWithHex = event.images.map((img, index) => {
       color: var(--accent-light);
     }
     
-    .back-link {
-      position: fixed;
-      top: 2rem;
-      left: 2rem;
-      color: var(--quillGray);
-      background: rgba(var(--codGray-rgb), 0.95);
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--gunSmoke);
-      text-decoration: none;
-      font-size: 0.875rem;
-      z-index: 103;
-      transition: all 0.2s ease;
-    }
-    
-    .back-link:hover {
-      color: rgb(var(--accent-light));
-      border-color: rgb(var(--accent-light));
-    }
-    
-    @media (max-width: 768px) {
-      .back-link {
-        backdrop-filter: none;
-        background: var(--codGray);
-        top: 1rem;
-        left: 1rem;
-        padding: 0.5rem 0.75rem;
-        font-size: 0.8rem;
-      }
-    }
+    /* Removed back-link - using breadcrumb for navigation */
     
     .position-indicator {
       font-size: 0.75rem;
@@ -423,11 +480,26 @@ const imagesWithHex = event.images.map((img, index) => {
         width: calc(100vw - 4rem);
         justify-content: space-between;
       }
+      
+      .image-caption {
+        max-width: calc(100vw - 4rem);
+        font-size: 0.8rem;
+        bottom: 5rem;
+      }
     }
   </style>
 
+  <div class="breadcrumb-wrapper">
+    <Breadcrumbs client:load items={breadcrumbs} />
+  </div>
+  
   <main class="relative">    
-    <div class="read-head"></div>
+    <div class="read-head">
+      <div class="bracket bracket-tl"></div>
+      <div class="bracket bracket-tr"></div>
+      <div class="bracket bracket-bl"></div>
+      <div class="bracket bracket-br"></div>
+    </div>
     
     <div id="metadataDisplay" class="metadata-display">
       <div class="hex-label">
@@ -451,19 +523,10 @@ const imagesWithHex = event.images.map((img, index) => {
       <div class="position-indicator" id="positionIndicator">0 / {imagesWithHex.length}</div>
     </div>
     
-    <a href="/gallery" class="back-link">← Gallery</a>
-    
-    <div class="read-head">
-      <div class="bracket bracket-tl"></div>
-      <div class="bracket bracket-tr"></div>
-      <div class="bracket bracket-bl"></div>
-      <div class="bracket bracket-br"></div>
-    </div>
-    
     <div class="tape-container" id="tapeContainer">
       <div class="tape-track">
         {imagesWithHex.map((image) => (
-          <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index}>
+          <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index} data-caption={image.description || ''}>
             <div class="image-frame">
               <img
                 src={image.r2_url}
@@ -471,13 +534,13 @@ const imagesWithHex = event.images.map((img, index) => {
                 loading="lazy"
               />
             </div>
-            {image.description && (
-              <div class="image-caption">{image.description}</div>
-            )}
           </div>
         ))}
       </div>
     </div>
+    
+    {/* Fixed caption element */}
+    <div id="imageCaption" class="image-caption hidden"></div>
     
     <div class="tape-controls">
       <button id="prevBtn">← Prev</button>
@@ -510,6 +573,7 @@ const imagesWithHex = event.images.map((img, index) => {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const memorySegments = document.querySelectorAll('.memory-segment');
+    const imageCaption = document.getElementById('imageCaption');
     
     let currentIndex = 0;
     
@@ -579,6 +643,40 @@ const imagesWithHex = event.images.map((img, index) => {
             seg.classList.remove('active');
           }
         });
+        
+        // Update caption with animation
+        const caption = closestCell.getAttribute('data-caption');
+        const currentCaption = imageCaption.textContent;
+        
+        if (caption && caption.trim()) {
+          // Only animate if caption is different
+          if (currentCaption !== caption) {
+            // Slide up and fade out (exit animation)
+            imageCaption.classList.remove('visible', 'hidden');
+            imageCaption.classList.add('exit');
+            
+            // Update text and slide down with fade in after exit animation
+            setTimeout(() => {
+              imageCaption.textContent = caption;
+              imageCaption.classList.remove('exit');
+              imageCaption.classList.add('hidden');
+              
+              // Trigger entry animation
+              requestAnimationFrame(() => {
+                imageCaption.classList.remove('hidden');
+                imageCaption.classList.add('visible');
+              });
+            }, 150);
+          } else if (!imageCaption.classList.contains('visible')) {
+            // Same caption but was hidden, just show it
+            imageCaption.classList.remove('hidden', 'exit');
+            imageCaption.classList.add('visible');
+          }
+        } else {
+          // Hide caption if no description
+          imageCaption.classList.remove('visible');
+          imageCaption.classList.add('exit');
+        }
         
         // Haptic feedback (if supported)
         if ('vibrate' in navigator) {
@@ -664,6 +762,15 @@ const imagesWithHex = event.images.map((img, index) => {
         memorySegments[0].classList.add('active');
       }
       
+      // Show initial caption
+      const firstCaption = cells[0].getAttribute('data-caption');
+      if (firstCaption && firstCaption.trim()) {
+        setTimeout(() => {
+          imageCaption.textContent = firstCaption;
+          imageCaption.classList.add('visible');
+        }, 300);
+      }
+      
       // Scroll first image to center
       const firstCell = cells[0];
       const containerRect = container.getBoundingClientRect();
@@ -678,4 +785,5 @@ const imagesWithHex = event.images.map((img, index) => {
     // Run update after a brief delay for scroll position
     setTimeout(updateActiveCell, 100);
   </script>
-</BaseLayout>
+  </body>
+</html>

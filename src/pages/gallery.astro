@@ -36,19 +36,36 @@ function formatDate(dateStr: string): string {
       background: var(--codGray);
       color: var(--quillGray);
       min-height: 100vh;
-      padding: 2rem;
+    }
+    
+    .gallery-inner {
+      max-width: 56rem; /* max-w-4xl = 56rem */
+      margin: 0 auto;
+      padding: 3rem 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      .gallery-inner {
+        padding: 3rem 2rem;
+      }
     }
     
     .gallery-header {
-      max-width: 1200px;
-      margin: 0 auto 3rem;
+      margin-bottom: 3rem;
     }
     
     .gallery-title {
-      font-size: 2rem;
-      font-weight: 600;
+      font-size: 1.875rem;
+      font-weight: 700;
       color: var(--quillGray);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .gallery-title {
+        font-size: 2.25rem;
+      }
     }
     
     .gallery-subtitle {
@@ -57,8 +74,7 @@ function formatDate(dateStr: string): string {
     }
     
     .gallery-listing {
-      max-width: 1200px;
-      margin: 0 auto;
+      /* Width controlled by parent .gallery-inner */
     }
     
     .event-row {
@@ -150,15 +166,19 @@ function formatDate(dateStr: string): string {
   </style>
 
   <main class="gallery-container">
-    <header class="gallery-header">
-      <h1 class="gallery-title">Artifacts</h1>
-      <p class="gallery-subtitle">
-        {sortedEvents.length} {sortedEvents.length === 1 ? 'event' : 'events'}
-      </p>
-    </header>
+    <div class="gallery-inner">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs client:load items={breadcrumbs} />
+      
+      <header class="gallery-header">
+        <h1 class="gallery-title">Artifacts</h1>
+        <p class="gallery-subtitle">
+          {sortedEvents.length} {sortedEvents.length === 1 ? 'event' : 'events'}
+        </p>
+      </header>
 
-    {allEvents.length > 0 ? (
-      <div class="gallery-listing">
+      {allEvents.length > 0 ? (
+        <div class="gallery-listing">
         {sortedEvents.map((event) => (
           <a href={`/gallery/${event.slug}`} class="event-row" data-event-id={event.id}>
             <div class="event-header">
@@ -183,5 +203,6 @@ function formatDate(dateStr: string): string {
         <p>Check back soon.</p>
       </div>
     )}
+    </div>
   </main>
 </BaseLayout>
