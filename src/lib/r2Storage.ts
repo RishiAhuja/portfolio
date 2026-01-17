@@ -181,18 +181,27 @@ export async function getImageDimensions(file: File): Promise<{ width: number; h
 }
 
 /**
- * Validate image file
+ * Validate media file (image or video)
  */
 export function validateImageFile(file: File): { valid: boolean; error?: string } {
-  const maxSize = 10 * 1024 * 1024; // 10MB
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+  const maxImageSize = 10 * 1024 * 1024; // 10MB for images
+  const maxVideoSize = 100 * 1024 * 1024; // 100MB for videos
+  const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+  const allowedVideoTypes = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
   
-  if (!allowedTypes.includes(file.type)) {
-    return { valid: false, error: 'Only JPEG, PNG, WebP, and GIF images are allowed' };
+  const isImage = allowedImageTypes.includes(file.type);
+  const isVideo = allowedVideoTypes.includes(file.type);
+  
+  if (!isImage && !isVideo) {
+    return { valid: false, error: 'Only JPEG, PNG, WebP, GIF images or MP4, WebM, MOV videos are allowed' };
   }
   
-  if (file.size > maxSize) {
+  if (isImage && file.size > maxImageSize) {
     return { valid: false, error: 'Image size must be less than 10MB' };
+  }
+  
+  if (isVideo && file.size > maxVideoSize) {
+    return { valid: false, error: 'Video size must be less than 100MB' };
   }
   
   return { valid: true };

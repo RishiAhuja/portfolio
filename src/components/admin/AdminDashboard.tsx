@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAllEntries, createEntry, updateEntry, deleteEntry, togglePublishEntry, adminLogout, type UncompiledEntry } from '../../lib/admin';
 import SideQuestsEditor from './SideQuestsEditor';
-import GalleryEditor from './GalleryEditor';
+import GalleryEditor from './GalleryEditorV2';
 import BootcampEditor from './BootcampEditor';
 
 interface AdminDashboardProps {

@@ -1,29 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
-import { getAllGalleryEvents } from '../lib/gallery';
+import { getAllGalleryCollections } from '../lib/gallery';
 
-const allEvents = await getAllGalleryEvents('');
+const allCollections = await getAllGalleryCollections();
 
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
   { label: 'Artifacts' }
 ];
 
-// Sort events by date (newest first)
-const sortedEvents = allEvents.sort((a, b) => 
-  new Date(b.event_date).getTime() - new Date(a.event_date).getTime()
-);
-
-// Format date
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const month = months[date.getMonth()];
-  const day = date.getDate().toString().padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day} ${month} ${year}`;
-}
+// Sort collections by year and month (newest first)
+const sortedCollections = allCollections.sort((a, b) => {
+  if (a.year !== b.year) return b.year - a.year;
+  // For same year, put year-only collections after monthly ones
+  if (a.month === null && b.month !== null) return 1;
+  if (a.month !== null && b.month === null) return -1;
+  if (a.month === null && b.month === null) return 0;
+  return (b.month || 0) - (a.month || 0);
+});
 ---
 
 <BaseLayout 
@@ -74,72 +69,53 @@ function formatDate(dateStr: string): string {
     }
     
     .gallery-listing {
-      /* Width controlled by parent .gallery-inner */
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
     }
     
-    .event-row {
+    .collection-card {
       display: block;
       text-decoration: none;
-      border-bottom: 1px solid rgba(var(--gunSmoke-rgb), 0.15);
-      transition: all 0.2s ease;
+      border: 1px solid rgba(var(--gunSmoke-rgb), 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1;
     }
     
-    .event-header {
-      display: grid;
-      grid-template-columns: 110px 1fr auto;
-      gap: 1.5rem;
-      padding: 1.25rem 0;
-      cursor: pointer;
-      align-items: center;
+    .collection-card:hover {
+      border-color: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     
-    .event-row:hover .event-header {
-      background: rgba(var(--darkGrey-rgb), 0.2);
-      border-left: 2px solid var(--accent-light);
-      padding-left: calc(1rem - 2px);
+    .collection-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: var(--darkGrey);
     }
     
-    .event-date {
-      color: var(--gunSmoke);
-      font-size: 0.85rem;
+    .collection-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6), transparent);
     }
     
-    .event-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-    
-    .event-title {
+    .collection-name {
       color: var(--quillGray);
-      font-size: 1rem;
-      font-weight: 500;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
     }
     
-    .event-location {
+    .collection-count {
       color: var(--gunSmoke);
       font-size: 0.8rem;
-    }
-    
-    .event-meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      color: var(--gunSmoke);
-      font-size: 0.85rem;
-    }
-    
-    .category-badge {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
-      border: 1px solid var(--gunSmoke);
-      color: var(--gunSmoke);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .image-count {
-      color: var(--gunSmoke);
     }
     
     .empty-state {
@@ -149,18 +125,9 @@ function formatDate(dateStr: string): string {
     }
     
     @media (max-width: 768px) {
-      .event-header {
-        grid-template-columns: 90px 1fr;
-        gap: 1rem;
-      }
-      
-      .event-meta {
-        display: none;
-      }
-      
-      .images-grid {
+      .gallery-listing {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 0.75rem;
+        gap: 1rem;
       }
     }
   </style>
@@ -173,36 +140,38 @@ function formatDate(dateStr: string): string {
       <header class="gallery-header">
         <h1 class="gallery-title">Artifacts</h1>
         <p class="gallery-subtitle">
-          {sortedEvents.length} {sortedEvents.length === 1 ? 'event' : 'events'}
+          {sortedCollections.length} {sortedCollections.length === 1 ? 'collection' : 'collections'}
         </p>
       </header>
 
-      {allEvents.length > 0 ? (
+      {allCollections.length > 0 ? (
         <div class="gallery-listing">
-        {sortedEvents.map((event) => (
-          <a href={`/gallery/${event.slug}`} class="event-row" data-event-id={event.id}>
-            <div class="event-header">
-              <span class="event-date">{formatDate(event.event_date)}</span>
-              <div class="event-info">
-                <span class="event-title">{event.title}</span>
-                {event.location && (
-                  <span class="event-location">{event.location}</span>
-                )}
+          {sortedCollections.map((collection) => (
+            <a href={`/gallery/${collection.slug}`} class="collection-card">
+              {collection.cover_image_url ? (
+                <img 
+                  src={collection.cover_image_url} 
+                  alt={collection.display_name}
+                  class="collection-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="collection-cover" />
+              )}
+              <div class="collection-info">
+                <div class="collection-name">{collection.display_name}</div>
+                <div class="collection-count">{collection.image_count || 0} photos</div>
               </div>
-              <div class="event-meta">
-                <span class="category-badge">{event.category}</span>
-                <span class="image-count">{event.image_count || 0} photos</span>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
-    ) : (
-      <div class="empty-state">
-        <h2>No events yet</h2>
-        <p>Check back soon.</p>
-      </div>
-    )}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <h2>No collections yet</h2>
+          <p>Check back soon.</p>
+        </div>
+      )}
     </div>
   </main>
 </BaseLayout>
+  

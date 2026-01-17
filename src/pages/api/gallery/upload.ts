@@ -29,14 +29,13 @@ export const POST: APIRoute = async ({ request }) => {
     // Parse form data
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const eventId = formData.get('eventId') as string;
-    const eventSlug = formData.get('eventSlug') as string;
-    const title = formData.get('title') as string | null;
+    const collectionId = formData.get('collectionId') as string;
+    const collectionSlug = formData.get('collectionSlug') as string;
+    const capturedDate = formData.get('capturedDate') as string;
     const description = formData.get('description') as string | null;
-    const sortOrder = parseInt(formData.get('sortOrder') as string || '0');
     const isCover = formData.get('isCover') === 'true';
 
-    if (!file || !eventId || !eventSlug) {
+    if (!file || !collectionId || !collectionSlug || !capturedDate) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -49,15 +48,15 @@ export const POST: APIRoute = async ({ request }) => {
     // Upload to R2
     const uploadResult = await uploadImageToR2({
       file,
-      eventSlug,
+      eventSlug: collectionSlug, // R2Storage still uses eventSlug parameter name
     });
 
     // Save to database
     const { data, error } = await supabase
       .from('gallery_images')
       .insert({
-        event_id: eventId,
-        title: title || null,
+        collection_id: collectionId,
+        captured_date: capturedDate,
         description: description || null,
         r2_key: uploadResult.key,
         r2_url: uploadResult.url,
@@ -65,7 +64,6 @@ export const POST: APIRoute = async ({ request }) => {
         mime_type: uploadResult.mimeType,
         width: dimensions.width,
         height: dimensions.height,
-        sort_order: sortOrder,
         is_cover: isCover,
       })
       .select()
@@ -79,12 +77,12 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // If this is marked as cover, update the event's cover_image_url
+    // If this is marked as cover, update the collection's cover_image_url
     if (isCover) {
       await supabase
-        .from('gallery_events')
+        .from('gallery_collections')
         .update({ cover_image_url: uploadResult.url })
-        .eq('id', eventId);
+        .eq('id', collectionId);
     }
 
     return new Response(JSON.stringify({ success: true, data }), {

@@ -26,56 +26,44 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Parse request body
-    const { imageId } = await request.json();
-    if (!imageId) {
-      return new Response(JSON.stringify({ error: 'Missing imageId' }), {
+    const { collectionId } = await request.json();
+    if (!collectionId) {
+      return new Response(JSON.stringify({ error: 'Missing collectionId' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    // Get image data
-    const { data: image } = await supabase
+    // Get all images in this collection
+    const { data: images } = await supabase
       .from('gallery_images')
-      .select('r2_key, collection_id, r2_url')
-      .eq('id', imageId)
-      .single();
+      .select('r2_key')
+      .eq('collection_id', collectionId);
 
-    if (!image) {
-      return new Response(JSON.stringify({ error: 'Image not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' }
-      });
+    // Delete all images from R2
+    if (images && images.length > 0) {
+      for (const image of images) {
+        try {
+          await deleteImageFromR2(image.r2_key);
+        } catch (error) {
+          console.error('Error deleting image from R2:', error);
+          // Continue even if R2 deletion fails
+        }
+      }
     }
 
-    // Delete from R2
-    await deleteImageFromR2(image.r2_key);
-
-    // Delete from database
+    // Delete collection (CASCADE will delete all images from database)
     const { error } = await supabase
-      .from('gallery_images')
+      .from('gallery_collections')
       .delete()
-      .eq('id', imageId);
+      .eq('id', collectionId);
 
     if (error) {
+      console.error('Database error:', error);
       return new Response(JSON.stringify({ error: 'Database error' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
-    }
-
-    // If this was the cover image, clear it from the collection
-    const { data: collection } = await supabase
-      .from('gallery_collections')
-      .select('cover_image_url')
-      .eq('id', image.collection_id)
-      .single();
-
-    if (collection && collection.cover_image_url === image.r2_url) {
-      await supabase
-        .from('gallery_collections')
-        .update({ cover_image_url: null })
-        .eq('id', image.collection_id);
     }
 
     return new Response(JSON.stringify({ success: true }), {
@@ -84,7 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
   } catch (error) {
-    console.error('Delete error:', error);
+    console.error('Delete collection error:', error);
     return new Response(JSON.stringify({ error: 'Delete failed', details: error instanceof Error ? error.message : 'Unknown error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

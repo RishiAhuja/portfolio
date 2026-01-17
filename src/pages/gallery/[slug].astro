@@ -1,36 +1,45 @@
 ---
 import '../../styles/globals.css';
 import Breadcrumbs from '../../components/ui/Breadcrumbs';
-import { getGalleryEventBySlug, getAllGalleryEvents, type GalleryEventWithImages } from '../../lib/gallery';
+import { getGalleryCollectionBySlug, getAllGalleryCollections, type GalleryCollectionWithImages } from '../../lib/gallery';
 
 export async function getStaticPaths() {
-  const events = await getAllGalleryEvents('');
-  return events.map((event) => ({
-    params: { slug: event.slug },
+  const collections = await getAllGalleryCollections();
+  return collections.map((collection) => ({
+    params: { slug: collection.slug },
   }));
 }
 
 const { slug } = Astro.params;
-const eventData = await getGalleryEventBySlug(slug);
+const collectionData = await getGalleryCollectionBySlug(slug);
 
-if (!eventData) {
+if (!collectionData) {
   return Astro.redirect('/gallery');
 }
 
-const event: GalleryEventWithImages = eventData;
+const collection: GalleryCollectionWithImages = collectionData;
+
+// Get all collections to determine prev/next
+const allCollections = await getAllGalleryCollections();
+const currentIndex = allCollections.findIndex(c => c.slug === slug);
+// Collections are sorted DESC (newest first), so:
+// - "next" in time = previous in array (older collection)
+// - "prev" in time = next in array (newer collection)
+const nextCollection = currentIndex > 0 ? allCollections[currentIndex - 1] : null; // Newer
+const prevCollection = currentIndex < allCollections.length - 1 ? allCollections[currentIndex + 1] : null; // Older
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
   { label: 'Artifacts', href: '/gallery' },
-  { label: event.title }
+  { label: collection.display_name }
 ];
 
 // Generate hex addresses for images - base address is 0x10000000, increment by file size
 const BASE_ADDRESS = 0x10000000;
 let cumulativeSize = 0;
-const imagesWithHex = event.images.map((img, index) => {
+const imagesWithHex = collection.images.map((img, index) => {
   const hexAddress = `0x${(BASE_ADDRESS + cumulativeSize).toString(16).toUpperCase().padStart(8, '0')}`;
   const currentSize = img.file_size || 1024 * 1024; // Default to 1MB if size not available
   
@@ -47,6 +56,16 @@ const imagesWithHex = event.images.map((img, index) => {
   
   return result;
 });
+
+// Helper to format captured date
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
 ---
 
 <!doctype html>
@@ -57,19 +76,19 @@ const imagesWithHex = event.images.map((img, index) => {
     <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
     <link rel="canonical" href={canonicalURL} />
     
-    <title>{event.title} | Artifacts</title>
-    <meta name="description" content={event.description || `Memory tape from ${event.title}`} />
+    <title>{collection.display_name} | Artifacts</title>
+    <meta name="description" content={`Memory tape from ${collection.display_name}`} />
     
     <!-- Open Graph -->
-    <meta property="og:title" content={`${event.title} | Artifacts`} />
-    <meta property="og:description" content={event.description || `Memory tape from ${event.title}`} />
-    {event.cover_image_url && <meta property="og:image" content={event.cover_image_url} />}
+    <meta property="og:title" content={`${collection.display_name} | Artifacts`} />
+    <meta property="og:description" content={`Memory tape from ${collection.display_name}`} />
+    {collection.cover_image_url && <meta property="og:image" content={collection.cover_image_url} />}
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${event.title} | Artifacts`} />
-    <meta name="twitter:description" content={event.description || `Memory tape from ${event.title}`} />
-    {event.cover_image_url && <meta name="twitter:image" content={event.cover_image_url} />}
+    <meta name="twitter:title" content={`${collection.display_name} | Artifacts`} />
+    <meta name="twitter:description" content={`Memory tape from ${collection.display_name}`} />
+    {collection.cover_image_url && <meta name="twitter:image" content={collection.cover_image_url} />}
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -271,6 +290,12 @@ const imagesWithHex = event.images.map((img, index) => {
       gap: 0.5rem;
     }
     
+    .date-display {
+      font-size: 0.9rem;
+      color: var(--quillGray);
+      font-weight: 500;
+    }
+    
     .metadata-display:hover .address-tooltip {
       opacity: 1;
       visibility: visible;
@@ -332,10 +357,11 @@ const imagesWithHex = event.images.map((img, index) => {
       }
       
       .metadata-display {
-        top: 1rem;
+        top: 4.5rem;
         padding: 0.5rem 1rem;
         min-width: auto;
         font-size: 0.75rem;
+        gap: 0.25rem;
       }
     }
     
@@ -350,6 +376,12 @@ const imagesWithHex = event.images.map((img, index) => {
     }
     
     .image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .image-frame video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -487,11 +519,95 @@ const imagesWithHex = event.images.map((img, index) => {
         bottom: 5rem;
       }
     }
+    
+    /* Pull-to-navigate indicators */
+    .pull-indicator {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(var(--codGray-rgb), 0.9);
+      border: 1px solid rgba(var(--accent-light-rgb), 0.5);
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      color: rgba(var(--accent-light-rgb), 0.8);
+      font-weight: 500;
+      z-index: 105;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 4px;
+    }
+    
+    .pull-indicator:hover {
+      background: rgba(var(--codGray-rgb), 0.95);
+      border-color: rgb(var(--accent-light));
+      color: rgb(var(--accent-light));
+    }
+    
+    .pull-indicator-left {
+      left: 1.5rem;
+    }
+    
+    .pull-indicator-right {
+      right: 1.5rem;
+    }
+    
+    .pull-indicator.at-boundary {
+      opacity: 0.6;
+    }
+    
+    .pull-indicator.visible {
+      opacity: 1;
+    }
+    
+    .pull-indicator.active {
+      border-color: #4ade80;
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.1);
+      transform: translateY(-50%) scale(1.02);
+    }
+    
+    @media (max-width: 768px) {
+      .pull-indicator {
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%);
+        font-size: 0.875rem;
+        padding: 0.75rem 1rem;
+      }
+      
+      .pull-indicator-left {
+        top: 20%;
+      }
+      
+      .pull-indicator-right {
+        top: 80%;
+      }
+    }
   </style>
 
   <div class="breadcrumb-wrapper">
     <Breadcrumbs client:load items={breadcrumbs} />
   </div>
+  
+  {prevCollection && (
+    <a href={`/gallery/${prevCollection.slug}`} class="pull-indicator pull-indicator-left" id="pullIndicatorLeft">
+      <span>←</span>
+      <span>{prevCollection.display_name}</span>
+    </a>
+  )}
+  
+  {nextCollection && (
+    <a href={`/gallery/${nextCollection.slug}`} class="pull-indicator pull-indicator-right" id="pullIndicatorRight">
+      <span>{nextCollection.display_name}</span>
+      <span>→</span>
+    </a>
+  )}
   
   <main class="relative">    
     <div class="read-head">
@@ -519,23 +635,36 @@ const imagesWithHex = event.images.map((img, index) => {
           </div>
         </div>
       </div>
-      <div id="eventTitle">{event.title}</div>
+      <div class="date-display" id="dateDisplay">Loading...</div>
       <div class="position-indicator" id="positionIndicator">0 / {imagesWithHex.length}</div>
     </div>
     
     <div class="tape-container" id="tapeContainer">
       <div class="tape-track">
-        {imagesWithHex.map((image) => (
-          <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index} data-caption={image.description || ''}>
+        {imagesWithHex.map((image) => {
+          const isVideo = image.mime_type?.startsWith('video/');
+          return (
+          <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index} data-caption={image.description || ''} data-date={image.captured_date} data-is-video={isVideo}>
             <div class="image-frame">
-              <img
-                src={image.r2_url}
-                alt={image.title || `Memory block ${image.hexAddress}`}
-                loading="lazy"
-              />
+              {isVideo ? (
+                <video
+                  src={image.r2_url}
+                  title={`${formatDate(image.captured_date)}`}
+                  controls
+                  muted
+                  loop
+                  playsinline
+                />
+              ) : (
+                <img
+                  src={image.r2_url}
+                  alt={`${formatDate(image.captured_date)}`}
+                  loading="lazy"
+                />
+              )}
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
     
@@ -562,7 +691,11 @@ const imagesWithHex = event.images.map((img, index) => {
     </div>
   </main>
 
-  <script define:vars={{ images: imagesWithHex }}>
+  <script define:vars={{ 
+    images: imagesWithHex,
+    prevCollectionSlug: prevCollection?.slug,
+    nextCollectionSlug: nextCollection?.slug
+  }}>
     const container = document.getElementById('tapeContainer');
     const cells = document.querySelectorAll('.tape-cell');
     const hexLabel = document.getElementById('hexLabel');
@@ -570,12 +703,23 @@ const imagesWithHex = event.images.map((img, index) => {
     const tooltipOffset = document.getElementById('tooltipOffset');
     const tooltipSize = document.getElementById('tooltipSize');
     const positionIndicator = document.getElementById('positionIndicator');
+    const dateDisplay = document.getElementById('dateDisplay');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const memorySegments = document.querySelectorAll('.memory-segment');
     const imageCaption = document.getElementById('imageCaption');
+    const pullIndicatorLeft = document.getElementById('pullIndicatorLeft');
+    const pullIndicatorRight = document.getElementById('pullIndicatorRight');
     
     let currentIndex = 0;
+    
+    // Pull-to-navigate state
+    const PULL_THRESHOLD = 120; // pixels
+    let isPulling = false;
+    let pullStartX = 0;
+    let pullDistance = 0;
+    let isAtStart = false;
+    let isAtEnd = false;
     
     // Calculate total size
     const totalSize = images.reduce((sum, img) => sum + (img.file_size || 1024 * 1024), 0);
@@ -634,6 +778,19 @@ const imagesWithHex = event.images.map((img, index) => {
         }
         
         positionIndicator.textContent = `${currentIndex + 1} / ${images.length}`;
+        
+        // Update date display
+        const imageDate = closestCell.getAttribute('data-date');
+        if (imageDate) {
+          const date = new Date(imageDate);
+          const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+          const formattedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+          dateDisplay.textContent = formattedDate;
+        }
+        
+        // Check boundaries and update indicators
+        checkBoundaries();
+        updatePullIndicators();
         
         // Update memory bar highlighting
         memorySegments.forEach((seg, idx) => {
@@ -703,27 +860,219 @@ const imagesWithHex = event.images.map((img, index) => {
     let isScrolling;
     container.addEventListener('scroll', () => {
       clearTimeout(isScrolling);
-      isScrolling = setTimeout(updateActiveCell, 50);
+      isScrolling = setTimeout(() => {
+        updateActiveCell();
+        checkBoundaries();
+      }, 50);
     });
     
-    // Add touch/swipe feedback
+    // Check if at start or end of tape
+    function checkBoundaries() {
+      // Check based on which cell is active, not scroll position
+      isAtStart = currentIndex === 0;
+      isAtEnd = currentIndex === cells.length - 1;
+      
+      return { isAtStart, isAtEnd };
+    }
+    
+    // Update pull indicators
+    function updatePullIndicators() {
+      // Left indicator (previous collection)
+      if (pullIndicatorLeft) {
+        if (isAtStart) {
+          pullIndicatorLeft.classList.add('at-boundary');
+          
+          if (pullDistance > 20) {
+            pullIndicatorLeft.classList.add('visible');
+            pullIndicatorLeft.classList.remove('at-boundary');
+            
+            if (pullDistance > PULL_THRESHOLD) {
+              pullIndicatorLeft.classList.add('active');
+            } else {
+              pullIndicatorLeft.classList.remove('active');
+            }
+          } else {
+            pullIndicatorLeft.classList.remove('visible', 'active');
+            pullIndicatorLeft.classList.add('at-boundary');
+          }
+        } else {
+          pullIndicatorLeft.classList.remove('visible', 'active', 'at-boundary');
+        }
+      }
+      
+      // Right indicator (next collection)
+      if (pullIndicatorRight) {
+        if (isAtEnd) {
+          pullIndicatorRight.classList.add('at-boundary');
+          
+          if (pullDistance < -20) {
+            pullIndicatorRight.classList.add('visible');
+            pullIndicatorRight.classList.remove('at-boundary');
+            
+            if (Math.abs(pullDistance) > PULL_THRESHOLD) {
+              pullIndicatorRight.classList.add('active');
+            } else {
+              pullIndicatorRight.classList.remove('active');
+            }
+          } else {
+            pullIndicatorRight.classList.remove('visible', 'active');
+            pullIndicatorRight.classList.add('at-boundary');
+          }
+        } else {
+          pullIndicatorRight.classList.remove('visible', 'active', 'at-boundary');
+        }
+      }
+    }
+    
+    // Touch and mouse events for pull-to-navigate
     let startX = 0;
     let scrollStarted = false;
+    let initialScrollLeft = 0;
     
     container.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
+      initialScrollLeft = container.scrollLeft;
       scrollStarted = true;
+      isPulling = false;
+      pullDistance = 0;
+      checkBoundaries();
+      
+      console.log('Touch start - isAtStart:', isAtStart, 'isAtEnd:', isAtEnd, 'currentIndex:', currentIndex);
+    });
+    
+    container.addEventListener('mousedown', (e) => {
+      startX = e.clientX;
+      initialScrollLeft = container.scrollLeft;
+      scrollStarted = true;
+      isPulling = false;
+      pullDistance = 0;
+      checkBoundaries();
+    });
+    
+    container.addEventListener('touchmove', (e) => {
+      if (!scrollStarted) return;
+      
+      const currentX = e.touches[0].clientX;
+      const deltaX = currentX - startX;
+      
+      // Re-check boundaries based on current active cell
+      checkBoundaries();
+      
+      // At first image and swiping right (pulling to go to previous collection)
+      if (isAtStart && deltaX > 20) {
+        isPulling = true;
+        pullDistance = deltaX;
+        updatePullIndicators();
+        
+        console.log('Pulling LEFT indicator - distance:', pullDistance);
+        
+        // Only prevent default when actually pulling past boundary
+        if (deltaX > 40) {
+          e.preventDefault();
+        }
+      } 
+      // At last image and swiping left (pulling to go to next collection)
+      else if (isAtEnd && deltaX < -20) {
+        isPulling = true;
+        pullDistance = deltaX;
+        updatePullIndicators();
+        
+        console.log('Pulling RIGHT indicator - distance:', pullDistance);
+        
+        // Only prevent default when actually pulling past boundary
+        if (deltaX < -40) {
+          e.preventDefault();
+        }
+      } else {
+        // Reset pulling if we're back in normal range
+        if (isPulling && Math.abs(deltaX) < 15) {
+          isPulling = false;
+          pullDistance = 0;
+          updatePullIndicators();
+        }
+      }
+    });
+    
+    container.addEventListener('mousemove', (e) => {
+      if (!scrollStarted) return;
+      
+      const currentX = e.clientX;
+      const deltaX = currentX - startX;
+      
+      // Check boundaries in real-time
+      const bounds = checkBoundaries();
+      
+      // Mouse drag: at start pull right, at end pull left
+      if (bounds.isAtStart && deltaX > 30) {
+        isPulling = true;
+        pullDistance = deltaX;
+        updatePullIndicators();
+      } else if (bounds.isAtEnd && deltaX < -30) {
+        isPulling = true;
+        pullDistance = deltaX;
+        updatePullIndicators();
+      } else {
+        if (isPulling && Math.abs(deltaX) < 20) {
+          isPulling = false;
+          pullDistance = 0;
+          updatePullIndicators();
+        }
+      }
     });
     
     container.addEventListener('touchend', (e) => {
       if (scrollStarted) {
+        console.log('Touch end - isPulling:', isPulling, 'pullDistance:', pullDistance, 'isAtStart:', isAtStart, 'isAtEnd:', isAtEnd);
+        
+        // Check if we should navigate
+        if (isPulling) {
+          if (isAtStart && pullDistance > PULL_THRESHOLD && prevCollectionSlug) {
+            // Navigate to previous collection
+            console.log('Navigating to previous:', prevCollectionSlug);
+            if ('vibrate' in navigator) navigator.vibrate(20);
+            window.location.href = `/gallery/${prevCollectionSlug}`;
+            return;
+          } else if (isAtEnd && pullDistance < -PULL_THRESHOLD && nextCollectionSlug) {
+            // Navigate to next collection
+            console.log('Navigating to next:', nextCollectionSlug);
+            if ('vibrate' in navigator) navigator.vibrate(20);
+            window.location.href = `/gallery/${nextCollectionSlug}`;
+            return;
+          }
+        }
+        
+        // Reset
+        isPulling = false;
+        pullDistance = 0;
+        updatePullIndicators();
+        scrollStarted = false;
+        
+        // Normal haptic feedback for swipe
         const endX = e.changedTouches[0].clientX;
         const diff = startX - endX;
-        
-        // Stronger haptic feedback for swipe
         if (Math.abs(diff) > 50 && 'vibrate' in navigator) {
           navigator.vibrate(15);
         }
+      }
+    });
+    
+    container.addEventListener('mouseup', (e) => {
+      if (scrollStarted) {
+        // Check if we should navigate
+        if (isPulling) {
+          if (isAtStart && pullDistance > PULL_THRESHOLD && prevCollectionSlug) {
+            window.location.href = `/gallery/${prevCollectionSlug}`;
+            return;
+          } else if (isAtEnd && pullDistance < -PULL_THRESHOLD && nextCollectionSlug) {
+            window.location.href = `/gallery/${nextCollectionSlug}`;
+            return;
+          }
+        }
+        
+        // Reset
+        isPulling = false;
+        pullDistance = 0;
+        updatePullIndicators();
         scrollStarted = false;
       }
     });
@@ -760,6 +1109,15 @@ const imagesWithHex = event.images.map((img, index) => {
       positionIndicator.textContent = `1 / ${images.length}`;
       if (memorySegments.length > 0) {
         memorySegments[0].classList.add('active');
+      }
+      
+      // Set initial date
+      const firstImageDate = cells[0].getAttribute('data-date');
+      if (firstImageDate) {
+        const date = new Date(firstImageDate);
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const formattedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+        dateDisplay.textContent = formattedDate;
       }
       
       // Show initial caption

@@ -3,24 +3,22 @@ import { validateImageFile } from './r2Storage';
 
 export { validateImageFile };
 
-export interface GalleryEvent {
+export interface GalleryCollection {
   id: string;
-  title: string;
-  slug: string;
-  description: string | null;
-  event_date: string;
-  location: string | null;
-  category: string;
+  slug: string; // "2023", "2024", "jan-2025", "feb-2025"
+  year: number;
+  month: number | null; // null for year-only collections
+  display_name: string; // "2023", "January 2025"
+  image_count?: number;
   cover_image_url: string | null;
-  is_featured: boolean;
   created_at: string;
   updated_at: string;
 }
 
 export interface GalleryImage {
   id: string;
-  event_id: string;
-  title: string | null;
+  collection_id: string;
+  captured_date: string; // Date the photo was actually taken
   description: string | null;
   r2_key: string;
   r2_url: string;
@@ -29,139 +27,99 @@ export interface GalleryImage {
   width: number | null;
   height: number | null;
   mime_type: string | null;
-  sort_order: number;
   is_cover: boolean;
   created_at: string;
+  updated_at: string;
 }
 
-export interface GalleryEventWithCount extends GalleryEvent {
-  image_count: number;
-}
-
-export interface GalleryEventWithImages extends GalleryEvent {
+export interface GalleryCollectionWithImages extends GalleryCollection {
   images: GalleryImage[];
 }
 
-// ============ Gallery Events ============
+// ============ Gallery Collections ============
 
-export const getAllGalleryEvents = async (token: string): Promise<GalleryEventWithCount[]> => {
-  const { data, error } = await supabase.rpc('get_gallery_events_with_counts');
+export const getAllGalleryCollections = async (): Promise<GalleryCollection[]> => {
+  const { data, error } = await supabase.rpc('get_gallery_collections');
 
   if (error) {
-    console.error('Error fetching gallery events:', error);
+    console.error('Error fetching gallery collections:', error);
     return [];
   }
 
-  return data as GalleryEventWithCount[];
+  return data as GalleryCollection[];
 };
 
-export const getGalleryEventBySlug = async (slug: string): Promise<GalleryEventWithImages | null> => {
-  const { data, error } = await supabase.rpc('get_gallery_event_with_images', {
+export const getGalleryCollectionBySlug = async (slug: string): Promise<GalleryCollectionWithImages | null> => {
+  const { data, error } = await supabase.rpc('get_gallery_collection_by_slug', {
     p_slug: slug
   });
 
   if (error) {
-    console.error('Error fetching gallery event:', error);
+    console.error('Error fetching gallery collection:', error);
     return null;
   }
 
-  if (!data || !data.event) {
+  if (!data || !data.collection) {
     return null;
   }
 
   return {
-    ...data.event,
+    ...data.collection,
     images: data.images || []
-  } as GalleryEventWithImages;
+  } as GalleryCollectionWithImages;
 };
 
-export const getFeaturedGalleryEvents = async (): Promise<GalleryEventWithCount[]> => {
-  const { data, error } = await supabase.rpc('get_featured_gallery_events');
-
-  if (error) {
-    console.error('Error fetching featured events:', error);
-    return [];
-  }
-
-  return data as GalleryEventWithCount[];
-};
-
-export const getGalleryEventsByCategory = async (category: string): Promise<GalleryEventWithCount[]> => {
-  const { data, error } = await supabase.rpc('get_gallery_events_by_category', {
-    p_category: category
-  });
-
-  if (error) {
-    console.error('Error fetching events by category:', error);
-    return [];
-  }
-
-  return data as GalleryEventWithCount[];
-};
-
-export const createGalleryEvent = async (
+export const createGalleryCollection = async (
   token: string,
-  event: Omit<GalleryEvent, 'id' | 'created_at' | 'updated_at'>
-): Promise<GalleryEvent | null> => {
-  const { data, error } = await supabase
-    .from('gallery_events')
-    .insert(event)
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Error creating gallery event:', error);
-    return null;
+  collection: {
+    slug: string;
+    year: number;
+    month?: number;
+    display_name: string;
   }
-
-  return data as GalleryEvent;
-};
-
-export const updateGalleryEvent = async (
-  token: string,
-  id: string,
-  updates: Partial<Omit<GalleryEvent, 'id' | 'created_at'>>
-): Promise<GalleryEvent | null> => {
+): Promise<GalleryCollection | null> => {
   const { data, error } = await supabase
-    .from('gallery_events')
-    .update({
-      ...updates,
-      updated_at: new Date().toISOString()
+    .from('gallery_collections')
+    .insert({
+      slug: collection.slug,
+      year: collection.year,
+      month: collection.month || null,
+      display_name: collection.display_name,
+      image_count: 0
     })
-    .eq('id', id)
     .select()
     .single();
 
   if (error) {
-    console.error('Error updating gallery event:', error);
+    console.error('Error creating gallery collection:', error);
     return null;
   }
 
-  return data as GalleryEvent;
+  return data as GalleryCollection;
 };
 
-export const deleteGalleryEvent = async (token: string, id: string): Promise<boolean> => {
+export const deleteGalleryCollection = async (token: string, id: string): Promise<boolean> => {
   try {
     // Delete via API endpoint
-    const response = await fetch('/api/gallery/delete-event', {
+    const response = await fetch('/api/gallery/delete-collection', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ eventId: id }),
+      body: JSON.stringify({ collectionId: id }),
     });
 
     if (!response.ok) {
       const error = await response.json();
-      console.error('Delete event API error:', error);
+      console.error('Delete collection API error:', error);
       return false;
     }
 
     const result = await response.json();
     return result.success;
   } catch (error) {
-    console.error('Error deleting event:', error);
+    console.error('Error deleting collection:', error);
     return false;
   }
 };
@@ -170,13 +128,12 @@ export const deleteGalleryEvent = async (token: string, id: string): Promise<boo
 
 export const uploadGalleryImage = async (
   token: string,
-  eventId: string,
-  eventSlug: string,
+  collectionId: string,
+  collectionSlug: string,
   file: File,
   metadata: {
-    title?: string;
+    capturedDate: string; // YYYY-MM-DD format
     description?: string;
-    sortOrder?: number;
     isCover?: boolean;
   }
 ): Promise<GalleryImage | null> => {
@@ -184,12 +141,11 @@ export const uploadGalleryImage = async (
     // Create form data for API request
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('eventId', eventId);
-    formData.append('eventSlug', eventSlug);
-    formData.append('sortOrder', String(metadata.sortOrder || 0));
+    formData.append('collectionId', collectionId);
+    formData.append('collectionSlug', collectionSlug);
+    formData.append('capturedDate', metadata.capturedDate);
     formData.append('isCover', String(metadata.isCover || false));
     
-    if (metadata.title) formData.append('title', metadata.title);
     if (metadata.description) formData.append('description', metadata.description);
 
     // Upload via API endpoint
@@ -219,7 +175,7 @@ export const uploadGalleryImage = async (
 export const updateGalleryImage = async (
   token: string,
   imageId: string,
-  updates: Partial<Pick<GalleryImage, 'title' | 'description' | 'sort_order' | 'is_cover'>>
+  updates: Partial<Pick<GalleryImage, 'description' | 'captured_date' | 'is_cover'>>
 ): Promise<GalleryImage | null> => {
   const { data, error } = await supabase
     .from('gallery_images')
@@ -233,13 +189,13 @@ export const updateGalleryImage = async (
     return null;
   }
 
-  // If this is now the cover image, update event
+  // If this is now the cover image, update collection
   if (updates.is_cover && data) {
     const image = data as GalleryImage;
     await supabase
-      .from('gallery_events')
+      .from('gallery_collections')
       .update({ cover_image_url: image.r2_url })
-      .eq('id', image.event_id);
+      .eq('id', image.collection_id);
   }
 
   return data as GalleryImage;
@@ -271,16 +227,27 @@ export const deleteGalleryImage = async (token: string, imageId: string): Promis
   }
 };
 
-// Helper: Generate slug from title
-export function generateSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+// Helper: Generate collection slug from year/month
+export function generateCollectionSlug(year: number, month?: number): string {
+  if (!month) {
+    return String(year); // "2023", "2024"
+  }
+  const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+  return `${monthNames[month - 1]}-${year}`; // "jan-2025", "feb-2025"
+}
+
+// Helper: Generate display name from year/month
+export function generateCollectionDisplayName(year: number, month?: number): string {
+  if (!month) {
+    return String(year); // "2023"
+  }
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${monthNames[month - 1]} ${year}`; // "January 2025"
 }
 
 // Helper: Format date for display
-export function formatEventDate(dateString: string): string {
+export function formatCapturedDate(dateString: string): string {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-GB', {
     day: 'numeric',
