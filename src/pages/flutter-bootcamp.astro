@@ -97,7 +97,7 @@ const breadcrumbs = [
                   <a 
                     href={lecture.video_url}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer" 
                     title="Watch Video"
                     class="flex items-center justify-center w-10 h-10 bg-red-500/10 border border-red-500/40 rounded-lg text-red-400 hover:bg-red-500 hover:text-white hover:scale-110 transition-all duration-200 shadow-sm hover:shadow-red-500/20"
                   >
@@ -154,6 +154,79 @@ const breadcrumbs = [
         </div>
       )}
 
+      <!-- Students Section -->
+      <div class="mt-16 mb-8">
+        <div class="text-center mb-6">
+          <button
+            id="toggleStudents"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-darkGrey/30 border border-gunSmoke/40 rounded-sm text-quillGray hover:border-accent-light/50 hover:text-accent-light transition-all duration-200 font-ptMono text-sm"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span>View Students</span>
+            <svg id="studentsChevron" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+
+        <div id="studentsSection" class="hidden">
+          <div class="bg-darkGrey/20 border border-darkGrey/50 rounded-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-xl font-bold text-quillGray font-ptMono">Course Participants</h2>
+              <span class="text-sm text-gunSmoke font-ptMono">10+ students</span>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-3">
+              <!-- Sample students - replace with actual data -->
+              <div class="bg-codGray/30 rounded p-3 border border-darkGrey/30 hover:border-accent-light/20 transition-colors">
+                <div class="flex items-start gap-3">
+                  <div class="w-10 h-10 rounded-full bg-accent-light/10 flex items-center justify-center text-accent-light font-ptMono font-bold text-sm flex-shrink-0">
+                    SG
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-bold text-quillGray font-ptMono truncate">Sujal Gupta</h3>
+                    <p class="text-xs text-gunSmoke font-ptMono">Mathematics and Computing Department</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-codGray/30 rounded p-3 border border-darkGrey/30 hover:border-accent-light/20 transition-colors">
+                <div class="flex items-start gap-3">
+                  <div class="w-10 h-10 rounded-full bg-accent-light/10 flex items-center justify-center text-accent-light font-ptMono font-bold text-sm flex-shrink-0">
+                    SK
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-bold text-quillGray font-ptMono truncate">Sudhanshu Kumar</h3>
+                    <p class="text-xs text-gunSmoke font-ptMono">Mathematics and Computing Department</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-codGray/30 rounded p-3 border border-darkGrey/30 hover:border-accent-light/20 transition-colors">
+                <div class="flex items-start gap-3">
+                  <div class="w-10 h-10 rounded-full bg-accent-light/10 flex items-center justify-center text-accent-light font-ptMono font-bold text-sm flex-shrink-0">
+                    SK
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-bold text-quillGray font-ptMono truncate">Sanket Kumar Goswami</h3>
+                    <p class="text-xs text-gunSmoke font-ptMono">Computer Science and Engineering</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add more students as needed -->
+              <div class="bg-codGray/30 rounded p-3 border border-darkGrey/30">
+                <div class="flex items-center justify-center h-full text-gunSmoke/50 font-ptMono text-xs">
+                  + 10 more students
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Footer Note -->
       <div class="mt-16 text-center">
         <p class="text-sm text-gunSmoke/60 font-ptMono">
@@ -163,6 +236,27 @@ const breadcrumbs = [
     </div>
   </main>
 </BaseLayout>
+
+<script>
+  // Toggle students section
+  const toggleStudentsBtn = document.getElementById('toggleStudents');
+  const studentsSection = document.getElementById('studentsSection');
+  const studentsChevron = document.getElementById('studentsChevron');
+
+  toggleStudentsBtn?.addEventListener('click', () => {
+    const isHidden = studentsSection?.classList.contains('hidden');
+    
+    if (isHidden) {
+      studentsSection?.classList.remove('hidden');
+      studentsChevron?.classList.add('rotate-180');
+      toggleStudentsBtn.querySelector('span')!.textContent = 'Hide Students';
+    } else {
+      studentsSection?.classList.add('hidden');
+      studentsChevron?.classList.remove('rotate-180');
+      toggleStudentsBtn.querySelector('span')!.textContent = 'View Students';
+    }
+  });
+</script>
 
 <style>
   /* Smooth scroll behavior */

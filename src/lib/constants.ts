@@ -4,7 +4,7 @@ export const LINKS = {
   RESUME: 'https://drive.google.com/file/d/1CtMqPQK5GOgtc6o-gD3EEtdomaXN4POz/view?usp=sharing',
   
   // Flutter Bootcamp Curriculum
-  FLUTTER_BOOTCAMP_CURRICULUM: 'https://drive.google.com/file/d/YOUR_CURRICULUM_PDF_ID/view?usp=sharing',
+  FLUTTER_BOOTCAMP_CURRICULUM: 'https://drive.google.com/file/d/1hCXQ7xHCJTeNRNXhK4VTXtVWJtVo7s2l/view?usp=sharing',
   
   // Social
   TWITTER: 'https://twitter.com/Rishi2220',
