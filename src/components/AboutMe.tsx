@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
+import { LINKS } from '../lib/constants';
 
 const AboutMe: React.FC = () => {
   const [nameTyped, setNameTyped] = useState(false);
@@ -8,7 +9,7 @@ const AboutMe: React.FC = () => {
   // Resume download handler
   const handleResumeDownload = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.open('https://drive.google.com/file/d/1CtMqPQK5GOgtc6o-gD3EEtdomaXN4POz/view?usp=sharing', '_blank');
+    window.open(LINKS.RESUME, '_blank');
   };
 
   return (

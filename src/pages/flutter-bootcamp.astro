@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import { getBootcampLectures, type BootcampLecture } from '../lib/admin';
+import { LINKS } from '../lib/constants';
 
 const lectures = await getBootcampLectures();
 const totalLectures = lectures.length;
@@ -9,13 +10,13 @@ const totalLectures = lectures.length;
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
   { label: 'Community', href: '/community' },
-  { label: 'Flutter Bootcamp' }
+  { label: 'CS404: Applied Mobile Engineering' }
 ];
 ---
 
 <BaseLayout 
-  title="Flutter Bootcamp - 14 Day Journey | Rishi Ahuja"
-  description="Comprehensive 14-day Flutter bootcamp with slides, resources, and hands-on projects. Learn Flutter from fundamentals to advanced concepts."
+  title="CS404: Applied Mobile Engineering | Rishi Ahuja"
+  description="Comprehensive mobile engineering course with 23+ hours of content. Learn Flutter from fundamentals to advanced concepts with production-ready skills."
   image="/og/flutter-bootcamp.png"
 >
   <main class="min-h-screen bg-codGray py-16 px-4">
@@ -27,12 +28,29 @@ const breadcrumbs = [
       <div class="text-center mb-12">
         <div class="flex items-center justify-center gap-3 mb-3">
           <h1 class="text-3xl md:text-4xl font-bold text-quillGray font-ptMono">
-            Flutter Bootcamp
+            CS404: Applied Mobile Engineering
           </h1>
         </div>
-        <p class="text-base text-gunSmoke font-ptMono">
-          14-Day Intensive Journey into Flutter Development
+        <p class="text-base text-gunSmoke font-ptMono mb-4">
+          23+ hours of Flutter content. The missing semester of mobile engineering.
         </p>
+        
+        <!-- Download Curriculum PDF -->
+        <a
+          href={LINKS.FLUTTER_BOOTCAMP_CURRICULUM}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-darkGrey/30 border border-gunSmoke/40 rounded-sm text-quillGray hover:border-accent-light/50 hover:text-accent-light transition-all duration-200 font-ptMono text-sm mt-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>View Complete Curriculum</span>
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+            <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
+          </svg>
+        </a>
       </div>
 
       <!-- Lectures Grid -->
@@ -139,7 +157,7 @@ const breadcrumbs = [
       <!-- Footer Note -->
       <div class="mt-16 text-center">
         <p class="text-sm text-gunSmoke/60 font-ptMono">
-          This bootcamp was successfully completed with all 14 days of content.
+          CS404: Applied Mobile Engineering was successfully completed with 23+ hours of comprehensive content.
         </p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { LinkCard } from '../components/LinkCard';
+import { LINKS } from '../lib/constants';
 
 type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase';
 
@@ -32,7 +33,7 @@ const links = [
       {
         title: 'Resume' as IconName,
         description: 'Download my latest resume',
-        url: 'https://drive.google.com/file/d/1CtMqPQK5GOgtc6o-gD3EEtdomaXN4POz/view?usp=sharing',
+        url: LINKS.RESUME,
         primary: true
       },
       {
