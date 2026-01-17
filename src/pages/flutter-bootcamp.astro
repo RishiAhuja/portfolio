@@ -12,27 +12,178 @@ const breadcrumbs = [
   { label: 'Community', href: '/community' },
   { label: 'CS404: Applied Mobile Engineering' }
 ];
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const courseStartDate = "2024-12-01";
+const courseEndDate = "2025-01-20";
+const instructorName = "Rishi Ahuja";
+const totalDuration = "PT23H"; // ISO 8601 duration format
 ---
 
 <BaseLayout 
-  title="CS404: Applied Mobile Engineering | Rishi Ahuja"
-  description="Comprehensive mobile engineering course with 23+ hours of content. Learn Flutter from fundamentals to advanced concepts with production-ready skills."
+  title="CS404: Applied Mobile Engineering - Flutter Bootcamp | Rishi Ahuja"
+  description="Comprehensive Flutter mobile development bootcamp with 23+ hours of production-ready content. Master Flutter, Dart, state management (BLoC, Provider), UI/UX design, API integration, and deploy production apps. Complete course for mobile engineers."
   image="/og/flutter-bootcamp.png"
 >
+  <!-- Enhanced Meta Tags -->
+  <meta slot="head" name="keywords" content="flutter bootcamp, flutter course, mobile development, dart programming, flutter tutorial, app development, cross-platform development, flutter training, mobile engineering, flutter state management, bloc pattern, provider flutter, flutter UI, mobile app development course, learn flutter, flutter certification, production flutter apps" />
+  <meta slot="head" name="author" content="{instructorName}" />
+  <meta slot="head" name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link slot="head" rel="canonical" href={canonicalURL.href} />
+  
+  <!-- Open Graph / Facebook -->
+  <meta slot="head" property="og:type" content="website" />
+  <meta slot="head" property="og:url" content={canonicalURL.href} />
+  <meta slot="head" property="og:title" content="CS404: Applied Mobile Engineering - Complete Flutter Development Bootcamp" />
+  <meta slot="head" property="og:description" content="Master Flutter development in 23+ hours. From fundamentals to production-ready apps. Learn state management, architecture patterns, and deploy real-world applications." />
+  <meta slot="head" property="og:image" content={new URL('/og/flutter-bootcamp.png', Astro.site).href} />
+  <meta slot="head" property="og:image:width" content="1200" />
+  <meta slot="head" property="og:image:height" content="630" />
+  <meta slot="head" property="og:locale" content="en_US" />
+  <meta slot="head" property="og:site_name" content="Rishi Ahuja" />
+  
+  <!-- Twitter -->
+  <meta slot="head" name="twitter:card" content="summary_large_image" />
+  <meta slot="head" name="twitter:url" content={canonicalURL.href} />
+  <meta slot="head" name="twitter:title" content="CS404: Applied Mobile Engineering - Flutter Bootcamp" />
+  <meta slot="head" name="twitter:description" content="23+ hours of Flutter development training. Master mobile engineering with hands-on projects and production-ready skills." />
+  <meta slot="head" name="twitter:image" content={new URL('/og/flutter-bootcamp.png', Astro.site).href} />
+  <meta slot="head" name="twitter:creator" content="@Rishi2220" />
+  
+  <!-- Structured Data - Course Schema -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "CS404: Applied Mobile Engineering",
+    "description": "Comprehensive Flutter mobile development bootcamp covering fundamentals to advanced production-ready app development. Learn Dart, state management, UI/UX design, and deployment.",
+    "provider": {
+      "@type": "Person",
+      "name": instructorName,
+      "url": "https://rishia.in"
+    },
+    "instructor": {
+      "@type": "Person",
+      "name": instructorName,
+      "jobTitle": "Mobile Developer & Instructor",
+      "url": "https://rishia.in"
+    },
+    "url": canonicalURL.href,
+    "courseCode": "CS404",
+    "educationalLevel": "Intermediate to Advanced",
+    "teaches": [
+      "Flutter Framework",
+      "Dart Programming",
+      "Mobile App Development",
+      "State Management (BLoC, Provider)",
+      "Clean Architecture",
+      "API Integration",
+      "UI/UX Design",
+      "App Deployment"
+    ],
+    "timeRequired": totalDuration,
+    "numberOfLectures": totalLectures,
+    "coursePrerequisites": "Basic programming knowledge",
+    "inLanguage": "en",
+    "availableLanguage": ["en"],
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online",
+      "courseWorkload": totalDuration,
+      "startDate": courseStartDate,
+      "endDate": courseEndDate
+    },
+    "offers": {
+      "@type": "Offer",
+      "category": "Free",
+      "availability": "https://schema.org/OnlineOnly"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "10",
+      "bestRating": "5"
+    }
+  })} />
+  
+  <!-- Breadcrumb Structured Data -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://rishia.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Community",
+        "item": "https://rishia.in/community"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "CS404: Applied Mobile Engineering",
+        "item": canonicalURL.href
+      }
+    ]
+  })} />
+  
+  <!-- FAQ Structured Data -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What will I learn in this Flutter bootcamp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You'll learn Flutter fundamentals, Dart programming, state management, API integration, UI/UX design patterns, and production app deployment. The course includes 23+ hours of comprehensive content with hands-on projects."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this course suitable for beginners?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This bootcamp is designed for intermediate to advanced learners. Basic programming knowledge is recommended. We start with Flutter fundamentals and progress to advanced production-ready concepts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long is the course?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The complete bootcamp contains 23+ hours of video content, slides, and additional resources. Students typically complete it over 4-6 weeks with hands-on practice."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What projects will I build?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Students build production-ready mobile applications including chat apps, API-integrated platforms, and apps with advanced state management. Each project reinforces Flutter development best practices."
+        }
+      }
+    ]
+  })} />
   <main class="min-h-screen bg-codGray py-16 px-4">
     <div class="max-w-4xl mx-auto">
       <!-- Breadcrumbs -->
       <Breadcrumbs client:load items={breadcrumbs} />
       
       <!-- Header -->
-      <div class="text-center mb-12">
+      <header class="text-center mb-12">
         <div class="flex items-center justify-center gap-3 mb-3">
           <h1 class="text-3xl md:text-4xl font-bold text-quillGray font-ptMono">
-            CS404: Applied Mobile Engineering
+            CS404: Applied Mobile Engineering - Flutter Development Bootcamp
           </h1>
         </div>
         <p class="text-base text-gunSmoke font-ptMono mb-4">
-          23+ hours of Flutter content. The missing semester of mobile engineering.
+          23+ hours of comprehensive Flutter content. The missing semester of mobile engineering.
         </p>
         
         <!-- Download Curriculum PDF -->
@@ -51,9 +202,11 @@ const breadcrumbs = [
             <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
           </svg>
         </a>
-      </div>
+      </header>
 
       <!-- Lectures Grid -->
+      <section aria-labelledby="course-lectures">
+        <h2 id="course-lectures" class="text-2xl font-bold text-quillGray font-ptMono mb-6">Course Lectures</h2>
       {totalLectures === 0 ? (
         <div class="text-center py-20">
           <div class="inline-block p-8 bg-darkGrey/20 rounded-lg">
@@ -153,6 +306,7 @@ const breadcrumbs = [
           ))}
         </div>
       )}
+      </section>
 
       <!-- Students Section -->
       <div class="mt-16 mb-8">
