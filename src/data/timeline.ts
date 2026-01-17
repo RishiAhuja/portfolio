@@ -38,7 +38,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'achievement',
       description: 'Won 1st place in the AWS Partner Track at HackCBS 8.0 with Swasya.AI. Built a hybrid serverless architecture using EC2 (Dockerized FastAPI), Lambda (SAM), S3 triggers, DynamoDB, AWS Transcribe, Textract, and real-time updates via IoT Core (MQTT).',
       year: '2025-26',
-      gallerySlug: 'hackcbs-8',
+      // gallerySlug: 'hackcbs-8',
       buttons: [
         {
           label: 'Devfolio',
@@ -58,7 +58,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'community',
       description: 'Attended the Seedhe Maut SMX Tour in Chandigarh. Witnessed the raw energy of the duo live—jumping into the moshpit and screaming lyrics with thousands of fans was an unmatched experience.',
       year: '2025-26',
-      gallerySlug: 'smx',
+      // gallerySlug: 'smx',
       buttons: [
         {
           label: 'Spotify', 
@@ -92,7 +92,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'community',
       description: 'Presented our Agri-Tech innovations to a high-level delegation in a 4-hour strategic meeting and luncheon. The audience included the Chief AI Officer (Ministry of Agriculture), the Director of IIT Ropar, officials from the Ministry of Education, and leadership from MeitY.',
       year: '2025-26', 
-      gallerySlug: 'goi-meity-delegation',
+      // gallerySlug: 'goi-meity-delegation',
       buttons: [
         {
           label: 'View Post (MeitY)',
@@ -156,7 +156,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'community',
       description: 'Invited as a mentor for the Bit n Build Punjab Round hackathon at Thapar University, Patiala. Guided and advised over 30 participating teams during the event held on September 6, 2025, which hosted 120+ participants in collaboration with Genesoc Society.',
       year: '2025-26',
-      gallerySlug: 'bit-n-build-punjab',
+      // gallerySlug: 'bit-n-build-punjab',
       buttons: [
         { label: 'View Event Details', link: 'https://www.openlearn.org.in/events/hackathon-1', icon: 'external' }
       ]
@@ -430,7 +430,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       description: 'Won 2nd place at national hackathon in Mumbai among 23,000+ participants with SoulBuddy AI project.',
       year: '2024-25',
       journeySlug: 'level-supermind-hackathon',
-      gallerySlug: 'level-supermind-hack',
+      // gallerySlug: 'level-supermind-hack',
       buttons: [
         { label: 'Read Story', link: '/journey/level-supermind-hackathon', icon: 'blog' },
         { label: 'Tweet', link: 'https://x.com/Rishi2220/status/1881041863983169800', icon: 'certificate' },

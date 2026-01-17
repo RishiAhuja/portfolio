@@ -1,0 +1,101 @@
+---
+import '../styles/globals.css';
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <title>404 - Page Not Found</title>
+    <meta name="description" content="Page not found" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <script is:inline>
+      const theme = localStorage.getItem('theme') || 
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+    </script>
+  </head>
+  <body class="bg-codGray text-quillGray min-h-screen flex items-center justify-center overflow-hidden">
+    <style>
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.3;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.5);
+        }
+      }
+      
+      .void-pixel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 2px;
+        height: 2px;
+        background: var(--quillGray);
+        animation: pulse 3s ease-in-out infinite;
+      }
+      
+      .void-content {
+        position: relative;
+        z-index: 10;
+      }
+      
+      .null-text {
+        font-family: 'PT Mono', monospace;
+        font-size: 3rem;
+        color: var(--gunSmoke);
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.1em;
+      }
+      
+      .subtext {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        color: var(--gunSmoke);
+        margin-bottom: 4rem;
+        font-weight: 300;
+        letter-spacing: 0.05em;
+      }
+      
+      .orbit-btn {
+        font-family: 'PT Mono', monospace;
+        font-size: 0.875rem;
+        color: var(--quillGray);
+        border: 1px solid rgba(var(--gunSmoke-rgb), 0.3);
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      
+      .orbit-btn:hover {
+        border-color: var(--quillGray);
+        color: var(--quillGray);
+        box-shadow: 0 0 20px rgba(var(--quillGray-rgb), 0.1);
+      }
+    </style>
+    
+    <div class="void-pixel"></div>
+    
+    <div class="void-content text-center">
+      <div class="null-text">( null )</div>
+      <div class="subtext">You've reached the edge of the known universe.</div>
+      <a href="/" class="orbit-btn">Return to Orbit</a>
+    </div>
+  </body>
+</html>
