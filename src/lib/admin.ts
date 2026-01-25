@@ -49,6 +49,23 @@ export interface BootcampLecture {
   updated_at: string;
 }
 
+export interface BootcampStudent {
+  id: string;
+  name: string;
+  email: string | null;
+  college: string | null;
+  year_of_study: number | null;
+  linkedin_profile: string;
+  linkedin_post: string | null;
+  github_profile: string | null;
+  initials: string;
+  learning_takeaway: string | null;
+  consent: boolean;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+  updated_at: string;
+}
+
 // Generate secure random token
 const generateToken = () => {
   return `${Date.now()}_${Math.random().toString(36).substring(2)}_${Math.random().toString(36).substring(2)}`;
@@ -471,6 +488,87 @@ export const togglePublishBootcampLecture = async (
       is_published: isPublished,
       updated_at: new Date().toISOString()
     })
+    .eq('id', id);
+
+  return !error;
+};
+
+// Verify admin token (simplified for API routes)
+export const verifyAdminToken = async (token: string): Promise<boolean> => {
+  const session = await verifyAdminSession(token);
+  return session !== null;
+};
+
+// Get pending bootcamp student requests (admin only)
+export const getPendingBootcampStudents = async (token: string): Promise<BootcampStudent[]> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase
+    .from('bootcamp_students')
+    .select('*')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching pending students:', error);
+    return [];
+  }
+
+  return data as BootcampStudent[];
+};
+
+// Get all bootcamp students (admin only)
+export const getAllBootcampStudents = async (token: string): Promise<BootcampStudent[]> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { data, error } = await supabase
+    .from('bootcamp_students')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching students:', error);
+    return [];
+  }
+
+  return data as BootcampStudent[];
+};
+
+// Approve or reject bootcamp student request (admin only)
+export const updateBootcampStudentStatus = async (
+  token: string,
+  id: string,
+  status: 'approved' | 'rejected'
+): Promise<boolean> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { error } = await supabase
+    .from('bootcamp_students')
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', id);
+
+  return !error;
+};
+
+// Delete bootcamp student (admin only)
+export const deleteBootcampStudent = async (token: string, id: string): Promise<boolean> => {
+  const session = await verifyAdminSession(token);
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const { error } = await supabase
+    .from('bootcamp_students')
+    .delete()
     .eq('id', id);
 
   return !error;
