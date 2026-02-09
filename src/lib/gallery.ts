@@ -158,14 +158,25 @@ export const uploadGalleryImage = async (
       body: formData,
     });
 
+    const contentType = response.headers.get('content-type') || '';
+    const isJson = contentType.includes('application/json');
+    const responseBody = isJson ? await response.json() : await response.text();
+
     if (!response.ok) {
-      const error = await response.json();
-      console.error('Upload API error:', error);
+      console.error('Upload API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: responseBody,
+      });
       return null;
     }
 
-    const result = await response.json();
-    return result.data as GalleryImage;
+    if (!isJson || typeof responseBody !== 'object' || !('data' in responseBody)) {
+      console.error('Upload API returned unexpected response:', responseBody);
+      return null;
+    }
+
+    return (responseBody as { data: GalleryImage }).data;
   } catch (error) {
     console.error('Error uploading image:', error);
     return null;
@@ -213,14 +224,25 @@ export const deleteGalleryImage = async (token: string, imageId: string): Promis
       body: JSON.stringify({ imageId }),
     });
 
+    const contentType = response.headers.get('content-type') || '';
+    const isJson = contentType.includes('application/json');
+    const responseBody = isJson ? await response.json() : await response.text();
+
     if (!response.ok) {
-      const error = await response.json();
-      console.error('Delete API error:', error);
+      console.error('Delete API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: responseBody,
+      });
       return false;
     }
 
-    const result = await response.json();
-    return result.success;
+    if (!isJson || typeof responseBody !== 'object' || !('success' in responseBody)) {
+      console.error('Delete API returned unexpected response:', responseBody);
+      return false;
+    }
+
+    return Boolean((responseBody as { success: boolean }).success);
   } catch (error) {
     console.error('Error deleting image:', error);
     return false;
