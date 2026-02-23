@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from './ui/ExpandedContainer';
-import { fetchUserPRs, fetchUserIssues, formatDate, type GitHubPR, type GitHubIssue } from '../lib/github-upstream';
+import { fetchUserPRs, fetchUserIssues, fetchUpstreamOverrides, formatDate, type GitHubPR, type GitHubIssue } from '../lib/github-upstream';
 
 interface UpstreamItemProps {
   item: GitHubPR | GitHubIssue;
@@ -69,13 +69,30 @@ const Upstream: React.FC = () => {
         setIsLoading(true);
         setError(null);
 
-        const [fetchedPRs, fetchedIssues] = await Promise.all([
+        const [fetchedPRs, fetchedIssues, overrides] = await Promise.all([
           fetchUserPRs(),
           fetchUserIssues(),
+          fetchUpstreamOverrides(),
         ]);
 
-        setPrs(fetchedPRs);
-        setIssues(fetchedIssues);
+        const applyOverrides = <T extends GitHubPR | GitHubIssue>(items: T[]): T[] =>
+          items
+            .filter(item => {
+              const ov = overrides.get(item.url);
+              return ov?.visible !== false;
+            })
+            .map(item => {
+              const ov = overrides.get(item.url);
+              if (!ov) return item;
+              return {
+                ...item,
+                ...(ov.state_override ? { state: ov.state_override } : {}),
+                ...(ov.title_override ? { title: ov.title_override } : {}),
+              };
+            });
+
+        setPrs(applyOverrides(fetchedPRs));
+        setIssues(applyOverrides(fetchedIssues));
       } catch (err) {
         console.error('Error loading upstream data:', err);
         setError('Failed to load upstream contributions');
@@ -104,7 +121,7 @@ const Upstream: React.FC = () => {
   };
 
   const getStateLabel = (state: string) => {
-    return state === 'closed' ? 'MERGED' : state.toUpperCase();
+    return state.toUpperCase();
   };
 
   const renderContent = () => {

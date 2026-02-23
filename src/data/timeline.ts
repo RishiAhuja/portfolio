@@ -19,6 +19,22 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: '20 Jan 2026', // change to actual completion date
+      title: 'Concluded 14-Day Flutter Bootcamp at GDGC',
+      type: 'community',
+      description: 'Successfully concluded a 14-day intensive Flutter Bootcamp that I conducted at GDGC. Covered Flutter fundamentals, state management, architecture patterns, and hands-on project building with participants.',
+      link: 'https://rishia.in/flutter-bootcamp',
+      status: 'completed',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'Bootcamp Page',
+          link: 'https://rishia.in/flutter-bootcamp',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '25 Dec 2025',
       title: 'Bought iPhone 17 256GB',
       type: 'achievement',

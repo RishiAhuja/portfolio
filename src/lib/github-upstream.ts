@@ -19,6 +19,14 @@ export interface GitHubIssue {
   number: number;
 }
 
+export interface UpstreamOverride {
+  pr_url: string;
+  visible: boolean;
+  state_override: 'open' | 'closed' | 'merged' | null;
+  title_override: string | null;
+  notes: string | null;
+}
+
 interface GitHubSearchItem {
   id: number;
   title: string;
@@ -26,8 +34,13 @@ interface GitHubSearchItem {
   repository_url: string;
   state: string;
   created_at: string;
-  merged_at?: string;
-  pull_request?: any;
+  pull_request?: {
+    url: string;
+    html_url: string;
+    diff_url: string;
+    patch_url: string;
+    merged_at: string | null;
+  };
   number: number;
 }
 
@@ -94,9 +107,9 @@ export async function fetchUserPRs(): Promise<GitHubPR[]> {
         title: item.title,
         url: item.html_url,
         repo: extractRepoName(item.repository_url),
-        state: item.merged_at ? 'merged' : item.state as 'open' | 'closed',
+        state: item.pull_request?.merged_at ? 'merged' : item.state as 'open' | 'closed',
         createdAt: item.created_at,
-        mergedAt: item.merged_at,
+        mergedAt: item.pull_request?.merged_at ?? undefined,
         number: item.number,
       }));
 
@@ -137,6 +150,25 @@ export async function fetchUserIssues(): Promise<GitHubIssue[]> {
   } catch (error) {
     console.error('Error fetching GitHub issues:', error);
     return [];
+  }
+}
+
+export async function fetchUpstreamOverrides(): Promise<Map<string, UpstreamOverride>> {
+  try {
+    const { supabase } = await import('./supabase');
+    const { data, error } = await supabase
+      .from('upstream_overrides')
+      .select('pr_url, visible, state_override, title_override, notes');
+
+    if (error || !data) return new Map();
+
+    const map = new Map<string, UpstreamOverride>();
+    for (const row of data) {
+      map.set(row.pr_url, row as UpstreamOverride);
+    }
+    return map;
+  } catch {
+    return new Map();
   }
 }
 

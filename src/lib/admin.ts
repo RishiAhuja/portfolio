@@ -574,3 +574,65 @@ export const deleteBootcampStudent = async (token: string, id: string): Promise<
   return !error;
 };
 
+// ─── Upstream Overrides ────────────────────────────────────────────────────
+
+export interface UpstreamOverrideAdmin {
+  id: string;
+  pr_url: string;
+  item_type: 'pr' | 'issue';
+  visible: boolean;
+  state_override: 'open' | 'closed' | 'merged' | null;
+  title_override: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export const getUpstreamOverrides = async (token: string): Promise<UpstreamOverrideAdmin[]> => {
+  const session = await verifyAdminSession(token);
+  if (!session) throw new Error('Unauthorized');
+
+  const { data, error } = await supabase
+    .from('upstream_overrides')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) return [];
+  return data as UpstreamOverrideAdmin[];
+};
+
+export const upsertUpstreamOverride = async (
+  token: string,
+  override: Omit<UpstreamOverrideAdmin, 'id' | 'created_at' | 'updated_at'>
+): Promise<UpstreamOverrideAdmin | null> => {
+  const session = await verifyAdminSession(token);
+  if (!session) throw new Error('Unauthorized');
+
+  const { data, error } = await supabase
+    .from('upstream_overrides')
+    .upsert(
+      { ...override, updated_at: new Date().toISOString() },
+      { onConflict: 'pr_url' }
+    )
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error upserting upstream override:', error);
+    return null;
+  }
+  return data as UpstreamOverrideAdmin;
+};
+
+export const deleteUpstreamOverride = async (token: string, id: string): Promise<boolean> => {
+  const session = await verifyAdminSession(token);
+  if (!session) throw new Error('Unauthorized');
+
+  const { error } = await supabase
+    .from('upstream_overrides')
+    .delete()
+    .eq('id', id);
+
+  return !error;
+};
+

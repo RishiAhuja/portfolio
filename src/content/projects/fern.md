@@ -7,7 +7,7 @@ features:
   - "Modern UI toolkit ('fern') featuring responsive layout primitives, pixel-level rendering, and signal-slot event handling"
   - "Cross-platform support for Linux and WebAssembly, with tools for CLI, networking, and text rendering built around a cohesive natural metaphor"
 github_url: "https://github.com/rishiahuja/fern"
-live_url: "https://fern.rishia.in"
+live_url: "https://fernkit.in"
 category: "web"
 is_featured: true
 created_at: 2025-05-21

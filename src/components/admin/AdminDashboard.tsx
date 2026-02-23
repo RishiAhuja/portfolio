@@ -4,6 +4,7 @@ import SideQuestsEditor from './SideQuestsEditor';
 import GalleryEditor from './GalleryEditorV2';
 import BootcampEditor from './BootcampEditor';
 import BootcampStudentsManager from './BootcampStudentsManager';
+import UpstreamEditor from './UpstreamEditor';
 
 interface AdminDashboardProps {
   token: string;
@@ -12,7 +13,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery' | 'bootcamp' | 'students'>('uncompiled');
+  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery' | 'bootcamp' | 'students' | 'upstream'>('uncompiled');
   const [entries, setEntries] = useState<UncompiledEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditor, setShowEditor] = useState(false);
@@ -286,6 +287,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
           >
             Students
           </button>
+          <button
+            onClick={() => setActiveTab('upstream')}
+            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
+              activeTab === 'upstream'
+                ? 'text-accent-light border-b-2 border-accent-light'
+                : 'text-gunSmoke hover:text-quillGray'
+            }`}
+          >
+            Upstream
+          </button>
         </div>
 
         {/* Content */}
@@ -297,6 +308,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
           <GalleryEditor token={token} />
         ) : activeTab === 'sidequests' ? (
           <SideQuestsEditor token={token} />
+        ) : activeTab === 'upstream' ? (
+          <UpstreamEditor token={token} />
         ) : (
           <>
             {/* New Entry Button */}
