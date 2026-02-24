@@ -1,10 +1,10 @@
 // Centralized external links
 export const LINKS = {
   // Resume
-  RESUME: 'https://drive.google.com/file/d/1CtMqPQK5GOgtc6o-gD3EEtdomaXN4POz/view?usp=sharing',
+  RESUME: 'https://artifacts.rishia.in/resume/rishi-resume-v8.pdf',
   
   // Flutter Bootcamp Curriculum
-  FLUTTER_BOOTCAMP_CURRICULUM: 'https://drive.google.com/file/d/1hCXQ7xHCJTeNRNXhK4VTXtVWJtVo7s2l/view?usp=sharing',
+  FLUTTER_BOOTCAMP_CURRICULUM: 'https://artifacts.rishia.in/bootcamp/cs404_curriculum-3.pdf',
   
   // Social
   TWITTER: 'https://twitter.com/Rishi2220',
