@@ -1,0 +1,12 @@
+name = "supabase-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-09-27"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+[vars]
+ALLOWED_ORIGIN = "https://rishia.in"
+
+[[routes]]
+pattern = "db.rishia.in"
+custom_domain = true
