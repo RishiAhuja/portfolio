@@ -1,7 +1,7 @@
 import React from 'react';
-import { Calendar, Mail, Twitter, FileText, Linkedin, Github, Hash, Globe, Building, Rocket } from 'lucide-react';
+import { Calendar, Mail, Twitter, FileText, Linkedin, Github, Hash, Globe, Building, Rocket, BookOpen } from 'lucide-react';
 
-type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase';
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase' | 'Research';
 
 const iconMap: Record<IconName, any> = {
   'Schedule a Call': Calendar,
@@ -13,7 +13,8 @@ const iconMap: Record<IconName, any> = {
   'Technical Blog': Hash,
   'Portfolio': Globe,
   'iHub AWaDH': Building,
-  'Zenbase': Rocket
+  'Zenbase': Rocket,
+  'Research': BookOpen
 };
 
 interface LinkCardProps {

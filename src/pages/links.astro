@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { LinkCard } from '../components/LinkCard';
 import { LINKS } from '../lib/constants';
 
-type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase';
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase' | 'Research';
 
 const links = [
   {
@@ -55,6 +55,12 @@ const links = [
         title: 'Technical Blog' as IconName,
         description: 'Deep dives on Hashnode',
         url: 'https://hashnode.com/@rishi2220'
+      },
+      {
+        title: 'Research' as IconName,
+        description: 'Published papers & research work',
+        url: 'https://risha.in/research',
+        primary: true
       },
       {
         title: 'Portfolio' as IconName,
