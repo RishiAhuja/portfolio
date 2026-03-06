@@ -1,7 +1,7 @@
 // Centralized external links
 export const LINKS = {
   // Resume
-  RESUME: 'https://artifacts.rishia.in/resume/rishi-resume-v8.pdf',
+  RESUME: 'https://artifacts.rishia.in/resume/rishi-resume-v9.pdf',
   
   // Flutter Bootcamp Curriculum
   FLUTTER_BOOTCAMP_CURRICULUM: 'https://artifacts.rishia.in/bootcamp/cs404_curriculum-3.pdf',
