@@ -30,6 +30,19 @@ const paper = {
   url={https://openreview.net/forum?id=Qj96MlCmZw}
 }`,
 };
+
+const presentationDetails = {
+  city: 'Rio de Janeiro',
+  country: 'Brazil',
+  workshopStartDate: '2026-04-26',
+  workshopEndDate: '2026-04-27',
+  workshopDatesLabel: 'Apr 26–27, 2026',
+  grantLabel: '$2,025',
+  conferenceUrl: 'https://iclr.cc/Conferences/2026',
+  conferenceDatesUrl: 'https://iclr.cc/Conferences/2026/Dates'
+};
+
+const canonicalResearchUrl = 'https://rishia.in/research';
 ---
 
 <BaseLayout
@@ -37,6 +50,59 @@ const paper = {
   description="Research publications by Rishi Ahuja. Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting — ICLR 2026 TSALM Workshop."
   image="/og?title=Research&description=Publications%20%26%20Papers&type=default"
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ScholarlyArticle',
+    headline: paper.title,
+    author: paper.authors.map((author) => ({
+      '@type': 'Person',
+      name: author.name,
+      url: author.profile
+    })),
+    datePublished: '2026-03-02',
+    award: `ICLR 2026 travel grant (${presentationDetails.grantLabel})`,
+    isPartOf: {
+      '@type': 'Event',
+      name: paper.venue,
+      startDate: presentationDetails.workshopStartDate,
+      endDate: presentationDetails.workshopEndDate,
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: {
+        '@type': 'Place',
+        name: 'Riocentro Convention and Event Center',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: presentationDetails.city,
+          addressCountry: presentationDetails.country
+        }
+      },
+      url: presentationDetails.conferenceUrl
+    },
+    abstract: paper.tldr,
+    url: paper.forumUrl,
+    sameAs: [paper.forumUrl, paper.pdfUrl],
+    inLanguage: 'en'
+  })} />
+
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://rishia.in/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Research',
+        item: canonicalResearchUrl
+      }
+    ]
+  })} />
+
   <main class="min-h-screen bg-codGray text-quillGray">
     <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
 
@@ -56,7 +122,13 @@ const paper = {
 
       <div class="mb-6 rounded-lg border border-accent/25 bg-accent/10 px-4 py-3">
         <p class="text-sm font-ptMono text-accent-light leading-relaxed">
-          To be presented at <span class="font-semibold text-quillGray">ICLR 2026 Workshop (TSALM)</span> · ICLR is a top-tier A* ML conference venue.
+          Poster presentation at <span class="font-semibold text-quillGray">ICLR 2026 Workshop (TSALM)</span> in {presentationDetails.city}, {presentationDetails.country} ({presentationDetails.workshopDatesLabel}) Received a {presentationDetails.grantLabel} travel grant.
+        </p>
+        <p class="mt-2 text-xs font-ptMono text-gunSmoke leading-relaxed">
+          Verified details:
+          <a href={presentationDetails.conferenceUrl} target="_blank" rel="noopener noreferrer" class="text-accent-light/80 hover:text-accent-light transition-colors">ICLR 2026 venue</a>,
+          <a href={presentationDetails.conferenceDatesUrl} target="_blank" rel="noopener noreferrer" class="text-accent-light/80 hover:text-accent-light transition-colors">workshop dates</a>,
+          and <a href={paper.forumUrl} target="_blank" rel="noopener noreferrer" class="text-accent-light/80 hover:text-accent-light transition-colors">paper forum</a>.
         </p>
       </div>
 
@@ -64,7 +136,7 @@ const paper = {
       <article class="bg-bgShades-light border border-darkGrey/40 rounded-lg">
         <div class="p-6 md:p-8">
           <p class="text-xs font-ptMono text-gunSmoke mb-4">
-            {paper.venue} · Poster · {paper.publishedDate}
+            {paper.venue} · Poster presentation · {presentationDetails.city}, {presentationDetails.country}
           </p>
 
           <!-- Title -->
@@ -111,6 +183,7 @@ const paper = {
               type="button"
               class="mt-3 md:hidden inline-flex items-center gap-1 text-xs font-ptMono text-accent-light hover:text-accent transition-colors"
               aria-expanded="false"
+              aria-controls="abstract-text"
             >
               <span id="toggle-abstract-label">Show more</span>
             </button>
@@ -153,6 +226,7 @@ const paper = {
               >
                 <span id="copy-label">copy</span>
               </button>
+              <span id="copy-status" class="sr-only" aria-live="polite"></span>
             </div>
             <div>
               <pre class="bg-bgShades-darker border border-darkGrey/40 rounded-lg p-4 text-xs font-ptMono text-gunSmoke leading-relaxed overflow-x-auto whitespace-pre-wrap break-words"><code id="bibtex-code">{paper.bibtex}</code></pre>
@@ -177,6 +251,7 @@ const paper = {
 <script>
   const copyBtn = document.getElementById('copy-bibtex');
   const copyLabel = document.getElementById('copy-label');
+  const copyStatus = document.getElementById('copy-status');
   const bibtexCode = document.getElementById('bibtex-code');
   const abstractText = document.getElementById('abstract-text');
   const toggleAbstract = document.getElementById('toggle-abstract');
@@ -202,19 +277,25 @@ const paper = {
     });
   }
 
-  if (copyBtn && copyLabel && bibtexCode) {
+  if (copyBtn && copyLabel && copyStatus && bibtexCode) {
     copyBtn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(bibtexCode.textContent || '');
         copyLabel.textContent = 'copied!';
+        copyStatus.textContent = 'BibTeX copied to clipboard.';
         copyBtn.classList.add('text-accent-light', 'border-accent/30');
         setTimeout(() => {
           copyLabel.textContent = 'copy';
+          copyStatus.textContent = '';
           copyBtn.classList.remove('text-accent-light', 'border-accent/30');
         }, 2000);
       } catch {
         copyLabel.textContent = 'error';
-        setTimeout(() => { copyLabel.textContent = 'copy'; }, 2000);
+        copyStatus.textContent = 'Unable to copy BibTeX.';
+        setTimeout(() => {
+          copyLabel.textContent = 'copy';
+          copyStatus.textContent = '';
+        }, 2000);
       }
     });
   }

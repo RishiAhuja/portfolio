@@ -153,6 +153,44 @@ export async function getPresignedUrl(key: string, expiresIn: number = 3600): Pr
   return await getSignedUrl(r2Client, command, { expiresIn });
 }
 
+export interface PresignedUploadResult {
+  uploadUrl: string;
+  key: string;
+  publicUrl: string;
+}
+
+/**
+ * Generate a presigned PUT URL so the browser can upload directly to R2,
+ * bypassing the Vercel function payload limit (4.5 MB).
+ */
+export async function generatePresignedUploadUrl(
+  eventSlug: string,
+  fileName: string,
+  contentType: string,
+  expiresIn: number = 300 // 5 minutes
+): Promise<PresignedUploadResult> {
+  const { PutObjectCommand } = await import('@aws-sdk/client-s3');
+  const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
+  const r2Client = await getR2Client();
+  const config = getR2Config();
+
+  const timestamp = Date.now();
+  const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
+  const key = `events/${eventSlug}/${timestamp}_${sanitizedFileName}`;
+
+  const command = new PutObjectCommand({
+    Bucket: config.BUCKET,
+    Key: key,
+    ContentType: contentType,
+    CacheControl: 'public, max-age=31536000',
+  });
+
+  const uploadUrl = await getSignedUrl(r2Client, command, { expiresIn });
+  const publicUrl = `${config.PUBLIC_URL}/${key}`;
+
+  return { uploadUrl, key, publicUrl };
+}
+
 /**
  * Get image dimensions from File object (browser-side only)
  */
@@ -161,21 +199,42 @@ export async function getImageDimensions(file: File): Promise<{ width: number; h
     // Server-side: return default dimensions
     return { width: 0, height: 0 };
   }
-  
+
+  const isVideo = file.type.startsWith('video/');
+  const url = URL.createObjectURL(file);
+
+  if (isVideo) {
+    return new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+
+      video.onloadedmetadata = () => {
+        URL.revokeObjectURL(url);
+        resolve({ width: video.videoWidth, height: video.videoHeight });
+      };
+
+      video.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve({ width: 0, height: 0 }); // non-fatal for videos
+      };
+
+      video.src = url;
+    });
+  }
+
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const url = URL.createObjectURL(file);
-    
+
     img.onload = () => {
       URL.revokeObjectURL(url);
       resolve({ width: img.width, height: img.height });
     };
-    
+
     img.onerror = () => {
       URL.revokeObjectURL(url);
       reject(new Error('Failed to load image'));
     };
-    
+
     img.src = url;
   });
 }

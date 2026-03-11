@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { validateImageFile } from './r2Storage';
+import { validateImageFile, getImageDimensions } from './r2Storage';
 
 export { validateImageFile };
 
@@ -138,41 +138,84 @@ export const uploadGalleryImage = async (
   }
 ): Promise<GalleryImage | null> => {
   try {
-    // Create form data for API request
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('collectionId', collectionId);
-    formData.append('collectionSlug', collectionSlug);
-    formData.append('capturedDate', metadata.capturedDate);
-    formData.append('isCover', String(metadata.isCover || false));
-    
-    if (metadata.description) formData.append('description', metadata.description);
+    // 1. Get image dimensions client-side before upload
+    const dimensions = await getImageDimensions(file);
 
-    // Upload via API endpoint
-    const response = await fetch('/api/gallery/upload', {
+    // 2. Request a presigned PUT URL from the server (sends no file — tiny payload)
+    const presignRes = await fetch('/api/gallery/presign', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
-        // Don't set Content-Type - let browser set it with boundary for FormData
+        'Content-Type': 'application/json',
       },
-      body: formData,
+      body: JSON.stringify({
+        fileName: file.name,
+        contentType: file.type,
+        collectionSlug,
+      }),
     });
 
-    const contentType = response.headers.get('content-type') || '';
-    const isJson = contentType.includes('application/json');
-    const responseBody = isJson ? await response.json() : await response.text();
+    if (!presignRes.ok) {
+      const body = await presignRes.text();
+      console.error('Presign API error:', { status: presignRes.status, body });
+      return null;
+    }
 
-    if (!response.ok) {
+    const { uploadUrl, key, publicUrl } = await presignRes.json() as {
+      uploadUrl: string;
+      key: string;
+      publicUrl: string;
+    };
+
+    // 3. Upload the file directly to R2 — bypasses Vercel entirely
+    const r2Res = await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: file,
+    });
+
+    if (!r2Res.ok) {
+      const body = await r2Res.text();
+      console.error('R2 direct upload error:', { status: r2Res.status, body });
+      return null;
+    }
+
+    // 4. Confirm the upload and save metadata to the database
+    const confirmRes = await fetch('/api/gallery/confirm', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        r2Key: key,
+        r2Url: publicUrl,
+        collectionId,
+        capturedDate: metadata.capturedDate,
+        description: metadata.description,
+        isCover: metadata.isCover ?? false,
+        width: dimensions.width,
+        height: dimensions.height,
+        fileSize: file.size,
+        mimeType: file.type,
+      }),
+    });
+
+    const contentType = confirmRes.headers.get('content-type') || '';
+    const isJson = contentType.includes('application/json');
+    const responseBody = isJson ? await confirmRes.json() : await confirmRes.text();
+
+    if (!confirmRes.ok) {
       console.error('Upload API error:', {
-        status: response.status,
-        statusText: response.statusText,
+        status: confirmRes.status,
+        statusText: confirmRes.statusText,
         body: responseBody,
       });
       return null;
     }
 
     if (!isJson || typeof responseBody !== 'object' || !('data' in responseBody)) {
-      console.error('Upload API returned unexpected response:', responseBody);
+      console.error('Confirm API returned unexpected response:', responseBody);
       return null;
     }
 
