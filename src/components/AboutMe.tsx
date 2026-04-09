@@ -43,18 +43,14 @@ const AboutMe: React.FC = () => {
         </p>
 
         <p>
-          Currently, I serve as an <span className="text-accent-light">Entrepreneur-in-Residence (EIR)</span> at{" "}
-          <span className="text-accent-light">iHub AWaDH, IIT Ropar</span>, while simultaneously working as a{" "}
-          <span className="text-accent-light">Founding DevOps Engineer</span> at{" "}
-          <span className="text-accent-light">Zenbase (Singapore)</span> to build <em>Ninja</em>.
+          I recently published at <span className="text-accent-light">ICLR 2026</span> (TSALM Workshop) and I&apos;m presenting a poster in{" "}
+          <span className="text-accent-light">Rio de Janeiro</span> later this month. The paper is on retrieval-augmented time series forecasting.
         </p>
 
         <p>
-          From pitching AI pipelines to the <span className="text-accent-light">Government of India (MeitY)</span> to architecting global infrastructure, I like solving problems at scale.
-        </p>
-
-        <p>
-          By day, I&apos;m a B.Tech IT student at NIT Jalandhar, but I spend my nights managing cloud deployments and making flutter apps.
+          I also work as a <span className="text-accent-light">Founding DevOps Engineer</span> at{" "}
+          <span className="text-accent-light">Zenbase (Singapore)</span>, building <em>Ninja</em> — and by day, I&apos;m a B.Tech IT student at{" "}
+          <span className="text-accent-light">NIT Jalandhar</span>.
         </p>
 
         <p className="text-gunSmoke pt-2">

@@ -19,6 +19,67 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: '24 Apr 2026',
+      title: 'Presenting Poster at ICLR 2026, Rio de Janeiro',
+      type: 'achievement',
+      description: 'Presenting poster for "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting" at ICLR 2026, Rio de Janeiro (April 24-27, 2026). Received a $2,025 travel grant.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'Paper',
+          link: 'https://rishia.in/research',
+          icon: 'external'
+        },
+        {
+          label: 'ICLR Virtual 2026',
+          link: 'https://iclr.cc/virtual/2026/10013856',
+          icon: 'external'
+        }
+      ]
+    },
+    {
+      date: 'Apr 2026',
+      title: 'Invited as Reviewer for FMSD Workshop at ICML 2026',
+      type: 'achievement',
+      description: 'Invited to review papers for the Foundation Models for Structured Data (FMSD) Workshop at ICML 2026.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'FMSD @ ICML 2026',
+          link: 'https://icml-structured-fm-workshop.github.io',
+          icon: 'external'
+        }
+      ]
+    },
+    {
+      date: '28 Mar 2026',
+      title: 'Organizer & Judge Coordinator — HackMol 7.0, NIT Jalandhar',
+      type: 'community',
+      description: 'Served as Organizer and Judge Coordinator at HackMol 7.0, NIT Jalandhar (March 28-29, 2026).',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'HackMol',
+          link: 'https://hackmol.com',
+          icon: 'external'
+        }
+      ]
+    },
+    {
+      date: 'Mar 2026',
+      title: 'ICLR 2026 TSALM Workshop Paper Accepted',
+      type: 'achievement',
+      description: 'Paper "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting" accepted at ICLR 2026 TSALM Workshop — first CORE A* acceptance in the department\'s history including faculty.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'Paper',
+          link: 'https://rishia.in/research',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '20 Jan 2026', // change to actual completion date
       title: 'Concluded 14-Day Flutter Bootcamp at GDGC',
       type: 'community',
@@ -77,9 +138,9 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       // gallerySlug: 'smx',
       buttons: [
         {
-          label: 'Spotify', 
+          label: 'Spotify',
           link: 'https://open.spotify.com/artist/2oBG74gAocPMFv6Ij9ykdo?si=-BooK2k5St-woUhw3O7Csw',
-          icon: 'external' 
+          icon: 'external'
         }
       ]
     },
@@ -88,7 +149,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       title: '1st Place Winner: Qyrus Track @ HackCBS 8.0',
       type: 'achievement',
       description: 'Secured First Place in the qAPI by Qyrus sponsor track at the HackCBS 8.0 hackathon in Delhi. Our project, Swasya.AI, was awarded the top prize (Ray-Ban Meta smart glasses) by the Qyrus leadership team.',
-      year: '2025-26', 
+      year: '2025-26',
       buttons: [
         {
           label: 'View Sponsor (Qyrus)',
@@ -107,7 +168,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       title: 'Product Presentation to GOI & MeitY Delegation',
       type: 'community',
       description: 'Presented our Agri-Tech innovations to a high-level delegation in a 4-hour strategic meeting and luncheon. The audience included the Chief AI Officer (Ministry of Agriculture), the Director of IIT Ropar, officials from the Ministry of Education, and leadership from MeitY.',
-      year: '2025-26', 
+      year: '2025-26',
       // gallerySlug: 'goi-meity-delegation',
       buttons: [
         {
@@ -128,8 +189,8 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'community',
       description: 'Began role as an Entrepreneur-in-Residence at iHub AwaDH, IIT Ropar, supporting and mentoring technology startups.',
       link: 'https://ihub-awadh.in/',
-      status: 'ongoing',
-      year: '2025-26', 
+      status: 'completed',
+      year: '2025-26',
       buttons: [
         {
           label: 'Visit iHub AwaDH',
@@ -143,7 +204,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       title: 'Turned 18 Years Old!',
       type: 'achievement',
       description: 'Celebrated my 18th birthday—officially an adult! Reflecting on an incredible journey of building projects, winning hackathons, contributing to open source, and learning from amazing mentors. Excited for what the next chapter brings.',
-      year: '2025-26', 
+      year: '2025-26',
       buttons: [
         {
           label: 'View Post',
@@ -157,7 +218,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       title: 'Got MacBook Pro M4',
       type: 'achievement',
       description: 'Upgraded to a MacBook Pro with M4 chip—a game-changer for development work. The performance boost has significantly improved my productivity for building cross-platform apps, compiling C++ projects, and running ML workloads.',
-      year: '2025-26', 
+      year: '2025-26',
       buttons: [
         {
           label: 'View Post',

@@ -65,7 +65,7 @@ const PapersReading: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <ExpandedContainer text="Things I'm figuring out" />
+      <ExpandedContainer text="Things I'm reading" />
       <div className="h-4" />
       <div className="flex flex-col space-y-2 md:space-y-4">
         {papers.slice(0, visibleCount).map((paper, index) => {

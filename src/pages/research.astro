@@ -10,10 +10,10 @@ const breadcrumbs = [
 const paper = {
   title: 'Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting',
   authors: [
-    { name: 'Rishi Ahuja', isMe: true, profile: 'https://openreview.net/profile?id=~Rishi_Ahuja1' },
-    { name: 'Kumar Prateek', isMe: false, profile: 'https://openreview.net/profile?id=~Kumar_Prateek1' },
-    { name: 'Simranjit Singh', isMe: false, profile: 'https://openreview.net/profile?id=~Simranjit_Singh4' },
-    { name: 'Dr Vijay Kumar', isMe: false, profile: 'https://openreview.net/profile?id=~Dr_Vijay_Kumar1' },
+    { name: 'Rishi Ahuja', isMe: true, isCorresponding: false, profile: 'https://openreview.net/profile?id=~Rishi_Ahuja1' },
+    { name: 'Kumar Prateek', isMe: false, isCorresponding: false, profile: 'https://openreview.net/profile?id=~Kumar_Prateek1' },
+    { name: 'Simranjit Singh', isMe: false, isCorresponding: true, profile: 'https://openreview.net/profile?id=~Simranjit_Singh4' },
+    { name: 'Vijay Kumar', isMe: false, isCorresponding: false, profile: 'https://openreview.net/profile?id=~Dr_Vijay_Kumar1' },
   ],
   venue: '1st ICLR Workshop on Time Series in the Age of Large Models',
   proceedings: 'Proceedings of ICLR 2026',
@@ -148,7 +148,7 @@ const canonicalResearchUrl = 'https://rishia.in/research';
           </h2>
 
           <!-- Authors -->
-          <div class="flex flex-wrap items-center gap-x-1 gap-y-1 mb-6 font-ptMono text-sm">
+          <div class="flex flex-wrap items-center gap-x-1 gap-y-1 mb-2 font-ptMono text-sm">
             {paper.authors.map((author, i) => (
               <>
                 <a
@@ -157,7 +157,7 @@ const canonicalResearchUrl = 'https://rishia.in/research';
                   rel="noopener noreferrer"
                   class={`hover:text-accent-light transition-colors duration-200 ${author.isMe ? 'text-accent-light font-medium underline underline-offset-2 decoration-accent-light/40' : 'text-gunSmoke'}`}
                 >
-                  {author.name}
+                  {author.name}<sup class="text-[0.6em] text-gunSmoke/70 ml-px">†{author.isCorresponding ? '✉' : ''}</sup>
                 </a>
                 {i < paper.authors.length - 1 && (
                   <span class="text-darkGrey select-none">,</span>
@@ -165,6 +165,9 @@ const canonicalResearchUrl = 'https://rishia.in/research';
               </>
             ))}
           </div>
+          <p class="text-xs font-ptMono text-gunSmoke/60 mb-6 leading-relaxed">
+            <sup class="text-[0.6em]">†</sup>Department of Information Technology, Dr. B.R. Ambedkar National Institute of Technology Jalandhar
+          </p>
 
           <!-- Published date -->
           <div class="border-t border-darkGrey/30 mb-6"></div>

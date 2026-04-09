@@ -48,7 +48,7 @@ const BlogPosts: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <ExpandedContainer text="Things I've figured out" />
+      <ExpandedContainer text="Things I've written" />
       <div className="h-4" />
       {isLoading ? (
         <div className="space-y-2 md:space-y-4">

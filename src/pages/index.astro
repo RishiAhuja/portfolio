@@ -47,7 +47,7 @@ const schema = {
 ---
 
 <BaseLayout
-  image="/og?title=Rishi%20Ahuja&description=Full%20Stack%20Developer%20%7C%20EIR%20at%20iHub%20AwaDH&type=default"
+  image="/og?title=Rishi%20Ahuja&description=Full%20Stack%20Developer%20%7C%20ICLR%202026&type=default"
 >
   <JsonLd data={schema} />
   <Navigation client:load />
@@ -65,6 +65,21 @@ const schema = {
           <TechStacks client:visible />
         </FadeInSection>
       </section> -->
+
+      <div class="h-8" />
+
+      <!-- Pinned Research Card -->
+      <a href="/research" class="block w-full border border-darkGrey/40 rounded-sm p-5 md:p-6 bg-bgShades-light/50 hover:border-accent-light/40 transition-all duration-300 group">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-ptMono text-accent-light/80 mb-2">ICLR 2026 · TSALM Workshop</p>
+            <h3 class="text-sm md:text-base font-ptMono font-medium text-quillGray group-hover:text-accent-light transition-colors duration-200 leading-snug">
+              Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting
+            </h3>
+          </div>
+          <span class="text-gunSmoke group-hover:text-accent-light transition-colors duration-200 flex-shrink-0 mt-1">→</span>
+        </div>
+      </a>
 
       <div class="h-8" />
       
