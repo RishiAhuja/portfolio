@@ -383,8 +383,29 @@ function formatDate(dateStr: string): string {
     
     .image-frame video {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
+      max-height: 42vh;
+      object-fit: contain;
+      display: block;
+    }
+    
+    .image-frame.video-frame {
+      aspect-ratio: unset;
+      height: auto;
+      max-width: 50vw;
+      max-height: 42vh;
+      background: #000;
+    }
+    
+    @media (max-width: 768px) {
+      .image-frame.video-frame {
+        max-width: 85vw;
+        max-height: 60vh;
+      }
+      
+      .image-frame video {
+        max-height: 60vh;
+      }
     }
     
     .image-caption {
@@ -645,7 +666,7 @@ function formatDate(dateStr: string): string {
           const isVideo = image.mime_type?.startsWith('video/');
           return (
           <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index} data-caption={image.description || ''} data-date={image.captured_date} data-is-video={isVideo}>
-            <div class="image-frame">
+            <div class:list={['image-frame', { 'video-frame': isVideo }]}>
               {isVideo ? (
                 <video
                   src={image.r2_url}

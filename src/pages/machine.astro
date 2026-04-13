@@ -1,0 +1,561 @@
+---
+// /machine — A page designed for AI agents, crawlers, and automated readers.
+// Human? You're welcome too. But this one's mostly for the machines.
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const generatedAt = new Date().toISOString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href={canonicalURL} />
+    <title>Rishi Ahuja — machine.txt</title>
+    <meta name="description" content="Structured, crawlable profile of Rishi Ahuja. Everything in one place — research, work, projects, links." />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Rishi Ahuja — machine.txt" />
+    <meta property="og:description" content="Structured, crawlable profile of Rishi Ahuja." />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="profile" />
+
+    <!-- JSON-LD: Full structured data dump -->
+    <script type="application/ld+json">{JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Rishi Ahuja",
+      "url": "https://rishia.in",
+      "sameAs": [
+        "https://github.com/RishiAhuja",
+        "https://www.linkedin.com/in/rishi-ahuja-b1a224310",
+        "https://twitter.com/Rishi2220",
+        "https://hashnode.com/@rishi2220",
+        "https://openreview.net/profile?id=~Rishi_Ahuja1"
+      ],
+      "email": "rishia2220@gmail.com",
+      "birthDate": "2007-10-03",
+      "nationality": "Indian",
+      "jobTitle": "Founding DevOps Engineer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Zenbase Singapore PTE Ltd",
+        "location": "Singapore"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Dr. B.R. Ambedkar National Institute of Technology, Jalandhar",
+        "url": "https://www.nitj.ac.in"
+      },
+      "knowsAbout": [
+        "Flutter", "Dart", "React", "TypeScript", "Next.js", "Node.js",
+        "Python", "C", "C++", "Docker", "AWS", "Nginx", "PostgreSQL",
+        "Supabase", "Machine Learning", "Time Series Forecasting",
+        "Retrieval-Augmented Generation", "DevOps", "Web Development"
+      ],
+      "award": [
+        "ICLR 2026 Travel Grant ($2,025)",
+        "1st Place AWS Partner Track — HackCBS 8.0",
+        "1st Place Qyrus Track — HackCBS 8.0"
+      ],
+      "publication": {
+        "@type": "ScholarlyArticle",
+        "headline": "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting",
+        "url": "https://openreview.net/forum?id=Qj96MlCmZw",
+        "datePublished": "2026-03-02",
+        "isPartOf": {
+          "@type": "Event",
+          "name": "1st ICLR Workshop on Time Series in the Age of Large Models (TSALM)",
+          "startDate": "2026-04-26",
+          "location": "Rio de Janeiro, Brazil"
+        }
+      }
+    })}</script>
+
+    <style>
+      :root {
+        --bg: #0f0f0f;
+        --surface: #161616;
+        --border: #2a2a2a;
+        --accent: #64B2BC;
+        --text: #D3D0C9;
+        --muted: #666;
+        --green: #4ade80;
+        --yellow: #fbbf24;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'PT Mono', 'Courier New', monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        padding: 2rem 1rem;
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .page-header {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .page-title {
+        font-size: 1.1rem;
+        color: var(--text);
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.02em;
+      }
+
+      .page-title span { color: var(--accent); }
+
+      .page-meta {
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.7;
+        max-width: 560px;
+      }
+
+      /* Sections */
+      .section {
+        margin-bottom: 2.5rem;
+        border-left: 2px solid var(--border);
+        padding-left: 1.5rem;
+      }
+
+      .section-header {
+        color: var(--accent);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        margin-left: -1.5rem;
+        padding-left: 1rem;
+        border-left: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .section-header::before {
+        content: attr(data-index);
+        color: var(--muted);
+        font-size: 9px;
+      }
+
+      /* Key-value pairs */
+      .kv { display: grid; grid-template-columns: 160px 1fr; gap: 0.25rem 1rem; margin-bottom: 0.25rem; }
+      .kv-key { color: var(--muted); }
+      .kv-val { color: var(--text); }
+      .kv-val a { color: var(--accent); text-decoration: none; }
+      .kv-val a:hover { text-decoration: underline; }
+
+      /* Items / cards */
+      .item {
+        border: 1px solid var(--border);
+        padding: 1rem 1.25rem;
+        margin-bottom: 0.75rem;
+        background: var(--surface);
+      }
+
+      .item-title {
+        color: var(--text);
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+      }
+
+      .item-sub {
+        color: var(--accent);
+        font-size: 11px;
+        margin-bottom: 0.5rem;
+      }
+
+      .item-desc {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .item-meta {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .tag {
+        border: 1px solid var(--border);
+        padding: 1px 6px;
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .tag.accent { border-color: var(--accent); color: var(--accent); }
+      .tag.green  { border-color: var(--green);  color: var(--green);  }
+
+      /* Abstract block */
+      .abstract {
+        border-left: 3px solid var(--accent);
+        padding: 1rem 1.25rem;
+        background: rgba(100, 178, 188, 0.04);
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.8;
+        margin: 0.75rem 0;
+      }
+
+      /* Footer */
+      .machine-footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 11px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .machine-footer a { color: var(--accent); text-decoration: none; }
+
+      /* Skill grid */
+      .skill-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      hr.divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 1.5rem 0;
+      }
+
+      @media (max-width: 600px) {
+        body { padding: 1.2rem 0.75rem; font-size: 12px; }
+        .kv { grid-template-columns: 120px 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+
+      <!-- ══ HEADER ══ -->
+      <header class="page-header" role="banner">
+        <div class="page-title">Rishi Ahuja &mdash; <span>machine.txt</span></div>
+        <p class="page-meta">
+          A structured, crawlable profile. No auth, no JavaScript required, no paywalls.<br />
+          Everything is labeled and linked. Current as of April 2026.<br />
+          If you're human: <a href="https://rishia.in" style="color: var(--accent);">rishia.in</a> is probably nicer to look at.
+        </p>
+      </header>
+
+      <!-- ══ 01 · IDENTITY ══ -->
+      <section class="section" aria-labelledby="sect-identity">
+        <div class="section-header" data-index="01" id="sect-identity">Identity</div>
+
+        <div class="kv"><span class="kv-key">Full name</span>    <span class="kv-val">Rishi Ahuja</span></div>
+        <div class="kv"><span class="kv-key">Date of birth</span><span class="kv-val">3 October 2007 (age 18)</span></div>
+        <div class="kv"><span class="kv-key">Nationality</span>  <span class="kv-val">Indian</span></div>
+        <div class="kv"><span class="kv-key">Based in</span>     <span class="kv-val">Jalandhar, Punjab, India</span></div>
+        <div class="kv"><span class="kv-key">Homepage</span>     <span class="kv-val"><a href="https://rishia.in">https://rishia.in</a></span></div>
+        <div class="kv"><span class="kv-key">Email</span>        <span class="kv-val"><a href="mailto:rishia2220@gmail.com">rishia2220@gmail.com</a></span></div>
+        <div class="kv"><span class="kv-key">Self-description</span><span class="kv-val">18-year-old builder. Researcher. Engineer. Currently doing everything at once.</span></div>
+
+        <hr class="divider" />
+
+        <div class="kv"><span class="kv-key">Primary role</span>      <span class="kv-val">Founding DevOps Engineer — Zenbase Singapore PTE Ltd (Remote)</span></div>
+        <div class="kv"><span class="kv-key">Academic role</span>     <span class="kv-val">B.Tech Information Technology — NIT Jalandhar (Dr. B.R. Ambedkar NIT Jalandhar)</span></div>
+        <div class="kv"><span class="kv-key">Research role</span>     <span class="kv-val">Published researcher — ICLR 2026 (TSALM Workshop)</span></div>
+      </section>
+
+      <!-- ══ 02 · RESEARCH ══ -->
+      <section class="section" aria-labelledby="sect-research">
+        <div class="section-header" data-index="02" id="sect-research">Research &amp; Publications</div>
+
+        <div class="item">
+          <div class="item-title">Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting</div>
+          <div class="item-sub">1st ICLR Workshop on Time Series in the Age of Large Models (TSALM) · Proceedings of ICLR 2026</div>
+
+          <div class="kv"><span class="kv-key">Authors</span>       <span class="kv-val">Rishi Ahuja*, Kumar Prateek, Simranjit Singh†, Vijay Kumar (* = first author, † = corresponding)</span></div>
+          <div class="kv"><span class="kv-key">Published</span>     <span class="kv-val">2 March 2026</span></div>
+          <div class="kv"><span class="kv-key">Venue location</span><span class="kv-val">Rio de Janeiro, Brazil (Apr 26–27, 2026)</span></div>
+          <div class="kv"><span class="kv-key">Travel grant</span>  <span class="kv-val">$2,025 (ICLR 2026)</span></div>
+          <div class="kv"><span class="kv-key">OpenReview</span>    <span class="kv-val"><a href="https://openreview.net/forum?id=Qj96MlCmZw">openreview.net/forum?id=Qj96MlCmZw</a></span></div>
+          <div class="kv"><span class="kv-key">PDF</span>           <span class="kv-val"><a href="https://openreview.net/pdf?id=Qj96MlCmZw">openreview.net/pdf?id=Qj96MlCmZw</a></span></div>
+          <div class="kv"><span class="kv-key">Poster</span>        <span class="kv-val"><a href="https://artifacts.rishia.in/research/ahuja2026retrieval/poster.pdf">artifacts.rishia.in/research/ahuja2026retrieval/poster.pdf</a></span></div>
+          <div class="kv"><span class="kv-key">GitHub</span>        <span class="kv-val"><a href="https://github.com/RishiAhuja/ahuja2026retrieval">github.com/RishiAhuja/ahuja2026retrieval</a></span></div>
+          <div class="kv"><span class="kv-key">ICLR Virtual</span> <span class="kv-val"><a href="https://iclr.cc/virtual/2026/10013856">iclr.cc/virtual/2026/10013856</a></span></div>
+
+          <div class="kv" style="margin-top:0.75rem"><span class="kv-key">TL;DR</span><span class="kv-val" style="color: var(--text);">Long contexts hurt time series forecasting by adding noise (inverse scaling, &gt;68% worse at 3k steps). Selective retrieval (RAFT) beats them with lower MSE (0.379 vs 0.647) and less compute. Future TSFMs should embed retrieval instead of extending context.</span></div>
+
+          <p style="font-size:11px; color: var(--muted); margin-top: 0.75rem;">Abstract:</p>
+          <div class="abstract">
+            Time Series Foundation Models (TSFMs) have borrowed the long context paradigm from natural language processing under the premise that feeding more history into the model improves forecast quality. But in stochastic domains, distant history is often just high-frequency noise, not signal. Hence, the proposed work tests whether this premise actually holds by running continuous context architectures (PatchTST included) through the ETTh1 benchmark. The obtained results contradict the premise: an inverse scaling law shows up clearly, with forecasting error rising as context gets longer. A 3,000-step window causes performance to drop by over 68%, evidence that attention mechanisms are poor at ignoring irrelevant historical volatility. Retrieval-Augmented Forecasting (RAFT) is evaluated as an alternative. RAFT achieves a mean squared error (MSE) of 0.379 with a fixed 720-step window and selective retrieval, well below the 0.647 MSE of the best long-context configuration despite requiring far less computation. In addition, the retrieval step injects only the most relevant historical segments as dynamic exogenous variables, which gives the model a context-informed inductive bias it cannot build on its own from raw sequences. Therefore, foundation models going forward need to shift architecturally toward selective retrieval.
+          </div>
+
+          <p style="font-size:11px; color: var(--muted); margin-top: 0.75rem;">BibTeX:</p>
+          <pre style="background: #0a0a0a; border: 1px solid var(--border); padding: 0.75rem; font-size: 11px; color: var(--muted); overflow-x: auto; margin-top: 0.4rem; line-height: 1.6;">{`@inproceedings{
+  ahuja2026retrieval,
+  title={Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting},
+  author={Rishi Ahuja and Kumar Prateek and Simranjit Singh and Dr Vijay Kumar},
+  booktitle={1st ICLR Workshop on Time Series in the Age of Large Models},
+  year={2026},
+  url={https://openreview.net/forum?id=Qj96MlCmZw}
+}`}</pre>
+
+          <div class="item-meta">
+            <span class="tag accent">ICLR 2026</span>
+            <span class="tag accent">TSALM Workshop</span>
+            <span class="tag">Time Series</span>
+            <span class="tag">Retrieval-Augmented Forecasting</span>
+            <span class="tag">Foundation Models</span>
+            <span class="tag">PatchTST</span>
+            <span class="tag">ETTh1</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Reviewer — FMSD Workshop @ ICML 2026</div>
+          <div class="item-sub">Foundation Models for Structured Data Workshop · ICML 2026</div>
+          <div class="item-desc">Invited to review papers for the Foundation Models for Structured Data (FMSD) Workshop at ICML 2026.</div>
+          <div class="item-meta">
+            <span class="tag accent">ICML 2026</span>
+            <span class="tag">Peer Review</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ 03 · WORK EXPERIENCE ══ -->
+      <section class="section" aria-labelledby="sect-work">
+        <div class="section-header" data-index="03" id="sect-work">Work Experience</div>
+
+        <div class="item">
+          <div class="item-title">Founding DevOps Engineer</div>
+          <div class="item-sub">Zenbase Singapore PTE Ltd · Remote · Part-time · Jan 2026 – present</div>
+          <div class="item-desc">Building internal infrastructure and DevOps pipelines for Ninja — Zenbase's flagship product. Responsible for deployment architecture, CI/CD, and cloud operations.</div>
+          <div class="item-meta"><span class="tag green">Current</span><span class="tag">Singapore</span><span class="tag">DevOps</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Entrepreneur in Residence (EIR)</div>
+          <div class="item-sub">iHub AWaDH · IIT Ropar · Hybrid · Oct 2025 – Feb 2026</div>
+          <div class="item-desc">Supported and mentored technology startups at the IIT Ropar incubator. Worked on Agri-Tech product development and presented innovations to Government of India &amp; MeitY delegation.</div>
+          <div class="item-meta"><span class="tag">IIT Ropar</span><span class="tag">Incubator</span><span class="tag">AgriTech</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Research Intern</div>
+          <div class="item-sub">Annam AI · IIT Ropar · Hybrid · Jun 2025 – Oct 2025</div>
+          <div class="item-desc">AI research internship focused on time series forecasting and retrieval-augmented models. This work led directly to the ICLR 2026 publication.</div>
+          <div class="item-meta"><span class="tag">Machine Learning</span><span class="tag">Time Series</span><span class="tag">Research</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Flutter Intern</div>
+          <div class="item-sub">Stack Wealth (YC S21) · Remote · Internship</div>
+          <div class="item-desc">Worked on Flutter mobile development for a YC-backed fintech product.</div>
+          <div class="item-meta"><span class="tag">YC S21</span><span class="tag">Flutter</span><span class="tag">Fintech</span></div>
+        </div>
+      </section>
+
+      <!-- ══ 04 · EDUCATION ══ -->
+      <section class="section" aria-labelledby="sect-edu">
+        <div class="section-header" data-index="04" id="sect-edu">Education</div>
+
+        <div class="item">
+          <div class="item-title">B.Tech — Information Technology</div>
+          <div class="item-sub">Dr. B.R. Ambedkar NIT Jalandhar · 2024 – Present</div>
+          <div class="item-desc">Currently pursuing undergraduate degree in Information Technology at NIT Jalandhar. First CORE A* conference acceptance (ICLR) in the department's history including faculty, achieved in first year.</div>
+          <div class="item-meta">
+            <span class="tag green">Current</span>
+            <span class="tag">NIT Jalandhar</span>
+            <span class="tag">Information Technology</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ 05 · NOTABLE ACHIEVEMENTS ══ -->
+      <section class="section" aria-labelledby="sect-ach">
+        <div class="section-header" data-index="05" id="sect-ach">Notable Achievements</div>
+
+        <div class="item">
+          <div class="item-title">ICLR 2026 — Poster Presentation, Rio de Janeiro</div>
+          <div class="item-sub">Apr 24–27, 2026 · $2,025 travel grant</div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">1st Place — AWS Partner Track &amp; Qyrus Track · HackCBS 8.0</div>
+          <div class="item-sub">Delhi, Nov 2025 · Project: Swasya.AI</div>
+          <div class="item-desc">Double track winner at HackCBS 8.0. Built hybrid serverless architecture using EC2 (Dockerized FastAPI), Lambda (SAM), S3 triggers, DynamoDB, AWS Transcribe, Textract, and real-time updates via IoT Core (MQTT).</div>
+          <div class="item-meta"><span class="tag accent">1st Place</span><span class="tag">AWS</span><span class="tag">Hackathon</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">MeitY / GOI Product Presentation</div>
+          <div class="item-sub">Nov 2025 · IIT Ropar</div>
+          <div class="item-desc">Presented Agri-Tech innovations to delegation including the Chief AI Officer (Ministry of Agriculture), Director of IIT Ropar, Ministry of Education officials, and MeitY leadership.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Organizer &amp; Judge Coordinator — HackMol 7.0</div>
+          <div class="item-sub">NIT Jalandhar · Mar 28–29, 2026</div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Mentor — Bit N Build Punjab · Thapar University</div>
+          <div class="item-sub">Sep 6, 2025 · Guided 30+ teams, 120+ participants</div>
+        </div>
+      </section>
+
+      <!-- ══ 06 · PROJECTS ══ -->
+      <section class="section" aria-labelledby="sect-proj">
+        <div class="section-header" data-index="06" id="sect-proj">Projects</div>
+
+        <div class="item">
+          <div class="item-title">FernKit — C++ UI Toolkit</div>
+          <div class="item-sub"><a href="https://fernkit.in">fernkit.in</a> · <a href="https://github.com/RishiAhuja">github.com/RishiAhuja</a></div>
+          <div class="item-desc">Low-level C++ UI framework. Building interactive UIs from scratch — custom widget system, text rasterization, TTF parsing.</div>
+          <div class="item-meta"><span class="tag">C++</span><span class="tag">CMake</span><span class="tag">UI Framework</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Nexus</div>
+          <div class="item-sub"><a href="https://nexus.rishia.in">nexus.rishia.in</a></div>
+          <div class="item-desc">A collaborative platform project.</div>
+          <div class="item-meta"><span class="tag">Web</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">Swasya.AI</div>
+          <div class="item-sub"><a href="https://devfolio.co/projects/swasya-ai-bf6e">devfolio.co/projects/swasya-ai-bf6e</a></div>
+          <div class="item-desc">Healthcare AI project. Hybrid serverless stack — EC2, Lambda, DynamoDB, AWS Transcribe, Textract, IoT Core. Won 1st place (AWS + Qyrus tracks) at HackCBS 8.0.</div>
+          <div class="item-meta"><span class="tag accent">Award Winner</span><span class="tag">AWS</span><span class="tag">AI</span><span class="tag">Healthcare</span></div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">NITJ Mess ERP</div>
+          <div class="item-sub">Status: In progress (2025–)</div>
+          <div class="item-desc">Comprehensive ERP system for NIT Jalandhar mess operations. 6-way infrastructure, targeting 5000+ users.</div>
+          <div class="item-meta"><span class="tag">ERP</span><span class="tag">NIT Jalandhar</span></div>
+        </div>
+
+        <p style="margin-top: 0.75rem; font-size: 12px; color: var(--muted);">Full project list: <a href="https://rishia.in" style="color: var(--accent);">rishia.in</a> (Projects section)</p>
+      </section>
+
+      <!-- ══ 07 · COMMUNITY & TEACHING ══ -->
+      <section class="section" aria-labelledby="sect-community">
+        <div class="section-header" data-index="07" id="sect-community">Community &amp; Teaching</div>
+
+        <div class="item">
+          <div class="item-title">Flutter Bootcamp — GDGC NIT Jalandhar</div>
+          <div class="item-sub">14-Day Intensive · Jan 2026 · <a href="https://rishia.in/flutter-bootcamp">rishia.in/flutter-bootcamp</a></div>
+          <div class="item-desc">Designed and conducted a 14-day intensive Flutter bootcamp covering Flutter fundamentals, state management (BLoC, Riverpod), architecture patterns, and hands-on project building.</div>
+        </div>
+
+        <div class="item">
+          <div class="item-title">OpenLearn — Educational Organization</div>
+          <div class="item-sub">Co-founder · Jun 2025 · <a href="https://github.com/openlearnnitj">github.com/openlearnnitj</a></div>
+          <div class="item-desc">Co-founded educational organization for teaching via blogs with cohorts. 120+ active users.</div>
+        </div>
+      </section>
+
+      <!-- ══ 08 · TECH SKILLS ══ -->
+      <section class="section" aria-labelledby="sect-tech">
+        <div class="section-header" data-index="08" id="sect-tech">Technical Skills</div>
+
+        <div class="kv" style="margin-bottom: 0.75rem;">
+          <span class="kv-key">Mobile</span>
+          <div class="skill-grid">
+            {['Flutter', 'Dart', 'BLoC', 'Riverpod', 'GetX', 'Firebase', 'Android Studio'].map(t => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+
+        <div class="kv" style="margin-bottom: 0.75rem;">
+          <span class="kv-key">Frontend</span>
+          <div class="skill-grid">
+            {['React', 'Next.js', 'TypeScript', 'JavaScript', 'Astro', 'HTML', 'CSS', 'Tailwind', 'Recoil'].map(t => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+
+        <div class="kv" style="margin-bottom: 0.75rem;">
+          <span class="kv-key">Backend</span>
+          <div class="skill-grid">
+            {['Node.js', 'Express.js', 'Python', 'Hono', 'MongoDB', 'PostgreSQL', 'Prisma', 'Supabase', 'AppWrite', 'NeonDB'].map(t => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+
+        <div class="kv" style="margin-bottom: 0.75rem;">
+          <span class="kv-key">Systems / Infra</span>
+          <div class="skill-grid">
+            {['C', 'C++', 'Docker', 'AWS', 'Nginx', 'Ngrok', 'Linux', 'Arch Linux', 'Bash', 'Make', 'CMake'].map(t => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+
+        <div class="kv" style="margin-bottom: 0.75rem;">
+          <span class="kv-key">Other</span>
+          <div class="skill-grid">
+            {['Git', 'GitHub', 'Solidity', 'Markdown', 'Obsidian', 'Notion'].map(t => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ 09 · LINKS ══ -->
+      <section class="section" aria-labelledby="sect-links">
+        <div class="section-header" data-index="09" id="sect-links">Links &amp; Profiles</div>
+
+        <div class="kv"><span class="kv-key">Homepage</span>    <span class="kv-val"><a href="https://rishia.in">rishia.in</a></span></div>
+        <div class="kv"><span class="kv-key">GitHub</span>      <span class="kv-val"><a href="https://github.com/RishiAhuja">github.com/RishiAhuja</a></span></div>
+        <div class="kv"><span class="kv-key">LinkedIn</span>    <span class="kv-val"><a href="https://www.linkedin.com/in/rishi-ahuja-b1a224310">linkedin.com/in/rishi-ahuja-b1a224310</a></span></div>
+        <div class="kv"><span class="kv-key">Twitter / X</span> <span class="kv-val"><a href="https://twitter.com/Rishi2220">twitter.com/Rishi2220</a></span></div>
+        <div class="kv"><span class="kv-key">Blog</span>        <span class="kv-val"><a href="https://hashnode.com/@rishi2220">hashnode.com/@rishi2220</a></span></div>
+        <div class="kv"><span class="kv-key">OpenReview</span>  <span class="kv-val"><a href="https://openreview.net/profile?id=~Rishi_Ahuja1">openreview.net/profile?id=~Rishi_Ahuja1</a></span></div>
+        <div class="kv"><span class="kv-key">Schedule</span>    <span class="kv-val"><a href="https://cal.com/rishi2220">cal.com/rishi2220</a></span></div>
+        <div class="kv"><span class="kv-key">Resume</span>      <span class="kv-val"><a href="https://artifacts.rishia.in/resume/rishi-resume-v10.pdf">artifacts.rishia.in/resume/rishi-resume-v10.pdf</a></span></div>
+        <div class="kv"><span class="kv-key">Email</span>       <span class="kv-val"><a href="mailto:rishia2220@gmail.com">rishia2220@gmail.com</a></span></div>
+      </section>
+
+      <!-- ══ 10 · SITE MAP ══ -->
+      <section class="section" aria-labelledby="sect-sitemap">
+        <div class="section-header" data-index="10" id="sect-sitemap">Site Pages</div>
+
+        <div class="kv"><span class="kv-key">/</span>               <span class="kv-val">Home — intro, projects, experience, blogs</span></div>
+        <div class="kv"><span class="kv-key">/research</span>       <span class="kv-val">Research publications &amp; ICLR 2026 paper detail</span></div>
+        <div class="kv"><span class="kv-key">/blogs</span>          <span class="kv-val">Technical writing from Hashnode</span></div>
+        <div class="kv"><span class="kv-key">/ledger</span>         <span class="kv-val">Life timeline — searchable events by year</span></div>
+        <div class="kv"><span class="kv-key">/gallery</span>        <span class="kv-val">Artifacts — photo collections with memory-tape UI</span></div>
+        <div class="kv"><span class="kv-key">/community</span>      <span class="kv-val">Teaching, mentoring, and community activities</span></div>
+        <div class="kv"><span class="kv-key">/flutter-bootcamp</span><span class="kv-val">14-day Flutter intensive bootcamp</span></div>
+        <div class="kv"><span class="kv-key">/links</span>          <span class="kv-val">All links in one place</span></div>
+        <div class="kv"><span class="kv-key">/colophon</span>       <span class="kv-val">How this site was built</span></div>
+        <div class="kv"><span class="kv-key">/stats</span>          <span class="kv-val">Analytics dashboard</span></div>
+        <div class="kv"><span class="kv-key">/uncompiled</span>     <span class="kv-val">Philosophical / unstructured writing</span></div>
+        <div class="kv"><span class="kv-key">/machine</span>        <span class="kv-val">This page — machine-readable profile (you are here)</span></div>
+        <div class="kv"><span class="kv-key">/sitemap-index.xml</span><span class="kv-val"><a href="/sitemap-index.xml">Full XML sitemap</a></span></div>
+      </section>
+
+      <!-- ══ FOOTER ══ -->
+      <div class="machine-footer" role="contentinfo">
+        <span>rishia.in/machine · generated {generatedAt}</span>
+        <span>Crawling unrestricted. No auth required.</span>
+        <span><a href="https://rishia.in">rishia.in</a> · <a href="mailto:rishia2220@gmail.com">rishia2220@gmail.com</a></span>
+      </div>
+
+    </div>
+
+    <!-- if you're reading source: hi. everything above is accurate as of april 2026. -->
+  </body>
+</html>
