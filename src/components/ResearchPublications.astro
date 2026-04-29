@@ -6,12 +6,14 @@ interface Props {
   papers: CollectionEntry<'research'>[];
   heading?: string;
   viewAllHref?: string;
+  rightText?: string;
 }
 
 const {
   papers,
   heading = "Things I've published",
   viewAllHref,
+  rightText,
 } = Astro.props;
 
 const formatDate = (date: Date) =>
@@ -32,6 +34,14 @@ const formatDate = (date: Date) =>
       >
         View all →
       </a>
+    )}
+    {!viewAllHref && rightText && (
+      <span
+        slot="right"
+        class="font-ptMono text-xs md:text-sm text-gunSmoke"
+      >
+        {rightText}
+      </span>
     )}
   </ExpandedContainer>
 
