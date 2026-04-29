@@ -12,21 +12,11 @@ const breadcrumbs = [
 const papers = (await getCollection('research')).sort(
   (a, b) => b.data.sort_date.getTime() - a.data.sort_date.getTime()
 );
-const featuredPaper = papers[0];
-const acceptedCount = papers.filter((paper) => paper.data.status === 'accepted').length;
-const publishedCount = papers.filter((paper) => paper.data.status === 'published').length;
-const topicTags = [
-  'Time-series forecasting',
-  'Retrieval-augmented systems',
-  'Trustworthy AI',
-  'Conversational fraud detection',
-];
 
 const researchDescription = 'Research publications by Rishi Ahuja across time-series forecasting, retrieval-augmented models, and trustworthy conversational fraud detection.';
 const canonicalResearchUrl = 'https://rishia.in/research';
 
 const getPaperPath = (paper: CollectionEntry<'research'>) => `/research/${paper.slug}`;
-const conferenceTrail = papers.map((paper) => paper.data.event?.venue).filter(Boolean).join(' → ');
 
 const toSchemaEvent = (paper: CollectionEntry<'research'>) => {
   if (!paper.data.event) {
@@ -115,105 +105,21 @@ const toSchemaPaper = (paper: CollectionEntry<'research'>) => {
   })} />
 
   <main class="min-h-screen bg-codGray text-quillGray">
-    <div class="max-w-5xl mx-auto px-4 md:px-8 py-12">
+    <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
       <Breadcrumbs items={breadcrumbs} />
 
-      <section class="relative mt-6 overflow-hidden rounded-2xl border border-darkGrey/40 bg-bgShades-light/80 px-6 py-7 md:px-8 md:py-9">
-        <div class="absolute -top-16 left-0 h-40 w-40 rounded-full bg-accent/10 blur-3xl"></div>
-        <div class="absolute right-0 top-10 h-48 w-48 rounded-full bg-accent-light/5 blur-3xl"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(100,178,188,0.06),transparent_35%,transparent_70%,rgba(142,207,214,0.04))]"></div>
+      <header class="mb-10 mt-6">
+        <h1 class="text-3xl md:text-4xl font-bold text-quillGray font-ptMono mb-3">Research</h1>
+        <p class="text-sm md:text-base text-gunSmoke font-ptMono max-w-3xl leading-relaxed">
+          Work across time-series forecasting, retrieval-augmented systems, and trustworthy conversational fraud detection.
+          I presented at ICLR 2026 in Rio de Janeiro in April, and my IJCAI-ECAI 2026 paper has been accepted for presentation in Bremen this August.
+        </p>
+      </header>
 
-        <div class="relative grid gap-8 lg:grid-cols-[1.25fr_0.9fr]">
-          <div>
-            <p class="text-xs font-ptMono uppercase tracking-[0.22em] text-accent-light/80 mb-3">
-              Research log
-            </p>
-            <h1 class="text-4xl md:text-6xl font-bold text-quillGray font-ptMono leading-none mb-5">
-              Research
-            </h1>
-            <p class="text-base md:text-lg text-gunSmoke font-ptMono max-w-3xl leading-relaxed">
-              Work across time-series forecasting, retrieval-augmented systems, and trustworthy conversational fraud detection.
-              I presented at ICLR 2026 in Rio de Janeiro in April, and my IJCAI-ECAI 2026 paper has been accepted for presentation in Bremen this August.
-            </p>
-
-            <div class="mt-6 flex flex-wrap gap-2">
-              {topicTags.map((tag) => (
-                <span class="inline-flex items-center rounded-full border border-accent/20 bg-bgShades-darker/70 px-3 py-1 text-[11px] md:text-xs font-ptMono text-accent-light/85">
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {featuredPaper && (
-              <div class="mt-7 rounded-xl border border-darkGrey/40 bg-bgShades-darker/80 p-4 md:p-5">
-                <p class="text-[11px] md:text-xs font-ptMono uppercase tracking-[0.18em] text-gunSmoke mb-2">
-                  Latest paper
-                </p>
-                <a
-                  href={getPaperPath(featuredPaper)}
-                  class="block text-lg md:text-xl font-ptMono font-medium text-quillGray hover:text-accent-light transition-colors leading-snug"
-                >
-                  {featuredPaper.data.title}
-                </a>
-                <p class="mt-2 text-sm font-ptMono text-gunSmoke leading-relaxed line-clamp-2">
-                  {featuredPaper.data.tldr}
-                </p>
-                <div class="mt-4 flex flex-wrap gap-3">
-                  <a
-                    href={getPaperPath(featuredPaper)}
-                    class="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-ptMono font-medium text-codGray hover:bg-accent-light transition-colors"
-                  >
-                    Open latest
-                    <span>→</span>
-                  </a>
-                  {featuredPaper.data.primary_url && (
-                    <a
-                      href={featuredPaper.data.primary_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-2 rounded-lg border border-darkGrey/40 bg-bgShades-light px-4 py-2 text-sm font-ptMono text-quillGray hover:border-accent/30 hover:text-accent-light transition-all"
-                    >
-                      External link
-                    </a>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <div class="rounded-xl border border-darkGrey/40 bg-bgShades-darker/75 p-4">
-              <p class="text-[11px] font-ptMono uppercase tracking-[0.18em] text-gunSmoke mb-2">Output</p>
-              <p class="text-3xl md:text-4xl font-ptMono font-bold text-quillGray">{String(papers.length).padStart(2, '0')}</p>
-              <p class="mt-2 text-xs font-ptMono text-gunSmoke">Published papers tracked here.</p>
-            </div>
-
-            <div class="rounded-xl border border-darkGrey/40 bg-bgShades-darker/75 p-4">
-              <p class="text-[11px] font-ptMono uppercase tracking-[0.18em] text-gunSmoke mb-2">Status mix</p>
-              <p class="text-base md:text-lg font-ptMono text-quillGray">
-                {publishedCount} published · {acceptedCount} accepted
-              </p>
-              <p class="mt-2 text-xs font-ptMono text-gunSmoke">One presented in Rio, one queued for Bremen.</p>
-            </div>
-
-            <div class="rounded-xl border border-darkGrey/40 bg-bgShades-darker/75 p-4">
-              <p class="text-[11px] font-ptMono uppercase tracking-[0.18em] text-gunSmoke mb-2">Current arc</p>
-              <p class="text-sm md:text-base font-ptMono text-accent-light leading-relaxed">
-                {conferenceTrail}
-              </p>
-              <p class="mt-2 text-xs font-ptMono text-gunSmoke">A small but coherent trail across retrieval and high-stakes ML.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="mt-10">
-        <ResearchPublications
-          papers={papers}
-          heading="Things I've published"
-          rightText={`${papers.length} papers`}
-        />
-      </section>
+      <ResearchPublications
+        papers={papers}
+        heading="Things I've published"
+      />
     </div>
   </main>
 </BaseLayout>
