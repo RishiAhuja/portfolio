@@ -1,0 +1,92 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ExpandedContainer from './ui/ExpandedContainer.astro';
+
+interface Props {
+  papers: CollectionEntry<'research'>[];
+  heading?: string;
+  viewAllHref?: string;
+}
+
+const {
+  papers,
+  heading = "Things I've published",
+  viewAllHref,
+} = Astro.props;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+---
+
+<div class="flex flex-col">
+  <ExpandedContainer text={heading}>
+    {viewAllHref && (
+      <a
+        slot="right"
+        href={viewAllHref}
+        class="font-ptMono text-sm text-gunSmoke hover:text-accent-light transition-colors duration-200"
+      >
+        View all →
+      </a>
+    )}
+  </ExpandedContainer>
+
+  <div class="h-4"></div>
+
+  <div class="flex flex-col space-y-2 md:space-y-4">
+    {papers.map((paper) => {
+      const paperHref = `/research/${paper.slug}`;
+      const date = formatDate(paper.data.sort_date);
+      const meta = `${paper.data.status === 'accepted' ? 'Accepted' : 'Published'} · ${paper.data.venue}`;
+
+      return (
+        <a
+          href={paperHref}
+          class="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
+        >
+          <div class="flex md:hidden flex-col gap-1.5">
+            <h3 class="font-ptMono text-sm font-medium text-quillGray group-hover:text-accent-light transition-colors duration-300">
+              {paper.data.title}
+            </h3>
+            <p class="font-ptMono text-xs text-accent-light/80">
+              {meta}
+            </p>
+            <div class="flex items-center justify-between">
+              <span class="font-ptMono text-xs text-gunSmoke">
+                {date}
+              </span>
+              <div class="transform transition-all duration-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-accent-light">
+                →
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden md:flex items-start gap-3 md:gap-8">
+            <div class="flex-shrink-0 w-32 font-ptMono text-xs text-gunSmoke group-hover:text-quillGray transition-colors duration-300">
+              {date}
+            </div>
+
+            <div class="flex-grow flex items-start justify-between gap-4 min-w-0">
+              <div class="min-w-0">
+                <h3 class="font-ptMono text-sm md:text-base font-medium text-quillGray group-hover:text-accent-light transition-colors duration-300 truncate">
+                  {paper.data.title}
+                </h3>
+                <p class="mt-1 font-ptMono text-xs text-accent-light/80 truncate">
+                  {meta}
+                </p>
+              </div>
+
+              <div class="flex-shrink-0 transform transition-all duration-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-accent-light">
+                →
+              </div>
+            </div>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+</div>

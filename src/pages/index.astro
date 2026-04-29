@@ -17,6 +17,7 @@ import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 import BackToTop from '../components/ui/BackToTop';
 import FadeInSection from '../components/ui/FadeInSection';
+import ResearchPublications from '../components/ResearchPublications.astro';
 
 const schema = {
   "@context": "https://schema.org",
@@ -75,43 +76,11 @@ const featuredResearch = (await getCollection('research'))
 
       <section id="research">
         <FadeInSection client:visible delay={100}>
-          <div class="space-y-3">
-            <div class="flex items-end justify-between gap-4">
-              <div>
-                <p class="text-xs font-ptMono text-accent-light/80 mb-2">Research</p>
-                <h2 class="text-sm md:text-base font-ptMono font-medium text-quillGray leading-snug">
-                  Two papers across ICLR 2026 and IJCAI-ECAI 2026.
-                </h2>
-              </div>
-              <a href="/research" class="hidden md:inline-flex items-center gap-1 text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors">
-                View all
-                <span>→</span>
-              </a>
-            </div>
-
-            {featuredResearch.map((paper) => (
-              <a href={`/research/${paper.slug}`} class="block w-full border border-darkGrey/40 rounded-sm p-5 md:p-6 bg-bgShades-light/50 hover:border-accent-light/40 transition-all duration-300 group">
-                <div class="flex items-start justify-between gap-4">
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-ptMono text-accent-light/80 mb-2">
-                      {paper.data.proceedings}
-                    </p>
-                    <h3 class="text-sm md:text-base font-ptMono font-medium text-quillGray group-hover:text-accent-light transition-colors duration-200 leading-snug">
-                      {paper.data.title}
-                    </h3>
-                  </div>
-                  <span class="text-gunSmoke group-hover:text-accent-light transition-colors duration-200 flex-shrink-0 mt-1">→</span>
-                </div>
-              </a>
-            ))}
-
-            <div class="md:hidden pt-1">
-              <a href="/research" class="inline-flex items-center gap-1 text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors">
-                View all
-                <span>→</span>
-              </a>
-            </div>
-          </div>
+          <ResearchPublications
+            papers={featuredResearch}
+            heading="Things I've published"
+            viewAllHref="/research"
+          />
         </FadeInSection>
       </section>
 

@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs';
+import ResearchPublications from '../../components/ResearchPublications.astro';
 
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
@@ -105,7 +106,7 @@ const toSchemaPaper = (paper: CollectionEntry<'research'>) => {
 
   <main class="min-h-screen bg-codGray text-quillGray">
     <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
-      <Breadcrumbs client:load items={breadcrumbs} />
+      <Breadcrumbs items={breadcrumbs} />
 
       <header class="mb-10 mt-6">
         <h1 class="text-3xl md:text-4xl font-bold text-quillGray font-ptMono mb-3">Research</h1>
@@ -115,74 +116,10 @@ const toSchemaPaper = (paper: CollectionEntry<'research'>) => {
         </p>
       </header>
 
-      <div class="space-y-6">
-        {papers.map((paper) => (
-          <article class="bg-bgShades-light border border-darkGrey/40 rounded-lg">
-            <div class="p-6 md:p-8">
-              <div class="flex flex-wrap items-center gap-3 mb-4">
-                <span class={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-ptMono uppercase tracking-wider border ${
-                  paper.data.status === 'accepted'
-                    ? 'border-accent/30 bg-accent/10 text-accent-light'
-                    : 'border-darkGrey/40 bg-bgShades-DEFAULT text-gunSmoke'
-                }`}>
-                  {paper.data.status}
-                </span>
-                <span class="text-xs font-ptMono text-gunSmoke">{paper.data.status_label}</span>
-              </div>
-
-              <p class="text-xs font-ptMono text-gunSmoke mb-4">
-                {paper.data.proceedings} · {paper.data.venue}
-              </p>
-
-              <h2 class="text-xl md:text-2xl font-bold text-quillGray font-ptMono leading-snug mb-3">
-                <a href={getPaperPath(paper)} class="hover:text-accent-light transition-colors">
-                  {paper.data.title}
-                </a>
-              </h2>
-
-              <p class="text-xs font-ptMono text-gunSmoke/70 mb-4">
-                {paper.data.authors.map((author) => author.name).join(', ')}
-              </p>
-
-              <p class="text-sm font-ptMono text-quillGray leading-relaxed mb-4">
-                {paper.data.description}
-              </p>
-
-              {paper.data.event?.announcement && (
-                <p class="text-xs font-ptMono text-gunSmoke leading-relaxed mb-6">
-                  {paper.data.event.announcement}
-                </p>
-              )}
-
-              <div class="flex flex-wrap gap-3">
-                <a
-                  href={getPaperPath(paper)}
-                  class="inline-flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-light text-codGray font-ptMono text-sm font-medium rounded-lg transition-colors duration-200"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 3h7v7m0-7L10 14M5 5v14h14" />
-                  </svg>
-                  Open paper page
-                </a>
-
-                {paper.data.primary_url && (
-                  <a
-                    href={paper.data.primary_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-bgShades-DEFAULT hover:bg-bgShades-lighter border border-darkGrey/40 hover:border-accent/30 text-quillGray font-ptMono text-sm rounded-lg transition-all duration-200"
-                  >
-                    <svg class="w-4 h-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    External link
-                  </a>
-                )}
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
+      <ResearchPublications
+        papers={papers}
+        heading="Things I've published"
+      />
     </div>
   </main>
 </BaseLayout>
