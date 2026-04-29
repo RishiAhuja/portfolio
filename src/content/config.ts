@@ -16,6 +16,53 @@ const projectsCollection = defineCollection({
   }),
 });
 
+const researchCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    tldr: z.string(),
+    abstract: z.string(),
+    venue: z.string(),
+    proceedings: z.string(),
+    status: z.enum(['accepted', 'published']),
+    status_label: z.string(),
+    sort_date: z.date(),
+    published_date: z.date().optional(),
+    authors: z.array(z.object({
+      name: z.string(),
+      is_me: z.boolean().default(false),
+      is_corresponding: z.boolean().default(false),
+      profile: z.string().url().optional(),
+    })),
+    affiliation_note: z.string().optional(),
+    award: z.string().optional(),
+    event: z.object({
+      announcement: z.string(),
+      label: z.string(),
+      venue: z.string(),
+      location: z.string(),
+      dates_label: z.string(),
+      start_date: z.string().optional(),
+      end_date: z.string().optional(),
+      url: z.string().url(),
+      verified_links: z.array(z.object({
+        label: z.string(),
+        url: z.string().url(),
+      })).default([]),
+    }).optional(),
+    links: z.array(z.object({
+      label: z.string(),
+      url: z.string().url(),
+      primary: z.boolean().optional(),
+    })).default([]),
+    bibtex: z.string().optional(),
+    primary_url: z.string().url().optional(),
+    same_as: z.array(z.string().url()).default([]),
+  }),
+});
+
 export const collections = {
   projects: projectsCollection,
+  research: researchCollection,
 };

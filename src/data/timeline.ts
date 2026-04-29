@@ -27,7 +27,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       buttons: [
         {
           label: 'Research',
-          link: 'https://rishia.in/research',
+          link: 'https://rishia.in/research/ahuja2026icfd31k',
           icon: 'external'
         },
         {
@@ -46,7 +46,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       buttons: [
         {
           label: 'Paper',
-          link: 'https://rishia.in/research',
+          link: 'https://rishia.in/research/ahuja2026retrieval',
           icon: 'external'
         },
         {
@@ -93,7 +93,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       buttons: [
         {
           label: 'Paper',
-          link: 'https://rishia.in/research',
+          link: 'https://rishia.in/research/ahuja2026retrieval',
           icon: 'external'
         }
       ]

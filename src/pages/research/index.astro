@@ -1,0 +1,188 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs';
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Research' }
+];
+
+const papers = (await getCollection('research')).sort(
+  (a, b) => b.data.sort_date.getTime() - a.data.sort_date.getTime()
+);
+
+const researchDescription = 'Research publications by Rishi Ahuja across time-series forecasting, retrieval-augmented models, and trustworthy conversational fraud detection.';
+const canonicalResearchUrl = 'https://rishia.in/research';
+
+const getPaperPath = (paper: CollectionEntry<'research'>) => `/research/${paper.slug}`;
+
+const toSchemaEvent = (paper: CollectionEntry<'research'>) => {
+  if (!paper.data.event) {
+    return undefined;
+  }
+
+  const [city, country] = paper.data.event.location.split(',').map((part) => part.trim());
+
+  return {
+    '@type': 'Event',
+    name: paper.data.event.venue,
+    startDate: paper.data.event.start_date,
+    endDate: paper.data.event.end_date,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: paper.data.event.location,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: city,
+        addressCountry: country ?? city,
+      },
+    },
+    url: paper.data.event.url,
+  };
+};
+
+const toSchemaPaper = (paper: CollectionEntry<'research'>) => {
+  const schemaPaper: Record<string, unknown> = {
+    '@type': paper.data.status === 'published' ? 'ScholarlyArticle' : 'CreativeWork',
+    headline: paper.data.title,
+    author: paper.data.authors.map((author) => ({
+      '@type': 'Person',
+      name: author.name,
+      ...(author.profile ? { url: author.profile } : {}),
+    })),
+    abstract: paper.data.tldr,
+    url: `https://rishia.in${getPaperPath(paper)}`,
+    sameAs: paper.data.same_as,
+    inLanguage: 'en',
+    ...(paper.data.event ? { isPartOf: toSchemaEvent(paper) } : {}),
+    ...(paper.data.award ? { award: paper.data.award } : {}),
+  };
+
+  if (paper.data.status === 'published' && paper.data.published_date) {
+    schemaPaper.datePublished = paper.data.published_date.toISOString().split('T')[0];
+  } else {
+    schemaPaper.creativeWorkStatus = 'Accepted';
+  }
+
+  return schemaPaper;
+};
+---
+
+<BaseLayout
+  title="Research | Rishi Ahuja"
+  description={researchDescription}
+  image="/og?title=Research&description=ICLR%202026%20%C2%B7%20IJCAI-ECAI%202026&type=default"
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Research | Rishi Ahuja',
+    url: canonicalResearchUrl,
+    description: researchDescription,
+    hasPart: papers.map(toSchemaPaper),
+  })} />
+
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://rishia.in/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Research',
+        item: canonicalResearchUrl
+      }
+    ]
+  })} />
+
+  <main class="min-h-screen bg-codGray text-quillGray">
+    <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
+      <Breadcrumbs client:load items={breadcrumbs} />
+
+      <header class="mb-10 mt-6">
+        <h1 class="text-3xl md:text-4xl font-bold text-quillGray font-ptMono mb-3">Research</h1>
+        <p class="text-sm md:text-base text-gunSmoke font-ptMono max-w-3xl leading-relaxed">
+          Work across time-series forecasting, retrieval-augmented systems, and trustworthy conversational fraud detection.
+          I presented at ICLR 2026 in Rio de Janeiro in April, and my IJCAI-ECAI 2026 paper has been accepted for presentation in Bremen this August.
+        </p>
+      </header>
+
+      <div class="space-y-6">
+        {papers.map((paper) => (
+          <article class="bg-bgShades-light border border-darkGrey/40 rounded-lg">
+            <div class="p-6 md:p-8">
+              <div class="flex flex-wrap items-center gap-3 mb-4">
+                <span class={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-ptMono uppercase tracking-wider border ${
+                  paper.data.status === 'accepted'
+                    ? 'border-accent/30 bg-accent/10 text-accent-light'
+                    : 'border-darkGrey/40 bg-bgShades-DEFAULT text-gunSmoke'
+                }`}>
+                  {paper.data.status}
+                </span>
+                <span class="text-xs font-ptMono text-gunSmoke">{paper.data.status_label}</span>
+              </div>
+
+              <p class="text-xs font-ptMono text-gunSmoke mb-4">
+                {paper.data.proceedings} · {paper.data.venue}
+              </p>
+
+              <h2 class="text-xl md:text-2xl font-bold text-quillGray font-ptMono leading-snug mb-3">
+                <a href={getPaperPath(paper)} class="hover:text-accent-light transition-colors">
+                  {paper.data.title}
+                </a>
+              </h2>
+
+              <p class="text-xs font-ptMono text-gunSmoke/70 mb-4">
+                {paper.data.authors.map((author) => author.name).join(', ')}
+              </p>
+
+              <p class="text-sm font-ptMono text-quillGray leading-relaxed mb-4">
+                {paper.data.description}
+              </p>
+
+              {paper.data.event?.announcement && (
+                <p class="text-xs font-ptMono text-gunSmoke leading-relaxed mb-6">
+                  {paper.data.event.announcement}
+                </p>
+              )}
+
+              <div class="flex flex-wrap gap-3">
+                <a
+                  href={getPaperPath(paper)}
+                  class="inline-flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent-light text-codGray font-ptMono text-sm font-medium rounded-lg transition-colors duration-200"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 3h7v7m0-7L10 14M5 5v14h14" />
+                  </svg>
+                  Open paper page
+                </a>
+
+                {paper.data.primary_url && (
+                  <a
+                    href={paper.data.primary_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-bgShades-DEFAULT hover:bg-bgShades-lighter border border-darkGrey/40 hover:border-accent/30 text-quillGray font-ptMono text-sm rounded-lg transition-all duration-200"
+                  >
+                    <svg class="w-4 h-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    External link
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </main>
+</BaseLayout>

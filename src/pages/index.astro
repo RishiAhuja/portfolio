@@ -1,11 +1,10 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
-import ThemeToggle from '../components/ui/ThemeToggle.astro';
 
 // Import React components (will be hydrated as islands)
 import AboutMe from '../components/AboutMe';
-import TechStacks from '../components/TechStacks';
 import Projects from '../components/Projects.astro';
 import BlogPosts from '../components/BlogPosts';
 import PapersReading from '../components/PapersReading';
@@ -18,7 +17,6 @@ import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 import BackToTop from '../components/ui/BackToTop';
 import FadeInSection from '../components/ui/FadeInSection';
-import { researchPapers } from '../data/research';
 
 const schema = {
   "@context": "https://schema.org",
@@ -46,12 +44,14 @@ const schema = {
   ]
 };
 
-const featuredResearch = researchPapers.slice(0, 2);
+const featuredResearch = (await getCollection('research'))
+  .sort((a, b) => b.data.sort_date.getTime() - a.data.sort_date.getTime())
+  .slice(0, 2);
 ---
 
 <BaseLayout
   title="Rishi Ahuja | Builder, Researcher, Engineer"
-  description="Portfolio of Rishi Ahuja - builder, researcher, and engineer at NIT Jalandhar. Presented at ICLR 2026 in Rio de Janeiro and accepted at IJCAI-ECAI 2026 in Bremen."
+  description="Portfolio of Rishi Ahuja - builder, researcher, and engineer at NIT Jalandhar. Presented at ICLR 2026 in Rio de Janeiro and accepted to IJCAI-ECAI 2026, to be presented in Bremen."
   image="/og?title=Rishi%20Ahuja&description=Builder%20%7C%20Researcher%20%7C%20Engineer&type=default"
 >
   <JsonLd data={schema} />
@@ -90,14 +90,14 @@ const featuredResearch = researchPapers.slice(0, 2);
             </div>
 
             {featuredResearch.map((paper) => (
-              <a href="/research" class="block w-full border border-darkGrey/40 rounded-sm p-5 md:p-6 bg-bgShades-light/50 hover:border-accent-light/40 transition-all duration-300 group">
+              <a href={`/research/${paper.slug}`} class="block w-full border border-darkGrey/40 rounded-sm p-5 md:p-6 bg-bgShades-light/50 hover:border-accent-light/40 transition-all duration-300 group">
                 <div class="flex items-start justify-between gap-4">
                   <div class="flex-1 min-w-0">
                     <p class="text-xs font-ptMono text-accent-light/80 mb-2">
-                      {paper.status} · {paper.venue}
+                      {paper.data.proceedings}
                     </p>
                     <h3 class="text-sm md:text-base font-ptMono font-medium text-quillGray group-hover:text-accent-light transition-colors duration-200 leading-snug">
-                      {paper.title}
+                      {paper.data.title}
                     </h3>
                   </div>
                   <span class="text-gunSmoke group-hover:text-accent-light transition-colors duration-200 flex-shrink-0 mt-1">→</span>
