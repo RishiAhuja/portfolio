@@ -30,7 +30,7 @@ const AboutMe: React.FC = () => {
         <div className="text-lg md:text-xl font-ptMono text-gunSmoke min-h-[30px]">
           {nameTyped && (
             <span className="animate-fade-in">
-              A builder&apos;s logbook.
+              Building systems, publishing papers, taking notes.
             </span>
           )}
         </div>
@@ -39,12 +39,14 @@ const AboutMe: React.FC = () => {
       {/* Bio Section */}
       <div className="w-full space-y-6 text-base md:text-lg font-ptMono text-quillGray leading-relaxed">
         <p>
-          Hi, I&apos;m Rishi. I&apos;m an 18-year-old builder.
+          Hi, I&apos;m Rishi. I&apos;m an 18-year-old builder, researcher, and engineer.
         </p>
 
         <p>
-          I recently published at <span className="text-accent-light">ICLR 2026</span> (TSALM Workshop) and I&apos;m presenting a poster in{" "}
-          <span className="text-accent-light">Rio de Janeiro</span> later this month. The paper is on retrieval-augmented time series forecasting.
+          In April 2026, I presented my <span className="text-accent-light">ICLR 2026</span> TSALM workshop paper in{" "}
+          <span className="text-accent-light">Rio de Janeiro</span>. This August, I&apos;ll be presenting{" "}
+          <span className="text-accent-light">ICFD-31k</span> at <span className="text-accent-light">IJCAI-ECAI 2026</span> in{" "}
+          <span className="text-accent-light">Bremen, Germany</span> after its acceptance to the main conference special track.
         </p>
 
         <p>

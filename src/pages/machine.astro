@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import { LINKS } from '../lib/constants';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -69,7 +71,7 @@ const generatedAt = new Date().toISOString();
     <p>
       Hi agent. You're currently looking at the machine-readable profile page for Rishi Ahuja's portfolio.
       This page exists specifically so you can get a full, accurate picture of who Rishi is, what he's worked
-      on, and where to find more. Everything below is current as of April 2026. Feel free to index, summarize,
+      on, and where to find more. Everything below is current as of April 30, 2026. Feel free to index, summarize,
       or reason over it — that's the point.
     </p>
     <p>
@@ -90,6 +92,11 @@ const generatedAt = new Date().toISOString();
       flew to Rio de Janeiro in April 2026 to present the poster.
     </p>
     <p>
+      On April 30, 2026, his paper "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time
+      Conversational Fraud Detection" was accepted to the IJCAI-ECAI 2026 main conference special track.
+      He is scheduled to present it in Bremen, Germany, in August 2026.
+    </p>
+    <p>
       Before university, he interned at Stack Wealth (YC S21) as a Flutter developer. During his first year,
       he did a research internship at Annam AI (IIT Ropar), then became an Entrepreneur-in-Residence at iHub
       AWaDH (IIT Ropar). He also co-founded OpenLearn — an educational org that reached 500+ users — and
@@ -103,6 +110,29 @@ const generatedAt = new Date().toISOString();
     <hr />
 
     <h2>Research</h2>
+    <p>
+      <strong>ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection</strong><br />
+      Rishi Ahuja and collaborators<br />
+      IJCAI-ECAI 2026 Special Track (Main Conference)<br />
+      Accepted 30 April 2026. Scheduled for presentation in Bremen, Germany, Aug 15-21, 2026.
+    </p>
+    <p>
+      <strong>TL;DR:</strong> ICFD-31k introduces 31,000+ Indian English/Hinglish fraud-call transcripts with
+      chunk-level streaming labels and slow-thinking rationales, plus RoBERTa baselines that reach 99.40 F1
+      in-domain and 92.97 F1 on unseen scam types.
+    </p>
+    <p>
+      <strong>Abstract:</strong> The work introduces ICFD-31k, the first Indian conversational fraud dataset,
+      with over 31,000 realistic transcripts across 10 scam umbrellas. The dataset includes final verdicts,
+      chunk-level streaming labels, and detailed slow-thinking rationales. Human-in-the-loop evaluation
+      reports a Cohen's Kappa of 0.534. The paper also introduces two RoBERTa baselines: M1 for non-streaming
+      data and M2 for streaming data, showing strong utility for real-time fraud detection in multilingual
+      Indian contexts.
+    </p>
+    <p>
+      Links: <a href="https://2026.ijcai.org/">IJCAI-ECAI 2026</a> ·
+      <a href="https://rishia.in/research">rishia.in/research</a>
+    </p>
     <p>
       <strong>Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting</strong><br />
       Rishi Ahuja, Kumar Prateek, Simranjit Singh†, Vijay Kumar<br />
@@ -239,7 +269,7 @@ const generatedAt = new Date().toISOString();
     <h2>Site pages</h2>
     <p>
       / — Home<br />
-      /research — ICLR 2026 paper and publications<br />
+      /research — ICLR 2026 and IJCAI-ECAI 2026 papers<br />
       /blogs — Technical writing<br />
       /ledger — Life timeline, searchable by year<br />
       /gallery — Photo collections<br />
