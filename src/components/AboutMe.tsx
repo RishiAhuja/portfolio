@@ -44,9 +44,10 @@ const AboutMe: React.FC = () => {
 
         <p>
           In April 2026, I presented my <span className="text-accent-light">ICLR 2026</span> TSALM workshop paper in{" "}
-          <span className="text-accent-light">Rio de Janeiro</span>. This August, I&apos;ll be presenting{" "}
-          <span className="text-accent-light">ICFD-31k</span> at <span className="text-accent-light">IJCAI-ECAI 2026</span> in{" "}
-          <span className="text-accent-light">Bremen, Germany</span> after its acceptance to the main conference special track.
+          <span className="text-accent-light">Rio de Janeiro</span>. My paper{" "}
+          <span className="text-accent-light">ICFD-31k</span> has also been accepted to the{" "}
+          <span className="text-accent-light">IJCAI-ECAI 2026</span> main conference special track, and I&apos;ll be presenting it in{" "}
+          <span className="text-accent-light">Bremen, Germany</span> this August.
         </p>
 
         <p>

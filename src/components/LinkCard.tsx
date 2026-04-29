@@ -1,7 +1,7 @@
 import React from 'react';
-import { Calendar, Mail, Twitter, FileText, Linkedin, Github, Hash, Globe, Building, Rocket, BookOpen } from 'lucide-react';
+import { Calendar, Mail, Twitter, FileText, Linkedin, Github, Hash, Globe, BookOpen } from 'lucide-react';
 
-type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'iHub AWaDH' | 'Zenbase' | 'Research';
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'Research';
 
 const iconMap: Record<IconName, any> = {
   'Schedule a Call': Calendar,
@@ -12,8 +12,6 @@ const iconMap: Record<IconName, any> = {
   'GitHub': Github,
   'Technical Blog': Hash,
   'Portfolio': Globe,
-  'iHub AWaDH': Building,
-  'Zenbase': Rocket,
   'Research': BookOpen
 };
 

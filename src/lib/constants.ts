@@ -15,7 +15,4 @@ export const LINKS = {
   // Professional
   CAL_COM: 'https://cal.com/rishi2220',
   EMAIL: 'mailto:rishia2220@gmail.com',
-  
-  // Work
-  IHUB_AWADH: 'https://ihub-awadh.in/',
 } as const;
