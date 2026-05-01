@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 
@@ -17,7 +16,6 @@ import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 import BackToTop from '../components/ui/BackToTop';
 import FadeInSection from '../components/ui/FadeInSection';
-import ResearchPublications from '../components/ResearchPublications.astro';
 
 const schema = {
   "@context": "https://schema.org",
@@ -45,9 +43,6 @@ const schema = {
   ]
 };
 
-const featuredResearch = (await getCollection('research'))
-  .sort((a, b) => b.data.sort_date.getTime() - a.data.sort_date.getTime())
-  .slice(0, 2);
 ---
 
 <BaseLayout
@@ -72,16 +67,16 @@ const featuredResearch = (await getCollection('research'))
         </FadeInSection>
       </section> -->
 
-      <div class="h-8" />
+      <!-- <div class="h-8" /> -->
 
-      <section id="research">
+      <!-- <section id="research">
         <FadeInSection client:visible delay={100}>
           <ResearchPublications
             papers={featuredResearch}
             heading="Things I've published"
           />
         </FadeInSection>
-      </section>
+      </section> -->
 
       <div class="h-8" />
       
