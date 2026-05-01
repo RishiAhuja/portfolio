@@ -16,6 +16,9 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
     { label: 'Research', href: '/research' },
     { label: 'Links', href: '/links' },
   ];
+  const visibleNavItems = currentPath === '/'
+    ? navItems.filter((item) => item.href !== '/research')
+    : navItems;
 
   // Close menu on escape key
   useEffect(() => {
@@ -50,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
           <div />
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
@@ -120,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center md:hidden pointer-events-none">
             <nav className="space-y-8 pointer-events-auto animate-[fadeInScale_0.4s_ease-out]">
               {/* Main Pages */}
-              {navItems.map((item, index) => (
+              {visibleNavItems.map((item, index) => (
                 <a
                   key={item.href}
                   href={item.href}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { timelineData, type TimelineEvent } from '../data/timeline';
+import type { TimelineEvent } from '../data/timeline';
 import ExpandedContainer from './ui/ExpandedContainer';
 import CommandPalette from './ui/CommandPalette';
 
@@ -66,6 +66,7 @@ interface TimelineCardProps {
 const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const isHidden = item.hiddenInLedger === true;
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -96,90 +97,120 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
       {/* Timeline card */}
       <div className="flex-1 mb-2">
         <div
-          data-event-id={`${item.date}-${item.title}`}
+          data-event-id={isHidden ? undefined : `${item.date}-${item.title}`}
           className={`
-            border rounded-sm transition-all duration-300 relative group
-            ${isHovered ? 'border-accent shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] transform -translate-y-1' : 'border-darkGrey/30'}
+            border rounded-sm transition-all duration-300 relative group overflow-hidden
+            ${!isHidden && isHovered ? 'border-accent shadow-[0_4px_20px_-12px_rgba(100,178,188,0.25)] transform -translate-y-1' : 'border-darkGrey/30'}
           `}
           style={{ backgroundColor: '#191919' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
+          {isHidden && (
+            <div className="absolute inset-0 bg-gradient-to-br from-darkGrey/10 via-transparent to-darkGrey/10 pointer-events-none" />
+          )}
+
           {/* Accent corner */}
           <div className={`absolute top-0 right-0 w-0 h-0 transition-all duration-300
             ${isMobile ? 'border-t-[12px] border-r-[12px]' : 'border-t-[20px] border-r-[20px]'}
-            ${isHovered ? 'border-t-accent border-r-accent' : 'border-t-transparent border-r-transparent'}`}>
+            ${!isHidden && isHovered ? 'border-t-accent border-r-accent' : 'border-t-transparent border-r-transparent'}`}>
           </div>
 
           <div className={isMobile ? "p-3" : "p-6"}>
-            {/* Header with Journey/Gallery Links */}
-            <div className={`flex items-start ${isMobile ? 'flex-col' : 'justify-between'} gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
-              <div className={isMobile ? 'w-full' : 'flex-1 min-w-0'}>
-                <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
-                  ${isMobile ? 'text-base mb-2' : 'text-xl mb-2'}`}>
-                  {item.title}
-                </h3>
-                <p className={`text-gunSmoke leading-relaxed font-ptMono
-                  ${isMobile ? 'text-xs' : 'text-base'}`}>
-                  {item.description}
-                </p>
-              </div>
+            {isHidden ? (
+              <div aria-hidden="true" className="select-none pointer-events-none">
+                <div className={`${isMobile ? 'mb-3' : 'mb-4'}`}>
+                  <div className={`rounded-sm bg-darkGrey/40 blur-md
+                    ${isMobile ? 'h-5 w-3/4 mb-3' : 'h-7 w-2/3 mb-4'}`} />
+                  <div className="space-y-2">
+                    <div className={`rounded-sm bg-darkGrey/30 blur-md ${isMobile ? 'h-3 w-full' : 'h-4 w-full'}`} />
+                    <div className={`rounded-sm bg-darkGrey/25 blur-md ${isMobile ? 'h-3 w-11/12' : 'h-4 w-10/12'}`} />
+                    <div className={`rounded-sm bg-darkGrey/20 blur-md ${isMobile ? 'h-3 w-4/5' : 'h-4 w-8/12'}`} />
+                  </div>
+                </div>
 
-              {/* Journey and Gallery Links - Prominent styling */}
-              {(item.journeySlug || item.gallerySlug) && (
-                <div className={`flex-shrink-0 flex gap-3 ${isMobile ? 'flex-row items-start mt-3' : 'flex-col gap-2 items-end'}`}>
-                  {item.journeySlug && (
-                    <a
-                      href={`/journey/${item.journeySlug}`}
-                      className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
-                        transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
-                        ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}
-                    >
-                      Read Blurb →
-                    </a>
-                  )}
-                  {item.gallerySlug && (
-                    <a
-                      href={`/gallery/${item.gallerySlug}`}
-                      className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
-                        transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
-                        ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}
-                    >
-                      View Artifacts →
-                    </a>
+                <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
+                  <div className={`rounded-sm bg-darkGrey/25 blur-md ${isMobile ? 'h-7 w-24' : 'h-10 w-32'}`} />
+                  <div className={`rounded-sm bg-darkGrey/20 blur-md ${isMobile ? 'h-7 w-20' : 'h-10 w-24'}`} />
+                </div>
+
+                <div className="flex justify-between items-center pt-3 border-t border-darkGrey/20">
+                  <div className={`rounded-sm bg-darkGrey/20 blur-md ${isMobile ? 'h-3 w-16' : 'h-4 w-20'}`} />
+                  <div className={`rounded-sm bg-darkGrey/15 blur-md ${isMobile ? 'h-3 w-12' : 'h-4 w-16'}`} />
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Header with Journey/Gallery Links */}
+                <div className={`flex items-start ${isMobile ? 'flex-col' : 'justify-between'} gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
+                  <div className={isMobile ? 'w-full' : 'flex-1 min-w-0'}>
+                    <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
+                      ${isMobile ? 'text-base mb-2' : 'text-xl mb-2'}`}>
+                      {item.title}
+                    </h3>
+                    <p className={`text-gunSmoke leading-relaxed font-ptMono
+                      ${isMobile ? 'text-xs' : 'text-base'}`}>
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Journey and Gallery Links - Prominent styling */}
+                  {(item.journeySlug || item.gallerySlug) && (
+                    <div className={`flex-shrink-0 flex gap-3 ${isMobile ? 'flex-row items-start mt-3' : 'flex-col gap-2 items-end'}`}>
+                      {item.journeySlug && (
+                        <a
+                          href={`/journey/${item.journeySlug}`}
+                          className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
+                            transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
+                            ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}
+                        >
+                          Read Blurb →
+                        </a>
+                      )}
+                      {item.gallerySlug && (
+                        <a
+                          href={`/gallery/${item.gallerySlug}`}
+                          className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
+                            transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
+                            ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}
+                        >
+                          View Artifacts →
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
 
-            {/* Action Buttons */}
-            {item.buttons && item.buttons.length > 0 && (
-              <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
-                {item.buttons.map((button, buttonIndex) => (
-                  <a
-                    key={buttonIndex}
-                    href={button.link}
-                    className={`inline-flex items-center gap-2 font-ptMono 
-                      border border-darkGrey/50 text-gunSmoke hover:border-accent hover:text-accent 
-                      transition-all duration-200 rounded-sm hover:bg-accent/5
-                      ${isMobile ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'}`}
-                    target={button.link.startsWith('#') ? '_self' : '_blank'}
-                    rel="noopener noreferrer"
-                  >
-                    {getButtonIcon(button.icon)}
-                    <span>{button.label}</span>
-                  </a>
-                ))}
-              </div>
+                {/* Action Buttons */}
+                {item.buttons && item.buttons.length > 0 && (
+                  <div className={`flex flex-wrap gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
+                    {item.buttons.map((button, buttonIndex) => (
+                      <a
+                        key={buttonIndex}
+                        href={button.link}
+                        className={`inline-flex items-center gap-2 font-ptMono 
+                          border border-darkGrey/50 text-gunSmoke hover:border-accent hover:text-accent 
+                          transition-all duration-200 rounded-sm hover:bg-accent/5
+                          ${isMobile ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'}`}
+                        target={button.link.startsWith('#') ? '_self' : '_blank'}
+                        rel="noopener noreferrer"
+                      >
+                        {getButtonIcon(button.icon)}
+                        <span>{button.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {/* Bottom section */}
+                <div className="flex justify-between items-center pt-3 border-t border-darkGrey/20">
+                  <span className={`text-gunSmoke font-ptMono
+                    ${isMobile ? 'text-xs' : 'text-sm'}`}>
+                    {item.date}
+                  </span>
+                </div>
+              </>
             )}
-
-            {/* Bottom section */}
-            <div className="flex justify-between items-center pt-3 border-t border-darkGrey/20">
-              <span className={`text-gunSmoke font-ptMono
-                ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                {item.date}
-              </span>
-            </div>
           </div>
         </div>
       </div>
@@ -187,16 +218,27 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
   );
 };
 
-const TimelineView: React.FC = () => {
+interface TimelineViewProps {
+  timelineData: Record<string, TimelineEvent[]>;
+}
+
+const TimelineView: React.FC<TimelineViewProps> = ({ timelineData }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const selectedItemRef = useRef<HTMLDivElement>(null);
 
   // Get all years sorted in descending order
-  const years = Object.keys(timelineData).sort((a, b) => b.localeCompare(a));
+  const years = Object.keys(timelineData)
+    .filter((year) => (timelineData[year] || []).length > 0)
+    .sort((a, b) => b.localeCompare(a));
 
   // Flatten all timeline items for search
-  const allItems = years.flatMap(year => timelineData[year] || []);
+  const allItems = years.flatMap((year) =>
+    (timelineData[year] || []).filter((item) => !item.hiddenInLedger),
+  );
+  const hasHiddenEntries = years.some((year) =>
+    (timelineData[year] || []).some((item) => item.hiddenInLedger),
+  );
 
   useEffect(() => {
     const checkMobile = () => {
@@ -258,7 +300,12 @@ const TimelineView: React.FC = () => {
           <p className={`text-gunSmoke font-ptMono mb-8 ${isMobile ? 'text-sm' : 'text-base'} max-w-2xl mx-auto`}>
             A running log of my life events.
           </p>
-
+          {hasHiddenEntries && (
+            <div className="inline-flex items-center gap-2 px-3 py-2 border border-accent/20 rounded-sm bg-codGray/40 text-gunSmoke font-ptMono text-xs md:text-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent/70" />
+              Some blurred entries are being held back for now. They&apos;ll open up soon.
+            </div>
+          )}
 
         </div>
 

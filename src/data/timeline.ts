@@ -14,6 +14,7 @@ export interface TimelineEvent {
     link: string;
     icon: 'github' | 'demo' | 'blog' | 'certificate' | 'video' | 'docs' | 'download' | 'external';
   }[];
+  hiddenInLedger?: boolean;
 }
 
 export const timelineData: Record<string, TimelineEvent[]> = {
@@ -24,6 +25,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'achievement',
       description: 'Paper "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection" accepted to the IJCAI-ECAI 2026 main conference special track. I will present it in Bremen, Germany.',
       year: '2025-26',
+      hiddenInLedger: true,
       buttons: [
         {
           label: 'Research',
@@ -43,6 +45,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'achievement',
       description: 'Recently presented the poster for "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting" at the ICLR 2026 TSALM Workshop. Received a $2,025 travel grant.',
       year: '2025-26',
+      hiddenInLedger: true,
       buttons: [
         {
           label: 'Paper',
@@ -62,6 +65,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'achievement',
       description: 'Invited to review papers for the Foundation Models for Structured Data (FMSD) Workshop at ICML 2026.',
       year: '2025-26',
+      hiddenInLedger: true,
       buttons: [
         {
           label: 'FMSD @ ICML 2026',
@@ -90,6 +94,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'achievement',
       description: 'Paper "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting" accepted at ICLR 2026 TSALM Workshop — first CORE A* acceptance in the department\'s history including faculty.',
       year: '2025-26',
+      hiddenInLedger: true,
       buttons: [
         {
           label: 'Paper',
@@ -349,6 +354,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'internship',
       description: 'AI research internship at IIT Ropar focusing on agricultural technology and machine learning applications.',
       year: '2024-25',
+      hiddenInLedger: false,
       buttons: [
         { label: 'Company', link: 'http://annam.ai/', icon: 'external' }
       ]

@@ -2,22 +2,33 @@ import React from 'react';
 import ExpandedContainer from './ui/ExpandedContainer';
 import SmallContainer from './ui/SmallContainer';
 import CalendarSchedule from './ui/CalendarSchedule';
+import { LINKS } from '../lib/constants';
 
 const ContactSocial: React.FC = () => {
   const socialLinks = [
     {
       text: 'Twitter',
-      clickLink: 'https://x.com/Rishi2220',
+      clickLink: LINKS.TWITTER,
       icon: <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
     },
     {
+      text: 'GitHub',
+      clickLink: LINKS.GITHUB,
+      icon: <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.649.5.5 5.649.5 12c0 5.084 3.292 9.398 7.86 10.92.575.106.785-.25.785-.555 0-.274-.01-1-.016-1.962-3.197.695-3.872-1.54-3.872-1.54-.523-1.33-1.278-1.684-1.278-1.684-1.045-.714.08-.7.08-.7 1.156.081 1.764 1.187 1.764 1.187 1.028 1.761 2.697 1.252 3.354.958.104-.744.402-1.252.731-1.54-2.552-.29-5.236-1.276-5.236-5.682 0-1.255.449-2.282 1.185-3.087-.119-.291-.514-1.461.112-3.046 0 0 .967-.31 3.168 1.179a11.05 11.05 0 0 1 2.884-.388c.978.004 1.964.132 2.884.388 2.2-1.489 3.166-1.179 3.166-1.179.627 1.585.232 2.755.114 3.046.738.805 1.184 1.832 1.184 3.087 0 4.417-2.688 5.388-5.248 5.673.413.355.781 1.058.781 2.132 0 1.54-.014 2.78-.014 3.157 0 .308.207.667.79.554C20.212 21.394 23.5 17.082 23.5 12 23.5 5.649 18.351.5 12 .5Z" /></svg>
+    },
+    {
       text: 'Linkedin',
-      clickLink: 'https://www.linkedin.com/in/rishi-ahuja-b1a224310/',
+      clickLink: LINKS.LINKEDIN,
       icon: <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 21.227.792 22 1.771 22h20.451C23.2 22 24 21.227 24 20.542V1.729C24 .774 23.2 0 22.226 0z" /></svg>
     },
     {
+      text: 'Google Scholar',
+      clickLink: LINKS.GOOGLE_SCHOLAR,
+      icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4 3 8.5 12 13l9-4.5L12 4Zm-6 7.5V15c0 1.8 2.686 3.5 6 3.5s6-1.7 6-3.5v-3.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.5V14" /></svg>
+    },
+    {
       text: 'Hashnode',
-      clickLink: 'https://rishi2220.hashnode.dev',
+      clickLink: LINKS.HASHNODE,
       icon: <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.351 8.019l-6.37-6.37a5.63 5.63 0 0 0-7.962 0l-6.37 6.37a5.63 5.63 0 0 0 0 7.962l6.37 6.37a5.63 5.63 0 0 0 7.962 0l6.37-6.37a5.63 5.63 0 0 0 0-7.962zM12 15.953a3.953 3.953 0 1 1 0-7.906 3.953 3.953 0 0 1 0 7.906z" /></svg>
     },
     {

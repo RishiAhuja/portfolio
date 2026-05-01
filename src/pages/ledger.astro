@@ -2,11 +2,32 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import TimelineView from '../components/TimelineView.tsx';
+import { timelineData, type TimelineEvent } from '../data/timeline';
 
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
   { label: 'Life Ledger' }
 ];
+
+const ledgerTimelineData = Object.fromEntries(
+  Object.entries(timelineData).map(([year, items]) => [
+    year,
+    items.map((item): TimelineEvent => (
+      item.hiddenInLedger
+        ? {
+            ...item,
+            date: '',
+            title: '',
+            description: '',
+            link: undefined,
+            journeySlug: undefined,
+            gallerySlug: undefined,
+            buttons: [],
+          }
+        : item
+    )),
+  ]),
+) as Record<string, TimelineEvent[]>;
 ---
 
 <BaseLayout 
@@ -19,5 +40,5 @@ const breadcrumbs = [
       <Breadcrumbs client:load items={breadcrumbs} />
     </div>
   </div>
-  <TimelineView client:load />
+  <TimelineView client:load timelineData={ledgerTimelineData} />
 </BaseLayout>
