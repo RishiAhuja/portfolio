@@ -6,7 +6,6 @@ abstract: "Time Series Foundation Models (TSFMs) have borrowed the long context 
 venue: "1st ICLR Workshop on Time Series in the Age of Large Models"
 proceedings: "Proceedings of ICLR 2026"
 status: "published"
-status_label: "Published Mar 2, 2026"
 sort_date: 2026-03-02
 published_date: 2026-03-02
 authors:
@@ -23,11 +22,10 @@ authors:
 affiliation_note: "Department of Information Technology, Dr. B.R. Ambedkar National Institute of Technology Jalandhar"
 award: "$2,025 ICLR travel grant"
 event:
-  announcement: "Presented at the ICLR 2026 TSALM Workshop in Rio de Janeiro, Brazil (Apr 26-27, 2026). Received a $2,025 ICLR travel grant."
+  announcement: "Recently presented this work as an ICLR 2026 TSALM Workshop poster. Received a $2,025 ICLR travel grant."
   label: "Presented poster at"
   venue: "ICLR 2026 Workshop (TSALM)"
   location: "Rio de Janeiro, Brazil"
-  dates_label: "Apr 26-27, 2026"
   start_date: "2026-04-26"
   end_date: "2026-04-27"
   url: "https://iclr.cc/Conferences/2026"
@@ -69,15 +67,3 @@ same_as:
   - "https://iclr.cc/virtual/2026/10013856"
   - "https://github.com/RishiAhuja/ahuja2026retrieval"
 ---
-
-## What this paper argues
-
-The core claim is simple: in noisy time-series settings, more context is not automatically better. Long windows can bury the useful signal under irrelevant volatility, and attention alone does not reliably separate the two.
-
-## Main takeaway
-
-Selective retrieval worked better than brute-force context scaling. Instead of asking the model to scan everything, RAFT injects the most relevant historical segments and gives the forecaster a much cleaner inductive bias.
-
-## Presentation
-
-I presented this work at the ICLR 2026 TSALM Workshop in Rio de Janeiro. It was also the first CORE A* acceptance in the department's history, including faculty.

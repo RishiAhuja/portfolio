@@ -6,7 +6,6 @@ abstract: "The proliferation of sophisticated telephone scams poses a significan
 venue: "IJCAI-ECAI 2026 Special Track (Main Conference)"
 proceedings: "Accepted to IJCAI-ECAI 2026"
 status: "accepted"
-status_label: "Accepted Apr 30, 2026"
 sort_date: 2026-04-30
 authors:
   - name: "Rishi Ahuja"
@@ -19,11 +18,10 @@ authors:
     profile: "https://openreview.net/profile?id=~Simranjit_Singh4"
 affiliation_note: "Department of Information Technology, Dr. B.R. Ambedkar National Institute of Technology Jalandhar"
 event:
-  announcement: "Accepted to the IJCAI-ECAI 2026 main conference special track. Presentation scheduled in Bremen, Germany (Aug 15-21, 2026)."
+  announcement: "Accepted to the IJCAI-ECAI 2026 main conference special track. I will present ICFD-31k in Bremen, Germany."
   label: "To be presented at"
   venue: "IJCAI-ECAI 2026"
   location: "Bremen, Germany"
-  dates_label: "Aug 15-21, 2026"
   start_date: "2026-08-15"
   end_date: "2026-08-21"
   url: "https://2026.ijcai.org/"
@@ -38,19 +36,3 @@ primary_url: "https://2026.ijcai.org/"
 same_as:
   - "https://2026.ijcai.org/"
 ---
-
-## Highlights
-
-- 31,000+ realistic conversational transcripts built for the Indian fraud landscape.
-- Bilingual coverage across English and Hinglish, including code-switching patterns.
-- Chunk-level streaming labels for real-time fraud detection experiments.
-- Slow-thinking rationales for explainability and auditability.
-- RoBERTa baselines for both static and streaming settings.
-
-## Why it matters
-
-Most fraud-detection datasets either focus on transactions, emails, or monolingual contexts. This paper pushes toward a more deployable benchmark for live call settings, where the hard part is not just classification, but early intervention under incomplete context.
-
-## Release note
-
-I will add camera-ready metadata and any public artifacts here once the final proceedings and release flow are ready.

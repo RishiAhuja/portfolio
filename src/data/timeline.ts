@@ -22,7 +22,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       date: '30 Apr 2026',
       title: 'IJCAI-ECAI 2026 Special Track Paper Accepted',
       type: 'achievement',
-      description: 'Paper "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection" accepted to the IJCAI-ECAI 2026 main conference special track. Presentation scheduled for Bremen, Germany (August 15-21, 2026).',
+      description: 'Paper "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection" accepted to the IJCAI-ECAI 2026 main conference special track. I will present it in Bremen, Germany.',
       year: '2025-26',
       buttons: [
         {
@@ -39,9 +39,9 @@ export const timelineData: Record<string, TimelineEvent[]> = {
     },
     {
       date: '26 Apr 2026',
-      title: 'Presented Poster at ICLR 2026, Rio de Janeiro',
+      title: 'Presented ICLR 2026 Poster',
       type: 'achievement',
-      description: 'Presented poster for "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting" at the ICLR 2026 TSALM Workshop in Rio de Janeiro, Brazil (April 26-27, 2026). Received a $2,025 travel grant.',
+      description: 'Recently presented the poster for "Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting" at the ICLR 2026 TSALM Workshop. Received a $2,025 travel grant.',
       year: '2025-26',
       buttons: [
         {

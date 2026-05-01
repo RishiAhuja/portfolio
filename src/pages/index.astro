@@ -52,7 +52,7 @@ const featuredResearch = (await getCollection('research'))
 
 <BaseLayout
   title="Rishi Ahuja | Builder, Researcher, Engineer"
-  description="Portfolio of Rishi Ahuja - builder, researcher, and engineer at NIT Jalandhar. Presented at ICLR 2026 in Rio de Janeiro and accepted to IJCAI-ECAI 2026, to be presented in Bremen."
+  description="Portfolio of Rishi Ahuja - builder, researcher, and engineer at NIT Jalandhar. Recently presented an ICLR 2026 poster and accepted to IJCAI-ECAI 2026, to be presented in Bremen."
   image="/og?title=Rishi%20Ahuja&description=Builder%20%7C%20Researcher%20%7C%20Engineer&type=default"
 >
   <JsonLd data={schema} />
@@ -79,7 +79,6 @@ const featuredResearch = (await getCollection('research'))
           <ResearchPublications
             papers={featuredResearch}
             heading="Things I've published"
-            viewAllHref="/research"
           />
         </FadeInSection>
       </section>

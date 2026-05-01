@@ -5,13 +5,13 @@ import ExpandedContainer from './ui/ExpandedContainer.astro';
 interface Props {
   papers: CollectionEntry<'research'>[];
   heading?: string;
-  viewAllHref?: string;
+  variant?: 'list' | 'cards';
 }
 
 const {
   papers,
   heading = "Things I've published",
-  viewAllHref,
+  variant = 'list',
 } = Astro.props;
 
 const formatDate = (date: Date) =>
@@ -23,70 +23,98 @@ const formatDate = (date: Date) =>
 ---
 
 <div class="flex flex-col">
-  <ExpandedContainer text={heading}>
-    {viewAllHref && (
-      <a
-        slot="right"
-        href={viewAllHref}
-        class="font-ptMono text-sm text-gunSmoke hover:text-accent-light transition-colors duration-200"
-      >
-        View all →
-      </a>
-    )}
-  </ExpandedContainer>
+  <ExpandedContainer text={heading} />
 
   <div class="h-4"></div>
 
-  <div class="flex flex-col space-y-2 md:space-y-4">
-    {papers.map((paper) => {
-      const paperHref = `/research/${paper.slug}`;
-      const date = formatDate(paper.data.sort_date);
-      const meta = `${paper.data.status === 'accepted' ? 'Accepted' : 'Published'} · ${paper.data.venue}`;
+  {variant === 'cards' ? (
+    <div class="grid gap-4">
+      {papers.map((paper) => {
+        const paperHref = `/research/${paper.slug}`;
+        const date = formatDate(paper.data.sort_date);
+        const meta = `${paper.data.proceedings} · ${paper.data.venue}`;
 
-      return (
-        <a
-          href={paperHref}
-          class="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
-        >
-          <div class="flex md:hidden flex-col gap-1.5">
-            <h3 class="font-ptMono text-sm font-medium text-quillGray group-hover:text-accent-light transition-colors duration-300">
-              {paper.data.title}
-            </h3>
-            <p class="font-ptMono text-xs text-accent-light/80">
-              {meta}
-            </p>
-            <div class="flex items-center justify-between">
-              <span class="font-ptMono text-xs text-gunSmoke">
-                {date}
-              </span>
-              <div class="transform transition-all duration-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-accent-light">
-                →
-              </div>
-            </div>
-          </div>
-
-          <div class="hidden md:flex items-start gap-3 md:gap-8">
-            <div class="flex-shrink-0 w-32 font-ptMono text-xs text-gunSmoke group-hover:text-quillGray transition-colors duration-300">
-              {date}
-            </div>
-
-            <div class="flex-grow flex items-start justify-between gap-4 min-w-0">
+        return (
+          <a
+            href={paperHref}
+            class="group block rounded-sm border border-darkGrey/45 bg-bgShades-light/55 p-5 transition-all duration-300 hover:border-accent-light/45 hover:bg-bgShades-light"
+          >
+            <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div class="min-w-0">
-                <h3 class="font-ptMono text-sm md:text-base font-medium text-quillGray group-hover:text-accent-light transition-colors duration-300 truncate">
+                <p class="mb-2 font-ptMono text-xs text-gunSmoke">
+                  {date}
+                </p>
+                <h2 class="font-ptMono text-lg font-bold leading-snug text-quillGray transition-colors duration-300 group-hover:text-accent-light">
                   {paper.data.title}
-                </h3>
-                <p class="mt-1 font-ptMono text-xs text-accent-light/80 truncate">
+                </h2>
+                <p class="mt-2 font-ptMono text-xs leading-relaxed text-accent-light/80">
                   {meta}
+                </p>
+                <p class="mt-3 max-w-3xl font-ptMono text-xs leading-relaxed text-gunSmoke">
+                  {paper.data.description}
                 </p>
               </div>
 
-              <div class="flex-shrink-0 transform transition-all duration-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-accent-light">
+              <div class="hidden flex-shrink-0 text-accent-light transition-transform duration-300 group-hover:translate-x-1 md:block">
                 →
               </div>
             </div>
-          </div>
-        </a>
-      );
-    })}
-  </div>
+          </a>
+        );
+      })}
+    </div>
+  ) : (
+    <div class="flex flex-col space-y-2 md:space-y-4">
+      {papers.map((paper) => {
+        const paperHref = `/research/${paper.slug}`;
+        const date = formatDate(paper.data.sort_date);
+        const meta = `${paper.data.proceedings} · ${paper.data.venue}`;
+
+        return (
+          <a
+            href={paperHref}
+            class="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
+          >
+            <div class="flex md:hidden flex-col gap-1.5">
+              <h3 class="font-ptMono text-sm font-medium text-quillGray group-hover:text-accent-light transition-colors duration-300">
+                {paper.data.title}
+              </h3>
+              <p class="font-ptMono text-xs text-accent-light/80">
+                {meta}
+              </p>
+              <div class="flex items-center justify-between">
+                <span class="font-ptMono text-xs text-gunSmoke">
+                  {date}
+                </span>
+                <div class="transform transition-all duration-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-accent-light">
+                  →
+                </div>
+              </div>
+            </div>
+
+            <div class="hidden md:flex items-start gap-3 md:gap-8">
+              <div class="flex-shrink-0 w-32 font-ptMono text-xs text-gunSmoke group-hover:text-quillGray transition-colors duration-300">
+                {date}
+              </div>
+
+              <div class="flex-grow flex items-start justify-between gap-4 min-w-0">
+                <div class="min-w-0">
+                  <h3 class="font-ptMono text-sm md:text-base font-medium text-quillGray group-hover:text-accent-light transition-colors duration-300 truncate">
+                    {paper.data.title}
+                  </h3>
+                  <p class="mt-1 font-ptMono text-xs text-accent-light/80 truncate">
+                    {meta}
+                  </p>
+                </div>
+
+                <div class="flex-shrink-0 transform transition-all duration-300 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 text-accent-light">
+                  →
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  )}
 </div>

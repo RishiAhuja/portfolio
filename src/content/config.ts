@@ -26,7 +26,6 @@ const researchCollection = defineCollection({
     venue: z.string(),
     proceedings: z.string(),
     status: z.enum(['accepted', 'published']),
-    status_label: z.string(),
     sort_date: z.date(),
     published_date: z.date().optional(),
     authors: z.array(z.object({
@@ -42,7 +41,6 @@ const researchCollection = defineCollection({
       label: z.string(),
       venue: z.string(),
       location: z.string(),
-      dates_label: z.string(),
       start_date: z.string().optional(),
       end_date: z.string().optional(),
       url: z.string().url(),

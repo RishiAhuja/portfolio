@@ -105,31 +105,8 @@ const [city, country] = paper.data.event?.location.split(',').map((part) => part
     <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
       <Breadcrumbs items={breadcrumbs} />
 
-      <div class="mt-6 mb-8">
-        <a
-          href="/research"
-          class="inline-flex items-center gap-2 text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to research
-        </a>
-      </div>
-
-      <article class="bg-bgShades-light border border-darkGrey/40 rounded-lg">
+      <article class="mt-8 bg-bgShades-light border border-darkGrey/40 rounded-lg">
         <div class="p-6 md:p-8">
-          <div class="flex flex-wrap items-center gap-3 mb-4">
-            <span class={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-ptMono uppercase tracking-wider border ${
-              paper.data.status === 'accepted'
-                ? 'border-accent/30 bg-accent/10 text-accent-light'
-                : 'border-darkGrey/40 bg-bgShades-DEFAULT text-gunSmoke'
-            }`}>
-              {paper.data.status}
-            </span>
-            <span class="text-xs font-ptMono text-gunSmoke">{paper.data.status_label}</span>
-          </div>
-
           <p class="text-xs font-ptMono text-gunSmoke mb-4">
             {paper.data.proceedings} · {paper.data.venue}
           </p>
