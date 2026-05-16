@@ -75,6 +75,25 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       ]
     },
     {
+      date: '16 Apr 2026',
+      title: 'Selected for YC Startup School India & OpenAI Codex Hackathon Bengaluru',
+      type: 'achievement',
+      description: 'Visited Bengaluru after being selected for two major builder events: YC Startup School India, shortlisted among roughly 2,000 participants from 24,000+ applicants, and OpenAI Codex Hackathon Bengaluru, selected as a top 100 candidate from 4,000+ applicants.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'OpenAI Codex Hackathon',
+          link: 'https://developers.openai.com/codex/community/meetups',
+          icon: 'external'
+        },
+        {
+          label: 'YC Startup School India',
+          link: 'https://www.passionateinmarketing.com/skil-events-executes-y-combinators-india-debut-of-startup-school-in-bengaluru/',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '28 Mar 2026',
       title: 'Organizer & Judge Coordinator — HackMol 7.0, NIT Jalandhar',
       type: 'community',
