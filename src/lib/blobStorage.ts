@@ -1,4 +1,4 @@
-// Vercel Blob Storage utilities for journey images
+// Vercel Blob Storage utilities for blurb images
 // Install with: npm install @vercel/blob
 
 /**
@@ -8,7 +8,7 @@
  * import { put } from '@vercel/blob';
  * 
  * const uploadImage = async (file: File) => {
- *   const blob = await put(`journey/${file.name}`, file, {
+ *   const blob = await put(`blurb/${file.name}`, file, {
  *     access: 'public',
  *   });
  *   return blob.url;
@@ -16,23 +16,23 @@
  */
 
 /**
- * Common Vercel Blob patterns for journey images
+ * Common Vercel Blob patterns for blurb images
  */
 export const BLOB_PATTERNS = {
   // Base URL for your Vercel Blob Storage
   BASE: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com',
   
-  // Journey content images
-  JOURNEY: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/journey/',
+  // Blurb content images
+  BLURB: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/blurb/',
   
   // Tweet screenshots
-  TWEETS: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/journey/tweets/',
+  TWEETS: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/blurb/tweets/',
   
   // Video thumbnails
-  VIDEO_POSTERS: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/journey/video-posters/',
+  VIDEO_POSTERS: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/blurb/video-posters/',
   
   // Carousel images
-  CAROUSEL: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/journey/carousel/',
+  CAROUSEL: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/blurb/carousel/',
   
   // Project specific folders (like your fern example)
   FERN: 'https://a5nvwd1dlbbduhtr.public.blob.vercel-storage.com/fern/',
@@ -62,11 +62,11 @@ export function getOptimizedBlobUrl(baseUrl: string, options?: {
 }
 
 /**
- * Helper function to construct journey image URLs
+ * Helper function to construct blurb image URLs
  */
-export const journeyImage = {
-  // Regular journey image
-  content: (filename: string) => `${BLOB_PATTERNS.JOURNEY}${filename}`,
+export const blurbImage = {
+  // Regular blurb image
+  content: (filename: string) => `${BLOB_PATTERNS.BLURB}${filename}`,
   
   // Tweet screenshot
   tweet: (filename: string) => `${BLOB_PATTERNS.TWEETS}${filename}`,
@@ -85,38 +85,38 @@ export const journeyImage = {
 };
 
 /**
- * Example usage in journey.ts:
+ * Example usage in blurb.ts:
  * 
  * {
  *   type: 'image',
- *   content: journeyImage.content('demo-screenshot.jpg'),
+ *   content: blurbImage.content('demo-screenshot.jpg'),
  *   alt: 'Application demo screenshot'
  * },
  * 
  * {
  *   type: 'tweetImage',
- *   content: journeyImage.tweet('tweet-announcement.jpg'),
+ *   content: blurbImage.tweet('tweet-announcement.jpg'),
  *   alt: 'Tweet about project launch',
  *   tweetUrl: 'https://twitter.com/username/status/123456789'
  * },
  * 
  * {
  *   type: 'image',
- *   content: journeyImage.fern('cyberpunk.png'), // For fern project images
+ *   content: blurbImage.fern('cyberpunk.png'), // For fern project images
  *   alt: 'Cyberpunk themed graphics'
  * },
  * 
  * {
  *   type: 'image',
- *   content: journeyImage.project('openlearn', 'dashboard.jpg'), // For other projects
+ *   content: blurbImage.project('openlearn', 'dashboard.jpg'), // For other projects
  *   alt: 'OpenLearn dashboard screenshot'
  * },
  * 
  * {
  *   type: 'carousel',
  *   images: [
- *     { src: journeyImage.carousel('step1.jpg'), alt: 'First step' },
- *     { src: journeyImage.carousel('step2.jpg'), alt: 'Second step' },
+ *     { src: blurbImage.carousel('step1.jpg'), alt: 'First step' },
+ *     { src: blurbImage.carousel('step2.jpg'), alt: 'Second step' },
  *   ]
  * }
  */

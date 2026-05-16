@@ -1,4 +1,4 @@
-import type { JourneyContent } from '../data/journey';
+import type { BlurbContent } from '../data/blurb';
 
 // Reading speed constants (words per minute)
 const AVERAGE_READING_SPEED = 200; // Average adult reading speed
@@ -10,10 +10,10 @@ const TIME_PER_LINK = 0.25; // 15 seconds per link embed
 
 /**
  * Calculate reading time based on content
- * @param content Array of journey content blocks
+ * @param content Array of blurb content blocks
  * @returns Reading time in minutes (rounded up)
  */
-export function calculateReadTime(content: JourneyContent[]): number {
+export function calculateReadTime(content: BlurbContent[]): number {
   let totalWords = 0;
   let additionalTime = 0;
 
@@ -68,7 +68,6 @@ export function calculateReadTime(content: JourneyContent[]): number {
         break;
 
       case 'twitter':
-      case 'tweetImage':
         additionalTime += 0.5; // 30 seconds to read a tweet
         break;
     }
@@ -99,10 +98,10 @@ function countWords(text: string): number {
 
 /**
  * Get reading time breakdown for debugging
- * @param content Array of journey content blocks
+ * @param content Array of blurb content blocks
  * @returns Detailed breakdown of reading time calculation
  */
-export function getReadTimeBreakdown(content: JourneyContent[]): {
+export function getReadTimeBreakdown(content: BlurbContent[]): {
   totalWords: number;
   readingTime: number;
   mediaTime: number;

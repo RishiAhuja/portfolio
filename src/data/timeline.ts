@@ -7,7 +7,7 @@ export interface TimelineEvent {
   link?: string;
   status?: 'ongoing' | 'completed';
   year: string;
-  journeySlug?: string; // Link to journey post if exists (displays as "Read Blurb")
+  blurbSlug?: string; // Link to blurb post if exists (displays as "Read Blurb")
   gallerySlug?: string; // Link to gallery event if exists (displays as "View Artifacts")
   buttons?: {
     label: string;
@@ -59,6 +59,18 @@ export const timelineData: Record<string, TimelineEvent[]> = {
         }
       ]
     },
+    // {
+    //   date: '23 Apr 2026',
+    //   title: 'ICLR 2026 and Rio de Janeiro',
+    //   type: 'achievement',
+    //   description: 'Traveled to Rio de Janeiro for ICLR 2026, presented the TSALM workshop poster, learned the city through buses, hostels, conference halls, and a lot of practical mistakes.',
+    //   year: '2025-26',
+    //   blurbSlug: 'iclr-2026-rio-de-janeiro',
+    //   buttons: [
+    //     { label: 'Read Blurb', link: '/blurb/iclr-2026-rio-de-janeiro', icon: 'blog' },
+    //     { label: 'ICLR Virtual 2026', link: 'https://iclr.cc/virtual/2026/10013856', icon: 'external' }
+    //   ]
+    // },
     {
       date: 'Apr 2026',
       title: 'Invited as Reviewer for FMSD Workshop at ICML 2026',
@@ -337,9 +349,9 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'community',
       description: 'Co-founded educational organization for teaching via blogs with cohorts, achieved 120+ active users.',
       year: '2024-25',
-      journeySlug: 'openlearn',
+      blurbSlug: 'openlearn',
       buttons: [
-        { label: 'Read Story', link: '/journey/openlearn', icon: 'blog' },
+        { label: 'Read Story', link: '/blurb/openlearn', icon: 'blog' },
         { label: 'GitHub', link: 'https://github.com/openlearnnitj', icon: 'github' },
         { label: 'Website', link: 'https://openlearn.org.in', icon: 'external' }
       ]
@@ -360,9 +372,9 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'project',
       description: '0-dependency C/C++ GUI creation library built from scratch, cross-platform with WebAssembly support.',
       year: '2024-25',
-      journeySlug: 'fern',
+      blurbSlug: 'fern',
       buttons: [
-        { label: 'Read Story', link: '/journey/fern', icon: 'blog' },
+        { label: 'Read Story', link: '/blurb/fern', icon: 'blog' },
         { label: 'GitHub', link: 'https://github.com/RishiAhuja/fern', icon: 'github' },
         { label: 'Docs', link: 'https://fern.rishia.in', icon: 'docs' }
       ]
@@ -550,10 +562,10 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       type: 'achievement',
       description: 'Won 2nd place at national hackathon in Mumbai among 23,000+ participants with SoulBuddy AI project.',
       year: '2024-25',
-      journeySlug: 'level-supermind-hackathon',
+      blurbSlug: 'level-supermind-hackathon',
       // gallerySlug: 'level-supermind-hack',
       buttons: [
-        { label: 'Read Story', link: '/journey/level-supermind-hackathon', icon: 'blog' },
+        { label: 'Read Story', link: '/blurb/level-supermind-hackathon', icon: 'blog' },
         { label: 'Tweet', link: 'https://x.com/Rishi2220/status/1881041863983169800', icon: 'certificate' },
         { label: 'Demo Video', link: 'https://youtu.be/AS8gnSInEF4?si=age9v2QcePFksNOU', icon: 'external' },
       ]

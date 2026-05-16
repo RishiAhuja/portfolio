@@ -1,4 +1,4 @@
-// Image configuration for journey system
+// Image configuration for blurb system
 // This allows easy switching between local and CDN images
 
 const IMAGE_CONFIG = {
@@ -18,7 +18,7 @@ const IMAGE_CONFIG = {
 
 /**
  * Get optimized image URL
- * @param imagePath - Relative image path (e.g., '/journey/demo.jpg')
+ * @param imagePath - Relative image path (e.g., '/blurb/demo.jpg')
  * @returns Optimized image URL
  */
 export function getImageUrl(imagePath: string): string {

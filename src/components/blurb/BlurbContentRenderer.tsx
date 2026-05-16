@@ -1,9 +1,23 @@
 import React, { useEffect } from 'react';
-import type { JourneyContent } from '../../data/journey';
+import type { BlurbContent } from '../../data/blurb';
 import ImageCarousel from './ImageCarousel';
 
-interface JourneyContentRendererProps {
-  content: JourneyContent[];
+interface BlurbContentRendererProps {
+  content: BlurbContent[];
+}
+
+function renderInlineText(text: string): React.ReactNode[] {
+  return text.split(/(`[^`]+`)/g).map((part, index) => {
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code key={index} className="rounded-sm bg-darkGrey/50 px-1.5 py-0.5 text-sm text-accent-light">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+
+    return part;
+  });
 }
 
 // Helper function to extract YouTube video ID from URL
@@ -13,7 +27,7 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content }) => {
+const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) => {
   // Load Twitter widgets after component mounts
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).twttr?.widgets) {
@@ -21,7 +35,7 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
     }
   }, [content]);
 
-  const renderContent = (item: JourneyContent, index: number) => {
+  const renderContent = (item: BlurbContent, index: number) => {
     switch (item.type) {
       case 'heading':
         const HeadingTag = `h${item.level || 2}` as keyof JSX.IntrinsicElements;
@@ -42,7 +56,7 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
       case 'paragraph':
         return (
           <p key={index} className="text-gunSmoke leading-relaxed mb-6 font-ptMono">
-            {item.content}
+            {renderInlineText(item.content || '')}
           </p>
         );
 
@@ -58,8 +72,11 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
             >
               <img
                 src={(item.content!)}
-                alt={item.alt || 'Journey image'}
-                className="max-w-full max-h-full object-contain" // Preserves natural aspect ratio
+                alt={item.alt || 'Blurb image'}
+                loading={index < 6 ? 'eager' : 'lazy'}
+                decoding="async"
+                fetchPriority={index < 6 ? 'high' : 'auto'}
+                className="blurb-media-image max-w-full max-h-full object-contain" // Preserves natural aspect ratio
               />
             </div>
             {item.alt && (
@@ -92,7 +109,7 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
         return (
           <blockquote key={index} className="mb-8 border-l-4 border-accent pl-6 py-4 rounded-r-sm" style={{ backgroundColor: 'rgba(100, 178, 188, 0.05)' }}>
             <p className="text-lg font-ptMono text-quillGray italic leading-relaxed">
-              "{item.content}"
+              "{renderInlineText(item.content || '')}"
             </p>
           </blockquote>
         );
@@ -103,7 +120,7 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
             {item.items?.map((listItem, listIndex) => (
               <li key={listIndex} className="flex items-start gap-3 text-gunSmoke font-ptMono">
                 <span className="text-accent mt-2 text-xs">▸</span>
-                <span>{listItem}</span>
+                <span>{renderInlineText(listItem)}</span>
               </li>
             ))}
           </ul>
@@ -232,6 +249,7 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
             key={index}
             images={item.images || []}
             caption={item.caption}
+            priority={index < 6}
           />
         );
 
@@ -298,4 +316,4 @@ const JourneyContentRenderer: React.FC<JourneyContentRendererProps> = ({ content
   );
 };
 
-export default JourneyContentRenderer;
+export default BlurbContentRenderer;

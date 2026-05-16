@@ -141,7 +141,7 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
               </div>
             ) : (
               <>
-                {/* Header with Journey/Gallery Links */}
+                {/* Header with Blurb/Gallery Links */}
                 <div className={`flex items-start ${isMobile ? 'flex-col' : 'justify-between'} gap-2 ${isMobile ? 'mb-3' : 'mb-4'}`}>
                   <div className={isMobile ? 'w-full' : 'flex-1 min-w-0'}>
                     <h3 className={`font-ptMono font-bold text-quillGray group-hover:text-accent transition-colors duration-200
@@ -154,12 +154,12 @@ const TimelineCard: React.FC<TimelineCardProps> = ({ item, index }) => {
                     </p>
                   </div>
 
-                  {/* Journey and Gallery Links - Prominent styling */}
-                  {(item.journeySlug || item.gallerySlug) && (
+                  {/* Blurb and Gallery Links - Prominent styling */}
+                  {(item.blurbSlug || item.gallerySlug) && (
                     <div className={`flex-shrink-0 flex gap-3 ${isMobile ? 'flex-row items-start mt-3' : 'flex-col gap-2 items-end'}`}>
-                      {item.journeySlug && (
+                      {item.blurbSlug && (
                         <a
-                          href={`/journey/${item.journeySlug}`}
+                          href={`/blurb/${item.blurbSlug}`}
                           className={`font-ptMono text-accent hover:text-quillGray whitespace-nowrap
                             transition-colors duration-200 underline decoration-accent/30 hover:decoration-quillGray/50 underline-offset-4
                             ${isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}`}

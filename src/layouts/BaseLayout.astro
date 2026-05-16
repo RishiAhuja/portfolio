@@ -6,16 +6,23 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageType?: string;
 }
 
 const {
   title = 'Rishi Ahuja | Full Stack Developer & Designer',
   description = 'Portfolio of Rishi Ahuja, a full stack developer and designer specializing in web and mobile app development.',
   image = '/og-image.png',
+  imageWidth = 1200,
+  imageHeight = 630,
+  imageType = 'image/png',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const currentPath = Astro.url.pathname;
+const imageURL = new URL(image, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -44,7 +51,7 @@ const currentPath = Astro.url.pathname;
       "@type": "Person",
       "name": "Rishi Ahuja",
       "url": Astro.site,
-      "image": new URL(image, Astro.site),
+      "image": imageURL,
       "sameAs": [
         "https://github.com/RishiAhuja",
         "https://www.linkedin.com/in/rishi-ahuja-b1a224310",
@@ -68,10 +75,10 @@ const currentPath = Astro.url.pathname;
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.site).toString()} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
+    <meta property="og:image:type" content={imageType} />
     <meta property="og:site_name" content="Rishi Ahuja - Developer Portfolio" />
     <meta property="og:locale" content="en_US" />
 
@@ -81,7 +88,7 @@ const currentPath = Astro.url.pathname;
     <meta name="twitter:creator" content="@rishi2220" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(image, Astro.site).toString()} />
+    <meta name="twitter:image" content={imageURL} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
