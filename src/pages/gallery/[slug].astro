@@ -366,19 +366,23 @@ function formatDate(dateStr: string): string {
     }
     
     .image-frame {
-      width: 100%;
+      width: min(100%, calc(42vh * var(--media-ratio, 1.333333)));
       max-width: 500px;
-      aspect-ratio: 4/3;
+      aspect-ratio: var(--media-aspect-ratio, 4 / 3);
       background: rgba(var(--darkGrey-rgb), 0.3);
       border: 1px solid var(--gunSmoke);
       overflow: hidden;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .image-frame img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      display: block;
     }
     
     .image-frame video {
@@ -398,6 +402,11 @@ function formatDate(dateStr: string): string {
     }
     
     @media (max-width: 768px) {
+      .image-frame:not(.video-frame) {
+        width: min(100%, calc(60vh * var(--media-ratio, 1.333333)));
+        max-width: 85vw;
+      }
+
       .image-frame.video-frame {
         max-width: 85vw;
         max-height: 60vh;
@@ -664,9 +673,15 @@ function formatDate(dateStr: string): string {
       <div class="tape-track">
         {imagesWithHex.map((image) => {
           const isVideo = image.mime_type?.startsWith('video/');
+          const mediaWidth = image.width && image.width > 0 ? image.width : 4;
+          const mediaHeight = image.height && image.height > 0 ? image.height : 3;
+          const imageFrameStyle = isVideo
+            ? undefined
+            : `--media-ratio: ${mediaWidth / mediaHeight}; --media-aspect-ratio: ${mediaWidth} / ${mediaHeight};`;
+
           return (
           <div class="tape-cell" class:list={[{ active: image.index === 0, inactive: image.index !== 0 }]} data-hex={image.hexAddress} data-index={image.index} data-caption={image.description || ''} data-date={image.captured_date} data-is-video={isVideo}>
-            <div class:list={['image-frame', { 'video-frame': isVideo }]}>
+            <div class:list={['image-frame', { 'video-frame': isVideo }]} style={imageFrameStyle}>
               {isVideo ? (
                 <video
                   src={image.r2_url}
