@@ -1,4 +1,6 @@
 // Cloudflare R2 configuration from environment variables
+const R2_CACHE_CONTROL = 'public, max-age=31536000, immutable, no-transform';
+
 // Only call this function server-side when actually needed
 function getR2Config() {
   // Prevent access in browser
@@ -87,7 +89,7 @@ export async function uploadImageToR2(options: UploadOptions): Promise<UploadRes
     Key: key,
     Body: buffer,
     ContentType: file.type,
-    CacheControl: 'public, max-age=31536000', // 1 year cache
+    CacheControl: R2_CACHE_CONTROL,
   });
   
   await r2Client.send(command);
@@ -159,6 +161,30 @@ export interface PresignedUploadResult {
   publicUrl: string;
 }
 
+export interface ResumeFile {
+  key: string;
+  fileName: string;
+  url: string;
+  size: number;
+  lastModified: string | null;
+  version: number;
+}
+
+const RESUME_PREFIX = 'resume/';
+const RESUME_FILE_PATTERN = /^rishi-resume-v(\d+)\.pdf$/i;
+
+function parseResumeVersion(fileName: string): number | null {
+  const match = fileName.match(RESUME_FILE_PATTERN);
+  return match ? Number(match[1]) : null;
+}
+
+function sortResumeFiles(files: ResumeFile[]): ResumeFile[] {
+  return files.sort((a, b) => {
+    if (a.version !== b.version) return b.version - a.version;
+    return new Date(b.lastModified || 0).getTime() - new Date(a.lastModified || 0).getTime();
+  });
+}
+
 /**
  * Generate a presigned PUT URL so the browser can upload directly to R2,
  * bypassing the Vercel function payload limit (4.5 MB).
@@ -182,7 +208,82 @@ export async function generatePresignedUploadUrl(
     Bucket: config.BUCKET,
     Key: key,
     ContentType: contentType,
-    CacheControl: 'public, max-age=31536000',
+    CacheControl: R2_CACHE_CONTROL,
+  });
+
+  const uploadUrl = await getSignedUrl(r2Client, command, { expiresIn });
+  const publicUrl = `${config.PUBLIC_URL}/${key}`;
+
+  return { uploadUrl, key, publicUrl };
+}
+
+export async function listResumeFiles(): Promise<ResumeFile[]> {
+  const { ListObjectsV2Command } = await import('@aws-sdk/client-s3');
+  const r2Client = await getR2Client();
+  const config = getR2Config();
+  const files: ResumeFile[] = [];
+  let continuationToken: string | undefined;
+
+  do {
+    const command = new ListObjectsV2Command({
+      Bucket: config.BUCKET,
+      Prefix: RESUME_PREFIX,
+      ContinuationToken: continuationToken,
+    });
+
+    const response = await r2Client.send(command);
+
+    for (const object of response.Contents || []) {
+      if (!object.Key || object.Key.endsWith('/')) continue;
+
+      const fileName = object.Key.slice(RESUME_PREFIX.length);
+      const version = parseResumeVersion(fileName);
+      if (version === null) continue;
+
+      files.push({
+        key: object.Key,
+        fileName,
+        url: `${config.PUBLIC_URL}/${object.Key}`,
+        size: Number(object.Size || 0),
+        lastModified: object.LastModified ? object.LastModified.toISOString() : null,
+        version,
+      });
+    }
+
+    continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+  } while (continuationToken);
+
+  return sortResumeFiles(files);
+}
+
+export async function getLatestResumeFile(): Promise<ResumeFile | null> {
+  const files = await listResumeFiles();
+  return files[0] || null;
+}
+
+export async function generatePresignedResumeUploadUrl(
+  fileName: string,
+  contentType: string = 'application/pdf',
+  expiresIn: number = 300
+): Promise<PresignedUploadResult> {
+  const trimmedFileName = fileName.trim();
+  const version = parseResumeVersion(trimmedFileName);
+
+  if (version === null) {
+    throw new Error('Resume filename must match rishi-resume-v<number>.pdf');
+  }
+
+  const { PutObjectCommand } = await import('@aws-sdk/client-s3');
+  const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
+  const r2Client = await getR2Client();
+  const config = getR2Config();
+  const key = `${RESUME_PREFIX}${trimmedFileName}`;
+
+  const command = new PutObjectCommand({
+    Bucket: config.BUCKET,
+    Key: key,
+    ContentType: contentType || 'application/pdf',
+    CacheControl: R2_CACHE_CONTROL,
   });
 
   const uploadUrl = await getSignedUrl(r2Client, command, { expiresIn });
