@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ExpandedContainer from './ui/ExpandedContainer';
 import BlogPostItem from './ui/BlogPostItem';
-import { fetchHashnodePosts, formatPostDate } from '../lib/hashnode';
+import { formatPostDate } from '../lib/hashnode';
 
 // Define a type for our component's state
 interface Post {
@@ -22,12 +22,17 @@ const BlogPosts: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(5);
   const USERNAME = "rishi2220";
 
-  const loadBlogPosts = async (forceRefresh = false) => {
+  const loadBlogPosts = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const data = await fetchHashnodePosts(USERNAME, 50); // Fetch all posts
+      const response = await fetch(`/api/hashnode/posts?username=${USERNAME}&limit=50`);
+      if (!response.ok) {
+        throw new Error(`Blog API error: ${response.status}`);
+      }
+
+      const { posts: data } = await response.json();
 
       if (data && data.length > 0) {
         setPosts(data);

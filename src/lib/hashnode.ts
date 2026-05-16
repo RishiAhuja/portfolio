@@ -23,24 +23,170 @@ export interface HashnodePostDetail extends HashnodePost {
   };
 }
 
-// Define a type for node from GraphQL v2 API
-interface HashnodeGraphQLNode {
+const HASHNODE_ENDPOINT = 'https://gql.hashnode.com';
+const HASHNODE_HOST = 'rishi2220.hashnode.dev';
+
+const fallbackHashnodePosts: HashnodePost[] = [
+  {
+    _id: 'fallback-you-dont-know-websockets-yet',
+    title: "You Don't Know WebSockets. Yet.",
+    brief: 'Deep dive technical blog exploring WebSocket protocol, real-time communication patterns, and bidirectional data flow in modern web applications.',
+    slug: 'you-dont-know-websockets-yet',
+    dateAdded: '2025-08-25T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/you-dont-know-websockets-yet`,
+  },
+  {
+    _id: 'fallback-go-beneath-the-abstraction-building-interactive-uis-with-fernkit',
+    title: 'Go Beneath the Abstraction: Building Interactive UIs with FernKit',
+    brief: 'Technical deep dive into FernKit UI toolkit, exploring low-level rendering, widget systems, and building UIs from scratch with C++.',
+    slug: 'go-beneath-the-abstraction-building-interactive-uis-with-fernkit',
+    dateAdded: '2025-08-03T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/go-beneath-the-abstraction-building-interactive-uis-with-fernkit`,
+  },
+  {
+    _id: 'fallback-shamirs-secret-sharing-scheme-and-multi-party-computation',
+    title: "Shamir's Secret Sharing Scheme and Multi Party Computation.",
+    brief: "Mathematical Blog exploring Shamir's Secret Sharing Scheme and Multi Party Computation for private key management.",
+    slug: 'shamirs-secret-sharing-scheme-and-multi-party-computation',
+    dateAdded: '2025-07-05T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/shamirs-secret-sharing-scheme-and-multi-party-computation`,
+  },
+  {
+    _id: 'fallback-your-hardest-hello-world-text-rasterization-1',
+    title: 'Your Hardest "Hello World!": Text Rasterization #1',
+    brief: 'Deep technical blog exploring TTF file format and text rendering fundamentals.',
+    slug: 'your-hardest-hello-world-text-rasterization-1',
+    dateAdded: '2025-06-14T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/your-hardest-hello-world-text-rasterization-1`,
+  },
+  {
+    _id: 'fallback-bits-of-trust-the-elegance-of-aes',
+    title: 'Bits of Trust: The Elegance of AES',
+    brief: 'Technical blog exploring AES encryption algorithms and cryptographic implementations.',
+    slug: 'bits-of-trust-the-elegance-of-aes',
+    dateAdded: '2025-04-01T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/bits-of-trust-the-elegance-of-aes`,
+  },
+  {
+    _id: 'fallback-building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive',
+    title: "Building Rosenblatt's Perceptron From Scratch in Flutter",
+    brief: 'Technical blog implementing classic machine learning perceptron algorithm in Flutter with visual explanations.',
+    slug: 'building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive',
+    dateAdded: '2025-02-27T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive`,
+  },
+  {
+    _id: 'fallback-getting-cracked-at-clean-and-bloc-architecture',
+    title: 'Getting Cracked at Clean and BLoC Architecture',
+    brief: 'Advanced Flutter architecture blog covering clean architecture principles and BLoC pattern implementation.',
+    slug: 'getting-cracked-at-clean-and-bloc-architecture',
+    dateAdded: '2025-01-05T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/getting-cracked-at-clean-and-bloc-architecture`,
+  },
+  {
+    _id: 'fallback-getting-started-at-bloc-architecture',
+    title: 'Getting Started at BLoC Architecture',
+    brief: 'Beginner-friendly Flutter architecture blog introducing BLoC pattern with practical examples.',
+    slug: 'getting-started-at-bloc-architecture',
+    dateAdded: '2024-12-13T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/getting-started-at-bloc-architecture`,
+  },
+  {
+    _id: 'fallback-resource-management-with-probabilistic-scheduling-in-the-context-of-linux',
+    title: 'Resource Management with Probabilistic Scheduling in Linux',
+    brief: 'Deep technical blog exploring Linux kernel scheduling mechanisms and resource management algorithms.',
+    slug: 'resource-management-with-probabilistic-scheduling-in-the-context-of-linux',
+    dateAdded: '2024-11-01T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/resource-management-with-probabilistic-scheduling-in-the-context-of-linux`,
+  },
+  {
+    _id: 'fallback-art',
+    title: 'State of the Art - ART (Android Runtime)',
+    brief: 'Technical blog analyzing Android Runtime (ART) and its impact on app performance and development.',
+    slug: 'art',
+    dateAdded: '2024-09-03T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/art`,
+  },
+  {
+    _id: 'fallback-comprehensive-arch-linux-guide',
+    title: 'Comprehensive Arch Linux Blog',
+    brief: 'In-depth technical guide covering Arch Linux installation, configuration, and advanced system administration.',
+    slug: 'comprehensive-arch-linux-guide',
+    dateAdded: '2024-08-16T00:00:00.000Z',
+    totalReactions: 0,
+    responseCount: 0,
+    coverImage: null,
+    directUrl: `https://${HASHNODE_HOST}/comprehensive-arch-linux-guide`,
+  },
+];
+
+let hashnodeUnavailable = false;
+
+const getFallbackHashnodePosts = (limit: number = fallbackHashnodePosts.length): HashnodePost[] => {
+  return fallbackHashnodePosts.slice(0, limit);
+};
+
+const getFallbackPostDetail = (slug: string): HashnodePostDetail | null => {
+  const post = fallbackHashnodePosts.find((item) => item.slug === slug);
+  if (!post) return null;
+
+  return {
+    ...post,
+    content: {
+      markdown: [
+        post.brief,
+        '',
+        `Hashnode is temporarily unavailable from this deployment environment, so this page is serving a lightweight fallback entry.`,
+        '',
+        `[Read the original article on Hashnode](${post.directUrl}).`,
+      ].join('\n'),
+    },
+    readTimeInMinutes: 1,
+    tags: [],
+    author: {
+      name: 'Rishi Ahuja',
+      username: 'rishi2220',
+    },
+  };
+};
+
+interface HashnodePostListNode {
   id: string;
   title: string;
   brief: string;
   slug: string;
   publishedAt: string;
-  updatedAt: string;
-  readTimeInMinutes: number;
-  reactionCount: number;
-  responseCount: number;
-  views: number;
   url: string;
-  coverImage: { url: string } | null;
-  author: {
-    name: string;
-    username: string;
-  };
 }
 
 // Define a type with the minimum fields needed for URL creation
@@ -52,11 +198,14 @@ export interface PostUrlData {
 
 export const fetchHashnodePosts = async (username: string, limit: number = 10): Promise<HashnodePost[]> => {
   try {
+    if (hashnodeUnavailable) {
+      return getFallbackHashnodePosts(limit);
+    }
     
     const query = `
-      query Publication($host: String!) {
+      query Publication($host: String!, $limit: Int!) {
         publication(host: $host) {
-          posts(first: 20) {
+          posts(first: $limit) {
             edges {
               node {
                 id
@@ -74,9 +223,10 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     
     const variables = {
       host: `${username}.hashnode.dev`,
+      limit,
     };
     
-    const response = await fetch('https://gql.hashnode.com/', {
+    const response = await fetch(HASHNODE_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -112,7 +262,7 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     const edges = data.data.publication.posts.edges;
     
     // Transform the data with proper URL construction
-    const posts = edges.map(({ node }: { node: any }) => {
+    const posts = edges.map(({ node }: { node: HashnodePostListNode }) => {
       const post = {
         _id: node.id,
         title: node.title,
@@ -139,8 +289,9 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     return posts;
     
   } catch (error) {
-    console.error('Error fetching Hashnode posts:', error);
-    throw error;
+    hashnodeUnavailable = true;
+    console.warn('Hashnode posts unavailable, using fallback posts:', error);
+    return getFallbackHashnodePosts(limit);
   }
 };
 
@@ -201,6 +352,10 @@ export const getPostUrl = (post: PostUrlData | null | undefined): string => {
  */
 export const fetchHashnodePostBySlug = async (username: string, slug: string): Promise<HashnodePostDetail | null> => {
   try {
+    if (hashnodeUnavailable) {
+      return getFallbackPostDetail(slug);
+    }
+
     const query = `
       query PostBySlug($host: String!, $slug: String!) {
         publication(host: $host) {
@@ -241,7 +396,7 @@ export const fetchHashnodePostBySlug = async (username: string, slug: string): P
       slug: slug,
     };
     
-    const response = await fetch('https://gql.hashnode.com/', {
+    const response = await fetch(HASHNODE_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -283,7 +438,8 @@ export const fetchHashnodePostBySlug = async (username: string, slug: string): P
     };
     
   } catch (error) {
-    console.error('Error fetching Hashnode post:', error);
-    throw error;
+    hashnodeUnavailable = true;
+    console.warn(`Hashnode post "${slug}" unavailable, using fallback if present:`, error);
+    return getFallbackPostDetail(slug);
   }
 };
