@@ -235,6 +235,23 @@ const Footer: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
               </svg>
             </a>
+            <a 
+              href="/archive" 
+              className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
+            >
+              <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
+                Archive
+              </span>
+              <svg 
+                className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </a>
           </div>
           <div className="text-sm font-ptMono text-quillGray flex items-center space-x-1">
             <span>made with</span>
@@ -301,6 +318,23 @@ const Footer: React.FC = () => {
               >
                 <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
                   Gallery
+                </span>
+                <svg 
+                  className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                </svg>
+              </a>
+              <a 
+                href="/archive" 
+                className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
+              >
+                <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
+                  Archive
                 </span>
                 <svg 
                   className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 

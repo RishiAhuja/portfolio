@@ -1,18 +1,20 @@
 import React from 'react';
-import { Calendar, Mail, Twitter, FileText, Linkedin, Github, Hash, Globe, BookOpen } from 'lucide-react';
+import { Calendar, Mail, TwitterIcon, FileText, LinkedinIcon, GithubIcon, Hash, Globe, BookOpen, GraduationCap, InstagramIcon } from 'lucide-react';
 
-type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'Research';
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Instagram' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'Research' | 'Google Scholar';
 
 const iconMap: Record<IconName, any> = {
   'Schedule a Call': Calendar,
   'Email': Mail,
-  'Twitter': Twitter,
+  'Twitter': TwitterIcon,
+  'Instagram': InstagramIcon,
   'Resume': FileText,
-  'LinkedIn': Linkedin,
-  'GitHub': Github,
+  'LinkedIn': LinkedinIcon,
+  'GitHub': GithubIcon,
   'Technical Blog': Hash,
   'Portfolio': Globe,
-  'Research': BookOpen
+  'Research': BookOpen,
+  'Google Scholar': GraduationCap
 };
 
 interface LinkCardProps {

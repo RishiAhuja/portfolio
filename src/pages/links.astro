@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { LinkCard } from '../components/LinkCard';
 import { LINKS } from '../lib/constants';
 
-type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'Research';
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Instagram' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'Research' | 'Google Scholar';
 
 const links = [
   {
@@ -23,7 +23,12 @@ const links = [
       {
         title: 'Twitter' as IconName,
         description: '@Rishi2220 - Where I shitpost',
-        url: 'https://twitter.com/Rishi2220'
+        url: LINKS.TWITTER
+      },
+      {
+        title: 'Instagram' as IconName,
+        description: '@rishia2220',
+        url: LINKS.INSTAGRAM
       }
     ]
   },
@@ -39,12 +44,17 @@ const links = [
       {
         title: 'LinkedIn' as IconName,
         description: 'Professional network',
-        url: 'https://www.linkedin.com/in/rishi-ahuja-b1a224310'
+        url: LINKS.LINKEDIN
       },
       {
         title: 'GitHub' as IconName,
         description: '@RishiAhuja - Code & projects',
-        url: 'https://github.com/RishiAhuja'
+        url: LINKS.GITHUB
+      },
+      {
+        title: 'Google Scholar' as IconName,
+        description: 'Research profile and citations',
+        url: LINKS.GOOGLE_SCHOLAR
       }
     ]
   },
@@ -54,7 +64,7 @@ const links = [
       {
         title: 'Technical Blog' as IconName,
         description: 'Deep dives on Hashnode',
-        url: 'https://hashnode.com/@rishi2220'
+        url: LINKS.HASHNODE
       },
       {
         title: 'Research' as IconName,

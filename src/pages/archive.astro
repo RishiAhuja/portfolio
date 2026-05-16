@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { LINKS } from '../lib/constants';
+import { listResumeFiles, type ResumeFile } from '../lib/r2Storage';
+
+export const prerender = false;
+
+interface PortfolioEntry {
+  name: string;
+  date: string;
+  url: string;
+  note: string;
+}
+
+const portfolios: PortfolioEntry[] = [
+  {
+    name: 'new-port-14-02-2021',
+    date: '14-02-2021',
+    url: 'https://new-port-14-02-2021.pages.dev/',
+    note: 'first portfolio',
+  },
+  {
+    name: 'github pages portfolio',
+    date: 'Apr 11, 2022 - Aug 16, 2024',
+    url: 'https://rishiahuja.github.io/my-portfolio/',
+    note: 'long-running version',
+  },
+  {
+    name: 'firebase portfolio',
+    date: 'Feb 1, 2025',
+    url: 'https://my-portfolio-462ef.web.app/',
+    note: 'terminal-looking version',
+  },
+  {
+    name: 'rishia.in',
+    date: 'May 21, 2025 - now',
+    url: 'https://rishia.in/',
+    note: 'current site',
+  },
+];
+
+let resumes: ResumeFile[] = [];
+let resumeError = '';
+
+try {
+  resumes = await listResumeFiles();
+} catch (error) {
+  resumeError = error instanceof Error ? error.message : 'Unable to read R2 resume folder.';
+}
+
+const fallbackResume: ResumeFile = {
+  key: 'resume/rishi-resume-v12.pdf',
+  fileName: 'rishi-resume-v12.pdf',
+  url: LINKS.RESUME_FALLBACK,
+  size: 0,
+  lastModified: null,
+  version: 12,
+};
+
+const visibleResumes = resumes.length > 0 ? resumes : [fallbackResume];
+
+const formatBytes = (bytes: number) => {
+  if (!bytes) return 'size unknown';
+  const units = ['B', 'KB', 'MB'];
+  let value = bytes;
+  let unitIndex = 0;
+
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+
+  return `${value.toFixed(unitIndex === 0 ? 0 : 2)} ${units[unitIndex]}`;
+};
+---
+
+<BaseLayout
+  title="Archive | Rishi Ahuja"
+  description="A loose dump of old portfolios, resumes, and miscellaneous site artifacts."
+  image="/og?title=Archive&description=Old%20portfolios,%20resumes,%20and%20loose%20artifacts&type=default"
+>
+  <main class="min-h-screen bg-codGray text-quillGray">
+    <section class="mx-auto max-w-4xl px-4 py-12 md:px-8 md:py-16">
+      <a
+        href="/"
+        class="font-ptMono text-sm text-gunSmoke underline decoration-gunSmoke/40 underline-offset-4 transition-colors hover:text-accent-light hover:decoration-accent-light"
+      >
+        back
+      </a>
+
+      <header class="mt-14 border-b border-darkGrey pb-8">
+        <p class="font-ptMono text-xs uppercase tracking-[0.18em] text-gunSmoke">
+          /archive
+        </p>
+        <h1 class="mt-3 font-ptMono text-4xl font-bold text-quillGray md:text-5xl">
+          Dump
+        </h1>
+        <p class="mt-5 max-w-2xl font-ptMono text-sm leading-7 text-gunSmoke">
+          Old portfolios and resume versions. Minimal on purpose.
+        </p>
+      </header>
+
+      <section class="mt-10">
+        <div class="mb-4 flex items-baseline justify-between gap-4">
+          <h2 class="font-ptMono text-lg font-bold text-quillGray">
+            portfolios
+          </h2>
+          <span class="font-ptMono text-xs text-gunSmoke">
+            {portfolios.length} items
+          </span>
+        </div>
+
+        <div class="border-b border-darkGrey">
+          {portfolios.map((portfolio, index) => (
+            <a
+              href={portfolio.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group grid gap-2 border-t border-darkGrey py-4 font-ptMono transition-colors hover:border-accent-light/60 md:grid-cols-[44px_170px_minmax(0,1fr)] md:gap-4"
+            >
+              <span class="text-xs text-gunSmoke">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span class="text-sm text-accent-light">
+                {portfolio.date}
+              </span>
+              <span class="min-w-0">
+                <span class="block text-sm font-bold text-quillGray transition-colors group-hover:text-accent-light">
+                  {portfolio.name}
+                </span>
+                <span class="mt-1 block text-xs text-gunSmoke">
+                  {portfolio.note} - {portfolio.url.replace('https://', '')}
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-12">
+        <div class="mb-4 flex items-baseline justify-between gap-4">
+          <h2 class="font-ptMono text-lg font-bold text-quillGray">
+            resumes
+          </h2>
+          <span class="font-ptMono text-xs text-gunSmoke">
+            {visibleResumes.length} items
+          </span>
+        </div>
+
+        {resumeError && (
+          <p class="mb-4 border border-darkGrey p-3 font-ptMono text-xs leading-5 text-gunSmoke">
+            R2 listing failed, showing fallback: {resumeError}
+          </p>
+        )}
+
+        <div class="border-b border-darkGrey">
+          {visibleResumes.map((resume, index) => (
+            <a
+              href={resume.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group grid gap-2 border-t border-darkGrey py-4 font-ptMono transition-colors hover:border-accent-light/60 md:grid-cols-[44px_90px_minmax(0,1fr)] md:gap-4"
+            >
+              <span class="text-xs text-gunSmoke">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span class="text-sm text-accent-light">
+                v{resume.version}
+              </span>
+              <span class="min-w-0">
+                <span class="flex flex-wrap items-center gap-2 text-sm font-bold text-quillGray transition-colors group-hover:text-accent-light">
+                  {resume.fileName}
+                  {index === 0 && (
+                    <span class="text-[10px] font-normal uppercase tracking-[0.16em] text-gunSmoke">
+                      latest
+                    </span>
+                  )}
+                </span>
+                <span class="mt-1 block break-all text-xs text-gunSmoke">
+                  {formatBytes(resume.size)} - {resume.key}
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+    </section>
+  </main>
+</BaseLayout>

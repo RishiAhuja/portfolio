@@ -16,9 +16,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
     { label: 'Research', href: '/research' },
     { label: 'Links', href: '/links' },
   ];
-  const visibleNavItems = currentPath === '/'
-    ? navItems.filter((item) => item.href !== '/research')
-    : navItems;
+  const visibleNavItems = navItems.filter((item) => item.href !== '/research');
 
   // Close menu on escape key
   useEffect(() => {
