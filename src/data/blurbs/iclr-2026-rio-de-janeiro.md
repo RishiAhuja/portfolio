@@ -1,6 +1,6 @@
 # My ICLR 2026 and Brazil Experience in Rio de Janeiro
 
-ICLR 2026 was the 14th International Conference on Learning Representations. It was held from April 23 to April 27, 2026, at Riocentro in Rio de Janeiro, Brazil. For me, it was not just a conference trip. It was my first time dealing with a long international route, a different transport system, language barriers, expensive last-minute decisions, conference networking, and a paper presentation in a place I had only seen in pictures before.
+ICLR, the International Conference on Learning Representations, is one of the most respected conferences in machine learning and is rated A* in the CORE conference rankings. It is the kind of venue that researchers across the world actively target, and getting a paper accepted there is a serious milestone. For me, this was not just a conference trip to Rio de Janeiro. It also carried a different kind of weight since the founding of my department in 2013, no faculty member or student from the department has had an accepted paper at an A* conference, let alone ICLR. That context is what made this journey feel much larger than travel, logistics, or even the presentation itself.
 
 The visa and pre-travel paperwork part is important, but it is also boring to write in detail right now. I might add that separately later. This post starts from the actual journey.
 
