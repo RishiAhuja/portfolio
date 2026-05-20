@@ -7,6 +7,8 @@ import BootcampStudentsManager from './BootcampStudentsManager';
 import UpstreamEditor from './UpstreamEditor';
 import ResumeManager from './ResumeManager';
 import ClusterProgressMonitor from './ClusterProgressMonitor';
+import AdminTabBar from './AdminTabBar';
+import { type AdminTabId, loadAdminTabOrder } from './adminTabs';
 
 interface AdminDashboardProps {
   token: string;
@@ -15,7 +17,8 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery' | 'resumes' | 'bootcamp' | 'students' | 'upstream' | 'cluster'>('uncompiled');
+  const [tabOrder, setTabOrder] = useState<AdminTabId[]>(loadAdminTabOrder);
+  const [activeTab, setActiveTab] = useState<AdminTabId>('uncompiled');
   const [entries, setEntries] = useState<UncompiledEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditor, setShowEditor] = useState(false);
@@ -121,9 +124,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
 
   if (showEditor) {
     return (
-      <div className="min-h-screen bg-codGray p-4">
+      <div className="min-h-screen bg-codGray p-3 sm:p-4 overflow-x-hidden">
         <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
             <h2 className="text-2xl font-bold font-ptMono text-quillGray">
               {editingEntry ? 'Edit Entry' : 'New Entry'}
             </h2>
@@ -220,106 +223,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
   }
 
   return (
-    <div className="min-h-screen bg-codGray p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-codGray p-3 sm:p-4 overflow-x-hidden">
+      <div className="max-w-6xl mx-auto min-w-0">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-2xl font-bold font-ptMono text-quillGray">Admin Panel</h1>
-            <p className="text-sm text-gunSmoke font-ptMono mt-1">Logged in as {email}</p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold font-ptMono text-quillGray">Admin Panel</h1>
+            <p className="text-xs sm:text-sm text-gunSmoke font-ptMono mt-1 truncate">
+              Logged in as {email}
+            </p>
           </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-darkGrey border border-gunSmoke/30 rounded-sm text-gunSmoke
+            className="self-start sm:self-auto shrink-0 px-4 py-2 bg-darkGrey border border-gunSmoke/30 rounded-sm text-gunSmoke
               hover:border-red-400 hover:text-red-400 transition-colors font-ptMono text-sm"
           >
             Logout
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-darkGrey/50">
-          <button
-            onClick={() => setActiveTab('uncompiled')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'uncompiled'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Uncompiled
-          </button>
-          <button
-            onClick={() => setActiveTab('sidequests')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'sidequests'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Side Quests
-          </button>
-          <button
-            onClick={() => setActiveTab('gallery')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'gallery'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Gallery
-          </button>
-          <button
-            onClick={() => setActiveTab('resumes')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'resumes'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Resumes
-          </button>
-          <button
-            onClick={() => setActiveTab('bootcamp')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'bootcamp'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Bootcamp
-          </button>
-          <button
-            onClick={() => setActiveTab('students')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'students'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Students
-          </button>
-          <button
-            onClick={() => setActiveTab('upstream')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'upstream'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Upstream
-          </button>
-          <button
-            onClick={() => setActiveTab('cluster')}
-            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
-              activeTab === 'cluster'
-                ? 'text-accent-light border-b-2 border-accent-light'
-                : 'text-gunSmoke hover:text-quillGray'
-            }`}
-          >
-            Cluster
-          </button>
-        </div>
+        <AdminTabBar
+          tabOrder={tabOrder}
+          activeTab={activeTab}
+          onTabOrderChange={setTabOrder}
+          onActiveTabChange={setActiveTab}
+        />
 
         {/* Content */}
         {activeTab === 'students' ? (
@@ -374,9 +302,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
                 key={entry.id}
                 className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-4"
               >
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                       <span className="text-xs font-ptMono text-gunSmoke">{entry.date}</span>
                       <span className={`px-2 py-0.5 text-xs font-ptMono rounded border ${
                         entry.published 
@@ -386,11 +314,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
                         {entry.published ? 'Published' : 'Draft'}
                       </span>
                     </div>
-                    <h3 className="text-lg font-ptMono text-quillGray mb-1">{entry.title}</h3>
-                    <p className="text-sm text-gunSmoke font-ptMono">{entry.slug}</p>
+                    <h3 className="text-base sm:text-lg font-ptMono text-quillGray mb-1 break-words">{entry.title}</h3>
+                    <p className="text-sm text-gunSmoke font-ptMono break-all">{entry.slug}</p>
                   </div>
                   
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2 shrink-0">
                     <button
                       onClick={() => handleTogglePublish(entry.id, entry.published)}
                       className="px-3 py-1.5 bg-codGray border border-gunSmoke/30 rounded-sm

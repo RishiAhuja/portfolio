@@ -96,12 +96,12 @@ const BootcampStudentsManager: React.FC<BootcampStudentsManagerProps> = ({ token
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-quillGray font-ptMono">Bootcamp Students</h2>
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-xl sm:text-2xl font-bold text-quillGray font-ptMono">Bootcamp Students</h2>
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('pending')}
-            className={`px-4 py-2 rounded font-ptMono text-sm transition-all ${
+            className={`px-3 sm:px-4 py-2 rounded font-ptMono text-xs sm:text-sm transition-all ${
               activeTab === 'pending'
                 ? 'bg-accent-light text-codGray'
                 : 'bg-darkGrey/30 text-gunSmoke hover:bg-darkGrey/50'
@@ -111,7 +111,7 @@ const BootcampStudentsManager: React.FC<BootcampStudentsManagerProps> = ({ token
           </button>
           <button
             onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded font-ptMono text-sm transition-all ${
+            className={`px-3 sm:px-4 py-2 rounded font-ptMono text-xs sm:text-sm transition-all ${
               activeTab === 'all'
                 ? 'bg-accent-light text-codGray'
                 : 'bg-darkGrey/30 text-gunSmoke hover:bg-darkGrey/50'
