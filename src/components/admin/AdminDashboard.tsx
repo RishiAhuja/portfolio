@@ -6,6 +6,7 @@ import BootcampEditor from './BootcampEditor';
 import BootcampStudentsManager from './BootcampStudentsManager';
 import UpstreamEditor from './UpstreamEditor';
 import ResumeManager from './ResumeManager';
+import ClusterProgressMonitor from './ClusterProgressMonitor';
 
 interface AdminDashboardProps {
   token: string;
@@ -14,7 +15,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery' | 'resumes' | 'bootcamp' | 'students' | 'upstream'>('uncompiled');
+  const [activeTab, setActiveTab] = useState<'uncompiled' | 'sidequests' | 'gallery' | 'resumes' | 'bootcamp' | 'students' | 'upstream' | 'cluster'>('uncompiled');
   const [entries, setEntries] = useState<UncompiledEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditor, setShowEditor] = useState(false);
@@ -308,6 +309,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
           >
             Upstream
           </button>
+          <button
+            onClick={() => setActiveTab('cluster')}
+            className={`px-4 py-2 font-ptMono text-sm transition-colors ${
+              activeTab === 'cluster'
+                ? 'text-accent-light border-b-2 border-accent-light'
+                : 'text-gunSmoke hover:text-quillGray'
+            }`}
+          >
+            Cluster
+          </button>
         </div>
 
         {/* Content */}
@@ -323,6 +334,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
           <SideQuestsEditor token={token} />
         ) : activeTab === 'upstream' ? (
           <UpstreamEditor token={token} />
+        ) : activeTab === 'cluster' ? (
+          <ClusterProgressMonitor token={token} />
         ) : (
           <>
             {/* New Entry Button */}
