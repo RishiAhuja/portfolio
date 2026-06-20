@@ -47,8 +47,7 @@ const AboutMe: React.FC = () => {
         </p>
 
         <p>
-          I also work as a <span className="text-accent-light">Founding DevOps Engineer</span> at{" "}
-          <span className="text-accent-light">Zenbase (Singapore)</span>, building <em>Ninja</em> — and by day, I&apos;m a B.Tech IT student at{" "}
+          By day, I&apos;m a B.Tech IT student at{" "}
           <span className="text-accent-light">NIT Jalandhar</span>.
         </p>
 
