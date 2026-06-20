@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import BlogPostItem from '../components/ui/BlogPostItem';
-import { fetchHashnodePosts, formatPostDate } from '../lib/hashnode';
+import { fetchHashnodePosts, formatPostDate, getPostUrl } from '../lib/hashnode';
 
 const USERNAME = "rishi2220";
 const posts = await fetchHashnodePosts(USERNAME, 100); // Fetch all posts
@@ -48,7 +48,7 @@ const breadcrumbs = [
         <div class="space-y-2 md:space-y-4">
           {posts.map((post) => {
             const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
-            const link = post.slug ? `/blogs/${post.slug}` : '#';
+            const link = getPostUrl(post);
             const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
             const uniqueKey = post.slug || post._id || 'unknown';
 

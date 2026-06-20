@@ -8,6 +8,7 @@ export interface HashnodePost {
   responseCount: number;
   coverImage: { url: string } | null;
   directUrl: string;
+  isStub?: boolean;
 }
 
 export interface HashnodePostDetail extends HashnodePost {
@@ -25,6 +26,30 @@ export interface HashnodePostDetail extends HashnodePost {
 
 const HASHNODE_ENDPOINT = 'https://gql.hashnode.com';
 const HASHNODE_HOST = 'rishi2220.hashnode.dev';
+const HASHNODE_API_ACCESS_NOTICE_URL = 'https://hashnode.com/changelog/2026-05-13-graphql-api-paid-access';
+const STUB_POST_NOTICE = 'This local copy keeps the post discoverable on rishia.in while the full article remains on Hashnode.';
+
+const getHashnodePersonalAccessToken = (): string | undefined => {
+  const token = import.meta.env.HASHNODE_PERSONAL_ACCESS_TOKEN;
+  return typeof token === 'string' && token.trim().length > 0 ? token.trim() : undefined;
+};
+
+const buildHashnodeHeaders = (): Record<string, string> => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+
+  const token = getHashnodePersonalAccessToken();
+  if (token) {
+    // Hashnode expects the raw PAT in Authorization, not a Bearer prefix.
+    headers.Authorization = token;
+  }
+
+  return headers;
+};
+
+const hasHashnodeApiAccess = (): boolean => Boolean(getHashnodePersonalAccessToken());
 
 const fallbackHashnodePosts: HashnodePost[] = [
   {
@@ -47,7 +72,7 @@ const fallbackHashnodePosts: HashnodePost[] = [
     totalReactions: 0,
     responseCount: 0,
     coverImage: null,
-    directUrl: `https://${HASHNODE_HOST}/go-beneath-the-abstraction-building-interactive-uis-with-fernkit`,
+    directUrl: `https://${HASHNODE_HOST}/fernkit`,
   },
   {
     _id: 'fallback-shamirs-secret-sharing-scheme-and-multi-party-computation',
@@ -162,13 +187,14 @@ const getFallbackPostDetail = (slug: string): HashnodePostDetail | null => {
 
   return {
     ...post,
+    isStub: true,
     content: {
       markdown: [
         post.brief,
         '',
-        `Hashnode is temporarily unavailable from this deployment environment, so this page is serving a lightweight fallback entry.`,
+        STUB_POST_NOTICE,
         '',
-        `[Read the original article on Hashnode](${post.directUrl}).`,
+        `[Open the full article on Hashnode](${post.directUrl}).`,
       ].join('\n'),
     },
     readTimeInMinutes: 1,
@@ -180,6 +206,13 @@ const getFallbackPostDetail = (slug: string): HashnodePostDetail | null => {
   };
 };
 
+export const isHashnodeStubPost = (post: Pick<HashnodePostDetail, 'isStub' | 'content'>): boolean => {
+  if (post.isStub) return true;
+
+  const markdown = typeof post.content === 'string' ? post.content : post.content.markdown;
+  return markdown.includes(STUB_POST_NOTICE);
+};
+
 interface HashnodePostListNode {
   id: string;
   title: string;
@@ -188,6 +221,29 @@ interface HashnodePostListNode {
   publishedAt: string;
   url: string;
 }
+
+const parseHashnodeJsonResponse = async (response: Response) => {
+  if (response.status >= 300 && response.status < 400) {
+    const location = response.headers.get('location') || HASHNODE_API_ACCESS_NOTICE_URL;
+    const upgradeHint = hasHashnodeApiAccess()
+      ? ''
+      : ' Set HASHNODE_PERSONAL_ACCESS_TOKEN from hashnode.com/settings/developer after upgrading to Hashnode Pro.';
+    throw new Error(`Hashnode GraphQL access redirected to ${location}.${upgradeHint}`);
+  }
+
+  if (!response.ok) {
+    throw new Error(`Hashnode API error: ${response.status} ${response.statusText}`);
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`Hashnode API returned ${contentType || 'non-JSON'} instead of JSON`);
+  }
+
+  return response.json();
+};
+
+const getErrorMessage = (error: unknown) => error instanceof Error ? error.message : String(error);
 
 // Define a type with the minimum fields needed for URL creation
 export interface PostUrlData {
@@ -198,7 +254,7 @@ export interface PostUrlData {
 
 export const fetchHashnodePosts = async (username: string, limit: number = 10): Promise<HashnodePost[]> => {
   try {
-    if (hashnodeUnavailable) {
+    if (hashnodeUnavailable && !hasHashnodeApiAccess()) {
       return getFallbackHashnodePosts(limit);
     }
     
@@ -228,21 +284,15 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     
     const response = await fetch(HASHNODE_ENDPOINT, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      redirect: 'manual',
+      headers: buildHashnodeHeaders(),
       body: JSON.stringify({ 
         query,
         variables,
       }),
     });
 
-    if (!response.ok) {
-      console.error(`❌ Hashnode API error: ${response.status} ${response.statusText}`);
-      throw new Error(`Hashnode API error: ${response.status} ${response.statusText}`);
-    }
-    
-    const data = await response.json();
+    const data = await parseHashnodeJsonResponse(response);
     
     if (data.errors) {
       console.error('❌ GraphQL errors:', data.errors);
@@ -251,12 +301,12 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
     
     if (!data.data?.publication) {
       console.error('❌ No publication found for host:', `${username}.hashnode.dev`);
-      return [];
+      return getFallbackHashnodePosts(limit);
     }
     
     if (!data.data.publication.posts?.edges || data.data.publication.posts.edges.length === 0) {
       console.warn('⚠️ No posts found in publication');
-      return [];
+      return getFallbackHashnodePosts(limit);
     }
     
     const edges = data.data.publication.posts.edges;
@@ -285,12 +335,14 @@ export const fetchHashnodePosts = async (username: string, limit: number = 10): 
       return dateB - dateA;
     });
 
-    
+    hashnodeUnavailable = false;
     return posts;
     
   } catch (error) {
-    hashnodeUnavailable = true;
-    console.warn('Hashnode posts unavailable, using fallback posts:', error);
+    if (!hasHashnodeApiAccess()) {
+      hashnodeUnavailable = true;
+    }
+    console.warn(`Hashnode posts unavailable, using local post index: ${getErrorMessage(error)}`);
     return getFallbackHashnodePosts(limit);
   }
 };
@@ -352,7 +404,7 @@ export const getPostUrl = (post: PostUrlData | null | undefined): string => {
  */
 export const fetchHashnodePostBySlug = async (username: string, slug: string): Promise<HashnodePostDetail | null> => {
   try {
-    if (hashnodeUnavailable) {
+    if (hashnodeUnavailable && !hasHashnodeApiAccess()) {
       return getFallbackPostDetail(slug);
     }
 
@@ -398,18 +450,12 @@ export const fetchHashnodePostBySlug = async (username: string, slug: string): P
     
     const response = await fetch(HASHNODE_ENDPOINT, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+      redirect: 'manual',
+      headers: buildHashnodeHeaders(),
       body: JSON.stringify({ query, variables }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Hashnode API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
+    const data = await parseHashnodeJsonResponse(response);
     
     if (data.errors) {
       throw new Error(`GraphQL error: ${data.errors[0]?.message}`);
@@ -418,8 +464,10 @@ export const fetchHashnodePostBySlug = async (username: string, slug: string): P
     const post = data.data?.publication?.post;
     
     if (!post) {
-      return null;
+      return getFallbackPostDetail(slug);
     }
+
+    hashnodeUnavailable = false;
     
     return {
       _id: post.id,
@@ -435,11 +483,14 @@ export const fetchHashnodePostBySlug = async (username: string, slug: string): P
       readTimeInMinutes: post.readTimeInMinutes,
       tags: post.tags || [],
       author: post.author,
+      isStub: false,
     };
     
   } catch (error) {
-    hashnodeUnavailable = true;
-    console.warn(`Hashnode post "${slug}" unavailable, using fallback if present:`, error);
+    if (!hasHashnodeApiAccess()) {
+      hashnodeUnavailable = true;
+    }
+    console.warn(`Hashnode post "${slug}" unavailable, using local preview if present: ${getErrorMessage(error)}`);
     return getFallbackPostDetail(slug);
   }
 };
