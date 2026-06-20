@@ -1,26 +1,14 @@
 import type { APIRoute } from 'astro';
 import { listResumeFiles } from '../../../lib/r2Storage';
-import { verifyAdminSession } from '../../../lib/admin';
+import { requireAdminSession, unauthorizedResponse } from '../../../lib/api-auth';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
   try {
-    const authHeader = request.headers.get('Authorization') || request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    const token = authHeader.substring(7);
-    const session = await verifyAdminSession(token);
+    const session = await requireAdminSession(request);
     if (!session) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return unauthorizedResponse();
     }
 
     const resumes = await listResumeFiles();

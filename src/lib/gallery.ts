@@ -78,24 +78,27 @@ export const createGalleryCollection = async (
     display_name: string;
   }
 ): Promise<GalleryCollection | null> => {
-  const { data, error } = await supabase
-    .from('gallery_collections')
-    .insert({
-      slug: collection.slug,
-      year: collection.year,
-      month: collection.month || null,
-      display_name: collection.display_name,
-      image_count: 0
-    })
-    .select()
-    .single();
+  try {
+    const response = await fetch('/api/gallery/create-collection', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(collection),
+    });
 
-  if (error) {
+    if (!response.ok) {
+      console.error('Create collection API error:', await response.text());
+      return null;
+    }
+
+    const { data } = await response.json();
+    return data as GalleryCollection;
+  } catch (error) {
     console.error('Error creating gallery collection:', error);
     return null;
   }
-
-  return data as GalleryCollection;
 };
 
 export const deleteGalleryCollection = async (token: string, id: string): Promise<boolean> => {
@@ -231,28 +234,27 @@ export const updateGalleryImage = async (
   imageId: string,
   updates: Partial<Pick<GalleryImage, 'description' | 'captured_date' | 'is_cover'>>
 ): Promise<GalleryImage | null> => {
-  const { data, error } = await supabase
-    .from('gallery_images')
-    .update(updates)
-    .eq('id', imageId)
-    .select()
-    .single();
+  try {
+    const response = await fetch('/api/gallery/update-image', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ imageId, updates }),
+    });
 
-  if (error) {
+    if (!response.ok) {
+      console.error('Update image API error:', await response.text());
+      return null;
+    }
+
+    const { data } = await response.json();
+    return data as GalleryImage;
+  } catch (error) {
     console.error('Error updating image:', error);
     return null;
   }
-
-  // If this is now the cover image, update collection
-  if (updates.is_cover && data) {
-    const image = data as GalleryImage;
-    await supabase
-      .from('gallery_collections')
-      .update({ cover_image_url: image.r2_url })
-      .eq('id', image.collection_id);
-  }
-
-  return data as GalleryImage;
 };
 
 export const deleteGalleryImage = async (token: string, imageId: string): Promise<boolean> => {

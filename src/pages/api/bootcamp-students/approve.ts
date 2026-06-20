@@ -1,26 +1,12 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
-import { verifyAdminToken } from '../../../lib/admin';
+import { requireAdminSession, unauthorizedResponse } from '../../../lib/api-auth';
+import { updateBootcampStudentStatusServer } from '../../../lib/admin-server';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const authHeader = request.headers.get('Authorization');
-    const token = authHeader?.replace('Bearer ', '');
-
-    if (!token) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Verify admin token
-    const isValid = await verifyAdminToken(token);
-    if (!isValid) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid or expired token' }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      );
+    const session = await requireAdminSession(request);
+    if (!session) {
+      return unauthorizedResponse();
     }
 
     const body = await request.json();
@@ -34,16 +20,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const status = action === 'approve' ? 'approved' : 'rejected';
+    const success = await updateBootcampStudentStatusServer(id, status);
 
-    const { data, error } = await supabase
-      .from('bootcamp_students')
-      .update({ status })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating student status:', error);
+    if (!success) {
       return new Response(
         JSON.stringify({ error: 'Failed to update status' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
@@ -51,7 +30,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, data }),
+      JSON.stringify({ success: true }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {

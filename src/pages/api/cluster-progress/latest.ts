@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { verifyAdminSession } from '../../../lib/admin';
+import { requireAdminSession } from '../../../lib/api-auth';
 import { supabase } from '../../../lib/supabase';
 
 export const prerender = false;
@@ -15,14 +15,8 @@ const jsonResponse = (payload: unknown, status = 200) =>
     },
   });
 
-const getBearerToken = (request: Request) => {
-  const auth = request.headers.get('Authorization') || request.headers.get('authorization') || '';
-  return auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
-};
-
 export const GET: APIRoute = async ({ request }) => {
-  const token = getBearerToken(request);
-  const session = token ? await verifyAdminSession(token) : null;
+  const session = await requireAdminSession(request);
   if (!session) {
     return jsonResponse({ error: 'Unauthorized' }, 401);
   }

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
+import { getSupabaseAdmin } from '../../../lib/supabase-admin';
 
 export const prerender = false;
 
@@ -52,6 +52,7 @@ export const POST: APIRoute = async ({ request }) => {
     progress_text: typeof body.progress_text === 'string' ? body.progress_text.slice(0, 40000) : '',
   };
 
+  const supabase = getSupabaseAdmin();
   const { data: existing } = await supabase
     .from('upstream_overrides')
     .select('notes')

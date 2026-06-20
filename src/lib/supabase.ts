@@ -5,7 +5,10 @@ const supabaseUrl =
   import.meta.env.PUBLIC_SUPABASE_PROXY_URL ||   // https://db.rishia.in  (Cloudflare Worker)
   import.meta.env.PUBLIC_SUPABASE_URL ||          
   'https://placeholder.supabase.co';
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
+const supabaseAnonKey =
+  import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY ||
+  'placeholder-key';
 
 // Standard Supabase client for most operations
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

@@ -1,28 +1,15 @@
 import type { APIRoute } from 'astro';
 import { deleteImageFromR2 } from '../../../lib/r2Storage';
-import { supabase } from '../../../lib/supabase';
-import { verifyAdminSession } from '../../../lib/admin';
+import { requireAdminSession, unauthorizedResponse } from '../../../lib/api-auth';
+import { getSupabaseAdmin } from '../../../lib/supabase-admin';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // Verify authentication
-    const authHeader = request.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    const token = authHeader.substring(7);
-    const session = await verifyAdminSession(token);
+    const session = await requireAdminSession(request);
     if (!session) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return unauthorizedResponse();
     }
 
     // Parse request body
@@ -33,6 +20,8 @@ export const POST: APIRoute = async ({ request }) => {
         headers: { 'Content-Type': 'application/json' }
       });
     }
+
+    const supabase = getSupabaseAdmin();
 
     // First, get all images to delete from R2
     const { data: images } = await supabase
