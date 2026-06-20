@@ -9,10 +9,46 @@ interface Paper {
 }
 
 const PapersReading: React.FC = () => {
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(6);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   
   const papers: Paper[] = [
+    {
+      title: "Chronos: Learning the Language of Time Series",
+      arxivId: "2403.07815",
+      year: "2024",
+      link: "https://arxiv.org/abs/2403.07815"
+    },
+    {
+      title: "A Time Series is Worth 64 Words: Long-term Forecasting with Transformers",
+      arxivId: "2211.14730",
+      year: "2023",
+      link: "https://arxiv.org/abs/2211.14730"
+    },
+    {
+      title: "ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs",
+      arxivId: "2307.16789",
+      year: "2023",
+      link: "https://arxiv.org/abs/2307.16789"
+    },
+    {
+      title: "tau-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains",
+      arxivId: "2406.12045",
+      year: "2024",
+      link: "https://arxiv.org/abs/2406.12045"
+    },
+    {
+      title: "Evaluating Very Long-Term Conversational Memory of LLM Agents",
+      arxivId: "2402.17753",
+      year: "2024",
+      link: "https://arxiv.org/abs/2402.17753"
+    },
+    {
+      title: "SOTOPIA: Interactive Evaluation for Social Intelligence in Language Agents",
+      arxivId: "2310.11667",
+      year: "2023",
+      link: "https://arxiv.org/abs/2310.11667"
+    },
     {
       title: "Don’t Do RAG: When Cache-Augmented Generation is All You Need for Knowledge Tasks",
       arxivId: "2412.15605",

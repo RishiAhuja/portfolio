@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { LinkCard } from '../components/LinkCard';
 import { LINKS } from '../lib/constants';
 
-type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Instagram' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio' | 'Research' | 'Google Scholar';
+type IconName = 'Schedule a Call' | 'Email' | 'Twitter' | 'Resume' | 'LinkedIn' | 'GitHub' | 'Technical Blog' | 'Portfolio';
 
 const links = [
   {
@@ -25,11 +25,6 @@ const links = [
         description: '@Rishi2220 - Where I shitpost',
         url: LINKS.TWITTER
       },
-      {
-        title: 'Instagram' as IconName,
-        description: '@rishia2220',
-        url: LINKS.INSTAGRAM
-      }
     ]
   },
   {
@@ -51,11 +46,6 @@ const links = [
         description: '@RishiAhuja - Code & projects',
         url: LINKS.GITHUB
       },
-      {
-        title: 'Google Scholar' as IconName,
-        description: 'Research profile and citations',
-        url: LINKS.GOOGLE_SCHOLAR
-      }
     ]
   },
   {
@@ -65,12 +55,6 @@ const links = [
         title: 'Technical Blog' as IconName,
         description: 'Deep dives on Hashnode',
         url: LINKS.HASHNODE
-      },
-      {
-        title: 'Research' as IconName,
-        description: 'Selected papers and notes',
-        url: 'https://rishia.in/research',
-        primary: false
       },
       {
         title: 'Portfolio' as IconName,

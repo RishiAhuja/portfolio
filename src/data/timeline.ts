@@ -29,7 +29,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       buttons: [
         {
           label: 'Research',
-          link: 'https://rishia.in/research/ahuja2026icfd31k',
+          link: 'https://rishia.in/rsh/ahuja2026icfd31k',
           icon: 'external'
         },
         {
@@ -49,7 +49,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       buttons: [
         {
           label: 'Paper',
-          link: 'https://rishia.in/research/ahuja2026retrieval',
+          link: 'https://rishia.in/rsh/ahuja2026retrieval',
           icon: 'external'
         },
         {
@@ -71,21 +71,6 @@ export const timelineData: Record<string, TimelineEvent[]> = {
     //     { label: 'ICLR Virtual 2026', link: 'https://iclr.cc/virtual/2026/10013856', icon: 'external' }
     //   ]
     // },
-    {
-      date: 'Apr 2026',
-      title: 'Invited as Reviewer for FMSD Workshop at ICML 2026',
-      type: 'achievement',
-      description: 'Invited to review papers for the Foundation Models for Structured Data (FMSD) Workshop at ICML 2026.',
-      year: '2025-26',
-      hiddenInLedger: true,
-      buttons: [
-        {
-          label: 'FMSD @ ICML 2026',
-          link: 'https://icml-structured-fm-workshop.github.io',
-          icon: 'external'
-        }
-      ]
-    },
     {
       date: '16 Apr 2026',
       title: 'Selected for YC Startup School India & OpenAI Codex Hackathon Bengaluru',
@@ -129,7 +114,7 @@ export const timelineData: Record<string, TimelineEvent[]> = {
       buttons: [
         {
           label: 'Paper',
-          link: 'https://rishia.in/research/ahuja2026retrieval',
+          link: 'https://rishia.in/rsh/ahuja2026retrieval',
           icon: 'external'
         }
       ]

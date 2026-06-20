@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import TimelineView from '../components/TimelineView.tsx';
-import { timelineData, type TimelineEvent } from '../data/timeline';
+import { timelineData } from '../data/timeline';
 
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
@@ -12,22 +12,9 @@ const breadcrumbs = [
 const ledgerTimelineData = Object.fromEntries(
   Object.entries(timelineData).map(([year, items]) => [
     year,
-    items.map((item): TimelineEvent => (
-      item.hiddenInLedger
-        ? {
-            ...item,
-            date: '',
-            title: '',
-            description: '',
-            link: undefined,
-            blurbSlug: undefined,
-            gallerySlug: undefined,
-            buttons: [],
-          }
-        : item
-    )),
+    items.filter((item) => !item.hiddenInLedger),
   ]),
-) as Record<string, TimelineEvent[]>;
+);
 ---
 
 <BaseLayout 
