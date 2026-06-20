@@ -13,10 +13,10 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
     { label: 'Artifacts', href: '/gallery' },
     { label: 'Ledger', href: '/ledger' },
     { label: 'Community', href: '/community' },
-    { label: 'Research', href: '/research' },
+    { label: 'Research', href: '/rsh' },
     { label: 'Links', href: '/links' },
   ];
-  const visibleNavItems = navItems.filter((item) => item.href !== '/research');
+  const visibleNavItems = navItems.filter((item) => item.href !== '/rsh');
 
   // Close menu on escape key
   useEffect(() => {

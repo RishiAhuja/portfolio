@@ -30,7 +30,7 @@ const formatDate = (date: Date) =>
   {variant === 'cards' ? (
     <div class="grid gap-4">
       {papers.map((paper) => {
-        const paperHref = `/research/${paper.slug}`;
+        const paperHref = `/rsh/${paper.slug}`;
         const date = formatDate(paper.data.sort_date);
         const meta = `${paper.data.proceedings} · ${paper.data.venue}`;
 
@@ -66,7 +66,7 @@ const formatDate = (date: Date) =>
   ) : (
     <div class="flex flex-col space-y-2 md:space-y-4">
       {papers.map((paper) => {
-        const paperHref = `/research/${paper.slug}`;
+        const paperHref = `/rsh/${paper.slug}`;
         const date = formatDate(paper.data.sort_date);
         const meta = `${paper.data.proceedings} · ${paper.data.venue}`;
 
