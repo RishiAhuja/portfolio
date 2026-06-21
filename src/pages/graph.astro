@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentGraphView from '../components/ContentGraphView.tsx';
+---
+
+<BaseLayout
+  title="Graph | Rishi Ahuja"
+  description="An interactive knowledge graph of projects, writing, timeline events, and ideas across rishia.in."
+  image="/og?title=Knowledge%20Graph&description=How%20this%20site%20connects&type=default"
+>
+  <ContentGraphView client:load />
+</BaseLayout>
