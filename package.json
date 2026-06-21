@@ -10,7 +10,9 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "graph:structural": "tsx scripts/build-structural-graph.ts",
+    "graph:build": "tsx scripts/build-content-graph.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -35,6 +37,7 @@
     "marked-katex-extension": "^5.1.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-force-graph-2d": "^1.27.0",
     "react-icons": "^5.5.0",
     "react-type-animation": "^3.2.0",
     "recharts": "^3.4.1",
@@ -44,6 +47,9 @@
     "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
+    "chromadb": "^1.10.5",
+    "openai": "^4.104.0",
+    "tsx": "^4.20.3",
     "@astrojs/sitemap": "^3.6.0",
     "@types/node": "^20",
     "@types/ua-parser-js": "^0.7.39",
