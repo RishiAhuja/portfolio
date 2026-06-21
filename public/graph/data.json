@@ -1,0 +1,990 @@
+{
+  "generatedAt": "2026-06-20T23:56:28.035Z",
+  "embeddingModel": "text-embedding-3-large",
+  "usedChroma": false,
+  "nodes": [
+    {
+      "id": "page-home",
+      "type": "page",
+      "title": "Home",
+      "url": "/",
+      "snippet": "Rishi Ahuja portfolio — engineer, builder, open source, ledger, blurbs, projects."
+    },
+    {
+      "id": "page-ledger",
+      "type": "page",
+      "title": "Ledger",
+      "url": "/ledger",
+      "snippet": "Life timeline of projects, achievements, internships, community work, and milestones."
+    },
+    {
+      "id": "page-links",
+      "type": "page",
+      "title": "Links",
+      "url": "/links",
+      "snippet": "Contact links, resume, social profiles, blog, and professional presence."
+    },
+    {
+      "id": "page-community",
+      "type": "page",
+      "title": "Community",
+      "url": "/community",
+      "snippet": "Community work, bootcamp, teaching, and outreach."
+    },
+    {
+      "id": "page-gallery",
+      "type": "page",
+      "title": "Artifacts",
+      "url": "/gallery",
+      "snippet": "Photo gallery and artifacts from events, travel, and projects."
+    },
+    {
+      "id": "page-uncompiled",
+      "type": "page",
+      "title": "Uncompiled",
+      "url": "/uncompiled",
+      "snippet": "Philosophical writings on ambition, ego, and building — raw notes from a Stoic builder."
+    },
+    {
+      "id": "project-axon",
+      "type": "project",
+      "title": "Axon",
+      "url": "/projects/axon",
+      "snippet": "Axon A high-performance command-line tool providing strong encryption and decryption capabilities using AES-128 with Cipher Block Chaining (CBC) mode. Designed for secure file protection with a focus on performance, secu",
+      "tags": [
+        "C",
+        "AES-128",
+        "CMake",
+        "Make"
+      ]
+    },
+    {
+      "id": "project-blood4life",
+      "type": "project",
+      "title": "Blood 4 Life",
+      "url": "/projects/blood4life",
+      "snippet": "Blood 4 Life Three-way infrastructure facilitating NGO donor connections through a robust blood donation platform. A comprehensive blood donation platform connecting donors, NGOs, and hospitals in a seamless three-way in",
+      "tags": [
+        "Flutter",
+        "Firebase",
+        "Dart"
+      ]
+    },
+    {
+      "id": "project-fern",
+      "type": "project",
+      "title": "FernKit",
+      "url": "/projects/fern",
+      "snippet": "FernKit FernKit is a modular ecosystem of low-level developer tools for C, C++, and Python—designed with minimalism, composability, and transparency at its core. Centered around a handcrafted UI toolkit (fern) for WASM a",
+      "tags": [
+        "C++",
+        "WebAssembly",
+        "Bash",
+        "Emscripten"
+      ]
+    },
+    {
+      "id": "project-fingenie",
+      "type": "project",
+      "title": "FinGenie",
+      "url": "/projects/fingenie",
+      "snippet": "FinGenie A sophisticated financial management application combining expense tracking, group expense management, and AI-powered receipt scanning, clean architecture and BLoC pattern implementation with SOCIAL SCORES A com",
+      "tags": [
+        "Flutter",
+        "BLoC",
+        "Hive",
+        "ML Kit",
+        "Gemini AI",
+        "Go",
+        "Fiber",
+        "PostgreSQL",
+        "Python"
+      ]
+    },
+    {
+      "id": "project-ipqs",
+      "type": "project",
+      "title": "IPQS",
+      "url": "/projects/ipqs",
+      "snippet": "IPQS Intelligent PDF querying system enabling smart document analysis with AI-powered QA capabilities. An intelligent PDF querying system that transforms how you interact with documents through AI-powered analysis and sm",
+      "tags": [
+        "Flutter",
+        "Firebase",
+        "Syncfusion",
+        "Gemini AI"
+      ]
+    },
+    {
+      "id": "project-kisaanmithraa",
+      "type": "project",
+      "title": "KisaanMithraa",
+      "url": "/projects/kisaanmithraa",
+      "snippet": "KisaanMithraa A comprehensive agricultural cooperative platform developed under the Annam AI initiative in collaboration with IIT Ropar, implementing market price tracking and AI-powered farming assistance. A comprehensi",
+      "tags": [
+        "Flutter",
+        "GetX",
+        "Firebase",
+        "OpenAI"
+      ]
+    },
+    {
+      "id": "project-nexus",
+      "type": "project",
+      "title": "Nexus",
+      "url": "/projects/nexus",
+      "snippet": "Nexus A modern social blogging platform built with Flutter Web that amplifies user content through a unique signal network and beacon concept, featuring clean architecture, responsive design, and seamless Firebase integr",
+      "tags": [
+        "Flutter Web",
+        "BLoC",
+        "Firebase",
+        "Clean Architecture"
+      ]
+    },
+    {
+      "id": "project-openlearn",
+      "type": "project",
+      "title": "Open Learn",
+      "url": "/projects/openlearn",
+      "snippet": "Open Learn OpenLearn is a production-ready, TypeScript-powered backend designed for scalable cohort-based educational platforms. It supports structured learning paths, hierarchical roles, gamification, and real-time prog",
+      "tags": [
+        "TypeScript",
+        "Node.js",
+        "Express.js",
+        "Prisma ORM",
+        "PostgreSQL",
+        "Redis",
+        "JWT",
+        "Docker",
+        "Nginx",
+        "AWS EC2",
+        "Helmet.js",
+        "SMTP",
+        "GitHub Actions",
+        "REST API",
+        "Grafana",
+        "Prometheus"
+      ]
+    },
+    {
+      "id": "project-sahlplus",
+      "type": "project",
+      "title": "SahlPlus",
+      "url": "/projects/sahlplus",
+      "snippet": "SahlPlus An IoT-integrated e-scooter sharing platform built with Flutter implementing clean architecture principles and advanced state management solutions. A comprehensive e-scooter sharing platform integrating IoT hard",
+      "tags": [
+        "Flutter",
+        "Riverpod",
+        "Go",
+        "Docker"
+      ]
+    },
+    {
+      "id": "project-soulbuddy",
+      "type": "project",
+      "title": "SoulBuddy.ai",
+      "url": "/projects/soulbuddy",
+      "snippet": "SoulBuddy.ai AI-powered astrological platform providing personalized spiritual guidance through astrology and numerology. An innovative AI-powered spiritual guidance platform combining ancient astrological wisdom with mo",
+      "tags": [
+        "Flutter",
+        "Dart",
+        "AWS",
+        "Cassandra",
+        "Hive",
+        "Datastax",
+        "Langflow"
+      ]
+    },
+    {
+      "id": "research-ahuja2026icfd31k",
+      "type": "research",
+      "title": "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection",
+      "url": "/rsh/ahuja2026icfd31k",
+      "snippet": "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection Accepted at IJCAI-ECAI 2026 main conference special track. A large-scale Indian bilingual fraud-call benchmark with streaming lab",
+      "tags": []
+    },
+    {
+      "id": "research-ahuja2026retrieval",
+      "type": "research",
+      "title": "ahuja2026retrieval",
+      "url": "/rsh/ahuja2026retrieval",
+      "snippet": "ahuja2026retrieval --- title: \"Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting\" description: \"Published at the ICLR 2026 TSALM Workshop. A paper arguing that selective retrieval beats brute-f",
+      "tags": []
+    },
+    {
+      "id": "blurb-fern",
+      "type": "blurb",
+      "title": "Building Fern",
+      "url": "/blurb/fern",
+      "snippet": "Building Fern The complete journey of developing a modern web graphics library A deep dive into the development of Fern — a zero-dependency, Wasm-powered graphics and UI library built in C and C++. From early pixel buffe",
+      "tags": [
+        "C++",
+        "Wasm",
+        "Graphics",
+        "UI",
+        "Layout Engine"
+      ]
+    },
+    {
+      "id": "blurb-openlearn",
+      "type": "blurb",
+      "title": "Building OpenLearn",
+      "url": "/blurb/openlearn",
+      "snippet": "Building OpenLearn the complete journey of developing a modern cohort-based educational platform The story behind OpenLearn — a production-grade platform built for scalable, structured, and role-based education. This cha",
+      "tags": [
+        "TypeScript",
+        "Express",
+        "PostgreSQL",
+        "Prisma",
+        "Docker",
+        "Render",
+        "NeonDB"
+      ]
+    },
+    {
+      "id": "blurb-level-supermind-hackathon",
+      "type": "blurb",
+      "title": "Our Journey to the Level Supermind Hackathon in Mumbai",
+      "url": "/blurb/level-supermind-hackathon",
+      "snippet": "Our Journey to the Level Supermind Hackathon in Mumbai From a last-minute entry to a second-place victory, and the chaotic journey back home. This is the story of how our team participated in the Level Supermind Hackatho",
+      "tags": [
+        "Hackathon",
+        "Mumbai",
+        "Level Supermind",
+        "Insightly",
+        "SoulBuddy",
+        "Travel"
+      ]
+    },
+    {
+      "id": "blurb-iclr-2026-rio-de-janeiro",
+      "type": "blurb",
+      "title": "My ICLR 2026 and Brazil Experience in Rio de Janeiro",
+      "url": "/blurb/iclr-2026-rio-de-janeiro",
+      "snippet": "My ICLR 2026 and Brazil Experience in Rio de Janeiro A long route to Rio, a paper presentation at ICLR, and the practical lessons that came with figuring out Brazil in real time. A personal blurb about presenting at ICLR",
+      "tags": [
+        "ICLR",
+        "Rio de Janeiro",
+        "Brazil",
+        "Conference",
+        "Travel",
+        "Research"
+      ]
+    },
+    {
+      "id": "uncompiled-conditional-architecture",
+      "type": "uncompiled",
+      "title": "Conditional Architecture",
+      "url": "/uncompiled/conditional-architecture",
+      "snippet": "Conditional Architecture Most people build their confidence the way engineers build a structure that was never meant to move. The foundations are sunk into outcomes. The weight is carried by metrics. The whole thing stan"
+    },
+    {
+      "id": "uncompiled-the-receipts-problem",
+      "type": "uncompiled",
+      "title": "The Receipts Problem",
+      "url": "/uncompiled/the-receipts-problem",
+      "snippet": "The Receipts Problem There is a specific cruelty that high self-awareness inflicts on the people who have it. Most people, when they succeed, simply accept it. They worked hard, it paid off, they move on. The credit flow"
+    },
+    {
+      "id": "uncompiled-the-defensive-reframe",
+      "type": "uncompiled",
+      "title": "The Defensive Reframe",
+      "url": "/uncompiled/the-defensive-reframe",
+      "snippet": "The Defensive Reframe At some point, most self-aware people discover a move. The move goes like this: when someone else's success threatens to destabilize you — when a peer gets the result you wanted, or does effortlessl"
+    },
+    {
+      "id": "uncompiled-writing-on-water",
+      "type": "uncompiled",
+      "title": "Writing on Water",
+      "url": "/uncompiled/writing-on-water",
+      "snippet": "Writing on Water We treat our decisions like they're being carved into stone. Every misstep, every rejection, every public stumble gets filed away as permanent evidence of something—our incompetence, our bad judgment, ou"
+    },
+    {
+      "id": "uncompiled-the-utility-of-ego",
+      "type": "uncompiled",
+      "title": "The Utility of Ego",
+      "url": "/uncompiled/the-utility-of-ego",
+      "snippet": "The Utility of Ego We are conditioned to view the ego as a defect—something to be suppressed, starved, or hidden. We are told that humility is the ultimate virtue and that to think highly of oneself is an error of judgme"
+    },
+    {
+      "id": "uncompiled-the-horizon-effect",
+      "type": "uncompiled",
+      "title": "The Horizon Effect",
+      "url": "/uncompiled/the-horizon-effect",
+      "snippet": "The Horizon Effect There is a specific, quiet emptiness that often follows a major achievement. We spend months or years convinced that a certain number—a specific weight on the barbell, a specific net worth, or a specif"
+    },
+    {
+      "id": "blog-you-dont-know-websockets-yet",
+      "type": "blog",
+      "title": "You Don't Know WebSockets Yet",
+      "url": "/blogs/you-dont-know-websockets-yet",
+      "snippet": "You Don't Know WebSockets Yet A deep dive into WebSockets, real-time communication, and what most tutorials skip."
+    },
+    {
+      "id": "blog-go-beneath-the-abstraction-building-interactive-uis-with-fernkit",
+      "type": "blog",
+      "title": "Go Beneath the Abstraction: Building Interactive UIs with FernKit",
+      "url": "/blogs/go-beneath-the-abstraction-building-interactive-uis-with-fernkit",
+      "snippet": "Go Beneath the Abstraction: Building Interactive UIs with FernKit Building interactive UIs from scratch with FernKit and low-level graphics."
+    },
+    {
+      "id": "blog-shamirs-secret-sharing-scheme-and-multi-party-computation",
+      "type": "blog",
+      "title": "Shamir's Secret Sharing Scheme and Multi-Party Computation",
+      "url": "/blogs/shamirs-secret-sharing-scheme-and-multi-party-computation",
+      "snippet": "Shamir's Secret Sharing Scheme and Multi-Party Computation Cryptography, secret sharing, and MPC explained with practical intuition."
+    },
+    {
+      "id": "blog-your-hardest-hello-world-text-rasterization-1",
+      "type": "blog",
+      "title": "Your Hardest Hello World: Text Rasterization (1)",
+      "url": "/blogs/your-hardest-hello-world-text-rasterization-1",
+      "snippet": "Your Hardest Hello World: Text Rasterization (1) Font rasterization, glyph rendering, and the hidden complexity of displaying text."
+    },
+    {
+      "id": "blog-bits-of-trust-the-elegance-of-aes",
+      "type": "blog",
+      "title": "Bits of Trust: The Elegance of AES",
+      "url": "/blogs/bits-of-trust-the-elegance-of-aes",
+      "snippet": "Bits of Trust: The Elegance of AES AES block cipher internals and why symmetric encryption still matters."
+    },
+    {
+      "id": "blog-building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive",
+      "type": "blog",
+      "title": "Building Rosenblatt's Perceptron from Scratch",
+      "url": "/blogs/building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive",
+      "snippet": "Building Rosenblatt's Perceptron from Scratch Implementing the perceptron learning algorithm from first principles."
+    },
+    {
+      "id": "timeline-30-apr-2026",
+      "type": "timeline",
+      "title": "IJCAI-ECAI 2026 Special Track Paper Accepted",
+      "url": "/rsh/ahuja2026icfd31k",
+      "snippet": "IJCAI-ECAI 2026 Special Track Paper Accepted Paper \"ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection\" accepted to the IJCAI-ECAI 2026 main conference special track. I will presen"
+    },
+    {
+      "id": "timeline-26-apr-2026",
+      "type": "timeline",
+      "title": "Presented ICLR 2026 Poster",
+      "url": "/rsh/ahuja2026retrieval",
+      "snippet": "Presented ICLR 2026 Poster Recently presented the poster for \"Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting\" at the ICLR 2026 TSALM Workshop. Received a $2,025 travel grant. achievement 202"
+    },
+    {
+      "id": "timeline-16-apr-2026",
+      "type": "timeline",
+      "title": "Selected for YC Startup School India & OpenAI Codex Hackathon Bengaluru",
+      "url": "/ledger",
+      "snippet": "Selected for YC Startup School India & OpenAI Codex Hackathon Bengaluru Visited Bengaluru after being selected for two major builder events: YC Startup School India, shortlisted among roughly 2,000 participants from 24,0"
+    },
+    {
+      "id": "timeline-28-mar-2026",
+      "type": "timeline",
+      "title": "Organizer & Judge Coordinator — HackMol 7.0, NIT Jalandhar",
+      "url": "/ledger",
+      "snippet": "Organizer & Judge Coordinator — HackMol 7.0, NIT Jalandhar Served as Organizer and Judge Coordinator at HackMol 7.0, NIT Jalandhar (March 28-29, 2026). community 2025-26"
+    },
+    {
+      "id": "timeline-mar-2026",
+      "type": "timeline",
+      "title": "ICLR 2026 TSALM Workshop Paper Accepted",
+      "url": "/rsh/ahuja2026retrieval",
+      "snippet": "ICLR 2026 TSALM Workshop Paper Accepted Paper \"Retrieval Mechanisms Surpass Long-Context Scaling in Time Series Forecasting\" accepted at ICLR 2026 TSALM Workshop — first CORE A* acceptance in the department's history inc"
+    },
+    {
+      "id": "timeline-20-jan-2026",
+      "type": "timeline",
+      "title": "Concluded 14-Day Flutter Bootcamp at GDGC",
+      "url": "/flutter-bootcamp",
+      "snippet": "Concluded 14-Day Flutter Bootcamp at GDGC Successfully concluded a 14-day intensive Flutter Bootcamp that I conducted at GDGC. Covered Flutter fundamentals, state management, architecture patterns, and hands-on project b"
+    },
+    {
+      "id": "timeline-25-dec-2025",
+      "type": "timeline",
+      "title": "Bought iPhone 17 256GB",
+      "url": "/ledger",
+      "snippet": "Bought iPhone 17 256GB Purchased my first iPhone (17 256GB) entirely with money I earned from my company work. A personal milestone representing months of hard work and financial independence. achievement 2025-26"
+    },
+    {
+      "id": "timeline-13-dec-2025",
+      "type": "timeline",
+      "title": "1st Place Winner: AWS Partner Track @ HackCBS 8.0",
+      "url": "/ledger",
+      "snippet": "1st Place Winner: AWS Partner Track @ HackCBS 8.0 Won 1st place in the AWS Partner Track at HackCBS 8.0 with Swasya.AI. Built a hybrid serverless architecture using EC2 (Dockerized FastAPI), Lambda (SAM), S3 triggers, Dy"
+    },
+    {
+      "id": "timeline-15-nov-2025",
+      "type": "timeline",
+      "title": "SMX Tour - Chandigarh",
+      "url": "/ledger",
+      "snippet": "SMX Tour - Chandigarh Attended the Seedhe Maut SMX Tour in Chandigarh. Witnessed the raw energy of the duo live—jumping into the moshpit and screaming lyrics with thousands of fans was an unmatched experience. community "
+    },
+    {
+      "id": "timeline-10-nov-2025",
+      "type": "timeline",
+      "title": "1st Place Winner: Qyrus Track @ HackCBS 8.0",
+      "url": "/ledger",
+      "snippet": "1st Place Winner: Qyrus Track @ HackCBS 8.0 Secured First Place in the qAPI by Qyrus sponsor track at the HackCBS 8.0 hackathon in Delhi. Our project, Swasya.AI, was awarded the top prize (Ray-Ban Meta smart glasses) by "
+    },
+    {
+      "id": "timeline-3-nov-2025",
+      "type": "timeline",
+      "title": "Product Presentation to GOI & MeitY Delegation",
+      "url": "/ledger",
+      "snippet": "Product Presentation to GOI & MeitY Delegation Presented our Agri-Tech innovations to a high-level delegation in a 4-hour strategic meeting and luncheon. The audience included the Chief AI Officer (Ministry of Agricultur"
+    },
+    {
+      "id": "timeline-17-oct-2025",
+      "type": "timeline",
+      "title": "Started Entrepreneur-in-Residence (EIR)",
+      "url": "/ledger",
+      "snippet": "Started Entrepreneur-in-Residence (EIR) Began role as an Entrepreneur-in-Residence at iHub AwaDH, IIT Ropar, supporting and mentoring technology startups. community 2025-26"
+    },
+    {
+      "id": "timeline-3-oct-2025",
+      "type": "timeline",
+      "title": "Turned 18 Years Old!",
+      "url": "/ledger",
+      "snippet": "Turned 18 Years Old! Celebrated my 18th birthday—officially an adult! Reflecting on an incredible journey of building projects, winning hackathons, contributing to open source, and learning from amazing mentors. Excited "
+    },
+    {
+      "id": "timeline-1-oct-2025",
+      "type": "timeline",
+      "title": "Got MacBook Pro M4",
+      "url": "/ledger",
+      "snippet": "Got MacBook Pro M4 Upgraded to a MacBook Pro with M4 chip—a game-changer for development work. The performance boost has significantly improved my productivity for building cross-platform apps, compiling C++ projects, an"
+    },
+    {
+      "id": "timeline-6-sept-2025",
+      "type": "timeline",
+      "title": "Bit N Build Punjab Mentor",
+      "url": "/ledger",
+      "snippet": "Bit N Build Punjab Mentor Invited as a mentor for the Bit n Build Punjab Round hackathon at Thapar University, Patiala. Guided and advised over 30 participating teams during the event held on September 6, 2025, which hos"
+    },
+    {
+      "id": "timeline-25-aug-2025",
+      "type": "timeline",
+      "title": "You Don't Know WebSockets. Yet.",
+      "url": "/blogs/you-dont-know-websockets-yet",
+      "snippet": "You Don't Know WebSockets. Yet. Deep dive technical blog exploring WebSocket protocol, real-time communication patterns, and bidirectional data flow in modern web applications. blog 2025-26"
+    },
+    {
+      "id": "timeline-3-aug-2025",
+      "type": "timeline",
+      "title": "Go Beneath the Abstraction: Building Interactive UIs with FernKit",
+      "url": "/blogs/go-beneath-the-abstraction-building-interactive-uis-with-fernkit",
+      "snippet": "Go Beneath the Abstraction: Building Interactive UIs with FernKit Technical deep dive into FernKit UI toolkit, exploring low-level rendering, widget systems, and building UIs from scratch with C++. blog 2025-26"
+    },
+    {
+      "id": "timeline-10-jul-2025",
+      "type": "timeline",
+      "title": "Mess ERP with 6-way Infrastructure",
+      "url": "/ledger",
+      "snippet": "Mess ERP with 6-way Infrastructure Currently developing comprehensive ERP system for NITJ with 6-way infrastructure, targeting 5000+ users for mess management and operations. project 2025-26"
+    },
+    {
+      "id": "timeline-5-july-2025",
+      "type": "timeline",
+      "title": "Shamir's Secret Sharing Scheme and Multi Party Computation.",
+      "url": "/blogs/shamirs-secret-sharing-scheme-and-multi-party-computation",
+      "snippet": "Shamir's Secret Sharing Scheme and Multi Party Computation. Mathematical Blog (21 min read) exploring Shamir's Secret Sharing Scheme and Multi Party Computation for private key management. blog 2025-26"
+    },
+    {
+      "id": "timeline-14-jun-2025",
+      "type": "timeline",
+      "title": "Your Hardest \"Hello World!\": Text Rasterization #1",
+      "url": "/blogs/your-hardest-hello-world-text-rasterization-1",
+      "snippet": "Your Hardest \"Hello World!\": Text Rasterization #1 Deep technical blog (32 min read) exploring TTF file format and text rendering fundamentals. blog 2024-25"
+    },
+    {
+      "id": "timeline-13-jun-2025",
+      "type": "timeline",
+      "title": "OpenLearn - Educational Organization",
+      "url": "/blurb/openlearn",
+      "snippet": "OpenLearn - Educational Organization Co-founded educational organization for teaching via blogs with cohorts, achieved 120+ active users. community 2024-25"
+    },
+    {
+      "id": "timeline-9-jun-2025",
+      "type": "timeline",
+      "title": "Text Rasterization Tool",
+      "url": "/ledger",
+      "snippet": "Text Rasterization Tool Low-level tool for understanding and processing TrueType Font (TTF) files and text rendering. project 2024-25"
+    },
+    {
+      "id": "timeline-30-may-2025",
+      "type": "timeline",
+      "title": "Fern Graphics Library",
+      "url": "/blurb/fern",
+      "snippet": "Fern Graphics Library 0-dependency C/C++ GUI creation library built from scratch, cross-platform with WebAssembly support. project 2024-25"
+    },
+    {
+      "id": "timeline-29-may-2025",
+      "type": "timeline",
+      "title": "Annam AI Research Intern - IIT Ropar",
+      "url": "/ledger",
+      "snippet": "Annam AI Research Intern - IIT Ropar AI research internship at IIT Ropar focusing on agricultural technology and machine learning applications. internship 2024-25"
+    },
+    {
+      "id": "timeline-21-may-2025",
+      "type": "timeline",
+      "title": "Portfolio Refresh",
+      "url": "/ledger",
+      "snippet": "Portfolio Refresh Complete redesign and modernization of personal portfolio with improved design and user experience. project 2024-25"
+    },
+    {
+      "id": "timeline-20-may-2025",
+      "type": "timeline",
+      "title": "Conduit HTTP Client",
+      "url": "/ledger",
+      "snippet": "Conduit HTTP Client HTTP client for C written in pure C with no external dependencies, lightweight and efficient. project 2024-25"
+    },
+    {
+      "id": "timeline-19-may-2025",
+      "type": "timeline",
+      "title": "Datum Web3 Wallet",
+      "url": "/ledger",
+      "snippet": "Datum Web3 Wallet Web3-based wallet project (never completed) - exploration into blockchain and cryptocurrency technologies. project 2024-25"
+    },
+    {
+      "id": "timeline-13-may-2025",
+      "type": "timeline",
+      "title": "SUDO - Society of Unified Developers",
+      "url": "/ledger",
+      "snippet": "SUDO - Society of Unified Developers Co-founded Society of Unified Developer and Operators, focusing on 0-dependency system programming tools. community 2024-25"
+    },
+    {
+      "id": "timeline-4-may-2025",
+      "type": "timeline",
+      "title": "NeoPrismLabs UI Library",
+      "url": "/ledger",
+      "snippet": "NeoPrismLabs UI Library Neubrutalist UI library for Flutter (somewhat completed), providing bold design components with modern aesthetics. project 2024-25"
+    },
+    {
+      "id": "timeline-10-apr-2025",
+      "type": "timeline",
+      "title": "ESP32 Controller & Hardware Robo",
+      "url": "/ledger",
+      "snippet": "ESP32 Controller & Hardware Robo IoT-based robot car for Robowar competitions with ESP32 controller and Flutter app for remote control. project 2024-25"
+    },
+    {
+      "id": "timeline-4-apr-2025",
+      "type": "timeline",
+      "title": "Stack Wealth Flutter Internship",
+      "url": "/ledger",
+      "snippet": "Stack Wealth Flutter Internship Flutter intern at YC S21 company, ranked #2 contributor with 50+ PRs merged for Athena app. internship 2024-25"
+    },
+    {
+      "id": "timeline-1-apr-2025",
+      "type": "timeline",
+      "title": "Bits of Trust: The Elegance of AES",
+      "url": "/ledger",
+      "snippet": "Bits of Trust: The Elegance of AES Technical blog (24 min read) exploring AES encryption algorithms and cryptographic implementations. blog 2024-25"
+    },
+    {
+      "id": "timeline-29-mar-2025",
+      "type": "timeline",
+      "title": "Axon AES Implementation",
+      "url": "/ledger",
+      "snippet": "Axon AES Implementation 0-dependency AES implementation tool in C with SIMD optimizations for high performance encryption. project 2024-25"
+    },
+    {
+      "id": "timeline-10-mar-2025",
+      "type": "timeline",
+      "title": "BarqScoot E-Scooter Platform",
+      "url": "/ledger",
+      "snippet": "BarqScoot E-Scooter Platform Freelancing project for Saudi Arabia-based e-scooter rental platform with real-time tracking and IoT integration. project 2024-25"
+    },
+    {
+      "id": "timeline-27-feb-2025",
+      "type": "timeline",
+      "title": "Building Rosenblatt's Perceptron From Scratch in Flutter",
+      "url": "/ledger",
+      "snippet": "Building Rosenblatt's Perceptron From Scratch in Flutter Technical blog (24 min read) implementing classic machine learning perceptron algorithm in Flutter with visual explanations. blog 2024-25"
+    },
+    {
+      "id": "timeline-24-feb-2025",
+      "type": "timeline",
+      "title": "Perceptron Simulator",
+      "url": "/ledger",
+      "snippet": "Perceptron Simulator 0-dependency Flutter visualization for Rosenblatt Perceptrons, educational tool for understanding neural networks. project 2024-25"
+    },
+    {
+      "id": "timeline-20-feb-2025",
+      "type": "timeline",
+      "title": "Numd - NumPy but in Dart",
+      "url": "/ledger",
+      "snippet": "Numd - NumPy but in Dart Rudimentary NumPy clone implemented in Dart, providing numerical computation capabilities for Flutter applications. project 2024-25"
+    },
+    {
+      "id": "timeline-15-feb-2025",
+      "type": "timeline",
+      "title": "KisaanMithraa Agricultural Platform",
+      "url": "/ledger",
+      "snippet": "KisaanMithraa Agricultural Platform Agricultural app developed under Annam AI initiative with IIT Ropar, featuring cooperative management and multilingual support. project 2024-25"
+    },
+    {
+      "id": "timeline-10-feb-2025",
+      "type": "timeline",
+      "title": "FinGenie Social Score Management",
+      "url": "/ledger",
+      "snippet": "FinGenie Social Score Management AI-based social score management system developed as hackathon product, focusing on social credit algorithms. project 2024-25"
+    },
+    {
+      "id": "timeline-25-jan-2025",
+      "type": "timeline",
+      "title": "Level SuperMind Frontend Internship",
+      "url": "/ledger",
+      "snippet": "Level SuperMind Frontend Internship Frontend development internship using Next.js, working on religious services platform with agile methodology. internship 2024-25"
+    },
+    {
+      "id": "timeline-19-jan-2025",
+      "type": "timeline",
+      "title": "Level SuperMind National Hack - 2nd Place",
+      "url": "/blurb/level-supermind-hackathon",
+      "snippet": "Level SuperMind National Hack - 2nd Place Won 2nd place at national hackathon in Mumbai among 23,000+ participants with SoulBuddy AI project. achievement 2024-25"
+    },
+    {
+      "id": "timeline-18-jan-2025",
+      "type": "timeline",
+      "title": "SoulBuddy AI Spiritual Guide",
+      "url": "/ledger",
+      "snippet": "SoulBuddy AI Spiritual Guide 12-hour hackathon project creating AI-powered astrological guidance platform with personalized insights and predictions. project 2024-25"
+    },
+    {
+      "id": "timeline-9-jan-2025",
+      "type": "timeline",
+      "title": "Nexus Tech Blogging Platform",
+      "url": "/ledger",
+      "snippet": "Nexus Tech Blogging Platform Flutter web technical blogging platform with rich Markdown editing, user authentication, and clean architecture. project 2024-25"
+    },
+    {
+      "id": "timeline-5-jan-2025",
+      "type": "timeline",
+      "title": "Getting Cracked at Clean and BLoC Architecture",
+      "url": "/ledger",
+      "snippet": "Getting Cracked at Clean and BLoC Architecture Advanced Flutter architecture blog (22 min read) covering clean architecture principles and BLoC pattern implementation. blog 2024-25"
+    },
+    {
+      "id": "timeline-28-dec-2024",
+      "type": "timeline",
+      "title": "Bit by Bit: C++",
+      "url": "/ledger",
+      "snippet": "Bit by Bit: C++ Comprehensive 150-page C++ programming guide covering fundamentals to advanced concepts with practical examples. project 2024-25"
+    },
+    {
+      "id": "timeline-13-dec-2024",
+      "type": "timeline",
+      "title": "Getting Started at BLoC Architecture",
+      "url": "/ledger",
+      "snippet": "Getting Started at BLoC Architecture Beginner-friendly Flutter architecture blog (23 min read) introducing BLoC pattern with practical examples. blog 2024-25"
+    },
+    {
+      "id": "timeline-8-dec-2024",
+      "type": "timeline",
+      "title": "Flutter Spotify Clone",
+      "url": "/ledger",
+      "snippet": "Flutter Spotify Clone Full-featured music streaming app built with Flutter and BLoC pattern, implementing advanced audio controls and UI. project 2024-25"
+    },
+    {
+      "id": "timeline-28-nov-2024",
+      "type": "timeline",
+      "title": "GDSC NITJ Core Member",
+      "url": "/ledger",
+      "snippet": "GDSC NITJ Core Member Became Core member (Mobile Dev) of Google Developer Student Club NITJ, organizing technical workshops. community 2024-25"
+    },
+    {
+      "id": "timeline-1-nov-2024",
+      "type": "timeline",
+      "title": "Resource Management with Probabilistic Scheduling in Linux",
+      "url": "/ledger",
+      "snippet": "Resource Management with Probabilistic Scheduling in Linux Deep technical blog (33 min read) exploring Linux kernel scheduling mechanisms and resource management algorithms. blog 2024-25"
+    },
+    {
+      "id": "timeline-28-oct-2024",
+      "type": "timeline",
+      "title": "PEC × Prajna AI Hackathon - 3rd Place",
+      "url": "/ledger",
+      "snippet": "PEC × Prajna AI Hackathon - 3rd Place Placed 3rd solo in hackathon among 60+ teams, developing IPQS (Intelligence PDF Querying System) with innovative AI implementation. achievement 2024-25"
+    },
+    {
+      "id": "timeline-19-oct-2024",
+      "type": "timeline",
+      "title": "IPQS - Intelligence PDF Querying System",
+      "url": "/ledger",
+      "snippet": "IPQS - Intelligence PDF Querying System AI-powered document analysis system for intelligent PDF querying and information extraction using advanced NLP techniques. project 2024-25"
+    },
+    {
+      "id": "timeline-16-sep-2024",
+      "type": "timeline",
+      "title": "Flutter Chat Application",
+      "url": "/ledger",
+      "snippet": "Flutter Chat Application Real-time messaging application built with Flutter, featuring modern chat interface and real-time communication. project 2024-25"
+    },
+    {
+      "id": "timeline-3-sep-2024",
+      "type": "timeline",
+      "title": "State of the Art - ART (Android Runtime)",
+      "url": "/ledger",
+      "snippet": "State of the Art - ART (Android Runtime) Technical blog (6 min read) analyzing Android Runtime (ART) and its impact on app performance and development. blog 2024-25"
+    },
+    {
+      "id": "timeline-16-aug-2024",
+      "type": "timeline",
+      "title": "Comprehensive Arch Linux Blog",
+      "url": "/ledger",
+      "snippet": "Comprehensive Arch Linux Blog In-depth technical guide (26 min read) covering Arch Linux installation, configuration, and advanced system administration. blog 2024-25"
+    }
+  ],
+  "links": [
+    {
+      "source": "blurb-fern",
+      "target": "project-fern",
+      "weight": 0.92,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-30-may-2025",
+      "target": "blurb-fern",
+      "weight": 0.9,
+      "kind": "structural"
+    },
+    {
+      "source": "blurb-openlearn",
+      "target": "project-openlearn",
+      "weight": 0.92,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-13-jun-2025",
+      "target": "blurb-openlearn",
+      "weight": 0.9,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-19-jan-2025",
+      "target": "blurb-level-supermind-hackathon",
+      "weight": 0.9,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-30-apr-2026",
+      "target": "research-ahuja2026icfd31k",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-26-apr-2026",
+      "target": "research-ahuja2026retrieval",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-mar-2026",
+      "target": "research-ahuja2026retrieval",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-25-aug-2025",
+      "target": "blog-you-dont-know-websockets-yet",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-3-aug-2025",
+      "target": "blog-go-beneath-the-abstraction-building-interactive-uis-with-fernkit",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-5-july-2025",
+      "target": "blog-shamirs-secret-sharing-scheme-and-multi-party-computation",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "timeline-14-jun-2025",
+      "target": "blog-your-hardest-hello-world-text-rasterization-1",
+      "weight": 0.86,
+      "kind": "structural"
+    },
+    {
+      "source": "project-blood4life",
+      "target": "project-ipqs",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "project-blood4life",
+      "target": "project-kisaanmithraa",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "project-fingenie",
+      "target": "project-ipqs",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "project-fingenie",
+      "target": "project-sahlplus",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "project-kisaanmithraa",
+      "target": "project-ipqs",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "project-nexus",
+      "target": "project-blood4life",
+      "weight": 0.7,
+      "kind": "tag"
+    },
+    {
+      "source": "project-nexus",
+      "target": "project-ipqs",
+      "weight": 0.7,
+      "kind": "tag"
+    },
+    {
+      "source": "project-openlearn",
+      "target": "project-fingenie",
+      "weight": 0.7,
+      "kind": "tag"
+    },
+    {
+      "source": "project-sahlplus",
+      "target": "project-blood4life",
+      "weight": 0.7,
+      "kind": "tag"
+    },
+    {
+      "source": "project-soulbuddy",
+      "target": "project-blood4life",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "project-soulbuddy",
+      "target": "project-fingenie",
+      "weight": 0.74,
+      "kind": "tag"
+    },
+    {
+      "source": "blurb-openlearn",
+      "target": "project-fingenie",
+      "weight": 0.7,
+      "kind": "tag"
+    },
+    {
+      "source": "timeline-29-mar-2025",
+      "target": "project-axon",
+      "weight": 0.6643,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-fern",
+      "target": "timeline-3-aug-2025",
+      "weight": 0.7025,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-fern",
+      "target": "timeline-30-may-2025",
+      "weight": 0.6752,
+      "kind": "semantic"
+    },
+    {
+      "source": "blog-go-beneath-the-abstraction-building-interactive-uis-with-fernkit",
+      "target": "project-fern",
+      "weight": 0.6614,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-fingenie",
+      "target": "timeline-10-feb-2025",
+      "weight": 0.6183,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-ipqs",
+      "target": "timeline-19-oct-2024",
+      "weight": 0.7712,
+      "kind": "semantic"
+    },
+    {
+      "source": "timeline-28-oct-2024",
+      "target": "project-ipqs",
+      "weight": 0.6376,
+      "kind": "semantic"
+    },
+    {
+      "source": "timeline-15-feb-2025",
+      "target": "project-kisaanmithraa",
+      "weight": 0.8131,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-nexus",
+      "target": "timeline-9-jan-2025",
+      "weight": 0.7816,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-openlearn",
+      "target": "timeline-13-jun-2025",
+      "weight": 0.6506,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-sahlplus",
+      "target": "timeline-10-mar-2025",
+      "weight": 0.6016,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-soulbuddy",
+      "target": "timeline-18-jan-2025",
+      "weight": 0.8249,
+      "kind": "semantic"
+    },
+    {
+      "source": "project-soulbuddy",
+      "target": "timeline-19-jan-2025",
+      "weight": 0.5979,
+      "kind": "semantic"
+    },
+    {
+      "source": "timeline-3-aug-2025",
+      "target": "blurb-fern",
+      "weight": 0.6745,
+      "kind": "semantic"
+    },
+    {
+      "source": "blurb-fern",
+      "target": "timeline-14-jun-2025",
+      "weight": 0.5317,
+      "kind": "semantic"
+    },
+    {
+      "source": "timeline-16-apr-2026",
+      "target": "blurb-level-supermind-hackathon",
+      "weight": 0.5419,
+      "kind": "semantic"
+    },
+    {
+      "source": "timeline-10-nov-2025",
+      "target": "blurb-level-supermind-hackathon",
+      "weight": 0.5205,
+      "kind": "semantic"
+    },
+    {
+      "source": "blurb-iclr-2026-rio-de-janeiro",
+      "target": "timeline-26-apr-2026",
+      "weight": 0.5355,
+      "kind": "semantic"
+    }
+  ]
+}
