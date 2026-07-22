@@ -32,6 +32,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.24",
     "highlight.js": "^11.11.1",
+    "katex": "^0.16.47",
     "lucide-react": "^0.562.0",
     "marked": "^16.4.1",
     "marked-katex-extension": "^5.1.5",
@@ -47,13 +48,13 @@
     "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
-    "chromadb": "^1.10.5",
-    "openai": "^4.104.0",
-    "tsx": "^4.20.3",
     "@astrojs/sitemap": "^3.6.0",
     "@types/node": "^20",
     "@types/ua-parser-js": "^0.7.39",
     "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.35"
+    "chromadb": "^1.10.5",
+    "openai": "^4.104.0",
+    "postcss": "^8.4.35",
+    "tsx": "^4.20.3"
   }
 }

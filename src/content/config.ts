@@ -60,7 +60,22 @@ const researchCollection = defineCollection({
   }),
 });
 
+const blogsCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    brief: z.string(),
+    dateAdded: z.coerce.date(),
+    hashnodeUrl: z.string().url(),
+    readTimeInMinutes: z.number().int().positive(),
+    author: z.string().default('Rishi Ahuja'),
+    coverImage: z.string().url().optional(),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
 export const collections = {
   projects: projectsCollection,
   research: researchCollection,
+  blogs: blogsCollection,
 };
