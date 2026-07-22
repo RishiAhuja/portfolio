@@ -13,7 +13,7 @@ const papers = (await getCollection('research')).sort(
   (a, b) => b.data.sort_date.getTime() - a.data.sort_date.getTime()
 );
 
-const researchDescription = 'Research publications by Rishi Ahuja across time-series forecasting, retrieval-augmented models, and trustworthy conversational fraud detection.';
+const researchDescription = 'Research publications by Rishi Ahuja across LLM evaluation, benchmarking, and mechanistic interpretability.';
 const canonicalResearchUrl = 'https://rishia.in/rsh';
 
 const getPaperPath = (paper: CollectionEntry<'research'>) => `/rsh/${paper.slug}`;
