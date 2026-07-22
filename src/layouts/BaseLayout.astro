@@ -120,5 +120,36 @@ const imageURL = new URL(image, Astro.site).toString();
   <body class="bg-codGray text-quillGray dark:bg-bgShades-dark dark:text-quillGray transition-colors duration-300">
     <Header client:load currentPath={currentPath} />
     <slot />
+
+    <!-- Lamatic portfolio assistant -->
+    <script is:inline async>
+      (function () {
+        const PROJECT_ID = '6de4aaa5-374f-465b-8a85-3fca80443fe5';
+        const FLOW_ID = 'c61a4fd4-432e-4ef3-9682-2b1a0016484f';
+        const API_URL = 'https://rishisorganization322-rishisproject461.lamatic.dev';
+
+        function loadLamaticChat() {
+          if (document.getElementById('lamatic-chat-root')) return;
+
+          const root = document.createElement('div');
+          root.id = 'lamatic-chat-root';
+          root.dataset.apiUrl = API_URL;
+          root.dataset.flowId = FLOW_ID;
+          root.dataset.projectId = PROJECT_ID;
+          document.body.appendChild(root);
+
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = 'https://widget.lamatic.ai/chat-v2?projectId=' + PROJECT_ID;
+          document.body.appendChild(script);
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadLamaticChat, { once: true });
+        } else {
+          loadLamaticChat();
+        }
+      })();
+    </script>
   </body>
 </html>
