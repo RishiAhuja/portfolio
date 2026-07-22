@@ -1,7 +1,7 @@
 ---
 title: "Towards the Modern Transformer Architecture"
 brief: "Tracing how the 2017 Transformer evolved into the recipes used by modern frontier models — norms, activations, attention variants, RoPE, KV cache, and more."
-dateAdded: 2026-07-01T00:00:00.000Z
+dateAdded: 2026-07-22T00:00:00.000Z
 hashnodeUrl: "https://rishi2220.hashnode.dev/towards-the-modern-transformer-architecture"
 readTimeInMinutes: 36
 author: "Rishi Ahuja"
