@@ -16,6 +16,9 @@ import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 import BackToTop from '../components/ui/BackToTop';
 import FadeInSection from '../components/ui/FadeInSection';
+import { getBlogListItems } from '../lib/blogs';
+
+const blogPosts = await getBlogListItems();
 
 const schema = {
   "@context": "https://schema.org",
@@ -82,7 +85,7 @@ const schema = {
       
       <section id="blog">
         <FadeInSection client:visible delay={150}>
-          <BlogPosts client:visible />
+          <BlogPosts client:visible posts={blogPosts} />
         </FadeInSection>
       </section>
       

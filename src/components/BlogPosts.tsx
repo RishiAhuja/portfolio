@@ -1,108 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ExpandedContainer from './ui/ExpandedContainer';
 import BlogPostItem from './ui/BlogPostItem';
-import { formatPostDate, getPostUrl } from '../lib/hashnode';
 
-// Define a type for our component's state
-interface Post {
-  _id?: string;
-  title?: string;
-  brief?: string;
-  dateAdded?: string;
-  directUrl?: string;
-  totalReactions?: number;
-  responseCount?: number;
-  slug?: string;
+export interface BlogPostPreview {
+  slug: string;
+  title: string;
+  dateLabel: string;
+  href: string;
 }
 
-const BlogPosts: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface BlogPostsProps {
+  posts: BlogPostPreview[];
+}
+
+const BlogPosts: React.FC<BlogPostsProps> = ({ posts }) => {
   const [visibleCount, setVisibleCount] = useState(5);
-  const USERNAME = "rishi2220";
-
-  const loadBlogPosts = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch(`/api/hashnode/posts?username=${USERNAME}&limit=50`);
-      if (!response.ok) {
-        throw new Error(`Blog API error: ${response.status}`);
-      }
-
-      const { posts: data } = await response.json();
-
-      if (data && data.length > 0) {
-        setPosts(data);
-      } else {
-        setError('No blog posts found. Please check back later.');
-      }
-    } catch (err) {
-      console.error('❌ Error loading blog posts:', err);
-      setError(`Failed to load blog posts: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadBlogPosts();
-  }, []);
 
   return (
     <div className="flex flex-col">
       <ExpandedContainer text="Things I've written" />
       <div className="h-4" />
-      {isLoading ? (
-        <div className="space-y-2 md:space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="bg-darkGrey/30 h-16 md:h-20 rounded-sm animate-pulse"></div>
-          ))}
-        </div>
-      ) : error ? (
-        <div className="text-base font-ptMono text-gunSmoke">
-          {error}
-        </div>
-      ) : posts.length === 0 ? (
+      {posts.length === 0 ? (
         <div className="text-base font-ptMono text-gunSmoke">
           No blog posts found. Check back soon!
         </div>
       ) : (
         <>
           <div className="space-y-2 md:space-y-4">
-            {posts.slice(0, visibleCount).map((post, index) => {
-              if (!post) return null;
-
-              const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
-              const link = getPostUrl(post);
-              const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
-
-              // Use slug as key for uniqueness, fallback to index
-              const uniqueKey = post.slug || post._id || `post-${index}`;
-
-              return (
-                <BlogPostItem
-                  key={uniqueKey}
-                  title={title}
-                  link={link}
-                  date={date}
-                  readTime={undefined} // Remove brief/readTime
-                />
-              );
-            })}
+            {posts.slice(0, visibleCount).map((post) => (
+              <BlogPostItem
+                key={post.slug}
+                title={post.title}
+                link={post.href}
+                date={post.dateLabel}
+                external={false}
+              />
+            ))}
           </div>
 
           {visibleCount < posts.length && (
             <button
-              onClick={() => setVisibleCount(prev => Math.min(posts.length, prev + 5))}
+              onClick={() => setVisibleCount((prev) => Math.min(posts.length, prev + 5))}
               className="mt-4 font-ptMono text-sm text-accent-light hover:text-accent transition-colors duration-200 mx-auto block"
             >
               Show {Math.min(posts.length - visibleCount, 5)} more →
             </button>
           )}
-          
+
           {visibleCount >= posts.length && posts.length > 5 && (
             <button
               onClick={() => setVisibleCount(5)}

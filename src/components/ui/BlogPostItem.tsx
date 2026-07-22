@@ -6,21 +6,24 @@ interface BlogPostItemProps {
   link: string;
   date?: string;
   readTime?: string;
+  external?: boolean;
 }
 
 const BlogPostItem: React.FC<BlogPostItemProps> = ({
   title,
   link,
   date,
-  readTime
+  readTime,
+  external = true,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <a
       href={link}
-      target="_blank"
-      rel="noopener noreferrer"
+      {...(external
+        ? { target: '_blank', rel: 'noopener noreferrer' }
+        : {})}
       className="group block w-full py-2 md:py-3 border-b border-darkGrey/20 hover:border-accent-light/30 transition-colors duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

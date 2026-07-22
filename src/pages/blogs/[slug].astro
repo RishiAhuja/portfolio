@@ -1,22 +1,266 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { fetchHashnodePosts, fetchHashnodePostBySlug } from '../../lib/hashnode';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs';
+import { getCollection } from 'astro:content';
+import { renderBlogMarkdown } from '../../lib/blogMarkdown';
 
 export const getStaticPaths = (async () => {
-  const username = 'rishi2220';
-  const posts = await fetchHashnodePosts(username, 50);
-
-  return posts.map((post) => ({
-    params: { slug: post.slug },
+  const blogs = await getCollection('blogs');
+  return blogs.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
   }));
 }) satisfies GetStaticPaths;
 
-const { slug } = Astro.params;
-const post = await fetchHashnodePostBySlug('rishi2220', slug!);
+const { entry } = Astro.props;
+const { title, brief, dateAdded, hashnodeUrl, readTimeInMinutes, author, coverImage, tags } = entry.data;
 
-if (!post) {
-  return Astro.redirect('/404');
-}
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
-return Astro.redirect(post.directUrl, 302);
+const htmlContent = await renderBlogMarkdown(entry.body);
+
+const ogImage = coverImage
+  ? coverImage
+  : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(brief)}&type=blog`;
+
+const breadcrumbs = [
+  { label: 'Rishi', href: '/' },
+  { label: 'Blogs', href: '/blogs' },
+  { label: title },
+];
 ---
+
+<BaseLayout
+  title={`${title} | Rishi Ahuja`}
+  description={brief}
+  image={ogImage}
+>
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+    crossorigin="anonymous"
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+  />
+
+  <main class="min-h-screen bg-codGray">
+    <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
+      <Breadcrumbs client:load items={breadcrumbs} />
+
+      <article class="prose prose-invert prose-lg max-w-none">
+        <header class="mb-8 pb-8 border-b border-darkGrey">
+          {coverImage && (
+            <div class="mb-6 rounded-sm overflow-hidden">
+              <img
+                src={coverImage}
+                alt={title}
+                class="w-full h-auto object-cover"
+              />
+            </div>
+          )}
+
+          <h1 class="text-4xl md:text-5xl font-bold font-ptMono text-quillGray mb-4">
+            {title}
+          </h1>
+
+          <div class="flex flex-wrap items-center gap-4 text-sm font-ptMono text-gunSmoke mb-4">
+            <span>{author}</span>
+            <span>•</span>
+            <time datetime={dateAdded.toISOString()}>
+              {formatDate(dateAdded)}
+            </time>
+            <span>•</span>
+            <span>{readTimeInMinutes} min read</span>
+          </div>
+
+          {tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span class="text-xs font-ptMono text-accent bg-darkGrey/50 px-2 py-1 rounded-sm">
+                  {tag.toLowerCase()}
+                </span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <aside class="not-prose mb-8 border-l-2 border-accent pl-3 py-0.5">
+          <p class="m-0 text-xs font-ptMono text-gunSmoke leading-snug">
+            Mirror of my
+            <a
+              href={hashnodeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-accent-light hover:text-accent underline decoration-accent/40 hover:decoration-accent"
+            >
+              Hashnode
+            </a>
+            post — you can start a discussion there.
+          </p>
+        </aside>
+
+        <div class="blog-content font-ptMono text-quillGray leading-relaxed" set:html={htmlContent} />
+
+        <div class="mt-12 pt-8 border-t border-darkGrey">
+          <a
+            href="/blogs"
+            class="text-sm font-ptMono text-gunSmoke hover:text-accent-light transition-colors"
+          >
+            ← All blogs
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-content :global(h1) {
+    @apply text-4xl font-bold font-ptMono text-quillGray mt-12 mb-6;
+  }
+
+  .blog-content :global(h2) {
+    @apply text-3xl font-bold font-ptMono text-quillGray mt-10 mb-5;
+  }
+
+  .blog-content :global(h3) {
+    @apply text-2xl font-bold font-ptMono text-quillGray mt-8 mb-4;
+  }
+
+  .blog-content :global(h4) {
+    @apply text-xl font-bold font-ptMono text-quillGray mt-6 mb-3;
+  }
+
+  .blog-content :global(p) {
+    @apply text-base font-ptMono text-gunSmoke leading-relaxed mb-6;
+  }
+
+  .blog-content :global(a) {
+    @apply text-accent underline decoration-1 decoration-accent/50 hover:decoration-accent transition-all;
+  }
+
+  .blog-content :global(strong) {
+    @apply text-quillGray font-bold;
+  }
+
+  .blog-content :global(em) {
+    @apply italic text-gunSmoke;
+  }
+
+  .blog-content :global(img) {
+    @apply rounded-sm border border-darkGrey my-8 w-full h-auto;
+  }
+
+  .blog-content :global(blockquote) {
+    @apply border-l-4 border-accent pl-6 py-2 italic text-gunSmoke my-6 bg-darkGrey/20 rounded-r-sm;
+  }
+
+  .blog-content :global(code) {
+    @apply bg-darkGrey/50 px-2 py-0.5 rounded-sm text-accent text-sm font-mono;
+  }
+
+  .blog-content :global(pre) {
+    @apply bg-darkGrey/30 p-4 rounded-sm overflow-x-auto my-6 border border-darkGrey/50;
+  }
+
+  .blog-content :global(pre code) {
+    @apply bg-transparent p-0 text-sm;
+  }
+
+  .blog-content :global(ul),
+  .blog-content :global(ol) {
+    @apply ml-6 mb-6 space-y-2;
+  }
+
+  .blog-content :global(li) {
+    @apply text-base font-ptMono text-gunSmoke;
+  }
+
+  .blog-content :global(ul li) {
+    @apply list-disc;
+  }
+
+  .blog-content :global(ol li) {
+    @apply list-decimal;
+  }
+
+  .blog-content :global(details) {
+    @apply my-6 rounded-sm border border-darkGrey/60 bg-darkGrey/20 overflow-hidden;
+  }
+
+  .blog-content :global(summary) {
+    @apply cursor-pointer list-none px-4 py-3 font-ptMono text-sm text-quillGray bg-darkGrey/40 hover:bg-darkGrey/55 transition-colors;
+  }
+
+  .blog-content :global(summary)::-webkit-details-marker {
+    display: none;
+  }
+
+  .blog-content :global(summary)::before {
+    content: '▸ ';
+    @apply text-accent-light;
+  }
+
+  .blog-content :global(details[open] summary)::before {
+    content: '▾ ';
+  }
+
+  .blog-content :global(details > *:not(summary)) {
+    @apply px-4;
+  }
+
+  .blog-content :global(details > p),
+  .blog-content :global(details > .katex-display),
+  .blog-content :global(details > img) {
+    @apply my-4;
+  }
+
+  .blog-content :global(.table-wrapper) {
+    @apply overflow-x-auto -mx-4 px-4 my-6;
+  }
+
+  @media (min-width: 768px) {
+    .blog-content :global(.table-wrapper) {
+      @apply mx-0 px-0;
+    }
+  }
+
+  .blog-content :global(table) {
+    @apply w-full border-collapse min-w-full;
+  }
+
+  .blog-content :global(th) {
+    @apply border border-darkGrey bg-darkGrey/30 px-4 py-2 text-left font-bold text-quillGray whitespace-nowrap;
+  }
+
+  .blog-content :global(td) {
+    @apply border border-darkGrey px-4 py-2 text-gunSmoke;
+  }
+
+  .blog-content :global(hr) {
+    @apply border-darkGrey my-8;
+  }
+
+  .blog-content :global(.katex) {
+    @apply text-quillGray;
+  }
+
+  .blog-content :global(.katex-display) {
+    @apply my-6 overflow-x-auto;
+  }
+
+  .blog-content :global(svg) {
+    @apply max-w-full h-auto my-6;
+  }
+</style>

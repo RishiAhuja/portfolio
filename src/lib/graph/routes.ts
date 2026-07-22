@@ -6,14 +6,20 @@ import { blurbPosts } from '../../data/blurb';
 const ROOT = join(import.meta.dirname, '../..');
 const CONTENT_DIR = join(ROOT, 'content');
 
-/** Blog slugs that always resolve at build time (Hashnode fallback stubs). */
+/** Blog slugs mirrored locally in src/content/blogs (used when collection isn't available). */
 export const FALLBACK_BLOG_SLUGS = [
+  'towards-the-modern-transformer-architecture',
   'you-dont-know-websockets-yet',
   'go-beneath-the-abstraction-building-interactive-uis-with-fernkit',
   'shamirs-secret-sharing-scheme-and-multi-party-computation',
   'your-hardest-hello-world-text-rasterization-1',
   'bits-of-trust-the-elegance-of-aes',
   'building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive',
+  'getting-cracked-at-clean-and-bloc-architecture',
+  'getting-started-at-bloc-architecture',
+  'resource-management-with-probabilistic-scheduling-in-the-context-of-linux',
+  'art',
+  'comprehensive-arch-linux-guide',
 ] as const;
 
 const STATIC_PAGE_PATHS = [
@@ -97,7 +103,15 @@ export function buildStaticRouteSet(): Set<string> {
     routes.add(`/blurb/${post.slug}`);
   }
 
-  for (const slug of FALLBACK_BLOG_SLUGS) {
+  const localBlogSlugs = (() => {
+    try {
+      return markdownSlugs('blogs');
+    } catch {
+      return [...FALLBACK_BLOG_SLUGS];
+    }
+  })();
+
+  for (const slug of localBlogSlugs) {
     routes.add(`/blogs/${slug}`);
   }
 

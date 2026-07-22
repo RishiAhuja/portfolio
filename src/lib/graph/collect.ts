@@ -16,38 +16,26 @@ import {
 const ROOT = join(import.meta.dirname, '../..');
 const CONTENT_DIR = join(ROOT, 'content');
 
-const FALLBACK_BLOGS: Array<{ title: string; slug: string; brief: string }> = [
-  {
-    title: "You Don't Know WebSockets Yet",
-    slug: 'you-dont-know-websockets-yet',
-    brief: 'A deep dive into WebSockets, real-time communication, and what most tutorials skip.',
-  },
-  {
-    title: 'Go Beneath the Abstraction: Building Interactive UIs with FernKit',
-    slug: 'go-beneath-the-abstraction-building-interactive-uis-with-fernkit',
-    brief: 'Building interactive UIs from scratch with FernKit and low-level graphics.',
-  },
-  {
-    title: "Shamir's Secret Sharing Scheme and Multi-Party Computation",
-    slug: 'shamirs-secret-sharing-scheme-and-multi-party-computation',
-    brief: 'Cryptography, secret sharing, and MPC explained with practical intuition.',
-  },
-  {
-    title: 'Your Hardest Hello World: Text Rasterization (1)',
-    slug: 'your-hardest-hello-world-text-rasterization-1',
-    brief: 'Font rasterization, glyph rendering, and the hidden complexity of displaying text.',
-  },
-  {
-    title: 'Bits of Trust: The Elegance of AES',
-    slug: 'bits-of-trust-the-elegance-of-aes',
-    brief: 'AES block cipher internals and why symmetric encryption still matters.',
-  },
-  {
-    title: "Building Rosenblatt's Perceptron from Scratch",
-    slug: 'building-rosenblatts-perceptron-from-scratch-a-comprehensive-technical-deep-dive',
-    brief: 'Implementing the perceptron learning algorithm from first principles.',
-  },
-];
+function loadLocalBlogs(): Array<{ title: string; slug: string; brief: string }> {
+  try {
+    const dir = join(CONTENT_DIR, 'blogs');
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.md'))
+      .map((name) => {
+        const slug = basename(name, '.md');
+        const raw = readFileSync(join(dir, name), 'utf-8');
+        const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+        const frontmatter = match?.[1] ?? '';
+        const title =
+          frontmatter.match(/^title:\s*(.+)$/m)?.[1]?.replace(/^["']|["']$/g, '') ?? slug;
+        const brief =
+          frontmatter.match(/^brief:\s*(.+)$/m)?.[1]?.replace(/^["']|["']$/g, '') ?? '';
+        return { title, slug, brief };
+      });
+  } catch {
+    return FALLBACK_BLOG_SLUGS.map((slug) => ({ title: slug, slug, brief: '' }));
+  }
+}
 
 function parseMarkdownFile(filePath: string): { title: string; description: string; body: string; tags: string[] } {
   const raw = readFileSync(filePath, 'utf-8');
@@ -245,9 +233,7 @@ export async function collectContentChunks(): Promise<ContentChunk[]> {
     }
   }
 
-  for (const blogs of FALLBACK_BLOGS.filter((item) =>
-    (FALLBACK_BLOG_SLUGS as readonly string[]).includes(item.slug),
-  )) {
+  for (const blogs of loadLocalBlogs()) {
     chunks.push(
       chunk('blog', blogs.slug, blogs.title, `/blogs/${blogs.slug}`, [
         blogs.title,

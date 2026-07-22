@@ -2,10 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import BlogPostItem from '../components/ui/BlogPostItem';
-import { fetchHashnodePosts, formatPostDate, getPostUrl } from '../lib/hashnode';
+import { getBlogListItems } from '../lib/blogs';
 
-const USERNAME = "rishi2220";
-const posts = await fetchHashnodePosts(USERNAME, 100); // Fetch all posts
+const posts = await getBlogListItems();
 
 const breadcrumbs = [
   { label: 'Rishi', href: '/' },
@@ -15,15 +14,13 @@ const breadcrumbs = [
 
 <BaseLayout 
   title="Technical Blogs | Rishi Ahuja"
-  description="Deep dives into WebSockets, text rendering, system programming, Flutter, and software engineering. Technical writing from a builder's perspective."
+  description="Deep dives into WebSockets, transformers, text rendering, system programming, Flutter, and software engineering. Technical writing from a builder's perspective."
   image="/og?title=Technical%20Blogs&description=Deep%20technical%20writing%20from%20a%20builder&type=default"
 >
   <main class="min-h-screen bg-codGray">
     <div class="max-w-4xl mx-auto px-4 md:px-8 py-12">
-      <!-- Breadcrumbs -->
       <Breadcrumbs client:load items={breadcrumbs} />
       
-      <!-- Header -->
       <div class="mb-10 mt-6">
         <h1 class="text-3xl md:text-4xl font-bold text-quillGray mb-3 font-ptMono">
           Technical Blogs
@@ -39,34 +36,26 @@ const breadcrumbs = [
         </div>
       </div>
 
-      <!-- Blog List -->
       {posts.length === 0 ? (
         <div class="text-base font-ptMono text-gunSmoke py-12 text-center">
           No blog posts found. Check back soon!
         </div>
       ) : (
         <div class="space-y-2 md:space-y-4">
-          {posts.map((post) => {
-            const title = typeof post.title === 'string' ? post.title : 'Untitled Post';
-            const link = getPostUrl(post);
-            const date = typeof post.dateAdded === 'string' ? formatPostDate(post.dateAdded) : 'Date unavailable';
-            const uniqueKey = post.slug || post._id || 'unknown';
-
-            return (
-              <BlogPostItem
-                title={title}
-                link={link}
-                date={date}
-              />
-            );
-          })}
+          {posts.map((post) => (
+            <BlogPostItem
+              title={post.title}
+              link={post.href}
+              date={post.dateLabel}
+              external={false}
+            />
+          ))}
         </div>
       )}
 
-      <!-- External Link to Hashnode -->
       <div class="mt-12 pt-8 border-t border-darkGrey/30">
         <p class="text-sm font-ptMono text-gunSmoke mb-4">
-          All articles are cross-posted on Hashnode for wider reach and community engagement.
+          Want reactions and discussion? Head to the Hashnode originals.
         </p>
         <a
           href="https://rishi2220.hashnode.dev"
