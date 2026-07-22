@@ -1,171 +1,295 @@
 import { ImageResponse } from '@vercel/og';
 import type { APIRoute } from 'astro';
 
-// Enable server-side rendering for this endpoint
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params, request }) => {
+const COLORS = {
+  bg: '#191919',
+  text: '#e2e2dd',
+  muted: '#8a8a84',
+  accent: '#64b2bc',
+  line: 'rgba(226, 226, 221, 0.12)',
+} as const;
+
+const truncate = (value: string, max: number) =>
+  value.length > max ? `${value.slice(0, max).trimEnd()}…` : value;
+
+const titleSize = (title: string) => {
+  if (title.length > 70) return 48;
+  if (title.length > 48) return 56;
+  if (title.length > 28) return 64;
+  return 72;
+};
+
+const typeLabel = (type: string) => {
+  if (type === 'blog') return 'Technical writing';
+  if (type === 'project') return 'Project';
+  return 'Portfolio';
+};
+
+export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
-  
-  // Get parameters from URL
+
   const title = url.searchParams.get('title') || 'Rishi Ahuja';
-  const description = url.searchParams.get('description') || 'Full Stack Developer & Designer';
-  const type = url.searchParams.get('type') || 'default'; // blog, project, default
-  
+  const description =
+    url.searchParams.get('description') || 'Full Stack Developer & Designer';
+  const type = url.searchParams.get('type') || 'default';
+
   try {
     const html = {
       type: 'div',
-      key: 'root',
       props: {
         style: {
           height: '100%',
           width: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          backgroundColor: '#191919',
-          padding: '80px',
-          fontFamily: 'monospace',
+          position: 'relative',
+          backgroundColor: COLORS.bg,
+          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          overflow: 'hidden',
         },
         children: [
-          // Top section with type badge
+          // Atmosphere: soft corner wash
           {
             type: 'div',
-            key: 'top',
             props: {
               style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: '20px',
+                position: 'absolute',
+                top: '-120px',
+                right: '-80px',
+                width: '520px',
+                height: '520px',
+                borderRadius: '50%',
+                background:
+                  'radial-gradient(circle, rgba(100,178,188,0.14) 0%, rgba(100,178,188,0) 68%)',
               },
-              children: type !== 'default' ? [{
-                type: 'div',
-                key: 'badge',
-                props: {
-                  style: {
-                    display: 'flex',
-                    padding: '12px 24px',
-                    backgroundColor: 'rgba(100, 178, 188, 0.1)',
-                    border: '2px solid rgba(100, 178, 188, 0.3)',
-                    borderRadius: '4px',
-                    color: '#64B2BC',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                  },
-                  children: type,
-                },
-              }] : [],
             },
           },
-          // Main content
           {
             type: 'div',
-            key: 'content',
             props: {
               style: {
+                position: 'absolute',
+                bottom: '-160px',
+                left: '-100px',
+                width: '480px',
+                height: '480px',
+                borderRadius: '50%',
+                background:
+                  'radial-gradient(circle, rgba(142,207,214,0.08) 0%, rgba(142,207,214,0) 70%)',
+              },
+            },
+          },
+          // Subtle vertical rule texture
+          {
+            type: 'div',
+            props: {
+              style: {
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: '72px',
+                width: '1px',
+                backgroundColor: COLORS.line,
+              },
+            },
+          },
+          // Accent spine
+          {
+            type: 'div',
+            props: {
+              style: {
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: '10px',
+                backgroundColor: COLORS.accent,
+              },
+            },
+          },
+          // Content frame
+          {
+            type: 'div',
+            props: {
+              style: {
+                position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '24px',
-                maxWidth: '90%',
-              },
-              children: [
-                // Title
-                {
-                  type: 'div',
-                  key: 'title',
-                  props: {
-                    style: {
-                      fontSize: title.length > 50 ? '54px' : '72px',
-                      fontWeight: 'bold',
-                      color: '#D3D0C9',
-                      lineHeight: 1.2,
-                      letterSpacing: '-0.02em',
-                    },
-                    children: title,
-                  },
-                },
-                // Description
-                {
-                  type: 'div',
-                  key: 'desc',
-                  props: {
-                    style: {
-                      fontSize: '32px',
-                      color: '#858585',
-                      lineHeight: 1.4,
-                      maxWidth: '85%',
-                    },
-                    children: description.length > 120 
-                      ? description.substring(0, 120) + '...' 
-                      : description,
-                  },
-                },
-              ],
-            },
-          },
-          // Bottom branding
-          {
-            type: 'div',
-            key: 'bottom',
-            props: {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
                 justifyContent: 'space-between',
+                height: '100%',
                 width: '100%',
-                borderTop: '2px solid rgba(100, 178, 188, 0.2)',
-                paddingTop: '32px',
+                padding: '64px 72px 56px 88px',
               },
               children: [
+                // Top meta row
                 {
                   type: 'div',
-                  key: 'author',
                   props: {
                     style: {
                       display: 'flex',
+                      width: '100%',
                       alignItems: 'center',
-                      gap: '16px',
+                      justifyContent: 'space-between',
                     },
                     children: [
-                      // Dot indicator
                       {
                         type: 'div',
-                        key: 'dot',
                         props: {
                           style: {
-                            width: '12px',
-                            height: '12px',
-                            borderRadius: '50%',
-                            backgroundColor: '#64B2BC',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '14px',
+                            color: COLORS.accent,
+                            fontSize: '22px',
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
+                            fontWeight: 700,
                           },
+                          children: [
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  width: '28px',
+                                  height: '2px',
+                                  backgroundColor: COLORS.accent,
+                                },
+                              },
+                            },
+                            type.toUpperCase(),
+                          ],
                         },
                       },
                       {
                         type: 'div',
-                        key: 'name',
                         props: {
                           style: {
-                            fontSize: '28px',
-                            color: '#D3D0C9',
-                            fontWeight: 'bold',
+                            color: COLORS.muted,
+                            fontSize: '24px',
+                            letterSpacing: '0.04em',
                           },
-                          children: 'Rishi Ahuja',
+                          children: 'rishia.in',
                         },
                       },
                     ],
                   },
                 },
+                // Title block
                 {
                   type: 'div',
-                  key: 'domain',
                   props: {
                     style: {
-                      fontSize: '28px',
-                      color: '#64B2BC',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '28px',
+                      maxWidth: '980px',
+                      marginTop: '24px',
+                      marginBottom: '24px',
                     },
-                    children: 'rishia.in',
+                    children: [
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            color: COLORS.text,
+                            fontSize: titleSize(title),
+                            fontWeight: 700,
+                            lineHeight: 1.12,
+                            letterSpacing: '-0.03em',
+                          },
+                          children: truncate(title, 90),
+                        },
+                      },
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            color: COLORS.muted,
+                            fontSize: '28px',
+                            lineHeight: 1.45,
+                            maxWidth: '860px',
+                          },
+                          children: truncate(description, 140),
+                        },
+                      },
+                    ],
+                  },
+                },
+                // Footer
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      display: 'flex',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderTop: `1px solid ${COLORS.line}`,
+                      paddingTop: '28px',
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '6px',
+                          },
+                          children: [
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  color: COLORS.text,
+                                  fontSize: '28px',
+                                  fontWeight: 700,
+                                  letterSpacing: '-0.01em',
+                                },
+                                children: 'Rishi Ahuja',
+                              },
+                            },
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  color: COLORS.muted,
+                                  fontSize: '22px',
+                                },
+                                children: typeLabel(type),
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            color: COLORS.accent,
+                            fontSize: '24px',
+                            fontWeight: 600,
+                          },
+                          children: [
+                            {
+                              type: 'div',
+                              props: {
+                                style: {
+                                  width: '10px',
+                                  height: '10px',
+                                  backgroundColor: COLORS.accent,
+                                },
+                              },
+                            },
+                            type === 'blog' ? 'Continue reading' : 'rishia.in',
+                          ],
+                        },
+                      },
+                    ],
                   },
                 },
               ],
