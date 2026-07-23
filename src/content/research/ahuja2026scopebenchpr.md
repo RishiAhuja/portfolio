@@ -33,12 +33,12 @@ links:
     url: "https://sites.google.com/view/globalsouthai-ijcai26/home"
     primary: true
   - label: "GitHub"
-    url: "https://github.com/RishiAhuja/ScopeBench-PR"
+    url: "https://github.com/SPELLAILab/ScopeBench-PR"
   - label: "Dataset (HF)"
     url: "https://huggingface.co/datasets/rishia2220/scopebench-pr"
 primary_url: "https://sites.google.com/view/globalsouthai-ijcai26/home"
 same_as:
   - "https://sites.google.com/view/globalsouthai-ijcai26/home"
-  - "https://github.com/RishiAhuja/ScopeBench-PR"
+  - "https://github.com/SPELLAILab/ScopeBench-PR"
   - "https://huggingface.co/datasets/rishia2220/scopebench-pr"
 ---
