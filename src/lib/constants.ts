@@ -9,11 +9,12 @@ export const LINKS = {
   
   // Social
   TWITTER: 'https://twitter.com/Rishi2220',
-  GITHUB: 'https://github.com/rishiahuja',
+  GITHUB: 'https://github.com/RishiAhuja',
   LINKEDIN: 'https://www.linkedin.com/in/rishi-ahuja-b1a224310',
   HASHNODE: 'https://hashnode.com/@rishi2220',
   GOOGLE_SCHOLAR: 'https://scholar.google.com/citations?hl=en&user=EZff3KsAAAAJ',
   INSTAGRAM: 'https://www.instagram.com/rishia2220/',
+  YOUTUBE: 'https://www.youtube.com/@rishi2220',
   
   // Professional
   CAL_COM: 'https://cal.com/rishi2220',
