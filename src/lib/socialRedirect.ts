@@ -30,6 +30,9 @@ export const isLinkPreviewBot = (userAgent: string | null): boolean => {
   );
 };
 
+/** Bump when OG art changes so chat apps refetch instead of showing a stale card. */
+const OG_CACHE_VERSION = '3';
+
 export const buildOgImagePath = (options: {
   title: string;
   description: string;
@@ -39,6 +42,7 @@ export const buildOgImagePath = (options: {
     title: options.title,
     description: options.description,
     type: options.type || 'default',
+    v: OG_CACHE_VERSION,
   });
   return `/og?${params.toString()}`;
 };
