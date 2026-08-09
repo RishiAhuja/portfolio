@@ -1,9 +1,7 @@
-import { SHORT_LINKS } from '../lib/shortLinks';
-import {
-  createOgRedirect,
-  createOgRedirectHead,
-} from '../lib/socialRedirect';
+import type { APIRoute } from 'astro';
 
 export const prerender = false;
-export const GET = createOgRedirect(SHORT_LINKS.calendar);
-export const HEAD = createOgRedirectHead(SHORT_LINKS.calendar);
+
+export const GET: APIRoute = async () => {
+  return Response.redirect('https://cal.com/rishi2220', 301);
+};

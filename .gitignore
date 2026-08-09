@@ -23,7 +23,6 @@ dist/
 # misc
 .DS_Store
 *.pem
-.og-preview/
 
 # debug
 npm-debug.log*

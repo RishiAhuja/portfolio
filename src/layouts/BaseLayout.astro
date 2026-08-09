@@ -12,9 +12,9 @@ interface Props {
 }
 
 const {
-  title = 'Rishi Ahuja | AI Researcher & Engineer',
-  description = 'Rishi Ahuja is a student researcher working on trustworthy AI, retrieval, time-series models, and conversational fraud detection.',
-  image = '/og?title=Rishi%20Ahuja&description=AI%20researcher%20%26%20engineer%20%C2%B7%20trustworthy%20systems&type=default',
+  title = 'Rishi Ahuja | Full Stack Developer & Designer',
+  description = 'Portfolio of Rishi Ahuja, a full stack developer and designer specializing in web and mobile app development.',
+  image = '/og-image.png',
   imageWidth = 1200,
   imageHeight = 630,
   imageType = 'image/png',
@@ -37,7 +37,7 @@ const imageURL = new URL(image, Astro.site).toString();
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content="Rishi Ahuja, AI researcher, trustworthy AI, LLM evaluation, time series forecasting, retrieval augmented systems, fraud detection, NIT Jalandhar, machine learning research" />
+    <meta name="keywords" content="Rishi Ahuja, developer portfolio, full stack developer, web development, mobile development, Flutter, React, Astro, TypeScript, C++, FernKit, OpenLearn, software engineer, NITJ, technical blogs, WebSockets, text rendering, system programming" />
     <meta name="author" content="Rishi Ahuja" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#191919" />
@@ -58,12 +58,16 @@ const imageURL = new URL(image, Astro.site).toString();
         "https://twitter.com/Rishi2220",
         "https://rishi2220.hashnode.dev"
       ],
-      "jobTitle": "Student Researcher",
-      "affiliation": {
-        "@type": "CollegeOrUniversity",
+      "jobTitle": "Full Stack Developer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "OpenLearn"
+      },
+      "alumniOf": {
+        "@type": "Organization",
         "name": "Dr. B.R. Ambedkar National Institute of Technology Jalandhar"
       },
-      "knowsAbout": ["Trustworthy AI", "LLM Evaluation", "Time Series Forecasting", "Retrieval-Augmented Systems", "Conversational Fraud Detection"],
+      "knowsAbout": ["Web Development", "Mobile Development", "System Programming", "UI/UX Design", "Flutter", "React", "TypeScript", "C++", "Python"],
     })} />
 
     <!-- Open Graph / Facebook -->
@@ -75,7 +79,7 @@ const imageURL = new URL(image, Astro.site).toString();
     <meta property="og:image:width" content={String(imageWidth)} />
     <meta property="og:image:height" content={String(imageHeight)} />
     <meta property="og:image:type" content={imageType} />
-    <meta property="og:site_name" content="Rishi Ahuja - AI Researcher" />
+    <meta property="og:site_name" content="Rishi Ahuja - Developer Portfolio" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
@@ -89,7 +93,7 @@ const imageURL = new URL(image, Astro.site).toString();
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Twitter Widget Script -->
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -110,8 +114,6 @@ const imageURL = new URL(image, Astro.site).toString();
         --font-pt-mono: 'PT Mono', monospace;
         --font-inter: 'Inter', sans-serif;
         --font-playfair: 'Playfair Display', serif;
-        --font-newsreader: 'Newsreader', serif;
-        --font-manrope: 'Manrope', sans-serif;
       }
     </style>
   </head>

@@ -5,36 +5,12 @@ export const prerender = false;
 
 const COLORS = {
   background: '#171717',
+  surface: '#202020',
   text: '#f1f1ed',
   muted: '#a3a39d',
   accent: '#8ecfd6',
   line: '#343434',
 } as const;
-
-type OgType =
-  | 'default'
-  | 'blog'
-  | 'project'
-  | 'resume'
-  | 'linkedin'
-  | 'youtube'
-  | 'github'
-  | 'instagram'
-  | 'calendar'
-  | 'research';
-
-const TYPE_META: Record<OgType, { label: string; footer: string }> = {
-  default: { label: 'PORTFOLIO', footer: 'AI researcher & engineer' },
-  blog: { label: 'BLOG', footer: 'Technical writing' },
-  project: { label: 'PROJECT', footer: 'Selected work' },
-  resume: { label: 'RESUME', footer: 'Curriculum vitae' },
-  linkedin: { label: 'LINKEDIN', footer: 'Professional profile' },
-  youtube: { label: 'YOUTUBE', footer: 'Video & talks' },
-  github: { label: 'GITHUB', footer: 'Code & projects' },
-  instagram: { label: 'INSTAGRAM', footer: 'Visual updates' },
-  calendar: { label: 'CALENDAR', footer: 'Book a conversation' },
-  research: { label: 'RESEARCH', footer: 'Papers & preprints' },
-};
 
 const truncate = (value: string, max: number) =>
   value.length > max ? `${value.slice(0, max).trimEnd()}…` : value;
@@ -45,27 +21,25 @@ const titleSize = (title: string) => {
   return 68;
 };
 
-const resolveType = (type: string): OgType =>
-  type in TYPE_META ? (type as OgType) : 'default';
+const typeLabel = (type: string) => {
+  if (type === 'blog') return 'BLOG';
+  if (type === 'project') return 'PROJECT';
+  return 'PORTFOLIO';
+};
 
-export const HEAD: APIRoute = async () =>
-  new Response(null, {
-    status: 200,
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
-    },
-  });
+const typeDescription = (type: string) => {
+  if (type === 'blog') return 'Technical writing';
+  if (type === 'project') return 'Selected work';
+  return 'Developer & designer';
+};
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
 
   const title = url.searchParams.get('title') || 'Rishi Ahuja';
   const description =
-    url.searchParams.get('description') ||
-    'AI researcher & engineer · trustworthy systems';
-  const type = resolveType(url.searchParams.get('type') || 'default');
-  const meta = TYPE_META[type];
+    url.searchParams.get('description') || 'Full Stack Developer & Designer';
+  const type = url.searchParams.get('type') || 'default';
 
   try {
     const html = {
@@ -82,6 +56,7 @@ export const GET: APIRoute = async ({ request }) => {
           fontFamily: 'Arial, Helvetica, sans-serif',
         },
         children: [
+          // Brand and content type
           {
             type: 'div',
             props: {
@@ -136,12 +111,13 @@ export const GET: APIRoute = async ({ request }) => {
                       fontWeight: 700,
                       letterSpacing: '0.14em',
                     },
-                    children: meta.label,
+                    children: typeLabel(type),
                   },
                 },
               ],
             },
           },
+          // Article title and description
           {
             type: 'div',
             props: {
@@ -181,6 +157,7 @@ export const GET: APIRoute = async ({ request }) => {
               ],
             },
           },
+          // Restrained footer
           {
             type: 'div',
             props: {
@@ -200,7 +177,7 @@ export const GET: APIRoute = async ({ request }) => {
                       color: COLORS.muted,
                       fontSize: '22px',
                     },
-                    children: meta.footer,
+                    children: typeDescription(type),
                   },
                 },
                 {
@@ -221,13 +198,7 @@ export const GET: APIRoute = async ({ request }) => {
       },
     };
 
-    return new ImageResponse(html as any, {
-      width: 1200,
-      height: 630,
-      headers: {
-        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
-      },
-    });
+    return new ImageResponse(html as any, { width: 1200, height: 630 });
   } catch (error) {
     console.error('Error generating OG image:', error);
     return new Response('Failed to generate image', { status: 500 });

@@ -6,7 +6,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isResearchHome = currentPath === '/';
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -17,14 +16,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
     { label: 'Research', href: '/rsh' },
     { label: 'Links', href: '/links' },
   ];
-  const visibleNavItems = isResearchHome
-    ? [
-        { label: 'Research', href: '/rsh' },
-        { label: 'Writing', href: '/blogs' },
-        { label: 'CV', href: '/resume' },
-        { label: 'Links', href: '/links' },
-      ]
-    : navItems;
+  const visibleNavItems = navItems.filter((item) => item.href !== '/rsh');
 
   // Close menu on escape key
   useEffect(() => {
@@ -54,27 +46,25 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
   return (
     <>
       {/* Header */}
-      <header className={`relative z-10 border-b ${isResearchHome ? 'bg-white border-[#dedede]' : 'bg-codGray border-transparent'}`}>
-        <nav className={`${isResearchHome ? 'max-w-[852px]' : 'max-w-7xl'} mx-auto px-4 py-3 flex items-center justify-between`}>
-          <a href="/" className={`${isResearchHome ? 'font-inter text-sm font-semibold text-[#222]' : 'font-ptMono text-xs font-bold tracking-[0.18em] text-quillGray'}`} aria-label="Rishi Ahuja home">
-            {isResearchHome ? 'Rishi Ahuja' : 'R/A'}
-          </a>
+      <header className="relative z-10 bg-codGray">
+        <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div />
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-8">
             {visibleNavItems.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className={`${isResearchHome ? 'font-inter text-[13px] font-normal' : 'font-ptMono text-sm'} transition-colors relative group ${
-                    isResearchHome
-                      ? isActive(item.href) ? 'text-[#222]' : 'text-[#555] hover:text-[#174ea6]'
-                      : isActive(item.href) ? 'text-accent-light' : 'text-gunSmoke hover:text-quillGray'
+                  className={`font-ptMono text-sm transition-colors relative group ${
+                    isActive(item.href)
+                      ? 'text-accent-light'
+                      : 'text-gunSmoke hover:text-quillGray'
                   }`}
                 >
                   {item.label}
-                  <span
-                    className={`absolute -bottom-1 left-0 h-px ${isResearchHome ? 'bg-transparent' : 'bg-accent-light'} ${
-                      isResearchHome ? 'w-0' : isActive(item.href) ? 'w-full' : 'w-0 group-hover:w-full'
+                  <span 
+                    className={`absolute -bottom-1 left-0 h-px bg-accent-light transition-all duration-300 ${
+                      isActive(item.href) ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
                 </a>
@@ -85,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden transition-colors p-2 relative z-50 ${isResearchHome ? 'text-[#222] hover:text-[#174ea6]' : 'text-quillGray hover:text-accent-light'}`}
+            className="md:hidden text-quillGray hover:text-accent-light transition-colors p-2 relative z-50"
             aria-label="Toggle menu"
           >
             <svg 
@@ -119,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
         <>
           {/* Backdrop with click handler */}
           <div 
-            className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ease-out ${isResearchHome ? 'bg-white/98' : 'bg-codGray/85'}`}
+            className="fixed inset-0 z-40 md:hidden bg-codGray/85 backdrop-blur-lg transition-all duration-300 ease-out"
             onClick={() => setIsMenuOpen(false)}
             onKeyDown={(e) => e.key === 'Enter' && setIsMenuOpen(false)}
             role="button"
@@ -135,10 +125,10 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
                 <a
                   key={item.href}
                   href={item.href}
-                  className={`block ${isResearchHome ? 'font-inter' : 'font-ptMono'} text-xl text-center transition-colors ${
+                  className={`block font-ptMono text-2xl text-center transition-colors ${
                     isActive(item.href)
-                      ? isResearchHome ? 'text-[#222]' : 'text-accent-light'
-                      : isResearchHome ? 'text-[#555] hover:text-[#174ea6]' : 'text-quillGray hover:text-accent-light'
+                      ? 'text-accent-light'
+                      : 'text-quillGray hover:text-accent-light'
                   }`}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -149,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({ currentPath = '/' }) => {
 
             {/* Close hint */}
             <div className="absolute bottom-12 left-0 right-0 text-center">
-              <p className={`font-ptMono text-sm ${isResearchHome ? 'text-[#777]' : 'text-gunSmoke'}`}>
+              <p className="font-ptMono text-sm text-gunSmoke">
                 Press <kbd className="px-2 py-1 bg-darkGrey/50 rounded text-xs">ESC</kbd> to close
               </p>
             </div>
