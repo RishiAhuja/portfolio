@@ -1,156 +1,420 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
-
-// Import React components (will be hydrated as islands)
-import AboutMe from '../components/AboutMe';
-// import Projects from '../components/Projects.astro';
-import BlogPosts from '../components/BlogPosts';
-import PapersReading from '../components/PapersReading';
-import Upstream from '../components/Upstream';
-import SideQuests from '../components/SideQuests';
-import Experience from '../components/Experience.astro';
-import EducationTimeline from '../components/EducationTimeline';
-import ContactSocial from '../components/ContactSocial';
-import Footer from '../components/Footer';
-import Navigation from '../components/Navigation';
-import BackToTop from '../components/ui/BackToTop';
-import FadeInSection from '../components/ui/FadeInSection';
 import { getBlogListItems } from '../lib/blogs';
+import { LINKS } from '../lib/constants';
 
-const blogPosts = await getBlogListItems();
+const papers = (await getCollection('research')).sort(
+  (a, b) => b.data.sort_date.getTime() - a.data.sort_date.getTime(),
+);
+const writing = (await getBlogListItems()).slice(0, 3);
+
+const researchAreas = [
+  {
+    title: 'Trustworthy AI evaluation',
+    description:
+      'Evaluating whether language models judge scientific work against the claims it actually makes, with particular attention to scope fairness and regional research.',
+  },
+  {
+    title: 'Retrieval for temporal models',
+    description:
+      'Studying when additional history improves forecasting and when selective retrieval is more useful than increasing a model’s context window.',
+  },
+  {
+    title: 'Conversational fraud detection',
+    description:
+      'Building datasets and streaming systems for detecting fraud in Indian English and Hinglish conversations under realistic deployment conditions.',
+  },
+];
+
+const updates = [
+  ['Aug 2026', 'Presenting ICFD-31k and ScopeBench-PR at IJCAI-ECAI 2026 in Bremen.'],
+  ['Jul 2026', 'ScopeBench-PR accepted at GlobalSouthAI @ IJCAI-ECAI 2026.'],
+  ['30 Apr 2026', 'ICFD-31k accepted to the IJCAI-ECAI 2026 main conference special track.'],
+  ['26 Apr 2026', 'Presented retrieval-augmented forecasting at the ICLR TSALM Workshop in Rio de Janeiro.'],
+];
 
 const schema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Rishi Ahuja",
-  "url": "https://rishia.in",
-  "jobTitle": "Builder and Engineer",
-  "sameAs": [
-    "https://github.com/RishiAhuja",
-    "https://www.linkedin.com/in/rishi-ahuja-b1a224310",
-    "https://twitter.com/Rishi2220"
-  ],
-  "knowsAbout": ["Web Development", "Mobile Development", "Research", "Fraud Detection", "Flutter", "React", "TypeScript"],
-  "workExample": [
-    {
-      "@type": "CreativeWork",
-      "name": "Fern",
-      "url": "https://fernkit.in"
-    },
-    {
-      "@type": "CreativeWork",
-      "name": "Nexus",
-      "url": "https://nexus.rishia.in"
-    }
-  ]
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Rishi Ahuja',
+  url: 'https://rishia.in',
+  image: 'https://artifacts.rishia.in/avatar.jpg',
+  jobTitle: 'Student Researcher',
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Dr. B.R. Ambedkar National Institute of Technology Jalandhar',
+  },
+  sameAs: [LINKS.GITHUB, LINKS.LINKEDIN, LINKS.GOOGLE_SCHOLAR, LINKS.TWITTER],
+  knowsAbout: ['Trustworthy AI', 'Time Series Forecasting', 'Retrieval-Augmented Systems', 'Fraud Detection'],
 };
 
+const authorLine = (authors: (typeof papers)[number]['data']['authors']) =>
+  authors.map((author) => author.name).join(', ');
 ---
 
 <BaseLayout
-  title="Rishi Ahuja | Builder, Engineer"
-  description="Portfolio of Rishi Ahuja - building systems, reading patterns, and keeping a record from NIT Jalandhar."
-  image="/og?title=Rishi%20Ahuja&description=Builder%20%7C%20Engineer%20%7C%20Notes&type=default"
+  title="Rishi Ahuja"
+  description="Rishi Ahuja is a student researcher at NIT Jalandhar working on trustworthy AI, temporal models, and conversational fraud detection."
+  image="https://artifacts.rishia.in/avatar.jpg"
+  imageWidth={2761}
+  imageHeight={2433}
+  imageType="image/jpeg"
 >
   <JsonLd data={schema} />
-  <Navigation client:load />
-  
-  <main class="flex min-h-screen flex-col items-center">
-    <div class="w-full max-w-4xl px-4 md:px-8 py-8">
-      <section id="about">
-        <AboutMe client:load />
-      </section>
-      
-      <!-- <div class="h-8" /> -->
-      
-      <!-- <section id="tech">
-        <FadeInSection client:visible>
-          <TechStacks client:visible />
-        </FadeInSection>
-      </section> -->
 
-      <!-- <div class="h-8" /> -->
+  <main class="academic-home">
+    <div class="page">
+      <section class="introduction" aria-labelledby="name">
+        <div class="intro-text">
+          <h1 id="name">Rishi Ahuja</h1>
+          <p class="role">Student Researcher · NIT Jalandhar</p>
 
-      <!-- <section id="research">
-        <FadeInSection client:visible delay={100}>
-          <ResearchPublications
-            papers={featuredResearch}
-            heading="Things I've published"
-          />
-        </FadeInSection>
-      </section> -->
+          <p>
+            I am a B.Tech Information Technology student at NIT Jalandhar. I work on trustworthy
+            evaluation of language models, retrieval for time-series models, and multilingual
+            conversational fraud detection.
+          </p>
+          <p>
+            More broadly, I am interested in AI systems that must reason from incomplete,
+            time-dependent, or socially situated evidence.
+          </p>
 
-      <div class="h-8" />
-      
-      <section id="blog">
-        <FadeInSection client:visible delay={150}>
-          <BlogPosts client:visible posts={blogPosts} />
-        </FadeInSection>
-      </section>
-      
-      <div class="h-8" />
-      
-      <section id="papers">
-        <FadeInSection client:visible delay={175}>
-          <PapersReading client:visible />
-        </FadeInSection>
+          <p class="profile-links">
+            <a href={LINKS.GOOGLE_SCHOLAR} target="_blank" rel="noopener noreferrer">Google Scholar</a>
+            <span>·</span>
+            <a href="https://openreview.net/profile?id=~Rishi_Ahuja1" target="_blank" rel="noopener noreferrer">OpenReview</a>
+            <span>·</span>
+            <a href={LINKS.RESUME}>CV</a>
+            <span>·</span>
+            <a href={LINKS.EMAIL}>Email</a>
+          </p>
+        </div>
+
+        <img
+          class="portrait"
+          src="https://artifacts.rishia.in/avatar.jpg"
+          alt="Rishi Ahuja"
+          width="180"
+          height="210"
+        />
       </section>
 
-      <div class="h-8" />
-      
-      <section id="sidequests">
-        <FadeInSection client:visible delay={275}>
-          <SideQuests client:visible />
-        </FadeInSection>
+      <section aria-labelledby="interests-heading">
+        <h2 id="interests-heading">Research interests</h2>
+        <ul class="research-list">
+          {researchAreas.map((area) => (
+            <li>
+              <strong>{area.title}.</strong> {area.description}
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <div class="h-8" />
-      
-      <section id="experience">
-        <FadeInSection client:visible delay={200}>
-          <Experience />
-        </FadeInSection>
+      <section aria-labelledby="news-heading">
+        <h2 id="news-heading">News</h2>
+        <ul class="news-list">
+          {updates.map(([date, text]) => (
+            <li>
+              <time>{date}</time>
+              <span>{text}</span>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <div class="h-8" />
-      <section id="upstream">
-        <FadeInSection client:visible delay={125}>
-          <Upstream client:visible />
-        </FadeInSection>
+      <section aria-labelledby="publications-heading">
+        <div class="section-title-row">
+          <h2 id="publications-heading">Selected publications</h2>
+          <a href="/rsh">All publications</a>
+        </div>
+
+        <ol class="publication-list">
+          {papers.map((paper) => (
+            <li>
+              <h3><a href={`/rsh/${paper.slug}`}>{paper.data.title}</a></h3>
+              <p class="authors">{authorLine(paper.data.authors)}</p>
+              <p class="venue">{paper.data.proceedings}</p>
+              <p class="paper-links">
+                <a href={`/rsh/${paper.slug}`}>Details</a>
+                {paper.data.links.slice(0, 3).map((link) => (
+                  <><span> · </span><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a></>
+                ))}
+              </p>
+            </li>
+          ))}
+        </ol>
       </section>
 
-      <div class="h-8" />
-      
-      <section id="education">
-        <FadeInSection client:visible delay={250}>
-          <EducationTimeline client:visible />
-        </FadeInSection>
+      <section aria-labelledby="writing-heading">
+        <div class="section-title-row">
+          <h2 id="writing-heading">Writing</h2>
+          <a href="/blogs">All writing</a>
+        </div>
+        <ul class="writing-list">
+          {writing.map((post) => (
+            <li>
+              <a href={post.href}>{post.title}</a>
+              <time>{post.dateLabel}</time>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      {/*
-      <div class="h-8" />
-
-      <section id="projects">
-        <FadeInSection client:visible delay={100}>
-          <Projects />
-        </FadeInSection>
-      </section>
-      */}
-      
-      <div class="h-8" />
-      
-      <section id="contact">
-        <FadeInSection client:visible delay={300}>
-          <ContactSocial client:visible />
-        </FadeInSection>
-      </section>
-      
-      <div class="h-8" />
-      
-      <Footer client:load />
+      <footer>
+        <a href={LINKS.EMAIL}>Email</a>
+        <span>·</span>
+        <a href={LINKS.GITHUB} target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span>·</span>
+        <a href={LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </footer>
     </div>
-    
-    <BackToTop client:idle />
   </main>
 </BaseLayout>
+
+<style>
+  :global(body:has(.academic-home)) {
+    background: #fff !important;
+    color: #222 !important;
+  }
+
+  .academic-home {
+    min-height: 100vh;
+    background: #fff;
+    color: #222;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .page {
+    width: min(100% - 40px, 820px);
+    margin: 0 auto;
+    padding: 56px 0 40px;
+  }
+
+  .introduction {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 52px;
+    align-items: start;
+    margin-bottom: 44px;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-newsreader), Georgia, serif;
+  }
+
+  h3 {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+
+  h1 {
+    margin-bottom: 2px;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .role {
+    margin-bottom: 22px;
+    color: #666;
+    font-size: 14px;
+  }
+
+  .intro-text > p:not(.role):not(.profile-links) {
+    max-width: 590px;
+    margin-bottom: 12px;
+  }
+
+  .portrait {
+    display: block;
+    width: 150px;
+    height: 178px;
+    object-fit: cover;
+    object-position: center 32%;
+    filter: grayscale(100%);
+  }
+
+  a {
+    color: #174ea6;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    text-decoration: underline;
+  }
+
+  .profile-links {
+    margin: 19px 0 0;
+    font-size: 14px;
+  }
+
+  .profile-links span,
+  footer span {
+    margin: 0 5px;
+    color: #999;
+  }
+
+  section:not(.introduction) {
+    margin-top: 38px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #d7d7d7;
+    font-size: 21px;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  .section-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #d7d7d7;
+    margin-bottom: 17px;
+  }
+
+  .section-title-row h2 {
+    margin: 0;
+    padding-bottom: 5px;
+    border: 0;
+  }
+
+  .section-title-row > a {
+    font-size: 13px;
+  }
+
+  .research-list,
+  .news-list,
+  .writing-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .research-list li {
+    margin-bottom: 9px;
+  }
+
+  .news-list li {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .news-list time {
+    color: #666;
+    font-size: 13px;
+  }
+
+  .publication-list {
+    margin: 0;
+    padding-left: 22px;
+  }
+
+  .publication-list li {
+    margin: 0 0 24px 0;
+    padding-left: 4px;
+  }
+
+  .publication-list h3 {
+    margin-bottom: 3px;
+    font-family: var(--font-newsreader), Georgia, serif;
+    font-size: 17px;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+
+  .publication-list p {
+    margin-bottom: 2px;
+  }
+
+  .authors,
+  .venue {
+    color: #555;
+    font-size: 14px;
+  }
+
+  .venue {
+    font-style: italic;
+  }
+
+  .paper-links {
+    margin-top: 4px;
+    font-size: 13px;
+  }
+
+  .writing-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 8px;
+  }
+
+  .writing-list time {
+    flex: 0 0 auto;
+    color: #777;
+    font-size: 13px;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 1px solid #d7d7d7;
+    color: #777;
+    font-size: 13px;
+  }
+
+  @media (max-width: 620px) {
+    .page {
+      width: min(100% - 32px, 820px);
+      padding-top: 36px;
+    }
+
+    .introduction {
+      grid-template-columns: 1fr;
+      gap: 22px;
+      margin-bottom: 36px;
+    }
+
+    .portrait {
+      grid-row: 1;
+      width: 104px;
+      height: 124px;
+    }
+
+    h1 {
+      font-size: 27px;
+    }
+
+    .news-list li {
+      grid-template-columns: 72px 1fr;
+    }
+
+    .writing-list li {
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .writing-list time {
+      display: block;
+      margin-top: 2px;
+    }
+  }
+</style>
