@@ -56,4 +56,13 @@ export const SHORT_LINKS = {
     ogDescription: 'AI research · engineering · selected experience',
     type: 'resume',
   },
+  researchResume: {
+    destination: LINKS.RESEARCH_RESUME_FALLBACK,
+    title: 'Research Resume · Rishi Ahuja',
+    description:
+      'Latest research CV — papers, academic work, and selected experience.',
+    ogTitle: 'Research Resume',
+    ogDescription: 'Academic CV · papers · selected experience',
+    type: 'resume',
+  },
 } as const satisfies Record<string, ShortLink>;

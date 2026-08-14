@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
-import { generatePresignedResumeUploadUrl } from '../../../lib/r2Storage';
+import {
+  generatePresignedResumeUploadUrl,
+  isResumeTrack,
+  RESUME_TRACKS,
+  type ResumeTrack,
+} from '../../../lib/r2Storage';
 import { requireAdminSession, unauthorizedResponse } from '../../../lib/api-auth';
 
 export const prerender = false;
-
-const RESUME_FILE_PATTERN = /^rishi-resume-v\d+\.pdf$/i;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -14,17 +17,22 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const body = await request.json();
-    const { fileName, contentType } = body as {
+    const { fileName, contentType, track: rawTrack } = body as {
       fileName?: string;
       contentType?: string;
+      track?: string;
     };
 
+    const track: ResumeTrack = isResumeTrack(rawTrack) ? rawTrack : 'engineering';
     const trimmedFileName = fileName?.trim();
-    if (!trimmedFileName || !RESUME_FILE_PATTERN.test(trimmedFileName)) {
-      return new Response(JSON.stringify({ error: 'Filename must match rishi-resume-v<number>.pdf' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    if (!trimmedFileName || !RESUME_TRACKS[track].pattern.test(trimmedFileName)) {
+      return new Response(
+        JSON.stringify({ error: `Filename must match ${RESUME_TRACKS[track].hint}` }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     if (contentType && contentType !== 'application/pdf') {
@@ -34,7 +42,12 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const result = await generatePresignedResumeUploadUrl(trimmedFileName, contentType || 'application/pdf');
+    const result = await generatePresignedResumeUploadUrl(
+      trimmedFileName,
+      contentType || 'application/pdf',
+      300,
+      track
+    );
 
     return new Response(JSON.stringify(result), {
       status: 200,

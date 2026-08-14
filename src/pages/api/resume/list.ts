@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { listResumeFiles } from '../../../lib/r2Storage';
+import { isResumeTrack, listResumeFiles, type ResumeTrack } from '../../../lib/r2Storage';
 import { requireAdminSession, unauthorizedResponse } from '../../../lib/api-auth';
 
 export const prerender = false;
@@ -11,9 +11,11 @@ export const GET: APIRoute = async ({ request }) => {
       return unauthorizedResponse();
     }
 
-    const resumes = await listResumeFiles();
+    const trackParam = new URL(request.url).searchParams.get('track');
+    const track: ResumeTrack = isResumeTrack(trackParam) ? trackParam : 'engineering';
+    const resumes = await listResumeFiles(track);
 
-    return new Response(JSON.stringify({ resumes, latest: resumes[0] || null }), {
+    return new Response(JSON.stringify({ resumes, latest: resumes[0] || null, track }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });

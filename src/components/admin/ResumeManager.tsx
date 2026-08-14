@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { LINKS } from '../../lib/constants';
+import { RESUME_TRACKS, type ResumeTrack } from '../../lib/resumeTracks';
 
 interface ResumeFile {
   key: string;
@@ -13,7 +15,12 @@ interface ResumeManagerProps {
   token: string;
 }
 
-const RESUME_FILE_PATTERN = /^rishi-resume-v(\d+)\.pdf$/i;
+const TRACKS: ResumeTrack[] = ['engineering', 'research'];
+
+const FALLBACK_URLS: Record<ResumeTrack, string> = {
+  engineering: LINKS.RESUME_FALLBACK,
+  research: LINKS.RESEARCH_RESUME_FALLBACK,
+};
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -30,6 +37,7 @@ function formatDate(value: string | null): string {
 }
 
 const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
+  const [track, setTrack] = useState<ResumeTrack>('engineering');
   const [resumes, setResumes] = useState<ResumeFile[]>([]);
   const [latestResume, setLatestResume] = useState<ResumeFile | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -38,14 +46,18 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const trackConfig = RESUME_TRACKS[track];
   const nextVersionFileName = useMemo(() => {
     const nextVersion = (latestResume?.version || 0) + 1;
-    return `rishi-resume-v${nextVersion}.pdf`;
-  }, [latestResume]);
+    return trackConfig.fileName(nextVersion);
+  }, [latestResume, trackConfig]);
 
   useEffect(() => {
-    loadResumes();
-  }, []);
+    loadResumes(track);
+    setSelectedFile(null);
+    setTargetFileName('');
+    setError(null);
+  }, [track]);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -53,12 +65,12 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
     }
   }, [nextVersionFileName, selectedFile]);
 
-  const loadResumes = async () => {
+  const loadResumes = async (activeTrack: ResumeTrack) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/resume/list', {
+      const response = await fetch(`/api/resume/list?track=${activeTrack}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -87,7 +99,7 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
       return;
     }
 
-    const matchingName = file.name.match(RESUME_FILE_PATTERN);
+    const matchingName = file.name.match(trackConfig.pattern);
     setTargetFileName(matchingName ? file.name : nextVersionFileName);
   };
 
@@ -102,8 +114,8 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
       return;
     }
 
-    if (!RESUME_FILE_PATTERN.test(targetFileName.trim())) {
-      setError('Target filename must match rishi-resume-v<number>.pdf');
+    if (!trackConfig.pattern.test(targetFileName.trim())) {
+      setError(`Target filename must match ${trackConfig.hint}`);
       return;
     }
 
@@ -121,6 +133,7 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
         body: JSON.stringify({
           fileName: uploadFileName,
           contentType: 'application/pdf',
+          track,
         }),
       });
 
@@ -142,7 +155,7 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
 
       setSelectedFile(null);
       setTargetFileName('');
-      await loadResumes();
+      await loadResumes(track);
       alert(`Uploaded ${uploadFileName}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
@@ -158,11 +171,11 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
           <div>
             <h2 className="text-xl font-bold font-ptMono text-quillGray">Resume Tracker</h2>
             <p className="text-sm text-gunSmoke font-ptMono mt-2">
-              Reads versioned PDFs from R2 at resume/rishi-resume-v*.pdf.
+              Versioned PDFs in R2 at {trackConfig.prefix}{trackConfig.hint}.
             </p>
           </div>
           <button
-            onClick={loadResumes}
+            onClick={() => loadResumes(track)}
             disabled={isLoading}
             className="px-4 py-2 bg-codGray border border-gunSmoke/30 rounded-sm text-gunSmoke
               hover:border-accent-light hover:text-accent-light transition-colors font-ptMono text-sm disabled:opacity-50"
@@ -171,9 +184,44 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
           </button>
         </div>
 
+        <div className="mt-5 flex flex-wrap gap-2">
+          {TRACKS.map((item) => (
+            <button
+              key={item}
+              onClick={() => setTrack(item)}
+              className={`px-4 py-2 rounded-sm font-ptMono text-sm border transition-colors ${
+                track === item
+                  ? 'bg-accent-light/10 border-accent-light/40 text-accent-light'
+                  : 'bg-codGray border-gunSmoke/30 text-gunSmoke hover:border-accent-light hover:text-accent-light'
+              }`}
+            >
+              {RESUME_TRACKS[item].label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 text-xs text-gunSmoke font-ptMono">
+          Public:{' '}
+          {trackConfig.publicPaths.map((path, index) => (
+            <React.Fragment key={path}>
+              {index > 0 && ' · '}
+              <a
+                href={path}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-light hover:text-quillGray transition-colors"
+              >
+                rishia.in{path}
+              </a>
+            </React.Fragment>
+          ))}
+        </div>
+
         {latestResume ? (
           <div className="mt-5 border border-accent-light/40 bg-accent-light/5 rounded-sm p-4">
-            <div className="text-xs text-accent-light font-ptMono mb-2">Latest Resume</div>
+            <div className="text-xs text-accent-light font-ptMono mb-2">
+              Latest {trackConfig.label} Resume
+            </div>
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <div className="font-ptMono text-quillGray">{latestResume.fileName}</div>
@@ -195,13 +243,25 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
           </div>
         ) : (
           <div className="mt-5 border border-gunSmoke/30 rounded-sm p-4 text-sm text-gunSmoke font-ptMono">
-            No versioned resume PDFs found in R2 yet.
+            No versioned {trackConfig.label.toLowerCase()} resume PDFs in R2 yet.
+            Public URLs currently fall back to{' '}
+            <a
+              href={FALLBACK_URLS[track]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-light hover:text-quillGray transition-colors"
+            >
+              the existing PDF
+            </a>
+            .
           </div>
         )}
       </div>
 
       <div className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-5">
-        <h3 className="text-base font-bold font-ptMono text-quillGray mb-4">Upload Resume</h3>
+        <h3 className="text-base font-bold font-ptMono text-quillGray mb-4">
+          Upload {trackConfig.label} Resume
+        </h3>
         <div className="grid gap-4 md:grid-cols-[1fr_280px_auto] md:items-end">
           <div>
             <label className="block text-sm font-ptMono text-gunSmoke mb-2">PDF File</label>
@@ -243,7 +303,9 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
       </div>
 
       <div className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-5">
-        <h3 className="text-base font-bold font-ptMono text-quillGray mb-4">All Resumes</h3>
+        <h3 className="text-base font-bold font-ptMono text-quillGray mb-4">
+          All {trackConfig.label} Resumes
+        </h3>
         {isLoading ? (
           <p className="text-gunSmoke font-ptMono text-sm">Loading resumes...</p>
         ) : resumes.length === 0 ? (

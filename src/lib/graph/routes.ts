@@ -33,6 +33,8 @@ const STATIC_PAGE_PATHS = [
   '/flutter-bootcamp',
   '/archive',
   '/resume',
+  '/research/resume',
+  '/rsh/resume',
   '/colophon',
   '/machine',
   '/graph',

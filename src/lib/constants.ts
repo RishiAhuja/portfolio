@@ -3,6 +3,8 @@ export const LINKS = {
   // Resume
   RESUME: '/resume',
   RESUME_FALLBACK: 'https://artifacts.rishia.in/resume/rishi-resume-v12.pdf',
+  RESEARCH_RESUME: '/research/resume',
+  RESEARCH_RESUME_FALLBACK: 'https://artifacts.rishia.in/Rishi_s_Resume__Single_-4.pdf',
   
   // Flutter Bootcamp Curriculum
   FLUTTER_BOOTCAMP_CURRICULUM: 'https://artifacts.rishia.in/bootcamp/cs404_curriculum-3.pdf',

@@ -1,3 +1,7 @@
+import { RESUME_TRACKS, type ResumeTrack } from './resumeTracks';
+
+export { isResumeTrack, RESUME_TRACKS, type ResumeTrack } from './resumeTracks';
+
 // Cloudflare R2 configuration from environment variables
 const R2_CACHE_CONTROL = 'public, max-age=31536000, immutable, no-transform';
 
@@ -170,11 +174,8 @@ export interface ResumeFile {
   version: number;
 }
 
-const RESUME_PREFIX = 'resume/';
-const RESUME_FILE_PATTERN = /^rishi-resume-v(\d+)\.pdf$/i;
-
-function parseResumeVersion(fileName: string): number | null {
-  const match = fileName.match(RESUME_FILE_PATTERN);
+function parseResumeVersion(fileName: string, track: ResumeTrack): number | null {
+  const match = fileName.match(RESUME_TRACKS[track].pattern);
   return match ? Number(match[1]) : null;
 }
 
@@ -217,17 +218,20 @@ export async function generatePresignedUploadUrl(
   return { uploadUrl, key, publicUrl };
 }
 
-export async function listResumeFiles(): Promise<ResumeFile[]> {
+export async function listResumeFiles(
+  track: ResumeTrack = 'engineering'
+): Promise<ResumeFile[]> {
   const { ListObjectsV2Command } = await import('@aws-sdk/client-s3');
   const r2Client = await getR2Client();
   const config = getR2Config();
+  const { prefix } = RESUME_TRACKS[track];
   const files: ResumeFile[] = [];
   let continuationToken: string | undefined;
 
   do {
     const command = new ListObjectsV2Command({
       Bucket: config.BUCKET,
-      Prefix: RESUME_PREFIX,
+      Prefix: prefix,
       ContinuationToken: continuationToken,
     });
 
@@ -236,8 +240,10 @@ export async function listResumeFiles(): Promise<ResumeFile[]> {
     for (const object of response.Contents || []) {
       if (!object.Key || object.Key.endsWith('/')) continue;
 
-      const fileName = object.Key.slice(RESUME_PREFIX.length);
-      const version = parseResumeVersion(fileName);
+      const fileName = object.Key.slice(prefix.length);
+      if (fileName.includes('/')) continue;
+
+      const version = parseResumeVersion(fileName, track);
       if (version === null) continue;
 
       files.push({
@@ -256,28 +262,31 @@ export async function listResumeFiles(): Promise<ResumeFile[]> {
   return sortResumeFiles(files);
 }
 
-export async function getLatestResumeFile(): Promise<ResumeFile | null> {
-  const files = await listResumeFiles();
+export async function getLatestResumeFile(
+  track: ResumeTrack = 'engineering'
+): Promise<ResumeFile | null> {
+  const files = await listResumeFiles(track);
   return files[0] || null;
 }
 
 export async function generatePresignedResumeUploadUrl(
   fileName: string,
   contentType: string = 'application/pdf',
-  expiresIn: number = 300
+  expiresIn: number = 300,
+  track: ResumeTrack = 'engineering'
 ): Promise<PresignedUploadResult> {
   const trimmedFileName = fileName.trim();
-  const version = parseResumeVersion(trimmedFileName);
+  const version = parseResumeVersion(trimmedFileName, track);
 
   if (version === null) {
-    throw new Error('Resume filename must match rishi-resume-v<number>.pdf');
+    throw new Error(`Resume filename must match ${RESUME_TRACKS[track].hint}`);
   }
 
   const { PutObjectCommand } = await import('@aws-sdk/client-s3');
   const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
   const r2Client = await getR2Client();
   const config = getR2Config();
-  const key = `${RESUME_PREFIX}${trimmedFileName}`;
+  const key = `${RESUME_TRACKS[track].prefix}${trimmedFileName}`;
 
   const command = new PutObjectCommand({
     Bucket: config.BUCKET,
