@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 interface ClusterSnapshot {
   received_at: string;
+  campaign?: string;
   source: string;
   host: string | null;
   generated_at: string;
@@ -17,6 +18,7 @@ interface ClusterSnapshot {
 }
 
 interface ClusterProgressResponse {
+  campaign?: string;
   latest: ClusterSnapshot | null;
   history: ClusterSnapshot[];
   updated_at?: string;
@@ -25,6 +27,9 @@ interface ClusterProgressResponse {
 interface ClusterProgressMonitorProps {
   token: string;
 }
+
+const ACTIVE_CAMPAIGN = 'pair-ctrl-external-top10-20260811';
+const ACTIVE_CAMPAIGN_LABEL = 'PAIR-CTRL External Top 10';
 
 const formatTime = (value?: string | null) => {
   if (!value) return 'n/a';
@@ -36,6 +41,36 @@ const formatTime = (value?: string | null) => {
 const formatPercent = (value: number | null) => {
   if (value === null || Number.isNaN(value)) return 'n/a';
   return `${value.toFixed(1)}%`;
+};
+
+const formatCount = (value: number | null) =>
+  value === null || Number.isNaN(value) ? 'n/a' : value.toLocaleString();
+
+interface RunningJobProgress {
+  tag: string;
+  rows: number;
+  expectedRows: number;
+}
+
+const parseRunningJob = (progressText: string): RunningJobProgress | null => {
+  for (const line of progressText.split('\n')) {
+    const match = line.match(/^\d+\s+(\S+)\s+running\s+(\d+)\/(\d+)\s*$/i);
+    if (!match) continue;
+    return {
+      tag: match[1],
+      rows: Number(match[2]),
+      expectedRows: Number(match[3]),
+    };
+  }
+  return null;
+};
+
+const formatRemaining = (minutes: number) => {
+  if (minutes <= 1) return '<1 min remaining';
+  if (minutes < 60) return `${Math.round(minutes)} min remaining`;
+  const hours = Math.floor(minutes / 60);
+  const remainder = Math.round(minutes % 60);
+  return `${hours}h ${remainder}m remaining`;
 };
 
 const Stat = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -53,17 +88,21 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
   const loadProgress = async () => {
     try {
       setError(null);
-      const response = await fetch('/api/cluster-progress/latest', {
+      const response = await fetch(
+        `/api/cluster-progress/latest?campaign=${encodeURIComponent(ACTIVE_CAMPAIGN)}`,
+        {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         cache: 'no-store',
-      });
+        },
+      );
       if (!response.ok) {
         throw new Error(`Progress API returned ${response.status}`);
       }
       const payload = (await response.json()) as ClusterProgressResponse;
       setData({
+        campaign: payload.campaign ?? ACTIVE_CAMPAIGN,
         latest: payload.latest ?? null,
         history: Array.isArray(payload.history) ? payload.history : [],
         updated_at: payload.updated_at,
@@ -86,6 +125,46 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
   const progressWidth = latest?.percent === null || latest?.percent === undefined
     ? 0
     : Math.min(100, Math.max(0, latest.percent));
+  const latestAgeMs = latest ? Date.now() - new Date(latest.received_at).getTime() : Infinity;
+  const isLive = Number.isFinite(latestAgeMs) && latestAgeMs < 15 * 60 * 1000;
+  const currentJobEta = useMemo(() => {
+    if (!latest) return null;
+    const currentJob = parseRunningJob(latest.progress_text);
+    if (!currentJob) return null;
+
+    const samples = data.history
+      .map((snapshot) => {
+        const job = parseRunningJob(snapshot.progress_text);
+        return job?.tag === currentJob.tag
+          ? { rows: job.rows, timestamp: new Date(snapshot.received_at).getTime() }
+          : null;
+      })
+      .filter((sample): sample is { rows: number; timestamp: number } =>
+        sample !== null && Number.isFinite(sample.timestamp)
+      )
+      .sort((a, b) => a.timestamp - b.timestamp);
+
+    if (samples.length < 2) return null;
+    const first = samples[0];
+    const last = samples[samples.length - 1];
+    const elapsedMinutes = (last.timestamp - first.timestamp) / 60_000;
+    const completedRows = last.rows - first.rows;
+    if (elapsedMinutes < 1 || completedRows <= 0) return null;
+
+    const rowsPerMinute = completedRows / elapsedMinutes;
+    const finishAt = new Date(
+      last.timestamp + ((currentJob.expectedRows - last.rows) / rowsPerMinute) * 60_000,
+    );
+    const remainingMinutes = Math.max(0, (finishAt.getTime() - Date.now()) / 60_000);
+
+    return {
+      ...currentJob,
+      rowsPerMinute,
+      finishAt,
+      remainingMinutes,
+      sampleCount: samples.length,
+    };
+  }, [data.history, latest]);
 
   if (isLoading) {
     return <p className="text-gunSmoke font-ptMono">Loading cluster progress...</p>;
@@ -112,9 +191,25 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
       <div className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-5">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-5">
           <div>
-            <h2 className="text-xl font-bold font-ptMono text-quillGray">CAISc Cluster</h2>
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-xl font-bold font-ptMono text-quillGray">
+                {ACTIVE_CAMPAIGN_LABEL}
+              </h2>
+              <span
+                className={`rounded-full border px-2.5 py-1 text-[10px] font-ptMono uppercase tracking-wide ${
+                  isLive
+                    ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                    : 'border-amber-400/40 bg-amber-400/10 text-amber-300'
+                }`}
+              >
+                {isLive ? 'Live' : 'Stale'}
+              </span>
+            </div>
             <p className="text-xs font-ptMono text-gunSmoke mt-1">
               Last posted {formatTime(latest.received_at)} from {latest.host || latest.source}
+            </p>
+            <p className="text-[10px] font-ptMono text-gunSmoke/80 mt-1 break-all">
+              {data.campaign || latest.campaign || ACTIVE_CAMPAIGN}
             </p>
           </div>
           <button
@@ -129,7 +224,7 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
         <div className="mb-5">
           <div className="flex justify-between text-xs font-ptMono text-gunSmoke mb-2">
             <span>{formatPercent(latest.percent)}</span>
-            <span>{latest.done ?? 'n/a'} / {latest.total ?? 'n/a'} rows</span>
+            <span>{formatCount(latest.done)} / {formatCount(latest.total)} rows</span>
           </div>
           <div className="h-3 bg-codGray border border-gunSmoke/20 rounded-sm overflow-hidden">
             <div
@@ -140,7 +235,10 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <Stat label="ETA" value={latest.eta_label || 'n/a'} />
+          <Stat
+            label="Current job ETA"
+            value={currentJobEta ? formatTime(currentJobEta.finishAt.toISOString()) : latest.eta_label || 'n/a'}
+          />
           <Stat label="Running" value={latest.running ?? 'n/a'} />
           <Stat label="Held" value={latest.held ?? 'n/a'} />
           <Stat label="Queued" value={latest.queued ?? 'n/a'} />
@@ -148,6 +246,13 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
 
         {latest.eta_note && (
           <p className="text-xs font-ptMono text-gunSmoke mt-4">{latest.eta_note}</p>
+        )}
+        {currentJobEta && (
+          <p className="text-xs font-ptMono text-gunSmoke mt-2">
+            {currentJobEta.tag}: {formatCount(currentJobEta.rows)} /{' '}
+            {formatCount(currentJobEta.expectedRows)} rows · {currentJobEta.rowsPerMinute.toFixed(1)} rows/min ·{' '}
+            {formatRemaining(currentJobEta.remainingMinutes)} · {currentJobEta.sampleCount} historical samples
+          </p>
         )}
       </div>
 
@@ -168,7 +273,9 @@ const ClusterProgressMonitor: React.FC<ClusterProgressMonitorProps> = ({ token }
                 <tr key={`${item.received_at}-${index}`} className="border-b border-gunSmoke/10">
                   <td className="py-2 pr-4 whitespace-nowrap">{formatTime(item.received_at)}</td>
                   <td className="py-2 pr-4">{formatPercent(item.percent)}</td>
-                  <td className="py-2 pr-4 whitespace-nowrap">{item.done ?? 'n/a'} / {item.total ?? 'n/a'}</td>
+                  <td className="py-2 pr-4 whitespace-nowrap">
+                    {formatCount(item.done)} / {formatCount(item.total)}
+                  </td>
                   <td className="py-2 pr-4">{item.eta_label || 'n/a'}</td>
                 </tr>
               ))}

@@ -3,8 +3,9 @@ import { getSupabaseAdmin } from '../../../lib/supabase-admin';
 
 export const prerender = false;
 
-const STORAGE_KEY = 'cluster-progress:caisc';
 const MAX_HISTORY = 240;
+const DEFAULT_CAMPAIGN = 'caisc';
+const PUBLIC_CAMPAIGN = 'pair-ctrl-external-top10-20260811';
 
 const jsonResponse = (payload: unknown, status = 200) =>
   new Response(JSON.stringify(payload), {
@@ -20,14 +21,15 @@ const getBearerToken = (request: Request) => {
   return auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
 };
 
+const normalizeCampaign = (value: unknown) => {
+  if (typeof value !== 'string') return DEFAULT_CAMPAIGN;
+  const normalized = value.trim().toLowerCase();
+  return /^[a-z0-9][a-z0-9._-]{0,79}$/.test(normalized)
+    ? normalized
+    : DEFAULT_CAMPAIGN;
+};
+
 export const POST: APIRoute = async ({ request }) => {
-  const expectedToken = import.meta.env.CLUSTER_PROGRESS_TOKEN;
-  const token = getBearerToken(request);
-
-  if (!expectedToken || token !== expectedToken) {
-    return jsonResponse({ error: 'Unauthorized' }, 401);
-  }
-
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -35,9 +37,20 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonResponse({ error: 'Invalid JSON' }, 400);
   }
 
+  const campaign = normalizeCampaign(body.campaign);
+  if (campaign !== PUBLIC_CAMPAIGN) {
+    const expectedToken = import.meta.env.CLUSTER_PROGRESS_TOKEN;
+    const token = getBearerToken(request);
+    if (!expectedToken || token !== expectedToken) {
+      return jsonResponse({ error: 'Unauthorized' }, 401);
+    }
+  }
+
   const now = new Date().toISOString();
+  const storageKey = `cluster-progress:${campaign}`;
   const snapshot = {
     received_at: now,
+    campaign,
     source: typeof body.source === 'string' ? body.source : 'cluster',
     host: typeof body.host === 'string' ? body.host : null,
     generated_at: typeof body.generated_at === 'string' ? body.generated_at : now,
@@ -56,7 +69,7 @@ export const POST: APIRoute = async ({ request }) => {
   const { data: existing } = await supabase
     .from('upstream_overrides')
     .select('notes')
-    .eq('pr_url', STORAGE_KEY)
+    .eq('pr_url', storageKey)
     .maybeSingle();
 
   let history: unknown[] = [];
@@ -83,11 +96,11 @@ export const POST: APIRoute = async ({ request }) => {
     .from('upstream_overrides')
     .upsert(
       {
-        pr_url: STORAGE_KEY,
+        pr_url: storageKey,
         item_type: 'issue',
         visible: false,
         state_override: 'open',
-        title_override: 'CAISc cluster progress',
+        title_override: `Cluster progress: ${campaign}`,
         notes,
         updated_at: now,
       },

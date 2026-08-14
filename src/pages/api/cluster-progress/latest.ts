@@ -4,7 +4,15 @@ import { supabase } from '../../../lib/supabase';
 
 export const prerender = false;
 
-const STORAGE_KEY = 'cluster-progress:caisc';
+const DEFAULT_CAMPAIGN = 'caisc';
+
+const normalizeCampaign = (value: string | null) => {
+  if (!value) return DEFAULT_CAMPAIGN;
+  const normalized = value.trim().toLowerCase();
+  return /^[a-z0-9][a-z0-9._-]{0,79}$/.test(normalized)
+    ? normalized
+    : DEFAULT_CAMPAIGN;
+};
 
 const jsonResponse = (payload: unknown, status = 200) =>
   new Response(JSON.stringify(payload), {
@@ -21,10 +29,13 @@ export const GET: APIRoute = async ({ request }) => {
     return jsonResponse({ error: 'Unauthorized' }, 401);
   }
 
+  const campaign = normalizeCampaign(new URL(request.url).searchParams.get('campaign'));
+  const storageKey = `cluster-progress:${campaign}`;
+
   const { data, error } = await supabase
     .from('upstream_overrides')
     .select('notes, updated_at')
-    .eq('pr_url', STORAGE_KEY)
+    .eq('pr_url', storageKey)
     .maybeSingle();
 
   if (error) {
@@ -33,17 +44,18 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   if (!data?.notes) {
-    return jsonResponse({ latest: null, history: [] });
+    return jsonResponse({ campaign, latest: null, history: [] });
   }
 
   try {
     const parsed = JSON.parse(data.notes);
     return jsonResponse({
+      campaign,
       latest: parsed.latest ?? null,
       history: Array.isArray(parsed.history) ? parsed.history : [],
       updated_at: data.updated_at,
     });
   } catch {
-    return jsonResponse({ latest: null, history: [], updated_at: data.updated_at });
+    return jsonResponse({ campaign, latest: null, history: [], updated_at: data.updated_at });
   }
 };
