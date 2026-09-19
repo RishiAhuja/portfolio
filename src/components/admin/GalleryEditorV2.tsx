@@ -636,7 +636,7 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
               <label>Select Images/Videos</label>
               <input
                 type="file"
-                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
+                accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm,.mov,image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
                 multiple
                 onChange={handleFileSelect}
                 disabled={uploading}

@@ -36,6 +36,10 @@ const researchCollection = defineCollection({
     })),
     affiliation_note: z.string().optional(),
     award: z.string().optional(),
+    awards: z.array(z.object({
+      label: z.string(),
+      result: z.string(),
+    })).default([]),
     event: z.object({
       announcement: z.string(),
       label: z.string(),

@@ -221,10 +221,15 @@ const Footer: React.FC = () => {
             <a 
               href="/gallery" 
               className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
+              title="May not be maintained"
             >
               <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
                 Gallery
               </span>
+              <span className="text-[9px] font-ptMono text-gunSmoke/35 leading-none -ml-0.5" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">, may not be maintained</span>
               <svg 
                 className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 
                 fill="none" 
@@ -315,10 +320,15 @@ const Footer: React.FC = () => {
               <a 
                 href="/gallery" 
                 className="flex items-center gap-1.5 group cursor-pointer transition-all duration-200"
+                title="May not be maintained"
               >
                 <span className="text-sm font-ptMono text-gunSmoke group-hover:text-accent-light transition-colors underline decoration-gunSmoke/40 group-hover:decoration-accent-light underline-offset-2">
                   Gallery
                 </span>
+                <span className="text-[9px] font-ptMono text-gunSmoke/35 leading-none -ml-0.5" aria-hidden="true">
+                  *
+                </span>
+                <span className="sr-only">, may not be maintained</span>
                 <svg 
                   className="w-3.5 h-3.5 text-gunSmoke/70 group-hover:text-accent-light group-hover:scale-110 transition-all duration-200 rotate-45" 
                   fill="none" 

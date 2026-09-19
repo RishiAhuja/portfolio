@@ -41,9 +41,19 @@ const formatDate = (date: Date) =>
           >
             <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div class="min-w-0">
-                <p class="mb-2 font-ptMono text-xs text-gunSmoke">
-                  {date}
-                </p>
+                <div class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <p class="font-ptMono text-xs text-gunSmoke">
+                    {date}
+                  </p>
+                  {paper.data.awards.map((award) => (
+                    <span class="inline-flex items-center gap-1.5 font-ptMono text-[11px] tracking-[0.02em] text-accent-light/70">
+                      <span class="text-[10px] leading-none text-accent-light" aria-hidden="true">★</span>
+                      <span class="font-bold text-quillGray/80">{award.result}</span>
+                      <span class="text-accent-light/35" aria-hidden="true">·</span>
+                      <span>{award.label}</span>
+                    </span>
+                  ))}
+                </div>
                 <h2 class="font-ptMono text-lg font-bold leading-snug text-quillGray transition-colors duration-300 group-hover:text-accent-light">
                   {paper.data.title}
                 </h2>

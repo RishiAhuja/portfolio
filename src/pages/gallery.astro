@@ -67,6 +67,14 @@ const sortedCollections = allCollections.sort((a, b) => {
       color: var(--gunSmoke);
       font-size: 0.9rem;
     }
+
+    .gallery-caveat {
+      margin-top: 0.4rem;
+      font-size: 0.7rem;
+      color: var(--gunSmoke);
+      opacity: 0.4;
+      letter-spacing: 0.02em;
+    }
     
     .gallery-listing {
       display: grid;
@@ -142,6 +150,7 @@ const sortedCollections = allCollections.sort((a, b) => {
         <p class="gallery-subtitle">
           {sortedCollections.length} {sortedCollections.length === 1 ? 'collection' : 'collections'}
         </p>
+        <p class="gallery-caveat">may not be maintained</p>
       </header>
 
       {allCollections.length > 0 ? (

@@ -20,16 +20,41 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: '17 Aug 2026',
+      title: 'ScopeBench-PR Best Paper Presentation and 3MT Runner-up',
+      type: 'achievement',
+      description: 'Presented ScopeBench-PR at GlobalSouthAI @ IJCAI-ECAI 2026 in Bremen. Received 1st place for Best Paper Presentation and placed runner-up in the Three Minute Thesis competition.',
+      year: '2025-26',
+      hiddenInLedger: true,
+      buttons: [
+        {
+          label: 'Research',
+          link: 'https://rishia.in/rsh/ahuja2026scopebenchpr',
+          icon: 'external'
+        },
+        {
+          label: 'Workshop',
+          link: 'https://sites.google.com/view/globalsouthai-ijcai26/home',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '30 Apr 2026',
       title: 'IJCAI-ECAI 2026 Special Track Paper Accepted',
       type: 'achievement',
-      description: 'Paper "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection" accepted to the IJCAI-ECAI 2026 main conference special track. I will present it in Bremen, Germany.',
+      description: 'Paper "ICFD-31k: A Large-Scale Dataset and Benchmark for Real-Time Conversational Fraud Detection" accepted to the IJCAI-ECAI 2026 main conference special track and now published in the proceedings.',
       year: '2025-26',
       hiddenInLedger: true,
       buttons: [
         {
           label: 'Research',
           link: 'https://rishia.in/rsh/ahuja2026icfd31k',
+          icon: 'external'
+        },
+        {
+          label: 'Proceedings',
+          link: 'https://www.ijcai.org/proceedings/2026/786',
           icon: 'external'
         },
         {

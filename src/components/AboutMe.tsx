@@ -44,6 +44,7 @@ const AboutMe: React.FC = () => {
 
         <p>
           I&apos;m a researcher working across fraud detection, foundation models for time series, and machine learning systems.
+          At IJCAI-ECAI 2026, ScopeBench-PR received Best Paper Presentation and placed runner-up in the GlobalSouthAI 3MT.
         </p>
 
         <p>

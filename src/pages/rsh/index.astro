@@ -58,7 +58,16 @@ const toSchemaPaper = (paper: CollectionEntry<'research'>) => {
     sameAs: paper.data.same_as,
     inLanguage: 'en',
     ...(paper.data.event ? { isPartOf: toSchemaEvent(paper) } : {}),
-    ...(paper.data.award ? { award: paper.data.award } : {}),
+    ...(
+      paper.data.award || paper.data.awards.length
+        ? {
+            award: [
+              ...(paper.data.award ? [paper.data.award] : []),
+              ...paper.data.awards.map((award) => `${award.result} — ${award.label}`),
+            ],
+          }
+        : {}
+    ),
   };
 
   if (paper.data.status === 'published' && paper.data.published_date) {
@@ -112,7 +121,7 @@ const toSchemaPaper = (paper: CollectionEntry<'research'>) => {
         <h1 class="text-3xl md:text-4xl font-bold text-quillGray font-ptMono mb-3">Research</h1>
         <p class="text-sm md:text-base text-gunSmoke font-ptMono max-w-3xl leading-relaxed">
           Work across time-series forecasting, retrieval-augmented systems, and trustworthy conversational fraud detection.
-          I recently presented my ICLR 2026 poster, and my IJCAI-ECAI 2026 paper ICFD-31k has been accepted for presentation in Bremen.
+          I recently presented my ICLR 2026 poster. ICFD-31k is now published in the IJCAI-ECAI 2026 proceedings. ScopeBench-PR received Best Paper Presentation and placed runner-up in the GlobalSouthAI 3MT.
         </p>
       </header>
 

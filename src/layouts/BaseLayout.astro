@@ -1,6 +1,7 @@
 ---
 import '../styles/globals.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 interface Props {
   title?: string;
@@ -120,5 +121,10 @@ const imageURL = new URL(image, Astro.site).toString();
   <body class="bg-codGray text-quillGray dark:bg-bgShades-dark dark:text-quillGray transition-colors duration-300">
     <Header client:load currentPath={currentPath} />
     <slot />
+    {currentPath !== '/' && currentPath !== '/admin' && (
+      <div class="max-w-7xl mx-auto">
+        <Footer client:load />
+      </div>
+    )}
   </body>
 </html>

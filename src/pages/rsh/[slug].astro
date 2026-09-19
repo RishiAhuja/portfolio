@@ -30,6 +30,13 @@ const breadcrumbs = [
 ];
 
 const [city, country] = paper.data.event?.location.split(',').map((part) => part.trim()) ?? [];
+const structuredAwards = [
+  ...(paper.data.award ? [paper.data.award] : []),
+  ...paper.data.awards.map((award) => `${award.result} — ${award.label}`),
+];
+const paperMeta = paper.data.awards.length && paper.data.event
+  ? `${paper.data.venue} · ${paper.data.event.location}`
+  : `${paper.data.proceedings} · ${paper.data.venue}`;
 ---
 
 <BaseLayout
@@ -69,7 +76,7 @@ const [city, country] = paper.data.event?.location.split(',').map((part) => part
         url: paper.data.event.url,
       }
     } : {}),
-    ...(paper.data.award ? { award: paper.data.award } : {}),
+    ...(structuredAwards.length ? { award: structuredAwards } : {}),
     abstract: paper.data.abstract,
     url: pageUrl,
     sameAs: paper.data.same_as,
@@ -108,7 +115,7 @@ const [city, country] = paper.data.event?.location.split(',').map((part) => part
       <article class="mt-8 bg-bgShades-light border border-darkGrey/40 rounded-lg">
         <div class="p-6 md:p-8">
           <p class="text-xs font-ptMono text-gunSmoke mb-4">
-            {paper.data.proceedings} · {paper.data.venue}
+            {paperMeta}
           </p>
 
           <h1 class="text-2xl md:text-3xl font-bold text-quillGray font-ptMono leading-snug mb-5">
@@ -143,7 +150,42 @@ const [city, country] = paper.data.event?.location.split(',').map((part) => part
             </p>
           )}
 
-          {paper.data.event && (
+          {paper.data.awards.length ? (
+            <section class="mb-6" aria-label="Presentation awards">
+              <div class="grid gap-x-10 gap-y-4 sm:grid-cols-2">
+                {paper.data.awards.map((award, index) => (
+                  <div class="flex items-center gap-3 font-ptMono">
+                    <span
+                      class:list={['award-burst', { 'award-burst--secondary': index > 0 }]}
+                      aria-hidden="true"
+                    >
+                      <span>{index === 0 ? '1st' : '2nd'}</span>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-xs font-medium leading-relaxed text-quillGray">{award.label}</p>
+                      <p class="mt-0.5 text-[10px] uppercase tracking-[0.1em] text-accent-light/75">{award.result}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {paper.data.event && (
+                <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 font-ptMono text-[11px] leading-relaxed text-gunSmoke">
+                  <span>{paper.data.event.announcement}</span>
+                  {paper.data.event.verified_links.map((link) => (
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-accent-light/75 transition-colors hover:text-accent-light"
+                    >
+                      {link.label} ↗
+                    </a>
+                  ))}
+                </div>
+              )}
+            </section>
+          ) : paper.data.event ? (
             <div class="mb-6 rounded-lg border border-accent/20 bg-accent/10 p-4">
               <p class="text-sm font-ptMono text-accent-light leading-relaxed">
                 {paper.data.event.announcement}
@@ -163,7 +205,7 @@ const [city, country] = paper.data.event?.location.split(',').map((part) => part
                 </div>
               ) : null}
             </div>
-          )}
+          ) : null}
 
           <div class="mb-6 bg-bgShades-DEFAULT border border-accent/15 rounded-lg p-4">
             <p class="text-xs font-ptMono text-accent-light mb-1.5 uppercase tracking-wider">TL;DR</p>
@@ -258,6 +300,43 @@ const [city, country] = paper.data.event?.location.split(',').map((part) => part
     </div>
   </main>
 </BaseLayout>
+
+<style>
+  .award-burst {
+    display: grid;
+    width: 2.8rem;
+    height: 2.8rem;
+    flex: 0 0 auto;
+    place-items: center;
+    clip-path: polygon(
+      50% 0%, 57.2% 13.7%, 69.1% 3.8%, 70.6% 19.2%,
+      85.4% 14.6%, 80.8% 29.4%, 96.2% 30.9%, 86.3% 42.8%,
+      100% 50%, 86.3% 57.2%, 96.2% 69.1%, 80.8% 70.6%,
+      85.4% 85.4%, 70.6% 80.8%, 69.1% 96.2%, 57.2% 86.3%,
+      50% 100%, 42.8% 86.3%, 30.9% 96.2%, 29.4% 80.8%,
+      14.6% 85.4%, 19.2% 70.6%, 3.8% 69.1%, 13.7% 57.2%,
+      0% 50%, 13.7% 42.8%, 3.8% 30.9%, 19.2% 29.4%,
+      14.6% 14.6%, 29.4% 19.2%, 30.9% 3.8%, 42.8% 13.7%
+    );
+    background: #8ecfd6;
+    color: #191919;
+    font-family: var(--font-pt-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    transform: rotate(-7deg);
+  }
+
+  .award-burst > span {
+    transform: rotate(7deg);
+  }
+
+  .award-burst--secondary {
+    background: #363b3d;
+    color: #8ecfd6;
+  }
+</style>
 
 {paper.data.bibtex && (
   <script>
