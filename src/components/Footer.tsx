@@ -152,6 +152,22 @@ const TimeSpentWidget: React.FC = () => {
   );
 };
 
+const ExperimentalPortfolioNote: React.FC = () => (
+  <p className="text-[11px] font-ptMono text-gunSmoke/55 leading-relaxed">
+    I&apos;m working on a new experimental portfolio. You can see it at{' '}
+    <a
+      href="https://rishiahuja.github.io/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline decoration-gunSmoke/35 underline-offset-2 transition-colors hover:text-accent-light hover:decoration-accent-light"
+    >
+      rishiahuja.github.io
+    </a>
+    {' '}
+    <span aria-hidden="true">:)</span>
+  </p>
+);
+
 /**
  * Footer component with analytics widgets and responsive layout
  */
@@ -257,6 +273,7 @@ const Footer: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
               </svg>
             </a>
+            <ExperimentalPortfolioNote />
           </div>
           <div className="text-sm font-ptMono text-quillGray flex items-center space-x-1">
             <span>made with</span>
@@ -358,6 +375,9 @@ const Footer: React.FC = () => {
               </a>
             </div>
             <div>© {year} All rights reserved</div>
+          </div>
+          <div className="mt-3">
+            <ExperimentalPortfolioNote />
           </div>
         </div>
       )}
