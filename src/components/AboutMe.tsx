@@ -48,7 +48,7 @@ const AboutMe: React.FC = () => {
 
         <p>
           By day, I&apos;m a B.Tech IT student at{" "}
-          <span className="text-accent-light">NIT Jalandhar</span>.
+          <span className="text-accent-light">NIT Jalandhar</span>. Upcoming summer intern at Cisco.
         </p>
 
         <p className="text-gunSmoke pt-2">

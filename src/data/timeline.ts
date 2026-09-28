@@ -20,6 +20,20 @@ export interface TimelineEvent {
 export const timelineData: Record<string, TimelineEvent[]> = {
   '2025-26': [
     {
+      date: 'Sep 2026',
+      title: 'Selected as a Cisco summer intern',
+      type: 'internship',
+      description: 'Selected for a summer internship at Cisco.',
+      year: '2025-26',
+      buttons: [
+        {
+          label: 'Cisco',
+          link: 'https://www.cisco.com/',
+          icon: 'external'
+        }
+      ]
+    },
+    {
       date: '17 Aug 2026',
       title: 'ScopeBench-PR Best Paper Presentation and 3MT Runner-up',
       type: 'achievement',
