@@ -1275,6 +1275,162 @@ int main() {
       content: "That combination is hard to summarize cleanly. Maybe that is why the raw notes were messy in the first place."
     }
   ]
+},
+{
+  id: 'cisco-interview',
+  title: 'My interview experience with Cisco',
+  subtitle: 'Campus hiring in September 2026, from the OA to the final HR round.',
+  description: 'A personal account of Cisco campus hiring in September 2026, from the OA through the technical, managerial, and HR rounds.',
+  slug: 'cisco-interview',
+  publishedDate: '2026-09-29',
+  tags: ['Cisco', 'Interview', 'Campus hiring'],
+  category: 'experience',
+  status: 'published',
+  socialImage: 'https://artifacts.rishia.in/blurbs/cisco-interview/cisco-attrition.png',
+  content: [
+    {
+      type: 'paragraph',
+      content: 'This is my experience with Cisco\'s campus hiring in September 2026, from the OA to the final HR round. I got in, and I am really grateful.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'The OA'
+    },
+    {
+      type: 'paragraph',
+      content: 'First round was the OA. It was tough, with 20 or so MCQs, 2 coding problems, and some subjective problems. I somehow cleared it.'
+    },
+    {
+      type: 'paragraph',
+      content: 'I don\'t know the exact number, but I\'d guess tens of thousands of people gave this OA, maybe more, and only 75 and 87 were shortlisted for the two interview lots. The lots were on 8 and 11 September. Mine was on the 8th. 3 interviews were scheduled. The 1st was Technical, then a managerial one, and finally the HR/ETR round.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'What was new this year'
+    },
+    {
+      type: 'paragraph',
+      content: 'This year there was an addition to the standard Cisco hiring process. We were emailed 2 problem statements to choose from. They were simple, and we were asked to use AI tools and agents to make it, and document our prompts and the decisions we took while using AI.'
+    },
+    {
+      type: 'paragraph',
+      content: 'I picked the College Event Certificate Eligibility Board, where you build a small app that adds up participants\' activity points by category and shows who is eligible for a certificate. The second problem was almost the same, just a different scenario.'
+    },
+    {
+      type: 'paragraph',
+      content: 'In the assignment brief, they also mentioned that they might ask us to make edits on the spot using AI, to see how we use AI. In my case, they never asked.'
+    },
+    {
+      type: 'paragraph',
+      content: 'We were also asked to make an inclusive resume. They gave us a template and asked us to remove name, college, CGPA, languages we spoke, or any other personal identifier. After submitting that, we were asked to join a Webex space.'
+    },
+    {
+      type: 'paragraph',
+      content: 'Here is the resume I submitted:'
+    },
+    {
+      type: 'linkEmbed',
+      title: 'Inclusive resume',
+      content: 'https://artifacts.rishia.in/blurbs/cisco-interview/CC7141.pdf',
+      description: 'The resume submitted for the Cisco process.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'How I prepared'
+    },
+    {
+      type: 'paragraph',
+      content: 'I had 3 days. I brushed up some OOPs, CN and OS concepts, and then made my resume properly, with no overstatements. Finally, I revised some DSA PYQs. That\'s it.'
+    },
+    {
+      type: 'paragraph',
+      content: 'I obviously prepped much more for the AI assignment, as it was required, and I thought the interview would focus a lot on it. In the actual interview, they asked just 1-2 questions and went through it for about 5 mins at the end.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'Technical round'
+    },
+    {
+      type: 'paragraph',
+      content: 'Mine was at 9:30 in the morning. The interviewer was a guy with 6-7 years of experience at Cisco.'
+    },
+    {
+      type: 'paragraph',
+      content: 'We started with an introduction. I thought he would go to my publications or experiences, which covered like 60% of the resume, but he went for the projects I mentioned. I had just mentioned one. He kept asking about the details and some scenarios, and he was genuinely interested and curious. We discussed this for 15-20 mins. Then he asked about the courses in my curriculum, if AI was part of it, which courses I was most intrigued by, and if I liked CN or how I was in CN.'
+    },
+    {
+      type: 'paragraph',
+      content: 'Next he asked some DSA problems. I was expecting harder, but they were very standard problems and common Cisco PYQs. He asked me the approach for Longest Common Subsequence (2D DP), and the code to reverse a linked list (??). Then he started asking OS, specifically page faults, virtual memory, MMU, segmentation, paging, and some very standard concepts.'
+    },
+    {
+      type: 'paragraph',
+      content: 'Then, at the end, he asked me to open the assignment we had made. He was already impressed by the architecture, and asked some normal questions like why this font on the website, lmao. Good for me, I knew all the nuances of what I built.'
+    },
+    {
+      type: 'paragraph',
+      content: 'After the interview, I asked him which team he works on and what exactly the team does.'
+    },
+    {
+      type: 'paragraph',
+      content: 'That\'s it. It was 50 mins, and it went really really well. Not at a single point did I feel it was going south.'
+    },
+    {
+      type: 'paragraph',
+      content: 'Then some people were dropped from the Webex space and listed as rejected on the spot (like 10-15), and meanwhile I got another interview call.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'Second round'
+    },
+    {
+      type: 'paragraph',
+      content: 'The person was older, with 20+ years of experience at Cisco. We started with how the previous interview went.'
+    },
+    {
+      type: 'paragraph',
+      content: 'This interview was very random and resume based. I wouldn\'t say it was purely managerial, but it had a hint of it. It was mostly general or resume-linked technical questions, mostly open ended. They were trying to see why certain decisions were taken, whether projects were collaborative, and so on. I figured I had better diplomatic skills than I thought 😛. It went for some 45 minutes, less nuanced, but technical only.'
+    },
+    {
+      type: 'paragraph',
+      content: 'I asked him for a review of how the interview went. He said it was great and I had passed all the parameters he had on his paper, and that he would connect me with HR soon.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'HR round'
+    },
+    {
+      type: 'paragraph',
+      content: 'Finally another bunch of people were rejected, so from 75 starting people we went down to 38 who attended the final HR call. I was expecting a standard long HR interview with scenarios, company values and what not, but it was quick, just 10 mins. They confirmed my college, asked if I was willing to relocate, how the interviews and OA were, and some basic questions. That\'s it.'
+    },
+    {
+      type: 'heading',
+      level: 2,
+      content: 'Results'
+    },
+    {
+      type: 'paragraph',
+      content: 'I got the results on the 26th, and I got in. I am really grateful.'
+    },
+    {
+      type: 'paragraph',
+      content: 'From some sources I figured that in the 11th drive, people went down from 87 to 50.'
+    },
+    {
+      type: 'paragraph',
+      content: 'Assuming the number of people hired would finally be 70% or so, they might have hired 55-60 people. I\'m basing this on my college. 3 people interviewed, 2 went till the HR round, and 1 was dropped in technical. It\'s a small sample space, but 70% seems a fair number to consider.'
+    },
+    {
+      type: 'image',
+      content: 'https://artifacts.rishia.in/blurbs/cisco-interview/cisco-attrition.png',
+      alt: 'Cisco hiring: candidates remaining per drive'
+    }
+  ]
 }
 ];
 
