@@ -1429,6 +1429,10 @@ int main() {
       type: 'image',
       content: 'https://artifacts.rishia.in/blurbs/cisco-interview/cisco-attrition.png',
       alt: 'Cisco hiring: candidates remaining per drive'
+    },
+    {
+      type: 'paragraph',
+      content: 'Thanks to y\'all for helping along. [@chahatkesh](https://twitter.com/chahatkesh), [@cneuralnetwork](https://twitter.com/cneuralnetwork), and [@offsidetwt](https://twitter.com/offsidetwt).'
     }
   ]
 }

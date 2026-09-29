@@ -7,12 +7,27 @@ interface BlurbContentRendererProps {
 }
 
 function renderInlineText(text: string): React.ReactNode[] {
-  return text.split(/(`[^`]+`)/g).map((part, index) => {
+  return text.split(/(`[^`]+`|\[[^\]\n]+\]\(https?:\/\/[^)\s]+\))/g).map((part, index) => {
     if (part.startsWith('`') && part.endsWith('`')) {
       return (
         <code key={index} className="rounded-sm bg-darkGrey/50 px-1.5 py-0.5 text-sm text-accent-light">
           {part.slice(1, -1)}
         </code>
+      );
+    }
+
+    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+    if (link) {
+      return (
+        <a
+          key={index}
+          href={link[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent underline underline-offset-2 decoration-accent/40 hover:text-accent/80"
+        >
+          {link[1]}
+        </a>
       );
     }
 
