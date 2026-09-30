@@ -218,6 +218,59 @@ export async function generatePresignedUploadUrl(
   return { uploadUrl, key, publicUrl };
 }
 
+const BLURB_PUBLIC_URL = 'https://artifacts.rishia.in';
+const BLURB_UPLOAD_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'application/pdf',
+  'video/mp4',
+]);
+
+export function assertBlurbUploadType(contentType: string): void {
+  if (!BLURB_UPLOAD_TYPES.has(contentType)) {
+    throw new Error('Upload a JPEG, PNG, WebP, GIF, PDF, or MP4.');
+  }
+}
+
+/**
+ * Presign a blurb asset. Public URL stays on artifacts.rishia.in,
+ * which is what published blurbs already use.
+ */
+export async function generateBlurbPresignedUploadUrl(
+  slug: string,
+  fileName: string,
+  contentType: string,
+  expiresIn: number = 300
+): Promise<PresignedUploadResult> {
+  assertBlurbUploadType(contentType);
+
+  const { PutObjectCommand } = await import('@aws-sdk/client-s3');
+  const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
+  const r2Client = await getR2Client();
+  const config = getR2Config();
+
+  const safeSlug = slug
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'draft';
+  const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_').replace(/_+/g, '_');
+  const key = `blurbs/${safeSlug}/${Date.now()}_${sanitizedFileName}`;
+
+  const command = new PutObjectCommand({
+    Bucket: config.BUCKET,
+    Key: key,
+    ContentType: contentType,
+    CacheControl: 'public, max-age=86400',
+  });
+
+  const uploadUrl = await getSignedUrl(r2Client, command, { expiresIn });
+  const publicUrl = `${BLURB_PUBLIC_URL}/${key}`;
+
+  return { uploadUrl, key, publicUrl };
+}
+
 export async function listResumeFiles(
   track: ResumeTrack = 'engineering'
 ): Promise<ResumeFile[]> {

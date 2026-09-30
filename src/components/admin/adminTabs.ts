@@ -1,4 +1,5 @@
 export type AdminTabId =
+  | 'blurbs'
   | 'uncompiled'
   | 'sidequests'
   | 'gallery'
@@ -11,6 +12,7 @@ export type AdminTabId =
 export const ADMIN_TAB_ORDER_KEY = 'admin_tab_order';
 
 export const DEFAULT_ADMIN_TAB_ORDER: AdminTabId[] = [
+  'blurbs',
   'uncompiled',
   'sidequests',
   'gallery',
@@ -22,6 +24,7 @@ export const DEFAULT_ADMIN_TAB_ORDER: AdminTabId[] = [
 ];
 
 export const ADMIN_TAB_LABELS: Record<AdminTabId, string> = {
+  blurbs: 'Blurbs',
   uncompiled: 'Uncompiled',
   sidequests: 'Side Quests',
   gallery: 'Gallery',
@@ -48,7 +51,7 @@ export function loadAdminTabOrder(): AdminTabId[] {
     );
 
     const missing = DEFAULT_ADMIN_TAB_ORDER.filter((id) => !valid.includes(id));
-    return [...valid, ...missing];
+    return [...missing, ...valid];
   } catch {
     return DEFAULT_ADMIN_TAB_ORDER;
   }

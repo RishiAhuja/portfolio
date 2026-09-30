@@ -7,6 +7,7 @@ import BootcampStudentsManager from './BootcampStudentsManager';
 import UpstreamEditor from './UpstreamEditor';
 import ResumeManager from './ResumeManager';
 import ClusterProgressMonitor from './ClusterProgressMonitor';
+import BlurbEditor from './BlurbEditor';
 import AdminTabBar from './AdminTabBar';
 import { type AdminTabId, loadAdminTabOrder } from './adminTabs';
 
@@ -264,6 +265,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
           <UpstreamEditor token={token} />
         ) : activeTab === 'cluster' ? (
           <ClusterProgressMonitor token={token} />
+        ) : activeTab === 'blurbs' ? (
+          <BlurbEditor token={token} />
         ) : (
           <>
             {/* New Entry Button */}
