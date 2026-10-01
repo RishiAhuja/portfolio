@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { BlurbContent, BlurbPost } from '../../data/blurb';
 import BlurbContentRenderer from '../blurb/BlurbContentRenderer';
 
@@ -168,8 +168,10 @@ function proseOf(block: EditorBlock): string {
 
 function resize(element: HTMLTextAreaElement | null) {
   if (!element) return;
+  const previous = element.style.height;
   element.style.height = 'auto';
-  element.style.height = `${element.scrollHeight}px`;
+  const next = `${element.scrollHeight}px`;
+  element.style.height = next === previous ? previous : next;
 }
 
 function exportBlock(block: EditorBlock): BlurbContent | null {
@@ -302,6 +304,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
   const [linkFor, setLinkFor] = useState<{ key: string; field: 'content' | 'itemsText'; start: number; end: number } | null>(null);
   const [linkUrl, setLinkUrl] = useState('');
   const textareas = useRef<Record<string, HTMLTextAreaElement | null>>({});
+  const caretRef = useRef<{ key: string; pos: number } | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const fileTarget = useRef<{ key: string; kind: 'image' | 'carousel' | 'shot' | 'video' | 'poster' | 'link' } | null>(null);
   const activeKey = useRef<string | null>(null);
@@ -312,16 +315,29 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
   }, [draft]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const top = window.scrollY;
+    const active = document.activeElement;
+    const start = active instanceof HTMLTextAreaElement ? active.selectionStart : null;
+    const end = active instanceof HTMLTextAreaElement ? active.selectionEnd : null;
     Object.values(textareas.current).forEach(resize);
-  }, [draft]);
+    if (active instanceof HTMLTextAreaElement && start != null && end != null && document.activeElement === active) {
+      active.setSelectionRange(start, end);
+    }
+    if (window.scrollY !== top) window.scrollTo(window.scrollX, top);
+  });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!focusKey) return;
-    const element = textareas.current[`${focusKey}:content`] || textareas.current[`${focusKey}:items`] || textareas.current[`${focusKey}:title`];
-    element?.focus();
+    const element = textareas.current[`${focusKey}:content`] || textareas.current[`${focusKey}:items`];
+    const pos = caretRef.current?.key === focusKey ? caretRef.current.pos : element?.value.length ?? 0;
+    caretRef.current = null;
+    if (element) {
+      if (document.activeElement !== element) element.focus();
+      element.setSelectionRange(pos, pos);
+    }
     setFocusKey(null);
-  }, [focusKey, draft.blocks]);
+  }, [focusKey]);
 
   const post = useMemo(() => toPost(draft), [draft]);
   const json = useMemo(() => JSON.stringify(post, null, 2), [post]);
@@ -518,11 +534,9 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     setMenu(null);
   };
 
-  const addParagraphAfter = (key: string) => {
-    const block = createBlock('paragraph');
-    placeBlock(key, block);
-    setMenu(null);
-    setFocusKey(block.key);
+  const focusBlock = (key: string, pos: number) => {
+    caretRef.current = { key, pos };
+    setFocusKey(key);
   };
 
   const onProseKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>, block: EditorBlock) => {
@@ -534,7 +548,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
         setMenu({ ...menu, index: (menu.index + delta + Math.max(commands.length, 1)) % Math.max(commands.length, 1) });
         return;
       }
-      if (event.key === 'Enter') {
+      if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
         if (commands[menu.index]) choose(commands[menu.index]);
         return;
@@ -546,34 +560,81 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
         return;
       }
     }
+
+    const element = event.currentTarget;
+    const atStart = element.selectionStart === 0 && element.selectionEnd === 0;
+
     if (event.key === 'Enter' && !event.shiftKey && block.type !== 'code') {
       event.preventDefault();
-      addParagraphAfter(block.key);
+      const before = block.content.slice(0, element.selectionStart);
+      const after = block.content.slice(element.selectionEnd);
+      const next = createBlock(block.type === 'heading' ? 'paragraph' : 'paragraph');
+      next.content = after;
+      setDraft((current) => {
+        const blocks = current.blocks.map((item) => item.key === block.key ? { ...item, content: before } : item);
+        const index = blocks.findIndex((item) => item.key === block.key);
+        blocks.splice(index + 1, 0, next);
+        return { ...current, blocks };
+      });
+      setMenu(null);
+      focusBlock(next.key, 0);
       return;
     }
-    if (event.key === 'Backspace' && block.content === '' && draft.blocks.length > 1 && event.currentTarget.selectionStart === 0) {
-      event.preventDefault();
+
+    if (event.key === 'Backspace' && atStart) {
       const index = draft.blocks.findIndex((item) => item.key === block.key);
       const previous = draft.blocks[index - 1];
-      removeBlock(block.key);
-      if (previous) setFocusKey(previous.key);
+      if (!previous) return;
+      const previousText = previous.type === 'list' ? previous.itemsText : previous.content;
+      const previousIsProse = previous.type === 'paragraph' || previous.type === 'heading' || previous.type === 'quote';
+      const currentIsProse = block.type === 'paragraph' || block.type === 'heading' || block.type === 'quote';
+      if (previousIsProse && currentIsProse) {
+        event.preventDefault();
+        const join = previousText.length;
+        setDraft((current) => ({
+          ...current,
+          blocks: current.blocks
+            .filter((item) => item.key !== block.key)
+            .map((item) => item.key === previous.key ? { ...item, content: previousText + block.content } : item),
+        }));
+        setMenu(null);
+        focusBlock(previous.key, join);
+        return;
+      }
+      if (block.content === '') {
+        event.preventDefault();
+        removeBlock(block.key);
+        if (previousIsProse) focusBlock(previous.key, previousText.length);
+      }
     }
   };
 
   const onProseChange = (block: EditorBlock, value: string) => {
     patchBlock(block.key, { content: value });
-    if (block.type === 'paragraph' && value.startsWith('/')) {
-      setMenu({ key: block.key, mode: 'slash', query: value.slice(1), index: 0 });
+    const slash = block.type === 'paragraph' && value.startsWith('/') && !value.includes('\n');
+    if (slash) {
+      const query = value.slice(1);
+      const shown = COMMANDS.filter((command) => matches(command, query)).length;
+      setMenu((current) => ({
+        key: block.key,
+        mode: 'slash',
+        query,
+        index: Math.min(
+          current?.key === block.key && current.mode === 'slash' ? current.index : 0,
+          Math.max(shown - 1, 0)
+        ),
+      }));
     } else if (menu?.key === block.key && menu.mode === 'slash') {
       setMenu(null);
     }
   };
 
   const rememberSelection = (key: string, field: 'content' | 'itemsText', element: HTMLTextAreaElement) => {
-    if (element.selectionStart !== element.selectionEnd) {
-      setLinkFor({ key, field, start: element.selectionStart, end: element.selectionEnd });
-      setLinkUrl('');
+    if (element.selectionStart === element.selectionEnd) {
+      setLinkFor((current) => (current?.key === key ? null : current));
+      return;
     }
+    setLinkFor({ key, field, start: element.selectionStart, end: element.selectionEnd });
   };
 
   const applyLink = (event: React.FormEvent) => {
@@ -660,6 +721,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
 
   useEffect(() => {
     const onPointer = (event: MouseEvent) => {
+      if (!menuRef.current) return;
       const target = event.target;
       if (target instanceof HTMLElement && target.closest('[data-blurb-menu]')) return;
       setMenu(null);
@@ -795,15 +857,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
           <BlurbContentRenderer content={post.content} />
         </div>
       ) : (
-        <div
-          className="min-h-[70vh]"
-          onClick={(event) => {
-            if (event.target !== event.currentTarget) return;
-            const last = draft.blocks[draft.blocks.length - 1];
-            if (last && last.type === 'paragraph' && !last.content) setFocusKey(last.key);
-            else if (last) addParagraphAfter(last.key);
-          }}
-        >
+        <div className="min-h-[70vh]">
           {draft.blocks.map((block, index) => (
             <BlockRow
               key={block.key}
@@ -934,13 +988,13 @@ function BlockRow({
       )}
 
       {linkFor && (
-        <form className="mb-2" onSubmit={onApplyLink}>
+        <form className="absolute left-10 top-0 z-10 -translate-y-full" onSubmit={onApplyLink}>
           <input
-            autoFocus
-            className={`${quiet} text-sm text-accent-light`}
-            placeholder="Paste the URL for the selected words"
+            className="w-64 bg-[#161616] px-2 py-1 text-sm text-accent-light outline-none"
+            placeholder="Paste a URL, then Enter"
             value={linkUrl}
             onChange={(event) => onLinkUrl(event.target.value)}
+            onKeyDown={(event) => event.stopPropagation()}
           />
         </form>
       )}
@@ -953,14 +1007,13 @@ function BlockRow({
 
       {(block.type === 'paragraph' || block.type === 'heading' || block.type === 'quote' || block.type === 'code') && (
         <textarea
-          ref={(element) => { bindTextarea(block.type === 'code' ? 'content' : 'content', element); resize(element); }}
+          ref={(element) => bindTextarea('content', element)}
           className={`${quiet} ${proseClass}`}
           rows={1}
           placeholder={isFirstEmpty ? 'Type / for a photo, heading, list, or link' : block.type === 'heading' ? 'Heading' : block.type === 'quote' ? 'Quote' : ''}
           value={block.content}
           onChange={(event) => onProseChange(block, event.target.value)}
           onKeyDown={(event) => onProseKeyDown(event, block)}
-          onKeyUp={(event) => onSelect(block.key, 'content', event.currentTarget)}
           onMouseUp={(event) => onSelect(block.key, 'content', event.currentTarget)}
           onFocus={onFocus}
         />
@@ -1067,6 +1120,20 @@ function ListBlock({
 }) {
   const items = block.itemsText.length ? block.itemsText.split('\n') : [''];
   const write = (next: string[]) => onPatch({ itemsText: next.join('\n') });
+  const pending = useRef<number | null>(null);
+  const pendingPos = useRef(0);
+  const refs = useRef<(HTMLTextAreaElement | null)[]>([]);
+
+  useLayoutEffect(() => {
+    if (pending.current == null) return;
+    const element = refs.current[pending.current];
+    const pos = pendingPos.current;
+    pending.current = null;
+    if (!element) return;
+    element.focus();
+    element.setSelectionRange(pos, pos);
+    resize(element);
+  });
 
   return (
     <div>
@@ -1074,29 +1141,35 @@ function ListBlock({
         <div key={index} className="flex gap-2">
           <span className="pt-1 text-sm text-accent">▸</span>
           <textarea
-            ref={(element) => { if (index === 0) bind(element); resize(element); }}
+            ref={(element) => { refs.current[index] = element; if (index === 0) bind(element); }}
             className={`${quiet} text-lg leading-8`}
             rows={1}
             placeholder={index === 0 ? 'List' : ''}
             value={item}
             onFocus={onFocus}
             onChange={(event) => write(items.map((line, lineIndex) => lineIndex === index ? event.target.value : line))}
-            onKeyUp={(event) => onSelect(event.currentTarget)}
             onMouseUp={(event) => onSelect(event.currentTarget)}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
+                const cursor = event.currentTarget.selectionStart;
                 const next = [...items];
-                next.splice(index + 1, 0, '');
+                const rest = item.slice(cursor);
+                next[index] = item.slice(0, cursor);
+                next.splice(index + 1, 0, rest);
+                pending.current = index + 1;
+                pendingPos.current = 0;
                 write(next);
-                const row = event.currentTarget.parentElement?.parentElement;
-                window.setTimeout(() => {
-                  row?.querySelectorAll('textarea')[index + 1]?.focus();
-                }, 0);
               }
-              if (event.key === 'Backspace' && item === '' && items.length > 1) {
+              if (event.key === 'Backspace' && event.currentTarget.selectionStart === 0 && event.currentTarget.selectionEnd === 0 && index > 0) {
                 event.preventDefault();
-                write(items.filter((_, lineIndex) => lineIndex !== index));
+                const previous = items[index - 1] ?? '';
+                const next = [...items];
+                next[index - 1] = previous + item;
+                next.splice(index, 1);
+                pending.current = index - 1;
+                pendingPos.current = previous.length;
+                write(next);
               }
             }}
           />

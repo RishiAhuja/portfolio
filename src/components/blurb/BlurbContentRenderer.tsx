@@ -70,7 +70,7 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
 
       case 'paragraph':
         return (
-          <p key={index} className="text-gunSmoke leading-relaxed mb-6 font-ptMono">
+          <p key={index} className="text-gunSmoke leading-relaxed mb-6 font-ptMono whitespace-pre-line">
             {renderInlineText(item.content || '')}
           </p>
         );
@@ -123,7 +123,7 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
       case 'quote':
         return (
           <blockquote key={index} className="mb-8 border-l-4 border-accent pl-6 py-4 rounded-r-sm" style={{ backgroundColor: 'rgba(100, 178, 188, 0.05)' }}>
-            <p className="text-lg font-ptMono text-quillGray italic leading-relaxed">
+            <p className="text-lg font-ptMono text-quillGray italic leading-relaxed whitespace-pre-line">
               "{renderInlineText(item.content || '')}"
             </p>
           </blockquote>
