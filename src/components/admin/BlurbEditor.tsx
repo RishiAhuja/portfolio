@@ -315,6 +315,16 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
   }, [draft]);
 
+  useEffect(() => {
+    const last = draft.blocks[draft.blocks.length - 1];
+    if (!last || last.type === 'paragraph') return;
+    setDraft((current) => {
+      const end = current.blocks[current.blocks.length - 1];
+      if (!end || end.type === 'paragraph') return current;
+      return { ...current, blocks: [...current.blocks, createBlock('paragraph')] };
+    });
+  }, [draft.blocks]);
+
   useLayoutEffect(() => {
     const top = window.scrollY;
     const active = document.activeElement;
@@ -537,6 +547,17 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
   const focusBlock = (key: string, pos: number) => {
     caretRef.current = { key, pos };
     setFocusKey(key);
+  };
+
+  const continueWriting = () => {
+    const last = draft.blocks[draft.blocks.length - 1];
+    if (last?.type === 'paragraph' && !last.content) {
+      focusBlock(last.key, 0);
+      return;
+    }
+    const block = createBlock('paragraph');
+    placeBlock(last?.key ?? null, block);
+    focusBlock(block.key, 0);
   };
 
   const onProseKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>, block: EditorBlock) => {
@@ -857,7 +878,14 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
           <BlurbContentRenderer content={post.content} />
         </div>
       ) : (
-        <div className="min-h-[70vh]">
+        <div
+          className="min-h-[70vh] cursor-text"
+          onMouseDown={(event) => {
+            if (event.target !== event.currentTarget) return;
+            event.preventDefault();
+            continueWriting();
+          }}
+        >
           {draft.blocks.map((block, index) => (
             <BlockRow
               key={block.key}
@@ -951,7 +979,7 @@ function BlockRow({
       ? 'border-l-2 border-accent pl-4 text-lg italic'
       : block.type === 'code'
         ? 'font-mono text-sm'
-        : 'text-lg leading-8';
+        : 'min-h-8 text-lg leading-8';
 
   return (
     <div className="group relative py-1 pl-10" onFocus={onFocus}>
@@ -1010,7 +1038,11 @@ function BlockRow({
           ref={(element) => bindTextarea('content', element)}
           className={`${quiet} ${proseClass}`}
           rows={1}
-          placeholder={isFirstEmpty ? 'Type / for a photo, heading, list, or link' : block.type === 'heading' ? 'Heading' : block.type === 'quote' ? 'Quote' : ''}
+          placeholder={
+            block.type === 'paragraph' && !block.content
+              ? (isFirstEmpty ? 'Type / for a photo, heading, list, or link' : 'Write…')
+              : block.type === 'heading' ? 'Heading' : block.type === 'quote' ? 'Quote' : ''
+          }
           value={block.content}
           onChange={(event) => onProseChange(block, event.target.value)}
           onKeyDown={(event) => onProseKeyDown(event, block)}
