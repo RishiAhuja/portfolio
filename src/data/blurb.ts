@@ -1442,7 +1442,7 @@ int main() {
   "subtitle": "Two research presentations, a last-minute proxy talk, two awards, a lot of people, and a week of figuring out Bremen in between all of it.",
   "description": "Two research presentations, a last-minute proxy talk, two awards, a lot of people, and a week of figuring out Bremen in between all of it.",
   "slug": "my-ijcai-ecai-2026-and-germany-experience-in-bremen",
-  "publishedDate": "2026-10-01",
+  "publishedDate": "2026-10-03",
   "tags": [],
   "category": "experience",
   "status": "published",
