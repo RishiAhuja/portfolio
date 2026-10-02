@@ -1435,6 +1435,841 @@ int main() {
       content: 'Thanks to y\'all for helping along. [@chahatkesh](https://twitter.com/chahatkesh), [@cneuralnetwork](https://twitter.com/cneuralnetwork), and [@offsidetwt](https://twitter.com/offsidetwt).'
     }
   ]
+},
+{
+  "id": "my-ijcai-ecai-2026-and-germany-experience-in-bremen",
+  "title": "My IJCAI–ECAI 2026 and Germany Experience in Bremen",
+  "subtitle": "Two research presentations, a last-minute proxy talk, two awards, a lot of people, and a week of figuring out Bremen in between all of it.",
+  "description": "Two research presentations, a last-minute proxy talk, two awards, a lot of people, and a week of figuring out Bremen in between all of it.",
+  "slug": "my-ijcai-ecai-2026-and-germany-experience-in-bremen",
+  "publishedDate": "2026-10-01",
+  "tags": [],
+  "category": "experience",
+  "status": "published",
+  "content": [
+    {
+      "type": "paragraph",
+      "content": "IJCAI–ECAI 2026 was very different from my [ICLR 2026 trip to Rio de Janeiro](https://rishiahuja.github.io/blurb/iclr-2026-rio-de-janeiro/) a few months earlier."
+    },
+    {
+      "type": "paragraph",
+      "content": "At ICLR, I was presenting one workshop paper, it was my first major international research conference, and a lot of the experience was simply figuring out how international conference travel worked. I had forgotten my printed poster before even reaching Delhi last time, had to get another one printed while my bus was on the way, and then spent half the trip figuring out buses, cash, Portuguese, and food in Rio."
+    },
+    {
+      "type": "paragraph",
+      "content": "This time I was slightly more prepared. For one thing, I remembered the posters 😂"
+    },
+    {
+      "type": "paragraph",
+      "content": "More importantly, I was going to Bremen with two different pieces of work to present. ICFD-31k, our work on real-time conversational fraud detection, had been accepted to the AI for Social Good Special Track at IJCAI–ECAI 2026 and was part of the main conference proceedings. My other work, ScopeBench-PR, on whether LLM reviewers actually respect the stated scope of a research paper, had been accepted to GlobalSouthAI @ IJCAI–ECAI 2026."
+    },
+    {
+      "type": "paragraph",
+      "content": "I had also received an IJCAI–AIJ travel grant, which made attending significantly easier, and I am really thankful to the Grants Chair for selecting me."
+    },
+    {
+      "type": "paragraph",
+      "content": "Another thing I did differently was emailing almost everyone before the conference, because I had access to all the authors and affiliations listed on 2026.ijcai.org. A surprising number of people replied."
+    },
+    {
+      "type": "paragraph",
+      "content": "Some conversations never happened because conference schedules are chaotic, but several people I met in Bremen were people I had already spoken to through those emails. That made the conference feel very different from arriving completely cold."
+    },
+    {
+      "type": "paragraph",
+      "content": "Officially, IJCAI–ECAI 2026 ran from August 15 to 21 in Bremen. Workshops and tutorials were from August 15–17, and the main technical conference ran from August 18–21."
+    },
+    {
+      "type": "heading",
+      "content": "Jalandhar to Delhi, Again",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "I started from Jalandhar and took the bus towards Delhi. Now this route is too familiar, it's like every month on average now."
+    },
+    {
+      "type": "paragraph",
+      "content": "My flight was with Turkish Airlines. The outbound itinerary was Delhi to Istanbul to Bremen."
+    },
+    {
+      "type": "paragraph",
+      "content": "There is a strange point during these trips where the conference still feels abstract. You have spent months working on the paper, then months waiting for reviews, camera-ready deadlines, registration, figuring out funding, visas, reimbursements, hotels, and flights. You know intellectually that you are going to IJCAI, but until you are sitting at the airport with a poster tube beside you, it does not completely register."
+    },
+    {
+      "type": "paragraph",
+      "content": "I boarded the Turkish Airlines flight to Istanbul. The first leg was fairly straightforward. After landing at Istanbul Airport, I had roughly five hours of transit before the Bremen flight. (The food on Turkish was way better than what I had on ITA Airways to Rio)\n\nIstanbul Airport is enormous. Five hours sounds like a lot when you see it on an itinerary, but once you walk around, find the gate, get something to drink, and sit for a while, it disappears surprisingly quickly.\n\nI tried a few Turkish drinks and spent the rest of the time waiting near the departure area."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790896181897_WhatsApp_Image_2026-10-02_at_04.38.34.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "While waiting for the Bremen flight, I started talking to a guy who was also travelling to Bremen. His name was João, and he was Brazilian, from São Paulo. That immediately gave us something to talk about because my previous international trip had been to Brazil for ICLR. I had spent a week in Rio, and passed through São Paulo Airport."
+    },
+    {
+      "type": "paragraph",
+      "content": "So suddenly, in Istanbul Airport, I was discussing Brazil with a Brazilian guy while both of us were going to Germany. He was also travelling for a conference, although not IJCAI. His event was connected to Constructor University Bremen."
+    },
+    {
+      "type": "paragraph",
+      "content": "There were also a few Pakistani guys around us who were travelling to the same university/event, so by the time we boarded, there was already a small group of people heading towards Bremen.\n\nJoão turned out to be a full-time engineer at Amazon. His plan was much more ambitious than mine. Instead of simply attending the conference and flying back, he wanted to travel around Germany afterwards. For that, he had rented a car. It was a BMW Series 4."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790896820973_WhatsApp_Image_2026-10-02_at_04.46.50.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790896873277_WhatsApp_Image_2026-10-02_at_04.50.50.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "After landing in Bremen, we realised that our hotels were only around 200 metres apart. So naturally, he dropped me off.\nBy around 8 PM, I had reached MEININGER Bremen Hauptbahnhof, where I was staying. The hotel was almost beside Bremen Central Station, which turned out to be one of the most convenient possible locations for this conference.\n\nThe main conference venue was near the station, the Opening Reception was beside it, trams were everywhere, and getting to the University of Bremen was simple."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897010038_WhatsApp_Image_2026-10-02_at_04.52.57.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "There was someone I already planned to meet that evening: Sohel from IIIT Delhi. He was a PhD student, and we had spoken before coming to Bremen. I met him soon after checking in.\n\nHe suggested there were some döner places, and compared with many other European food options, döner was probably one of the easiest ways to get a proper meal without spending a ridiculous amount.\n\nJoão came back with the car, and we decided to explore Bremen a little. Neither of us really knew the city yet, so the plan was basically Google Maps and improvisation. We drove towards the city centre and then walked around the old part of Bremen near the River Weser.\n\nThere seemed to be some kind of festival or public event happening that night. There were people around, lights, activity near the river, and considerably more life than I expected from Bremen based on what I had imagined before travelling there.\nBremen is not a huge city. It also does not feel overwhelming in the way Rio did. The city centre was extremely walkable, and a lot of the important places were fairly close to one another."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897411345_WhatsApp_Image_2026-10-02_at_04.59.05_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897412622_WhatsApp_Image_2026-10-02_at_04.59.05_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897413496_WhatsApp_Image_2026-10-02_at_04.59.05_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897414586_WhatsApp_Image_2026-10-02_at_04.59.05_4_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897415589_WhatsApp_Image_2026-10-02_at_04.59.05_5_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897416469_WhatsApp_Image_2026-10-02_at_04.59.05.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "content": "August 16, A Free Day and a Presentation I Suddenly Had to Make",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "The next day was August 16. This was still part of the workshop/tutorial period. The main IJCAI technical conference had not started yet; workshops and tutorials were being held at the University of Bremen from August 15–17.\n\nFor me, the day was mostly free. There were workshops happening, but none that I was particularly interested in attending for the full day. I had another problem anyway.\n\nMy ScopeBench-PR presentation at GlobalSouthAI was supposed to be the next morning. Originally, I had been expecting something closer to a poster presentation. Then we were told that the accepted works would instead be presented as short lightning talks. So now I needed actual slides and a proper short presentation, and now, like this, I'm stuck to making a PPT now, in Germany, wow.\n\nThe GlobalSouthAI event was only half a day, and the programme included lightning talks, invited talks, a 3-Minute Presentation competition, and awards. It was scheduled for the morning of August 17.\n\nI did not want to spend the entire day inside the hotel, though. Sohel and I took a few hours out and went exploring. We walked around Bremen for something like four hours."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897912095_WhatsApp_Image_2026-10-02_at_05.07.00_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897913448_WhatsApp_Image_2026-10-02_at_05.07.00_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897914645_WhatsApp_Image_2026-10-02_at_05.07.00_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897915747_WhatsApp_Image_2026-10-02_at_05.07.00_4_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897916783_WhatsApp_Image_2026-10-02_at_05.07.00_5_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897917838_WhatsApp_Image_2026-10-02_at_05.07.00_6_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897919098_WhatsApp_Image_2026-10-02_at_05.07.00_7_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897920435_WhatsApp_Image_2026-10-02_at_05.07.00_8_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790897921207_WhatsApp_Image_2026-10-02_at_05.07.00.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "So after this, rest of the evening went back into checking the slides and making sure I could explain the work without getting stuck.\n\nThe trip had officially started."
+    },
+    {
+      "type": "heading",
+      "content": "August 17, GlobalSouthAI",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "August 17 was the first day on which I actually had to present something.\n\nGlobalSouthAI @ IJCAI–ECAI 2026 was held from 9:00 AM to 12:30 PM at the SFG-Welcome Center Meeting Room in Bremen. Tram 6 went towards the university, took that.\n\nI reached the venue with only around five minutes to spare. Efficient, technically. Recommended, probably not.\n\nFinding the room itself also took some effort. University campuses in EU are not simple."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899003936_WhatsApp_Image_2026-10-02_at_05.26.09.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899005431_WhatsApp_Image_2026-10-02_at_05.26.10.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899137637_WhatsApp_Image_2026-10-02_at_05.28.17_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899138592_WhatsApp_Image_2026-10-02_at_05.28.17.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899139425_WhatsApp_Image_2026-10-02_at_05.28.18.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "There were talks, presentations, and people from a number of different places.\n\nMy talk was on: Do LLM Reviewers Respect Scope? ScopeBench-PR: A Benchmark for Scope Fairness in Peer Review"
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899179710_WhatsApp_Image_2026-10-02_at_05.28.18_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899180586_WhatsApp_Image_2026-10-02_at_05.28.18_2_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "The presentation went well.\n\nAfter that, I started meeting people I had already been talking to through email, organizers and speakers; some of them were Prof. Mariana Macedo, Yutong Zhou, Saurabh Deshpande, Nima Thing, and Donald Aadithiyan.\n\nAside from the workshop, people I met were Rishabh Jakhar, Yash Saxena, Tirthajit Baruah, Srinivas Rana, Adrien Sardi, Prajvi Saxena, and Priyanshu Vij.\n\nRishabh was doing his PhD at Maastricht University in the Netherlands. Priyanshu was working at BlackRock while also doing independent research. We started talking, and over the next few days, Rishabh and Priyanshu became two of the people I spent the most time with at the conference."
+    },
+    {
+      "type": "paragraph",
+      "content": "Another part of GlobalSouthAI was the 3-Minute Presentation competition, or 3MT. The format is intentionally restrictive. You have only three minutes, essentially one static slide, and you need to explain the entire idea clearly enough that someone who has not spent months on the project can still understand why it matters.\nI ended up receiving Best Paper Presentation for ScopeBench-PR, and then I was also announced as the runner-up in the 3MT competition."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899520928_WhatsApp_Image_2026-10-02_at_05.28.18_3_.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "Then I also met Sukriti Tiwari (Master's in MU, Pune) and Dr. Nidhi Goyal, who were from India and were also around attending another workshop."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790899605643_WhatsApp_Image_2026-08-26_at_18.46.31.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "After GlobalSouthAI, I attended some tutorials and spent more time around the University of Bremen."
+    },
+    {
+      "type": "paragraph",
+      "content": "That evening was the official IJCAI–ECAI Opening Reception and the venue was the Übersee-Museum Bremen, directly beside Bremen Central Station.\n\nThe museum was an interesting place for a conference reception."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975350217_WhatsApp_Image_2026-10-03_at_02.38.11_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975352045_WhatsApp_Image_2026-10-03_at_02.38.11_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975353080_WhatsApp_Image_2026-10-03_at_02.38.11_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975354092_WhatsApp_Image_2026-10-03_at_02.38.11_4_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975355116_WhatsApp_Image_2026-10-03_at_02.38.11.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "content": "August 18, Start of the Main Conference",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "The main IJCAI–ECAI technical programme began on August 18. The venue shifted from the University of Bremen to the Congress Centrum Bremen, or CCB, beside the MESSE BREMEN complex again really close to Central Station."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975659745_WhatsApp_Image_2026-10-03_at_02.43.04_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975661162_WhatsApp_Image_2026-10-03_at_02.43.04_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975662081_WhatsApp_Image_2026-10-03_at_02.43.04_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790975663030_WhatsApp_Image_2026-10-03_at_02.43.04.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "The conference opened that morning, followed by the first major talks and technical sessions.\n\nI attended parts of the opening programme, moved around between sessions, and spent a lot of time simply talking to people.\n\nI also met Prof. Ulas Bagci that day. He leads the Machine and Hybrid Intelligence Lab at Northwestern University. Me, him, and General Editor at Patterns Journal spent a good time talking. At some point during the conversation, he told me that one of his group's IJCAI papers needed someone to present it the following day. He asked me to present it.\n\nSo now, while still attending IJCAI, I suddenly had another presentation to prepare.\n\nAfter IJCAI, we stayed in contact, and I eventually started working with the Machine and Hybrid Intelligence Lab as a visiting scholar."
+    },
+    {
+      "type": "linkEmbed",
+      "title": "Rishi Ahuja, Machine and Hybrid Intelligence Lab",
+      "content": "https://bagcilab.com/people/rishi-ahuja/",
+      "description": "My page at Prof. Ulas Bagci's lab at Northwestern.",
+      "domain": "bagcilab.com"
+    },
+    {
+      "type": "paragraph",
+      "content": "There was also a Diversity & Inclusion Lunch scheduled that day. I had booked it and planned to attend. The official venue was actually a very impressive, the Upper Town Hall inside Bremen Town Hall, at Am Markt 21, but spoilers, I was not able to find it.\n\nI went towards the city centre with other attendees. There were basically no useful boards directing us to the actual room. At first I assumed I was simply missing something obvious. Then I realised other people were also lost. Eventually there was a group of maybe ten or twenty conference attendees walking around trying to figure out where exactly the lunch was. Some of them were people studying in Bremen and even they could not figure it out.\n\nEventually we gave up and went back to the conference.\n\nWhat makes it slightly funnier in retrospect is that the event was apparently happening inside the historic Upper Town Hall while a group of registered IJCAI attendees was wandering around Bremen's city centre, unable to enter it :')"
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790976313851_WhatsApp_Image_2026-10-03_at_02.54.41.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "I also met Dr. Kushal Kanwar that day. He was like 2 Rishi numbers away, lol. He was a coauthor of my coauthor."
+    },
+    {
+      "type": "paragraph",
+      "content": "That same day I also met Prof. Sundong Kim from GIST (Gwangju Institute of Science and Technology). We ended up talking for about an hour about his work on Benchmarking and ARG-AGI. By the end, he offered me to apply for a funded research internship at GIST and told me to apply through the official website before the deadline and to include his name in my application. Nice :)"
+    },
+    {
+      "type": "heading",
+      "content": "August 19, Proxy Presentation",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "The next morning, the proxy-presentation situation had to be made official.\n\nWe checked with the IJCAI team and got approval for me to give the presentation on behalf of the authors."
+    },
+    {
+      "type": "paragraph",
+      "content": "Earlier that morning, I also had a meeting through EurAI's “Meet with a EurAI Fellow” activity. I had emailed Amanda Figueras, EurAI's Executive Secretary, a couple of days earlier asking if I could participate, mainly because I wanted some perspective on research careers and eventually pursuing a PhD."
+    },
+    {
+      "type": "paragraph",
+      "content": "She matched me with Prof. Roman Barták from Charles University in Prague, and we met at 11:10 AM in a separate room at the conference venue. We spoke for around 30 minutes about his research, the differences between research and academic culture in Europe, the US, and India, and more generally about what I should be thinking about at my stage as an undergraduate trying to continue in research. It was a really useful and relaxed conversation, and one of the meetings from the conference that I remembered quite well afterwards."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790976648586_WhatsApp_Image_2026-10-03_at_02.59.07_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790976650098_WhatsApp_Image_2026-10-03_at_02.59.07.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "The presentation went well.\n\nAugust 19 was also the official Industry Day at IJCAI, so there was a lot happening around the exhibition floor in addition to the research programme."
+    },
+    {
+      "type": "heading",
+      "content": "Conference Banquet at Weserstadion",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "That evening was the conference banquet. It was at Weserstadion, the home stadium of SV Werder Bremen, in the stadium's VIP lounge."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977095661_WhatsApp_Image_2026-10-03_at_03.07.50.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "Rishab, Priyanshu, and I were together. Because of my dietary preferences, there were not many things we actually wanted to eat. Some options existed, but overall the food was not particularly great for me.\n\nWe met more people there, particularly Dr. Ashish Kumar from BITS Dubai."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977270482_WhatsApp_Image_2026-10-03_at_03.10.26_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977269148_WhatsApp_Image_2026-10-03_at_03.10.26_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977272327_WhatsApp_Image_2026-10-03_at_03.10.26.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977271327_WhatsApp_Image_2026-10-03_at_03.10.26_3_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "After some time, a few of us basically agreed that we were still hungry. So we did the logical thing while attending an international AI conference banquet inside a German football stadium.\n\nWe went looking for a Punjabi dhaba. And somehow we actually found one, and the guy there was from Jalandhar of all places. The food was excellent, though. Probably one of the best meals I had during the entire Germany trip."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977424822_WhatsApp_Image_2026-10-03_at_03.10.26_4_.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "After eating, we walked back, and when I say walked back, I mean something like a two-hour walk; it turned into another one of those conversations where the walk becomes secondary."
+    },
+    {
+      "type": "heading",
+      "content": "August 20, ICFD-31k Presentation Day",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "Today was my presentation. I got ready and headed to the venue and, continuing the tradition from GlobalSouthAI, I arrived extremely close to my presentation time, something like five minutes before.\nI found the room, got everything ready, and went up for the presentation."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977686937_WhatsApp_Image_2026-10-03_at_03.17.36.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977684166_WhatsApp_Image_2026-10-03_at_03.17.36_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977685241_WhatsApp_Image_2026-10-03_at_03.17.36_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977686065_WhatsApp_Image_2026-10-03_at_03.17.36_3_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "The talk and Q&A went well."
+    },
+    {
+      "type": "paragraph",
+      "content": "Later in the afternoon came the poster presentation in Hall 4. I put up the poster and spent the session explaining the work repeatedly."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977893315_WhatsApp_Image_2026-10-03_at_03.20.32.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977894258_WhatsApp_Image_2026-10-03_at_03.20.33_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977895247_WhatsApp_Image_2026-10-03_at_03.20.33_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977896212_WhatsApp_Image_2026-10-03_at_03.20.33_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790977897159_WhatsApp_Image_2026-10-03_at_03.20.33.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "By this point, almost all of my formal responsibilities for the trip were done."
+    },
+    {
+      "type": "paragraph",
+      "content": "That evening was the official Student Reception. The venue was Alte Werft, in Bremen's Überseestadt harbour district. It was an old industrial-style venue with shipping and maritime elements rather than a formal conference hall, so it felt completely different from the Congress Centrum or the banquet."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978181469_WhatsApp_Image_2026-10-03_at_03.24.58.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978177201_WhatsApp_Image_2026-10-03_at_03.24.58_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978178362_WhatsApp_Image_2026-10-03_at_03.24.58_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978179639_WhatsApp_Image_2026-10-03_at_03.24.58_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978180578_WhatsApp_Image_2026-10-03_at_03.24.58_4_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "By this point, Priyanshu had already left, and the group of people I had been spending time with throughout the conference was slowly changing as everyone started finishing their presentations and making their own travel plans."
+    },
+    {
+      "type": "paragraph",
+      "content": "The Student Reception itself was much more casual than the banquet the previous evening. There was food, music, and students from different universities sitting around and talking without the more formal atmosphere of the main conference.\nI was there with Rishabh, Taha, and Kabir, another final-year undergraduate I had met earlier during the conference."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978430463_WhatsApp_Image_2026-10-03_at_03.30.09.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978429304_WhatsApp_Image_2026-10-03_at_03.30.09_1_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "Unfortunately, we eventually arrived at roughly the same conclusion we had reached at the banquet the previous night, that the food was not really doing it for us. So once again, we left an official IJCAI event in search of something else to eat."
+    },
+    {
+      "type": "paragraph",
+      "content": "We found a Napoli pizza place."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978549154_WhatsApp_Image_2026-10-03_at_03.31.42.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "Somewhere in all of this, I also managed to leave my umbrella behind, which I only realised later. Considering how expensive each meal I was eating was, the umbrella felt like nothing; it was 300 Rs. So it was fine :')\n\nAfter eating, Taha and Kabir eventually headed their own way, which left just Rishabh and me walking back towards our hotels, and, once again, we decided to walk rather than figure out transport."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978703288_WhatsApp_Image_2026-10-03_at_03.34.47.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "By then we had already spent several days together, so the walk back turned into another long conversation. \nThat more or less concluded my final big conference day."
+    },
+    {
+      "type": "heading",
+      "content": "August 21, The Last Day of IJCAI",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "August 21 was the final day of IJCAI–ECAI.\nAfter several days of constantly preparing something, reaching venues just in time, attending receptions, and then staying out late with people from the conference, I finally had a morning where there was nothing I absolutely had to be at, so I slept a little late.\n\nI reached the conference later than usual and spent some time around the venue, attending parts of the remaining programme and meeting people for what was now probably the last time during the trip."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979154161_WhatsApp_Image_2026-10-03_at_03.42.08.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "The atmosphere on the final day was obviously different. Now people were already leaving.\n\nThe closing programme was in the afternoon, so I did not stay at the venue for very long afterwards.\n\nAnd since there were no more things to look at, we decided to use the remaining daylight to see Bremen properly one more time. This time I went out with Dr. Kushal Kanwar, Dr. Ashish Kumar, and Rishabh; the four of us headed back towards the city centre."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979317332_WhatsApp_Image_2026-10-03_at_03.42.09.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979306994_WhatsApp_Image_2026-10-03_at_03.42.09_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979306015_WhatsApp_Image_2026-10-03_at_03.42.09_1_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "We eventually stopped at another Indian restaurant for food, and then we went towards the River Weser, and for most of the rest of the evening, that is basically where we stayed."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979424286_WhatsApp_Image_2026-10-03_at_03.42.09_3_.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "That was a nice way for IJCAI to end. But I still had one completely free day left in Germany, and Rishab and I came to the conclusion that I should travel to Cologne instead of Hamburg, which I had initially intended to do. \n\nThe next morning, I would take an ICE to Cologne."
+    },
+    {
+      "type": "heading",
+      "content": "August 22, Cologne",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "I booked an ICE from Bremen and left in the morning (65 euros!)."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979807420_WhatsApp_Image_2026-10-03_at_03.52.59.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "I arrived at Köln Hauptbahnhof, and the first thing you see when you come out of the station is the Cologne Cathedral. I had obviously seen pictures of it before, but the scale is very difficult to understand until you are actually standing in front of it. It completely dominates the area around the station, and the amount of detail in the building is almost ridiculous when you look at it up close."
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979955337_WhatsApp_Video_2026-10-03_at_03.54.56.mp4"
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979981422_WhatsApp_Image_2026-10-03_at_03.55.22.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790979980549_WhatsApp_Image_2026-10-03_at_03.55.22_1_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "I spent quite a while around the cathedral, looking at it from different sides and going inside. After that, I decided to go inside and climb the South Tower. The climb was much longer than I expected, with what felt like an endless spiral staircase. You could see a huge part of Cologne from above, including the Rhine, the railway bridge, and the city stretching out in every direction."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980338453_WhatsApp_Image_2026-10-03_at_04.00.09.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980337423_WhatsApp_Image_2026-10-03_at_04.00.09_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980339342_WhatsApp_Image_2026-10-03_at_04.00.10_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980340235_WhatsApp_Image_2026-10-03_at_04.00.10_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980341379_WhatsApp_Image_2026-10-03_at_04.00.10_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980342255_WhatsApp_Image_2026-10-03_at_04.00.10_4_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980343287_WhatsApp_Image_2026-10-03_at_04.00.10_5_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980344165_WhatsApp_Image_2026-10-03_at_04.00.10_6_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980377924_WhatsApp_Image_2026-10-03_at_04.00.10.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980430624_WhatsApp_Video_2026-10-03_at_04.00.11_4_.mp4"
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980442113_WhatsApp_Video_2026-10-03_at_04.00.11_5_.mp4"
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980473961_WhatsApp_Image_2026-10-03_at_04.00.10_8_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980472848_WhatsApp_Image_2026-10-03_at_04.00.10_7_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980499449_WhatsApp_Video_2026-10-03_at_04.00.11_6_.mp4"
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980513565_WhatsApp_Video_2026-10-03_at_04.00.11_3_.mp4"
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980621554_WhatsApp_Image_2026-10-03_at_04.06.16_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980622664_WhatsApp_Image_2026-10-03_at_04.06.16_4_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980618877_WhatsApp_Image_2026-10-03_at_04.06.16_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980620210_WhatsApp_Image_2026-10-03_at_04.06.16_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980623734_WhatsApp_Image_2026-10-03_at_04.06.16_5_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980624663_WhatsApp_Image_2026-10-03_at_04.06.16.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "After coming down, I walked towards the Rhine River and spent some time around the riverfront and the nearby bridges. Cologne felt very different from Bremen. Bremen had been much quieter and easier to walk around, while Cologne immediately felt much larger and busier. I walked around for quite some time, took photos, explored some of the streets near the cathedral and the river, and generally just wandered without having a specific plan."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980737844_WhatsApp_Image_2026-10-03_at_04.08.21_1_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980738926_WhatsApp_Image_2026-10-03_at_04.08.21_2_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980740054_WhatsApp_Image_2026-10-03_at_04.08.21_3_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980740954_WhatsApp_Image_2026-10-03_at_04.08.21_4_.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980741982_WhatsApp_Image_2026-10-03_at_04.08.21.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980829556_WhatsApp_Video_2026-10-03_at_04.09.56.mp4"
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980862217_WhatsApp_Image_2026-10-03_at_04.09.56.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980853297_WhatsApp_Image_2026-10-03_at_04.09.56_1_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "Later, I took the train back to Bremen. It had only been a one-day trip, but I was very glad I went. Cologne gave me at least one full day that was just about seeing another part of the country."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790980909885_WhatsApp_Image_2026-10-03_at_04.09.56_2_.jpeg"
+    },
+    {
+      "type": "heading",
+      "content": "August 23 and 24, Flying Back",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "content": "The next day was my flight back to India. I had breakfast in the morning and met João once again before leaving Bremen."
+    },
+    {
+      "type": "paragraph",
+      "content": "We headed to Bremen Airport together and took the Turkish Airlines flight from Bremen to Istanbul. We landed in Istanbul together and had the layover there as well. We spent quite a bit of time walking around the airport, looking through the duty-free shops and continuing the same kinds of conversations we had been having since the first day."
+    },
+    {
+      "type": "carousel",
+      "images": [
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790981151178_WhatsApp_Image_2026-10-03_at_04.14.16.jpeg"
+        },
+        {
+          "src": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790981148937_WhatsApp_Image_2026-10-03_at_04.14.16_1_.jpeg"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790981165912_WhatsApp_Video_2026-10-03_at_04.14.16.mp4"
+    },
+    {
+      "type": "paragraph",
+      "content": "Eventually, our journeys split in Istanbul. From there, I had my flight back to Delhi, while João continued with his own travel plans. I boarded the Istanbul–Delhi flight and landed back in India the next day. My bus back to Jalandhar was still a few hours away, so I had roughly four to six hours to spend in Delhi. I went to Blue Tokai, kept all my luggage beside me, and sat there for a few hours until it was time to leave."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790981271660_WhatsApp_Image_2026-10-03_at_04.14.16_2_.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "After that, I took the bus back towards Jalandhar, and that was the end of the trip."
+    },
+    {
+      "type": "image",
+      "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790981320940_WhatsApp_Image_2026-10-03_at_04.14.16_3_.jpeg"
+    },
+    {
+      "type": "paragraph",
+      "content": "Until the next one."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "content": "Useful Links"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "IJCAI–ECAI 2026 official site",
+      "content": "https://2026.ijcai.org/",
+      "description": "conference information, venues, programme, and official pages.",
+      "domain": "2026.ijcai.org"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "IJCAI–ECAI 2026 at a glance",
+      "content": "https://2026.ijcai.org/at-a-glance2/",
+      "description": "overview of the conference dates, workshops, main programme, reception, banquet, and student reception.",
+      "domain": "2026.ijcai.org"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "ICFD-31k in the IJCAI 2026 proceedings",
+      "content": "https://www.ijcai.org/proceedings/2026/786",
+      "description": "the official proceedings page for our AI for Social Good paper, with the PDF, BibTeX, and DOI.",
+      "domain": "ijcai.org"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "ICFD-31k code and dataset repository",
+      "content": "https://github.com/SPELLAILab/ICFD-31k",
+      "description": "code, data, models, and reproducibility material for the paper.",
+      "domain": "github.com"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "GlobalSouthAI @ IJCAI–ECAI 2026",
+      "content": "https://sites.google.com/view/globalsouthai-ijcai26/home",
+      "description": "workshop information, programme, 3MT details, and the event where I presented ScopeBench-PR.",
+      "domain": "sites.google.com"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "Deutsche Bahn",
+      "content": "https://int.bahn.de/en/",
+      "description": "train schedules and tickets in Germany. I used an ICE for the Bremen–Cologne day trip.",
+      "domain": "int.bahn.de"
+    },
+    {
+      "type": "linkEmbed",
+      "title": "Cologne Cathedral official site",
+      "content": "https://www.koelner-dom.de/en",
+      "description": "visitor information for the cathedral and the South Tower climb.",
+      "domain": "koelner-dom.de"
+    }
+  ]
 }
 ];
 
