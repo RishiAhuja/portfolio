@@ -86,29 +86,23 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
 
       case 'image':
         return (
-          <div key={index} className="mb-8">
-            <div 
-              className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10 flex items-center justify-center"
-              style={{ 
-                height: '400px', // Fixed height for consistency
-                aspectRatio: '16/10'
-              }}
-            >
+          <figure key={index} className="mb-8">
+            <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10">
               <img
-                src={(item.content!)}
+                src={item.content!}
                 alt={item.alt || 'Blurb image'}
                 loading={index < 6 ? 'eager' : 'lazy'}
                 decoding="async"
                 fetchPriority={index < 6 ? 'high' : 'auto'}
-                className="blurb-media-image max-w-full max-h-full object-contain" // Preserves natural aspect ratio
+                className="blurb-media-image h-full max-h-full w-full max-w-full object-contain"
               />
             </div>
             {item.alt && (
-              <p className="text-sm text-gunSmoke font-ptMono mt-2 text-center italic">
+              <figcaption className="mt-2 text-center font-ptMono text-sm italic text-gunSmoke">
                 {item.alt}
-              </p>
+              </figcaption>
             )}
-          </div>
+          </figure>
         );
 
       case 'code':
