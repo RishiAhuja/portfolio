@@ -14,7 +14,7 @@ export interface BlurbContent {
   description?: string; // for link embeds
   image?: string; // for link embeds
   domain?: string; // for link embeds
-  images?: { src: string; alt: string }[]; // for carousel
+  images?: { src: string; alt?: string }[]; // for carousel
   caption?: string; // for carousel
   poster?: string; // for video poster/thumbnail
 }

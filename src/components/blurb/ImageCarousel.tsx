@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 interface CarouselImage {
   src: string;
-  alt: string;
+  alt?: string;
 }
 
 interface ImageCarouselProps {

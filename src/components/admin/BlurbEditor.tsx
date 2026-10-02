@@ -58,7 +58,7 @@ interface EditorBlock {
   title: string;
   description: string;
   image: string;
-  images: { src: string; alt: string }[];
+  images: { src: string; alt?: string }[];
   caption: string;
   poster: string;
 }
@@ -1169,7 +1169,7 @@ function BlockRow({
   onSelect: (key: string, field: 'content' | 'itemsText', element: HTMLTextAreaElement) => void;
   bindTextarea: (name: string, element: HTMLTextAreaElement | null) => void;
   patch: (partial: Partial<EditorBlock>) => void;
-  onImages: (recipe: (images: { src: string; alt: string }[]) => { src: string; alt: string }[]) => void;
+  onImages: (recipe: (images: { src: string; alt?: string }[]) => { src: string; alt?: string }[]) => void;
   onExitList: (before: string[], after: string[]) => void;
   onMergeList: (item: string, rest: string[]) => void;
   openFiles: (kind: 'image' | 'carousel' | 'shot' | 'video' | 'poster' | 'link') => void;
@@ -1401,7 +1401,7 @@ function BlockRow({
   );
 }
 
-function moveImage(images: { src: string; alt: string }[], from: number, to: number) {
+function moveImage(images: { src: string; alt?: string }[], from: number, to: number) {
   if (to < 0 || to >= images.length || from === to) return images;
   const next = [...images];
   const [moved] = next.splice(from, 1);
