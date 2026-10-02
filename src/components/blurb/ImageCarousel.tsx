@@ -19,15 +19,16 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption, priority
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  const currentImage = images[currentIndex];
   const imageCount = images.length;
+  const safeIndex = imageCount === 0 ? 0 : Math.min(currentIndex, imageCount - 1);
+  const currentImage = images[safeIndex];
 
   const adjacentSources = useMemo(() => {
     if (imageCount < 2) return [];
-    const previousIndex = currentIndex === 0 ? imageCount - 1 : currentIndex - 1;
-    const nextIndex = currentIndex === imageCount - 1 ? 0 : currentIndex + 1;
+    const previousIndex = safeIndex === 0 ? imageCount - 1 : safeIndex - 1;
+    const nextIndex = safeIndex === imageCount - 1 ? 0 : safeIndex + 1;
     return [images[previousIndex].src, images[nextIndex].src];
-  }, [currentIndex, imageCount, images]);
+  }, [safeIndex, imageCount, images]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -39,14 +40,14 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption, priority
     });
   }, [adjacentSources]);
 
-  if (!images || imageCount === 0) return null;
+  if (!images || imageCount === 0 || !currentImage) return null;
 
   const goToIndex = (index: number) => {
     setCurrentIndex((index + imageCount) % imageCount);
   };
 
-  const goToPrevious = () => goToIndex(currentIndex - 1);
-  const goToNext = () => goToIndex(currentIndex + 1);
+  const goToPrevious = () => goToIndex(safeIndex - 1);
+  const goToNext = () => goToIndex(safeIndex + 1);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'ArrowLeft') {
@@ -121,7 +122,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption, priority
             </button>
 
             <div className="absolute right-3 top-3 rounded-sm border border-darkGrey/60 bg-codGray/85 px-2 py-1 font-ptMono text-xs text-quillGray">
-              {currentIndex + 1} / {imageCount}
+              {safeIndex + 1} / {imageCount}
             </div>
           </>
         )}
@@ -131,16 +132,16 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption, priority
         <div className="mt-3 flex flex-wrap justify-center gap-2" aria-label="Carousel slides">
           {images.map((image, index) => (
             <button
-              key={image.src}
+              key={`${image.src}-${index}`}
               onClick={() => goToIndex(index)}
               type="button"
               className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                index === currentIndex
+                index === safeIndex
                   ? 'bg-accent-light'
                   : 'bg-darkGrey hover:bg-gunSmoke'
               }`}
               aria-label={`Show image ${index + 1}`}
-              aria-current={index === currentIndex}
+              aria-current={index === safeIndex}
             />
           ))}
         </div>

@@ -83,6 +83,8 @@ interface MenuState {
   mode: 'slash' | 'insert' | 'turn';
   query: string;
   index: number;
+  at?: number;
+  line?: number;
 }
 
 const PROSE = new Set<BlockType>(['paragraph', 'heading', 'quote', 'code', 'list']);
@@ -164,6 +166,42 @@ function domainOf(url: string): string {
 
 function proseOf(block: EditorBlock): string {
   return block.type === 'list' ? block.itemsText : block.content;
+}
+
+function tweetIdFrom(value: string): string {
+  const status = value.match(/status\/(\d{8,})/);
+  return status ? status[1] : value.trim();
+}
+
+function fileKindFor(type: BlockType): 'image' | 'carousel' | 'shot' | null {
+  if (type === 'image') return 'image';
+  if (type === 'carousel') return 'carousel';
+  if (type === 'tweetImage') return 'shot';
+  return null;
+}
+
+function withCommand(block: EditorBlock, command: Command, fromSlash: boolean): EditorBlock {
+  const source = fromSlash && proseOf(block).trim().startsWith('/') ? '' : proseOf(block);
+  const next: EditorBlock = { ...block, type: command.type, level: command.level ?? block.level };
+  if (command.type === 'carousel' && (block.type === 'image' || block.type === 'tweetImage') && block.content.trim()) {
+    const carried = { src: block.content.trim(), alt: block.alt };
+    next.images = [carried, ...block.images.filter((image) => image.src && image.src !== carried.src)];
+  }
+  if ((command.type === 'image' || command.type === 'tweetImage') && block.type === 'carousel' && block.images[0]?.src) {
+    next.content = block.images[0].src;
+    next.alt = block.images[0].alt || '';
+  }
+  if (command.type === 'list') {
+    next.itemsText = PROSE.has(block.type) ? source : block.itemsText;
+    next.content = '';
+  } else if (PROSE.has(command.type)) {
+    next.content = PROSE.has(block.type) ? source : block.alt || '';
+  } else if (fromSlash) {
+    next.content = '';
+    next.itemsText = '';
+  }
+  if (fromSlash && (command.type === 'image' || command.type === 'tweetImage')) next.alt = '';
+  return next;
 }
 
 function resize(element: HTMLTextAreaElement | null) {
@@ -306,7 +344,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
   const textareas = useRef<Record<string, HTMLTextAreaElement | null>>({});
   const caretRef = useRef<{ key: string; pos: number } | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
-  const fileTarget = useRef<{ key: string; kind: 'image' | 'carousel' | 'shot' | 'video' | 'poster' | 'link' } | null>(null);
+  const fileTarget = useRef<{ key: string; kind: 'image' | 'carousel' | 'shot' | 'video' | 'poster' | 'link'; command?: Command; fromSlash?: boolean } | null>(null);
   const activeKey = useRef<string | null>(null);
   const menuRef = useRef(menu);
   menuRef.current = menu;
@@ -398,30 +436,23 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     return body.publicUrl as string;
   };
 
-  const uploadInto = async (key: string, file: File, target: 'content' | 'image' | 'poster') => {
+  const uploadInto = async (
+    key: string,
+    file: File,
+    field: 'content' | 'image' | 'poster',
+    convert?: { command: Command; fromSlash: boolean },
+  ) => {
     setBusyKey(key);
     setError('');
     try {
       const url = await uploadFile(file);
-      patchBlock(key, { [target]: url });
-    } catch (uploadError) {
-      setError(uploadError instanceof Error ? uploadError.message : 'Upload failed.');
-    } finally {
-      setBusyKey(null);
-    }
-  };
-
-  const uploadCarousel = async (key: string, files: File[]) => {
-    setBusyKey(key);
-    setError('');
-    try {
-      const images: { src: string; alt: string }[] = [];
-      for (const file of files) images.push({ src: await uploadFile(file), alt: '' });
       setDraft((current) => ({
         ...current,
-        blocks: current.blocks.map((block) =>
-          block.key === key ? { ...block, images: [...block.images, ...images] } : block
-        ),
+        blocks: current.blocks.map((block) => {
+          if (block.key !== key) return block;
+          const base = convert && block.type !== convert.command.type ? withCommand(block, convert.command, convert.fromSlash) : block;
+          return { ...base, [field]: url };
+        }),
       }));
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : 'Upload failed.');
@@ -430,8 +461,34 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     }
   };
 
-  const openFiles = (key: string, kind: NonNullable<typeof fileTarget.current>['kind']) => {
-    fileTarget.current = { key, kind };
+  const uploadCarousel = async (key: string, files: File[], convert?: { command: Command; fromSlash: boolean }) => {
+    setBusyKey(key);
+    setError('');
+    try {
+      for (const file of files) {
+        const src = await uploadFile(file);
+        setDraft((current) => ({
+          ...current,
+          blocks: current.blocks.map((block) => {
+            if (block.key !== key) return block;
+            const base = convert && block.type !== convert.command.type ? withCommand(block, convert.command, convert.fromSlash) : block;
+            return { ...base, images: [...base.images, { src, alt: '' }] };
+          }),
+        }));
+      }
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : 'Upload failed.');
+    } finally {
+      setBusyKey(null);
+    }
+  };
+
+  const openFiles = (
+    key: string,
+    kind: NonNullable<typeof fileTarget.current>['kind'],
+    convert?: { command: Command; fromSlash: boolean },
+  ) => {
+    fileTarget.current = { key, kind, command: convert?.command, fromSlash: convert?.fromSlash };
     const input = fileInput.current;
     if (!input) return;
     input.multiple = kind === 'carousel';
@@ -448,8 +505,9 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     const files = Array.from(list || []);
     if (fileInput.current) fileInput.current.value = '';
     if (!target || files.length === 0) return;
+    const convert = target.command ? { command: target.command, fromSlash: Boolean(target.fromSlash) } : undefined;
     if (target.kind === 'carousel') {
-      await uploadCarousel(target.key, files);
+      await uploadCarousel(target.key, files, convert);
       return;
     }
     if (target.kind === 'link') {
@@ -468,7 +526,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
       return;
     }
     const field = target.kind === 'poster' ? 'poster' : 'content';
-    await uploadInto(target.key, files[0], field);
+    await uploadInto(target.key, files[0], field, convert);
   };
 
   const placeBlock = (afterKey: string | null, block: EditorBlock) => {
@@ -484,43 +542,72 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
   const convertBlock = (key: string, command: Command, fromSlash: boolean) => {
     setDraft((current) => ({
       ...current,
-      blocks: current.blocks.map((block) => {
-        if (block.key !== key) return block;
-        const source = fromSlash && proseOf(block).trim().startsWith('/') ? '' : proseOf(block);
-        const next = { ...block, type: command.type, level: command.level ?? block.level };
-        if (command.type === 'list') {
-          next.itemsText = PROSE.has(block.type) ? source : block.itemsText;
-          next.content = '';
-        } else if (PROSE.has(command.type)) {
-          next.content = PROSE.has(block.type) ? source : block.alt || '';
-        } else if (fromSlash) {
-          next.content = '';
-        }
-        if (command.type === 'image' && source && fromSlash) next.alt = '';
-        return next;
-      }),
+      blocks: current.blocks.map((block) => (block.key === key ? withCommand(block, command, fromSlash) : block)),
     }));
   };
 
   const choose = (command: Command) => {
     if (!menu) return;
+    const fileKind = fileKindFor(command.type);
     if (menu.mode === 'insert') {
       const block = createBlock(command.type);
       if (command.level) block.level = command.level;
-      placeBlock(menu.key, block);
+      insertAfterLine(menu.key, block, menu.line ?? 0);
       setMenu(null);
-      if (command.type === 'image') openFiles(block.key, 'image');
-      else if (command.type === 'carousel') openFiles(block.key, 'carousel');
-      else if (command.type === 'tweetImage') openFiles(block.key, 'shot');
+      if (fileKind) openFiles(block.key, fileKind);
       else setFocusKey(block.key);
       return;
     }
-    convertBlock(menu.key, command, menu.mode === 'slash');
+    if (menu.mode === 'slash') {
+      const host = draft.blocks.find((block) => block.key === menu.key);
+      if (host?.type === 'paragraph') {
+        const at = menu.at ?? 0;
+        const token = `/${menu.query}`;
+        const before = host.content.slice(0, at).replace(/\n+$/, '');
+        const after = host.content.slice(at + (host.content.startsWith(token, at) ? token.length : 0)).replace(/^\n/, '');
+        if (before.length > 0 || after.length > 0) {
+          const created = createBlock(command.type);
+          if (command.level) created.level = command.level;
+          const tail = createBlock('paragraph');
+          tail.content = after;
+          setDraft((current) => {
+            if (current.blocks.some((item) => item.key === created.key)) return current;
+            const index = current.blocks.findIndex((item) => item.key === host.key);
+            if (index < 0) return current;
+            const blocks = [...current.blocks];
+            const replacement: EditorBlock[] = [];
+            if (before.length) replacement.push({ ...current.blocks[index], content: before });
+            replacement.push(created);
+            if (after.length) replacement.push(tail);
+            blocks.splice(index, 1, ...replacement);
+            return { ...current, blocks };
+          });
+          setMenu(null);
+          if (fileKind) openFiles(created.key, fileKind);
+          else setFocusKey(created.key);
+          return;
+        }
+      }
+    }
+    const currentBlock = draft.blocks.find((block) => block.key === menu.key);
+    const carriesMedia = Boolean(
+      currentBlock && (
+        ((currentBlock.type === 'image' || currentBlock.type === 'tweetImage') && currentBlock.content.trim())
+        || (currentBlock.type === 'carousel' && currentBlock.images.some((image) => image.src))
+      )
+    );
+    if (fileKind && !carriesMedia) {
+      const key = menu.key;
+      const fromSlash = menu.mode === 'slash';
+      setMenu(null);
+      openFiles(key, fileKind, { command, fromSlash });
+      return;
+    }
+    const key = menu.key;
+    convertBlock(key, command, menu.mode === 'slash');
     setMenu(null);
-    if (command.type === 'image') openFiles(menu.key, 'image');
-    else if (command.type === 'carousel') openFiles(menu.key, 'carousel');
-    else if (command.type === 'tweetImage') openFiles(menu.key, 'shot');
-    else setFocusKey(menu.key);
+    if (command.type === 'carousel' && carriesMedia) openFiles(key, 'carousel');
+    else if (!fileKind) setFocusKey(key);
   };
 
   const moveBlock = (key: string, direction: -1 | 1) => {
@@ -560,6 +647,58 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     focusBlock(block.key, 0);
   };
 
+  const focusFirstWriter = () => {
+    const prose = draft.blocks.find((block) => block.type === 'paragraph' || block.type === 'heading' || block.type === 'quote' || block.type === 'list');
+    if (!prose) {
+      continueWriting();
+      return;
+    }
+    focusBlock(prose.key, prose.type === 'list' ? prose.itemsText.length : prose.content.length);
+  };
+
+  const exitList = (key: string, before: string[], after: string[]) => {
+    const paragraph = createBlock('paragraph');
+    setDraft((current) => {
+      const index = current.blocks.findIndex((block) => block.key === key);
+      if (index < 0) return current;
+      const list = current.blocks[index];
+      const replacement: EditorBlock[] = [];
+      if (before.some((item) => item.trim())) replacement.push({ ...list, itemsText: before.join('\n') });
+      replacement.push(paragraph);
+      if (after.some((item) => item.length > 0)) {
+        const rest = createBlock('list');
+        rest.itemsText = after.join('\n');
+        replacement.push(rest);
+      }
+      const blocks = [...current.blocks];
+      blocks.splice(index, 1, ...replacement);
+      return { ...current, blocks };
+    });
+    focusBlock(paragraph.key, 0);
+  };
+
+  const mergeListBackward = (key: string, item: string, rest: string[]) => {
+    const index = draft.blocks.findIndex((block) => block.key === key);
+    const previous = draft.blocks[index - 1];
+    const previousIsProse = previous && (previous.type === 'paragraph' || previous.type === 'heading' || previous.type === 'quote');
+    if (previousIsProse) {
+      const join = previous.content.length;
+      setDraft((current) => {
+        if (!current.blocks.some((block) => block.key === key)) return current;
+        const blocks = current.blocks.flatMap((block) => {
+          if (block.key === previous.key) return [{ ...block, content: block.content + item }];
+          if (block.key !== key) return [block];
+          if (!rest.length) return [];
+          return [{ ...block, itemsText: rest.join('\n') }];
+        });
+        return { ...current, blocks: blocks.length ? blocks : [createBlock('paragraph')] };
+      });
+      focusBlock(previous.key, join);
+      return;
+    }
+    if (!item && !rest.length) removeBlock(key);
+  };
+
   const onProseKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>, block: EditorBlock) => {
     const open = menu && menu.key === block.key && (menu.mode === 'slash' || menu.mode === 'insert');
     if (open && menu) {
@@ -576,7 +715,13 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
       }
       if (event.key === 'Escape') {
         event.preventDefault();
-        if (menu.mode === 'slash') patchBlock(block.key, { content: '' });
+        if (menu.mode === 'slash') {
+          const at = menu.at ?? 0;
+          const content = block.content.startsWith('/', at)
+            ? `${block.content.slice(0, at)}${block.content.slice(at + 1)}`
+            : block.content;
+          patchBlock(block.key, { content });
+        }
         setMenu(null);
         return;
       }
@@ -585,7 +730,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     const element = event.currentTarget;
     const atStart = element.selectionStart === 0 && element.selectionEnd === 0;
 
-    if (event.key === 'Enter' && !event.shiftKey && block.type !== 'code') {
+    if (event.key === 'Enter' && block.type !== 'code') {
       event.preventDefault();
       const before = block.content.slice(0, element.selectionStart);
       const after = block.content.slice(element.selectionEnd);
@@ -630,16 +775,22 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     }
   };
 
-  const onProseChange = (block: EditorBlock, value: string) => {
+  const onProseChange = (block: EditorBlock, value: string, caret: number) => {
     patchBlock(block.key, { content: value });
-    const slash = block.type === 'paragraph' && value.startsWith('/') && !value.includes('\n');
+    const at = value.lastIndexOf('\n', Math.max(caret - 1, 0)) + 1;
+    const lineEnd = value.indexOf('\n', at);
+    const line = value.slice(at, lineEnd === -1 ? value.length : lineEnd);
+    const slash = block.type === 'paragraph' && /^\/\S*$/.test(line);
     if (slash) {
-      const query = value.slice(1);
+      const query = line.slice(1);
       const shown = COMMANDS.filter((command) => matches(command, query)).length;
+      const lineIndex = value.slice(0, at).split('\n').length - 1;
       setMenu((current) => ({
         key: block.key,
         mode: 'slash',
         query,
+        at,
+        line: lineIndex,
         index: Math.min(
           current?.key === block.key && current.mode === 'slash' ? current.index : 0,
           Math.max(shown - 1, 0)
@@ -648,6 +799,28 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     } else if (menu?.key === block.key && menu.mode === 'slash') {
       setMenu(null);
     }
+  };
+
+  const insertAfterLine = (key: string, block: EditorBlock, lineIndex = 0) => {
+    setDraft((current) => {
+      if (current.blocks.some((item) => item.key === block.key)) return current;
+      const index = current.blocks.findIndex((item) => item.key === key);
+      if (index < 0) return { ...current, blocks: [...current.blocks, block] };
+      const host = current.blocks[index];
+      const lines = host.content.split('\n');
+      const canSplit = (host.type === 'paragraph' || host.type === 'heading' || host.type === 'quote')
+        && lines.length > 1
+        && lineIndex < lines.length - 1;
+      const blocks = [...current.blocks];
+      if (!canSplit) {
+        blocks.splice(index + 1, 0, block);
+        return { ...current, blocks };
+      }
+      const rest = createBlock('paragraph');
+      rest.content = lines.slice(lineIndex + 1).join('\n');
+      blocks.splice(index, 1, { ...host, content: lines.slice(0, lineIndex + 1).join('\n') }, block, rest);
+      return { ...current, blocks };
+    });
   };
 
   const rememberSelection = (key: string, field: 'content' | 'itemsText', element: HTMLTextAreaElement) => {
@@ -731,8 +904,21 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
     const images = Array.from(event.clipboardData.files).filter((file) => file.type.startsWith('image/'));
     if (images.length === 0) return;
     event.preventDefault();
+    const current = draft.blocks.find((block) => block.key === activeKey.current);
+    const carousel = COMMANDS.find((command) => command.id === 'carousel');
+    if (current?.type === 'carousel') {
+      void uploadCarousel(current.key, images);
+      return;
+    }
+    if (current?.type === 'image' && carousel) {
+      void uploadCarousel(current.key, images, { command: carousel, fromSlash: false });
+      return;
+    }
     const block = createBlock(images.length > 1 ? 'carousel' : 'image');
-    placeBlock(activeKey.current, block);
+    const textarea = current ? textareas.current[`${current.key}:content`] : null;
+    const line = textarea ? textarea.value.slice(0, textarea.selectionStart).split('\n').length - 1 : 0;
+    if (current) insertAfterLine(current.key, block, line);
+    else placeBlock(activeKey.current, block);
     if (images.length > 1) void uploadCarousel(block.key, images);
     else void uploadInto(block.key, images[0], 'content');
   };
@@ -847,28 +1033,30 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
       )}
 
       <textarea
+        ref={(element) => { textareas.current.title = element; }}
         className={`${quiet} mb-3 text-4xl font-semibold leading-tight md:text-5xl`}
         rows={1}
         placeholder="Title"
         value={draft.title}
-        onChange={(event) => { patchMeta({ title: event.target.value }); resize(event.target); }}
+        onChange={(event) => patchMeta({ title: event.target.value })}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             event.preventDefault();
-            setFocusKey(draft.blocks[0]?.key || null);
+            focusFirstWriter();
           }
         }}
       />
       <textarea
+        ref={(element) => { textareas.current.subtitle = element; }}
         className={`${quiet} mb-10 text-xl text-gunSmoke placeholder:text-gunSmoke/30`}
         rows={1}
         placeholder="Subtitle"
         value={draft.subtitle}
-        onChange={(event) => { patchMeta({ subtitle: event.target.value }); resize(event.target); }}
+        onChange={(event) => patchMeta({ subtitle: event.target.value })}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             event.preventDefault();
-            setFocusKey(draft.blocks[0]?.key || null);
+            focusFirstWriter();
           }
         }}
       />
@@ -900,7 +1088,7 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
               onApplyLink={applyLink}
               onChoose={choose}
               onTurn={() => setMenu({ key: block.key, mode: 'turn', query: '', index: 0 })}
-              onInsert={() => setMenu({ key: block.key, mode: 'insert', query: '', index: 0 })}
+              onInsert={(line) => setMenu({ key: block.key, mode: 'insert', query: '', index: 0, line })}
               onCloseMenu={() => setMenu(null)}
               onMove={(direction) => moveBlock(block.key, direction)}
               onRemove={() => removeBlock(block.key)}
@@ -912,6 +1100,14 @@ const BlurbEditor: React.FC<{ token: string }> = ({ token }) => {
               onSelect={rememberSelection}
               bindTextarea={(name, element) => { textareas.current[`${block.key}:${name}`] = element; }}
               patch={(partial) => patchBlock(block.key, partial)}
+              onImages={(recipe) => {
+                setDraft((current) => ({
+                  ...current,
+                  blocks: current.blocks.map((item) => item.key === block.key ? { ...item, images: recipe(item.images) } : item),
+                }));
+              }}
+              onExitList={(before, after) => exitList(block.key, before, after)}
+              onMergeList={(item, rest) => mergeListBackward(block.key, item, rest)}
               openFiles={(kind) => openFiles(block.key, kind)}
             />
           ))}
@@ -945,6 +1141,9 @@ function BlockRow({
   onSelect,
   bindTextarea,
   patch,
+  onImages,
+  onExitList,
+  onMergeList,
   openFiles,
 }: {
   block: EditorBlock;
@@ -958,21 +1157,29 @@ function BlockRow({
   onApplyLink: (event: React.FormEvent) => void;
   onChoose: (command: Command) => void;
   onTurn: () => void;
-  onInsert: () => void;
+  onInsert: (line: number) => void;
   onCloseMenu: () => void;
   onMove: (direction: -1 | 1) => void;
   onRemove: () => void;
   onCover: () => void;
   onSocial: () => void;
-  onProseChange: (block: EditorBlock, value: string) => void;
+  onProseChange: (block: EditorBlock, value: string, caret: number) => void;
   onProseKeyDown: (event: React.KeyboardEvent<HTMLTextAreaElement>, block: EditorBlock) => void;
   onFocus: () => void;
   onSelect: (key: string, field: 'content' | 'itemsText', element: HTMLTextAreaElement) => void;
   bindTextarea: (name: string, element: HTMLTextAreaElement | null) => void;
   patch: (partial: Partial<EditorBlock>) => void;
+  onImages: (recipe: (images: { src: string; alt: string }[]) => { src: string; alt: string }[]) => void;
+  onExitList: (before: string[], after: string[]) => void;
+  onMergeList: (item: string, rest: string[]) => void;
   openFiles: (kind: 'image' | 'carousel' | 'shot' | 'video' | 'poster' | 'link') => void;
 }) {
   const showMenu = Boolean(menu);
+  const dragFrom = useRef<number | null>(null);
+  const proseLines = (block.type === 'paragraph' || block.type === 'heading' || block.type === 'quote')
+    ? block.content.split('\n')
+    : null;
+  const multi = Boolean(proseLines && proseLines.length > 1);
   const proseClass = block.type === 'heading'
     ? block.level === 3 ? 'text-xl font-semibold' : 'text-3xl font-semibold'
     : block.type === 'quote'
@@ -983,13 +1190,27 @@ function BlockRow({
 
   return (
     <div className="group relative py-1 pl-10" onFocus={onFocus}>
-      <div data-blurb-menu className={`absolute left-0 top-1.5 flex gap-0.5 text-gunSmoke ${showMenu ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'}`}>
-        <button type="button" className="h-6 w-5 hover:text-quillGray" aria-label="Add below" onMouseDown={(event) => event.preventDefault()} onClick={onInsert}>+</button>
+      <div data-blurb-menu className={`absolute flex gap-0.5 text-gunSmoke ${multi ? 'left-5' : 'left-0'} ${showMenu ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'}`} style={{ top: 6 }}>
+        {!multi && <button type="button" className="h-6 w-5 hover:text-quillGray" aria-label="Add below" onMouseDown={(event) => event.preventDefault()} onClick={() => onInsert(0)}>+</button>}
         <button type="button" className="h-6 w-5 text-xs tracking-tighter hover:text-quillGray" aria-label="Turn into" onMouseDown={(event) => event.preventDefault()} onClick={onTurn}>⋮⋮</button>
       </div>
+      {multi && proseLines?.map((_, lineIndex) => (
+        <button
+          key={lineIndex}
+          type="button"
+          data-blurb-menu
+          style={{ top: lineIndex * 32 + 6 }}
+          className={`absolute left-0 h-6 w-5 text-gunSmoke hover:text-quillGray ${showMenu ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'}`}
+          aria-label={`Add below line ${lineIndex + 1}`}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => onInsert(lineIndex)}
+        >
+          +
+        </button>
+      ))}
 
       {showMenu && menu && (
-        <div data-blurb-menu className="absolute left-10 top-8 z-20 w-64 overflow-hidden rounded-md border border-white/10 bg-[#161616] py-1 shadow-2xl">
+        <div data-blurb-menu className="absolute left-10 z-20 w-64 overflow-hidden rounded-md border border-white/10 bg-[#161616] py-1 shadow-2xl" style={{ top: (menu.line ?? 0) * 32 + 32 }}>
           {commands.map((command, index) => (
             <button
               key={command.id}
@@ -1044,7 +1265,7 @@ function BlockRow({
               : block.type === 'heading' ? 'Heading' : block.type === 'quote' ? 'Quote' : ''
           }
           value={block.content}
-          onChange={(event) => onProseChange(block, event.target.value)}
+          onChange={(event) => onProseChange(block, event.target.value, event.target.selectionStart)}
           onKeyDown={(event) => onProseKeyDown(event, block)}
           onMouseUp={(event) => onSelect(block.key, 'content', event.currentTarget)}
           onFocus={onFocus}
@@ -1058,6 +1279,8 @@ function BlockRow({
           onFocus={onFocus}
           onSelect={(element) => onSelect(block.key, 'itemsText', element)}
           bind={(element) => bindTextarea('items', element)}
+          onExit={onExitList}
+          onMerge={onMergeList}
         />
       )}
 
@@ -1076,17 +1299,57 @@ function BlockRow({
 
       {block.type === 'carousel' && (
         <figure>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {block.images.map((image, imageIndex) => (
-              <div key={`${image.src}-${imageIndex}`}>
-                <img src={image.src} alt="" className="h-40 w-full rounded-sm object-cover" />
+              <div
+                key={`${image.src}-${imageIndex}`}
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  event.dataTransfer.dropEffect = 'move';
+                }}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  const from = dragFrom.current;
+                  dragFrom.current = null;
+                  if (from == null || from === imageIndex) return;
+                  onImages((images) => {
+                    if (from < 0 || from >= images.length) return images;
+                    const next = [...images];
+                    const [moved] = next.splice(from, 1);
+                    next.splice(imageIndex, 0, moved);
+                    return next;
+                  });
+                }}
+              >
+                <div className="relative">
+                  <img
+                    src={image.src}
+                    alt=""
+                    draggable
+                    className="h-40 w-full cursor-grab rounded-sm bg-black/30 object-contain active:cursor-grabbing"
+                    onDragStart={(event) => {
+                      dragFrom.current = imageIndex;
+                      event.dataTransfer.effectAllowed = 'move';
+                      event.dataTransfer.setData('text/plain', String(imageIndex));
+                    }}
+                  />
+                  <div className="absolute inset-x-1 top-1 flex items-center justify-between">
+                    <span className="rounded-sm bg-black/70 px-1.5 py-0.5 font-ptMono text-[10px] text-white/80">{imageIndex + 1}</span>
+                    <span className="flex gap-1">
+                      <button type="button" className="rounded-sm bg-black/70 px-1.5 py-0.5 font-ptMono text-[11px] text-white hover:text-accent-light disabled:opacity-30" aria-label="Move earlier" disabled={imageIndex === 0} onClick={() => onImages((images) => moveImage(images, imageIndex, imageIndex - 1))}>←</button>
+                      <button type="button" className="rounded-sm bg-black/70 px-1.5 py-0.5 font-ptMono text-[11px] text-white hover:text-accent-light disabled:opacity-30" aria-label="Move later" disabled={imageIndex === block.images.length - 1} onClick={() => onImages((images) => moveImage(images, imageIndex, imageIndex + 1))}>→</button>
+                      <button type="button" className="rounded-sm bg-black/70 px-1.5 py-0.5 font-ptMono text-[11px] text-white hover:text-red-300" aria-label="Remove photo" onClick={() => onImages((images) => images.filter((_, index) => index !== imageIndex))}>×</button>
+                    </span>
+                  </div>
+                </div>
                 <input
                   className={`${quiet} mt-1 text-sm text-gunSmoke`}
                   placeholder="Caption"
                   value={image.alt}
-                  onChange={(event) => patch({
-                    images: block.images.map((item, itemIndex) => itemIndex === imageIndex ? { ...item, alt: event.target.value } : item),
-                  })}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    onImages((images) => images.map((item, itemIndex) => itemIndex === imageIndex ? { ...item, alt: value } : item));
+                  }}
                 />
               </div>
             ))}
@@ -1094,6 +1357,7 @@ function BlockRow({
               Add photos
             </button>
           </div>
+          {block.images.length > 1 && <p className="mt-2 text-center font-ptMono text-[11px] text-gunSmoke/50">Drag a photo, or use the arrows, to change the order.</p>}
           <input className={`${quiet} mt-2 text-center text-sm italic text-gunSmoke`} placeholder="Caption for the set" value={block.caption} onChange={(event) => patch({ caption: event.target.value })} />
         </figure>
       )}
@@ -1110,7 +1374,7 @@ function BlockRow({
       )}
 
       {block.type === 'twitter' && (
-        <input className={`${quiet} text-lg`} placeholder="Tweet ID" value={block.tweetId} onChange={(event) => patch({ tweetId: event.target.value })} />
+        <input className={`${quiet} text-lg`} placeholder="Tweet link or ID" value={block.tweetId} onChange={(event) => patch({ tweetId: tweetIdFrom(event.target.value) })} />
       )}
 
       {block.type === 'tweetImage' && (
@@ -1137,18 +1401,30 @@ function BlockRow({
   );
 }
 
+function moveImage(images: { src: string; alt: string }[], from: number, to: number) {
+  if (to < 0 || to >= images.length || from === to) return images;
+  const next = [...images];
+  const [moved] = next.splice(from, 1);
+  next.splice(to, 0, moved);
+  return next;
+}
+
 function ListBlock({
   block,
   onPatch,
   onFocus,
   onSelect,
   bind,
+  onExit,
+  onMerge,
 }: {
   block: EditorBlock;
   onPatch: (partial: Partial<EditorBlock>) => void;
   onFocus: () => void;
   onSelect: (element: HTMLTextAreaElement) => void;
   bind: (element: HTMLTextAreaElement | null) => void;
+  onExit: (before: string[], after: string[]) => void;
+  onMerge: (item: string, rest: string[]) => void;
 }) {
   const items = block.itemsText.length ? block.itemsText.split('\n') : [''];
   const write = (next: string[]) => onPatch({ itemsText: next.join('\n') });
@@ -1157,7 +1433,16 @@ function ListBlock({
   const refs = useRef<(HTMLTextAreaElement | null)[]>([]);
 
   useLayoutEffect(() => {
-    if (pending.current == null) return;
+    const active = document.activeElement;
+    const start = active instanceof HTMLTextAreaElement ? active.selectionStart : null;
+    const end = active instanceof HTMLTextAreaElement ? active.selectionEnd : null;
+    refs.current.forEach(resize);
+    if (pending.current == null) {
+      if (active instanceof HTMLTextAreaElement && start != null && end != null && document.activeElement === active) {
+        active.setSelectionRange(start, end);
+      }
+      return;
+    }
     const element = refs.current[pending.current];
     const pos = pendingPos.current;
     pending.current = null;
@@ -1182,8 +1467,16 @@ function ListBlock({
             onChange={(event) => write(items.map((line, lineIndex) => lineIndex === index ? event.target.value : line))}
             onMouseUp={(event) => onSelect(event.currentTarget)}
             onKeyDown={(event) => {
+              if (event.key === 'Enter' && event.shiftKey) {
+                event.preventDefault();
+                return;
+              }
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
+                if (!item.trim()) {
+                  onExit(items.slice(0, index), items.slice(index + 1));
+                  return;
+                }
                 const cursor = event.currentTarget.selectionStart;
                 const next = [...items];
                 const rest = item.slice(cursor);
@@ -1202,6 +1495,16 @@ function ListBlock({
                 pending.current = index - 1;
                 pendingPos.current = previous.length;
                 write(next);
+              }
+              if (event.key === 'Backspace' && event.currentTarget.selectionStart === 0 && event.currentTarget.selectionEnd === 0 && index === 0) {
+                event.preventDefault();
+                if (!item && items.length > 1) {
+                  pending.current = 0;
+                  pendingPos.current = 0;
+                  write(items.slice(1));
+                  return;
+                }
+                onMerge(item, items.slice(1));
               }
             }}
           />

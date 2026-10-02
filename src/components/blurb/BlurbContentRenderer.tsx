@@ -35,6 +35,15 @@ function renderInlineText(text: string): React.ReactNode[] {
   });
 }
 
+function hostOf(url: string | undefined): string {
+  if (!url) return '';
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
 // Helper function to extract YouTube video ID from URL
 function extractYouTubeId(url: string): string | null {
   const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
@@ -215,7 +224,7 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
         );
 
       case 'linkEmbed':
-        const domain = item.domain || (item.content ? new URL(item.content).hostname : '');
+        const domain = item.domain || hostOf(item.content);
         return (
           <div key={index} className="mb-8">
             <a 
