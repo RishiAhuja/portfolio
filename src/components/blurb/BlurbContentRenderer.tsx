@@ -299,12 +299,11 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
             </div>
           );
         } else {
-          // Local video file
           return (
-            <div key={index} className="mb-8">
-              <div className="relative w-full rounded-sm overflow-hidden bg-darkGrey/10">
+            <figure key={index} className="mb-8">
+              <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10">
                 <video
-                  className="w-full h-auto"
+                  className="blurb-media-video h-full max-h-full w-full max-w-full object-contain"
                   controls
                   poster={item.poster}
                   preload="metadata"
@@ -314,11 +313,11 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
                 </video>
               </div>
               {item.alt && (
-                <p className="text-sm text-gunSmoke font-ptMono mt-2 text-center italic">
+                <figcaption className="mt-2 text-center font-ptMono text-sm italic text-gunSmoke">
                   {item.alt}
-                </p>
+                </figcaption>
               )}
-            </div>
+            </figure>
           );
         }
 
