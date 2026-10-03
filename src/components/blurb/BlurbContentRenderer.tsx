@@ -87,7 +87,7 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
       case 'image':
         return (
           <figure key={index} className="mb-8">
-            <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10">
+            <div className="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10 sm:aspect-[16/10]">
               <img
                 src={item.content!}
                 alt={item.alt || 'Blurb image'}
@@ -301,7 +301,7 @@ const BlurbContentRenderer: React.FC<BlurbContentRendererProps> = ({ content }) 
         } else {
           return (
             <figure key={index} className="mb-8">
-              <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10">
+              <div className="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10 sm:aspect-[16/10]">
                 <video
                   className="blurb-media-video h-full max-h-full w-full max-w-full object-contain"
                   controls

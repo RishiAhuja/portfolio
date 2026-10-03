@@ -83,7 +83,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, caption, priority
       aria-label={imageCount > 1 ? `Image carousel with ${imageCount} images` : 'Image'}
     >
       <div
-        className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10"
+        className="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-sm border border-darkGrey bg-darkGrey/10 sm:aspect-[16/10]"
         onTouchStart={(event) => setTouchStartX(event.touches[0].clientX)}
         onTouchEnd={handleTouchEnd}
       >
