@@ -1795,7 +1795,7 @@ int main() {
     },
     {
       "type": "paragraph",
-      "content": "That same day I also met Prof. Sundong Kim from GIST (Gwangju Institute of Science and Technology). We ended up talking for about an hour about his work on Benchmarking and ARG-AGI. By the end, he offered me to apply for a funded research internship at GIST and told me to apply through the official website before the deadline and to include his name in my application. Nice :)"
+      "content": "That same day I also met Prof. Sundong Kim from GIST (Gwangju Institute of Science and Technology). We ended up talking for about an hour about his work on Benchmarking and ARC-AGI. By the end, he encouraged me to apply for a funded research internship at GIST and told me to apply through the official website before the deadline and to include his name in my application. Nice :)"
     },
     {
       "type": "heading",
@@ -1853,7 +1853,7 @@ int main() {
     },
     {
       "type": "paragraph",
-      "content": "Rishab, Priyanshu, and I were together. Because of my dietary preferences, there were not many things we actually wanted to eat. Some options existed, but overall the food was not particularly great for me.\n\nWe met more people there, particularly Dr. Ashish Kumar from BITS Dubai."
+      "content": "Rishabh, Priyanshu, and I were together. Because of my dietary preferences, there were not many things we actually wanted to eat. Some options existed, but overall the food was not particularly great for me.\n\nWe met more people there, particularly Dr. Ashish Kumar from BITS Dubai."
     },
     {
       "type": "carousel",
@@ -1897,7 +1897,7 @@ int main() {
     },
     {
       "type": "paragraph",
-      "content": "Today was my presentation. I got ready and headed to the venue and, continuing the tradition from GlobalSouthAI, I arrived extremely close to my presentation time, something like five minutes before.\nI found the room, got everything ready, and went up for the presentation."
+      "content": "That day was my presentation. I got ready and headed to the venue and, continuing the tradition from GlobalSouthAI, I arrived extremely close to my presentation time, something like five minutes before.\nI found the room, got everything ready, and went up for the presentation."
     },
     {
       "type": "carousel",
@@ -2031,7 +2031,7 @@ int main() {
     {
       "type": "image",
       "content": "https://artifacts.rishia.in/blurbs/my-ijcai-ecai-2026-and-germany-experience-in-bremen/1790978703288_WhatsApp_Image_2026-10-03_at_03.34.47.jpeg",
-      "alt": "Devils Adobe?"
+      "alt": "Devils Abode?"
     },
     {
       "type": "paragraph",
@@ -2084,7 +2084,7 @@ int main() {
     },
     {
       "type": "paragraph",
-      "content": "That was a nice way for IJCAI to end. But I still had one completely free day left in Germany, and Rishab and I came to the conclusion that I should travel to Cologne instead of Hamburg, which I had initially intended to do. \n\nThe next morning, I would take an ICE to Cologne."
+      "content": "That was a nice way for IJCAI to end. But I still had one completely free day left in Germany, and Rishabh and I came to the conclusion that I should travel to Cologne instead of Hamburg, which I had initially intended to do. \n\nThe next morning, I would take an ICE to Cologne."
     },
     {
       "type": "heading",
