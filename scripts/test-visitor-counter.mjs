@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { runInNewContext } from 'node:vm';
+import ts from 'typescript';
+const source = ts.transpileModule(await readFile('src/lib/visitorCounter.ts','utf8'), { compilerOptions: {target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS} }).outputText;
+const requests=[];
+const state={exports:{},window:{location:{pathname:'/'}},sessionStorage:{getItem(){return 'original_session'},setItem(){throw new Error('Existing session should be reused')}},require(name){assert.equal(name,'./supabase');return {supabase:{async rpc(name,parameters){requests.push({name,parameters});return {data:name==='get_total_visitors'?4677:null,error:null}}}}}};
+runInNewContext(source,state);
+const first=state.exports.getVisitorCount(),second=state.exports.getVisitorCount();
+assert.equal(first,second,'Both responsive counters share the same recording');
+assert.deepEqual(await Promise.all([first,second]),[10424,10424]);
+assert.equal(requests.filter(r=>r.name==='log_visit').length,1);
+assert.equal(requests[0].parameters.p_session_id,'original_session');
+state.window.location.pathname='/community';
+await state.exports.getVisitorCount();
+assert.equal(requests.filter(r=>r.name==='log_visit').length,2,'A new page records one new view');
+assert.equal(requests.at(-2).parameters.p_page_path,'/community');
+console.log('Visitor counter checks passed: one shared recording, original session continuity, legacy offset, and navigation.');

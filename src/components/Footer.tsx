@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { getVisitorCount } from '../lib/visitorCounter';
 
 const VisitorCounter: React.FC = () => {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
@@ -12,29 +12,7 @@ const VisitorCounter: React.FC = () => {
     setMounted(true);
     const updateVisitorCount = async () => {
       try {
-        // Get or create session ID
-        let sessionId = sessionStorage.getItem('visitor_session_id');
-        if (!sessionId) {
-          sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-          sessionStorage.setItem('visitor_session_id', sessionId);
-        }
-
-        // Log the visit with page path and session ID
-        await supabase.rpc('log_visit', {
-          p_page_path: window.location.pathname,
-          p_session_id: sessionId
-        });
-        
-        // Get total visitor count
-        const { data, error } = await supabase.rpc('get_total_visitors');
-        
-        if (error) {
-          console.error('Error getting visitor count:', error);
-          return;
-        }
-        
-        // Add legacy visitor count (5747) to new system
-        setVisitorCount((data || 0) + 5747);
+        setVisitorCount(await getVisitorCount());
       } catch (error) {
         console.error('Error:', error);
       } finally {
