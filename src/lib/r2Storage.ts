@@ -49,6 +49,10 @@ async function getR2Client() {
       accessKeyId: config.ACCESS_KEY,
       secretAccessKey: config.SECRET_KEY,
     },
+    // Browser uploads send the file themselves. The default checksum is of an
+    // empty body, which R2 rejects and the browser reports as a CORS failure.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
   });
   
   return r2ClientInstance;
