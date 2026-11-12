@@ -12,7 +12,8 @@ export default defineConfig({
       // Apply Tailwind's base styles
       applyBaseStyles: false,
     }),
-    sitemap(),
+    // The earlier gallery design stays reachable but unlisted.
+    sitemap({ filter: (page) => !page.includes('/gallery/tape') }),
   ],
   output: 'hybrid',
   adapter: vercel({
