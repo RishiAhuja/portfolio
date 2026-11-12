@@ -41,6 +41,7 @@ main:focus { outline: none; }
 
 .wrap { width: 100%; padding-inline: var(--page-gutter); }
 
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .skip-link { position: absolute; left: -999px; top: 0; padding: 0.6em 1em; background: var(--bg); }
 .skip-link:focus { left: 1rem; top: 1rem; z-index: 10; }
 
@@ -123,7 +124,7 @@ main:focus { outline: none; }
   height: 64px;
   overflow: hidden;
   border-radius: 2px;
-  opacity: 0.55;
+  opacity: 0.7;
   transition: opacity 150ms ease-out;
 }
 .contact-strip a:hover, .contact-strip a[aria-current='true'] { opacity: 1; }
@@ -149,8 +150,22 @@ main:focus { outline: none; }
   object-fit: contain;
 }
 .frame-photo video { background: #111; }
+
+/* iPhone videos are HDR (HLG). On HDR screens browsers show them far brighter
+   than the page and the SDR photos beside them, so hold all media to SDR. */
+.frame-photo :is(img, video), .roll-cover :is(img, video) { dynamic-range-limit: standard; }
 .frame figcaption { max-width: 36em; margin: 0.9em auto 0; }
+.frame-meta-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .frame-meta { margin: 0; color: var(--text-muted); font-size: 0.85em; font-variant-numeric: tabular-nums; }
+.frame-share {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 0.85em;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+}
+.frame-share:hover { color: var(--accent); text-decoration-color: currentColor; }
 .frame-note { margin: 0.25em 0 0; font-family: var(--font-read); font-size: 1.05rem; line-height: 1.6; }
 
 .roll-nav {
@@ -164,6 +179,10 @@ main:focus { outline: none; }
 .roll-nav a { display: grid; gap: 0.1em; }
 .roll-nav small { color: var(--text-muted); font-size: 0.8em; }
 .roll-nav .newer { margin-left: auto; text-align: right; }
+.single-intro { padding-block: 2.5rem 1.5rem; }
+.single-nav { margin-top: 3rem; }
+.single-nav .in-roll { text-align: center; }
+.single-nav .in-roll:first-child { margin-inline: auto; }
 .keys-hint { margin: 0.6rem 0 0; color: var(--text-muted); font-size: 0.8em; }
 @media (hover: none) { .keys-hint { display: none; } }
 

@@ -8,9 +8,11 @@ interface Props {
   title: string;
   description: string;
   image?: string | null;
+  imageAlt?: string;
+  imageSize?: { width: number; height: number };
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, imageAlt, imageSize } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(path, GALLERY_ORIGIN).href;
 ---
@@ -33,11 +35,15 @@ const canonical = new URL(path, GALLERY_ORIGIN).href;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {image && <meta property="og:image" content={image} />}
+    {image && imageSize && <meta property="og:image:width" content={String(imageSize.width)} />}
+    {image && imageSize && <meta property="og:image:height" content={String(imageSize.height)} />}
+    {image && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
     <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:site" content="@Rishi2220" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
+    {image && imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

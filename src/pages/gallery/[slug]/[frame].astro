@@ -1,0 +1,67 @@
+---
+// One frame on its own page: the address to share, so link previews show
+// this photo and its note rather than the roll's cover.
+import GalleryLayout from '../../../layouts/GalleryLayout.astro';
+import GalleryFrame from '../../../components/gallery/GalleryFrame.astro';
+import { getAllGalleryCollections, getGalleryCollectionBySlug, type GalleryCollectionWithImages } from '../../../lib/gallery';
+import { frameAnchor, frameId, framePath, isVideo, longDate, shareImage, shareImageSize } from '../../../lib/galleryFrames';
+
+export async function getStaticPaths() {
+  const collections = await getAllGalleryCollections();
+  const rolls = await Promise.all(collections.map((collection) => getGalleryCollectionBySlug(collection.slug)));
+  const paths = rolls.filter((roll): roll is GalleryCollectionWithImages => Boolean(roll)).flatMap((roll) =>
+    roll.images.map((frame, index) => ({
+      params: { slug: roll.slug, frame: frameId(frame) },
+      props: { roll, index },
+    })),
+  );
+  // Short IDs are 8 hex characters of a UUID; a clash would send one link to
+  // the wrong photo, so stop the build instead.
+  const seen = new Set<string>();
+  for (const { params } of paths) {
+    const key = `${params.slug}/${params.frame}`;
+    if (seen.has(key)) throw new Error(`Two gallery frames share the short ID ${key}; lengthen frameId().`);
+    seen.add(key);
+  }
+  return paths;
+}
+
+const { roll, index } = Astro.props as { roll: GalleryCollectionWithImages; index: number };
+const frame = roll.images[index];
+const total = roll.images.length;
+const previous = roll.images[index - 1];
+const next = roll.images[index + 1];
+const date = longDate(frame.captured_date);
+const heading = frame.description || `Frame ${index + 1}`;
+const preview = shareImage([isVideo(frame) ? undefined : frame.r2_url, roll.cover_image_url]);
+---
+
+<GalleryLayout
+  title={`${heading} · ${roll.display_name} · Gallery`}
+  description={frame.description ? `${frame.description} — ${date}, from Rishi Ahuja's gallery.` : `Frame ${index + 1} of ${total} from ${roll.display_name}, ${date}.`}
+  image={preview}
+  imageAlt={isVideo(frame) ? undefined : frame.description || `Photo from ${date}`}
+  imageSize={isVideo(frame) ? undefined : shareImageSize(frame)}
+>
+  <section class="gallery-intro single-intro wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/gallery">Gallery</a><span aria-hidden="true">›</span>
+      <a href={`/gallery/${roll.slug}`}>{roll.display_name}</a><span aria-hidden="true">›</span>
+    </nav>
+    <h1 class="sr-only">{heading}</h1>
+  </section>
+
+  <div class="wrap">
+    <GalleryFrame frame={frame} index={index} total={total} slug={roll.slug} rollTitle={roll.display_name} eager />
+
+    <nav class="roll-nav single-nav" aria-label="Nearby frames">
+      {previous && <a class="older" href={framePath(roll.slug, previous)}><small>← Previous frame</small>{previous.description || longDate(previous.captured_date)}</a>}
+      <a class="in-roll" href={`/gallery/${roll.slug}#${frameAnchor(frame)}`}><small>See it in the roll</small>{roll.display_name}</a>
+      {next && <a class="newer" href={framePath(roll.slug, next)}><small>Next frame →</small>{next.description || longDate(next.captured_date)}</a>}
+    </nav>
+  </div>
+</GalleryLayout>
+
+<script>
+  import '../../../scripts/galleryShare';
+</script>

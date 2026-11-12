@@ -19,6 +19,12 @@ export const frameSrcset = (url: string, originalWidth?: number | null) =>
     .map((width) => `${resized(url, width)} ${width}w`)
     .join(', ');
 
+// Frames are addressed by their database ID, not their position, so shared
+// links survive photos being added, removed, or reordered.
+export const frameId = (image: GalleryImage) => image.id.replaceAll('-', '').slice(0, 8);
+export const framePath = (slug: string, image: GalleryImage) => `/gallery/${slug}/${frameId(image)}`;
+export const frameAnchor = (image: GalleryImage) => `f-${frameId(image)}`;
+
 export const isVideo = (image: GalleryImage) => Boolean(image.mime_type?.startsWith('video/'));
 
 // A roll's cover can be a video; collections only store its URL.
@@ -51,10 +57,17 @@ export const rollName = (collection: GalleryCollection) =>
   collection.month ? MONTHS[collection.month - 1] : 'The whole year';
 
 // Link previews need a still image of reasonable size, never a video.
+export const SHARE_WIDTH = 1200;
 export const shareImage = (urls: (string | null | undefined)[]) => {
   const still = urls.find((url): url is string => Boolean(url) && !isVideoUrl(url!));
-  return still ? new URL(resized(still, 1200, 80), GALLERY_ORIGIN).href : undefined;
+  return still ? new URL(resized(still, SHARE_WIDTH, 80), GALLERY_ORIGIN).href : undefined;
 };
+
+// The resized preview's size, when the original's dimensions are known.
+export const shareImageSize = (image: GalleryImage) =>
+  image.width && image.height
+    ? { width: Math.min(SHARE_WIDTH, image.width), height: Math.round(image.height * Math.min(SHARE_WIDTH, image.width) / image.width) }
+    : undefined;
 
 export const frameCount = (count: number) => `${count} ${count === 1 ? 'frame' : 'frames'}`;
 

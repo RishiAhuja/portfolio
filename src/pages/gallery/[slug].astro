@@ -1,8 +1,9 @@
 ---
 import GalleryLayout from '../../layouts/GalleryLayout.astro';
 import { getAllGalleryCollections, getGalleryCollectionBySlug } from '../../lib/gallery';
+import GalleryFrame from '../../components/gallery/GalleryFrame.astro';
 import {
-  THUMB_WIDTH, dateRange, dateStamp, frameCount, frameSrcset, isVideo, longDate, resized, shareImage, sortRolls,
+  THUMB_WIDTH, dateRange, frameAnchor, frameCount, isVideo, resized, shareImage, sortRolls,
 } from '../../lib/galleryFrames';
 
 export async function getStaticPaths() {
@@ -21,11 +22,7 @@ const older = position >= 0 && position < rolls.length - 1 ? rolls[position + 1]
 
 const frames = roll.images;
 const total = frames.length;
-const number = (index: number) => String(index + 1).padStart(2, '0');
 const range = dateRange(frames);
-const sizes = '(min-width: 769px) 83vw, 88vw';
-// Many older uploads have no stored dimensions; they get a 4:3 frame.
-const PLACEHOLDER_SIZE = { width: 1600, height: 1200 };
 ---
 
 <GalleryLayout
@@ -47,7 +44,7 @@ const PLACEHOLDER_SIZE = { width: 1600, height: 1200 };
         <ol class="contact-strip" aria-label="Contact sheet" data-contact-strip>
           {frames.map((frame, index) => (
             <li>
-              <a href={`#frame-${index + 1}`} aria-label={`Frame ${index + 1}${frame.description ? `: ${frame.description}` : ''}`} data-strip-frame={index + 1}>
+              <a href={`#${frameAnchor(frame)}`} aria-label={`Frame ${index + 1}${frame.description ? `: ${frame.description}` : ''}`} data-strip-frame={index + 1}>
                 {isVideo(frame)
                   ? <span class="strip-video" aria-hidden="true">▶</span>
                   : <img src={resized(frame.r2_url, THUMB_WIDTH, 60)} alt="" width="64" height="64" loading="lazy" decoding="async" />}
@@ -58,39 +55,9 @@ const PLACEHOLDER_SIZE = { width: 1600, height: 1200 };
         <p class="keys-hint">Use J and K, or the left and right arrow keys, to move between frames.</p>
 
         <ol class="frames">
-          {frames.map((frame, index) => {
-            const label = `Frame ${index + 1} of ${total}, ${longDate(frame.captured_date)}`;
-            const sized = Boolean(frame.width && frame.height);
-            const size = sized ? { width: frame.width!, height: frame.height! } : isVideo(frame) ? { width: 16, height: 9 } : PLACEHOLDER_SIZE;
-            return (
-              <li>
-                <figure class="frame" id={`frame-${index + 1}`} data-frame={index + 1}>
-                  <div class="frame-photo" style={`--ratio: ${(size.width / size.height).toFixed(4)}`}>
-                    {isVideo(frame) ? (
-                      <video src={frame.r2_url} controls playsinline preload="metadata" aria-label={frame.description || label} />
-                    ) : (
-                      <img
-                        src={resized(frame.r2_url, 1080)}
-                        srcset={frameSrcset(frame.r2_url, frame.width)}
-                        sizes={sizes}
-                        alt={frame.description || label}
-                        width={size.width}
-                        height={size.height}
-                        loading={index < 2 ? 'eager' : 'lazy'}
-                        fetchpriority={index === 0 ? 'high' : 'auto'}
-                        decoding="async"
-                      />
-                    )}
-                    <span class="stamp" aria-hidden="true">{dateStamp(frame.captured_date)}</span>
-                  </div>
-                  <figcaption>
-                    <p class="frame-meta">{number(index)} / {String(total).padStart(2, '0')} · {longDate(frame.captured_date)}</p>
-                    {frame.description && <p class="frame-note">{frame.description}</p>}
-                  </figcaption>
-                </figure>
-              </li>
-            );
-          })}
+          {frames.map((frame, index) => (
+            <li><GalleryFrame frame={frame} index={index} total={total} slug={roll.slug} rollTitle={roll.display_name} eager={index < 2} /></li>
+          ))}
         </ol>
       </>
     )}
@@ -103,6 +70,8 @@ const PLACEHOLDER_SIZE = { width: 1600, height: 1200 };
 </GalleryLayout>
 
 <script>
+  import '../../scripts/galleryShare';
+
   // Highlights the frame in view on the contact strip and lets J/K or the
   // arrow keys step through frames.
   const frames = [...document.querySelectorAll<HTMLElement>('[data-frame]')];

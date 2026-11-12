@@ -1,0 +1,57 @@
+---
+import type { GalleryImage } from '../../lib/gallery';
+import { dateStamp, frameAnchor, framePath, frameSrcset, isVideo, longDate, resized } from '../../lib/galleryFrames';
+
+interface Props {
+  frame: GalleryImage;
+  index: number;
+  total: number;
+  slug: string;
+  rollTitle: string;
+  eager?: boolean;
+}
+
+const { frame, index, total, slug, rollTitle, eager = false } = Astro.props;
+const date = longDate(frame.captured_date);
+const label = `Frame ${index + 1} of ${total}, ${date}`;
+const pad = (value: number) => String(value).padStart(2, '0');
+// Many older uploads have no stored dimensions; they get a 4:3 frame.
+const size = frame.width && frame.height ? { width: frame.width, height: frame.height }
+  : isVideo(frame) ? { width: 16, height: 9 } : { width: 1600, height: 1200 };
+const sizes = '(min-width: 769px) 83vw, 88vw';
+---
+
+<figure class="frame" id={frameAnchor(frame)} data-frame={index + 1}>
+  <div class="frame-photo" style={`--ratio: ${(size.width / size.height).toFixed(4)}`}>
+    {isVideo(frame) ? (
+      <video src={frame.r2_url} controls playsinline preload="metadata" aria-label={frame.description || label} />
+    ) : (
+      <img
+        src={resized(frame.r2_url, 1080)}
+        srcset={frameSrcset(frame.r2_url, frame.width)}
+        sizes={sizes}
+        alt={frame.description || label}
+        width={size.width}
+        height={size.height}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    )}
+    <span class="stamp" aria-hidden="true">{dateStamp(frame.captured_date)}</span>
+  </div>
+  <figcaption>
+    <div class="frame-meta-row">
+      <p class="frame-meta">{pad(index + 1)} / {pad(total)} · {date}</p>
+      <a
+        class="frame-share"
+        href={framePath(slug, frame)}
+        data-share
+        data-share-title={`${frame.description || label} · ${rollTitle}`}
+        data-share-text={frame.description ?? ''}
+        aria-label={`Share frame ${index + 1}`}
+      ><span data-share-label>Share</span></a>
+    </div>
+    {frame.description && <p class="frame-note">{frame.description}</p>}
+  </figcaption>
+</figure>
