@@ -13,6 +13,7 @@ import {
   type GalleryImage,
 } from '../../lib/gallery';
 import { validateImageFile } from '../../lib/r2Storage';
+import { framePath, resized } from '../../lib/galleryFrames';
 
 interface GalleryEditorProps {
   token: string;
@@ -355,251 +356,11 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
 
   return (
     <div className="gallery-editor">
-      <style>
-        {`
-          .gallery-editor {
-            font-family: 'PT Mono', monospace;
-            padding: 2rem;
-            color: var(--quillGray);
-          }
-          
-          .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-          }
-          
-          .header h2 {
-            font-size: 1.5rem;
-            color: var(--quillGray);
-          }
-          
-          .btn {
-            padding: 0.5rem 1rem;
-            background: var(--darkGrey);
-            border: 1px solid var(--gunSmoke);
-            color: var(--quillGray);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'PT Mono', monospace;
-            font-size: 0.875rem;
-          }
-          
-          .btn:hover {
-            border-color: var(--accent-light);
-            color: var(--accent-light);
-          }
-          
-          .btn-primary {
-            background: var(--accent-light);
-            color: var(--codGray);
-            border-color: var(--accent-light);
-          }
-          
-          .btn-primary:hover {
-            opacity: 0.8;
-          }
-          
-          .btn-danger {
-            border-color: #ff4444;
-            color: #ff4444;
-          }
-          
-          .btn-danger:hover {
-            background: #ff4444;
-            color: white;
-          }
-          
-          .form-group {
-            margin-bottom: 1rem;
-          }
-          
-          .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--gunSmoke);
-            font-size: 0.875rem;
-          }
-          
-          .form-group input,
-          .form-group select,
-          .form-group textarea {
-            width: 100%;
-            padding: 0.5rem;
-            background: var(--darkGrey);
-            border: 1px solid var(--gunSmoke);
-            color: var(--quillGray);
-            font-family: 'PT Mono', monospace;
-            font-size: 0.875rem;
-          }
-          
-          .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-          }
-          
-          .collections-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-          }
-          
-          .collection-card {
-            border: 1px solid var(--gunSmoke);
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-          }
-          
-          .collection-card:hover,
-          .collection-card.selected {
-            border-color: var(--accent-light);
-            background: rgba(var(--accent-light-rgb), 0.1);
-          }
-          
-          .collection-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: var(--quillGray);
-          }
-          
-          .collection-card p {
-            font-size: 0.75rem;
-            color: var(--gunSmoke);
-            margin: 0.25rem 0;
-          }
-          
-          .images-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-          }
-          
-          .image-card {
-            border: 1px solid var(--gunSmoke);
-            overflow: hidden;
-          }
-          
-          .image-card img {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-          }
-          
-          .image-info {
-            padding: 0.75rem;
-            font-size: 0.75rem;
-          }
-          
-          .image-date {
-            color: var(--accent-light);
-            margin-bottom: 0.5rem;
-          }
-          
-          .image-caption {
-            color: var(--gunSmoke);
-            margin-bottom: 0.5rem;
-          }
-          
-          .image-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-          }
-          
-          .upload-section {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border: 2px dashed var(--gunSmoke);
-          }
-          
-          .upload-section h3 {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-          }
-          
-          .form-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-          }
-          
-          .modal-content {
-            background: var(--codGray);
-            border: 1px solid var(--gunSmoke);
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-          }
-          
-          .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-          }
-          
-          .modal-header h3 {
-            font-size: 1.25rem;
-          }
-          
-          .modal-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-          }
-          
-          .pending-files {
-            margin-top: 1.5rem;
-          }
-          
-          .pending-file-item {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid var(--gunSmoke);
-            margin-bottom: 1rem;
-          }
-          
-          .pending-preview {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border: 1px solid var(--gunSmoke);
-          }
-          
-          .pending-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-          }
-          
-          .pending-file-name {
-            color: var(--quillGray);
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-          }
-        `}
-      </style>
 
       <div className="header">
-        <h2>Gallery Collections Manager</h2>
+        <h2>Rolls</h2>
         <button className="btn btn-primary" onClick={() => setShowNewCollectionForm(true)}>
-          + New Collection
+          New roll
         </button>
       </div>
 
@@ -613,9 +374,9 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
           >
             <h3>{collection.display_name}</h3>
             <p>{collection.image_count || 0} photos</p>
-            <p className="text-xs text-gunSmoke">{collection.slug}</p>
+            <p className="collection-slug">{collection.slug}</p>
             <button
-              className="btn btn-danger btn-sm mt-2"
+              className="btn btn-danger btn-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDeleteCollection(collection.id);
@@ -631,9 +392,9 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
       {selectedCollection && (
         <>
           <div className="upload-section">
-            <h3>Upload Images to {selectedCollection.display_name}</h3>
+            <h3>Add photos to {selectedCollection.display_name}</h3>
             <div className="form-group">
-              <label>Select Images/Videos</label>
+              <label>Photos and videos</label>
               <input
                 type="file"
                 accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.webm,.mov,image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
@@ -646,9 +407,7 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
             {/* Pending Files Preview */}
             {pendingFiles.length > 0 && (
               <div className="pending-files">
-                <h4 style={{ marginBottom: '1rem', color: 'var(--quillGray)' }}>
-                  {pendingFiles.length} file{pendingFiles.length !== 1 ? 's' : ''} ready to upload
-                </h4>
+                <h4>{pendingFiles.length} file{pendingFiles.length !== 1 ? 's' : ''} ready to upload</h4>
                 
                 {pendingFiles.map((pf, index) => {
                   const isVideo = pf.file.type.startsWith('video/');
@@ -662,11 +421,11 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                     
                     <div className="pending-inputs">
                       <div className="pending-file-name">
-                        {pf.file.name} {isVideo && <span style={{ color: 'var(--accent-light)' }}>[VIDEO]</span>}
+                        {pf.file.name} {isVideo && <span className="video-tag">Video</span>}
                       </div>
                       
-                      <div className="form-group" style={{ marginBottom: '0.5rem' }}>
-                        <label>Captured Date</label>
+                      <div className="form-group">
+                        <label>Date taken</label>
                         <input
                           type="date"
                           value={pf.capturedDate}
@@ -674,12 +433,12 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                         />
                       </div>
                       
-                      <div className="form-group" style={{ marginBottom: '0.5rem' }}>
-                        <label>Caption (optional)</label>
+                      <div className="form-group">
+                        <label>Note (optional)</label>
                         <textarea
                           value={pf.description}
                           onChange={(e) => handleUpdatePendingFile(index, 'description', e.target.value)}
-                          placeholder="Add a caption..."
+                          placeholder="A line or two about this photo"
                           rows={2}
                         />
                       </div>
@@ -699,9 +458,8 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                   className="btn btn-primary" 
                   onClick={handleUploadPendingFiles}
                   disabled={uploading}
-                  style={{ marginTop: '1rem' }}
                 >
-                  {uploading ? 'Uploading...' : `Upload ${pendingFiles.length} Image${pendingFiles.length !== 1 ? 's' : ''}`}
+                  {uploading ? 'Uploading…' : `Upload ${pendingFiles.length} file${pendingFiles.length !== 1 ? 's' : ''}`}
                 </button>
               </div>
             )}
@@ -714,14 +472,14 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
               return (
               <div key={image.id} className="image-card">
                 {isVideo ? (
-                  <video src={image.r2_url} controls muted style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover' }} />
+                  <video src={image.r2_url} controls muted preload="metadata" />
                 ) : (
-                  <img src={image.r2_url} alt={image.description || 'Gallery image'} />
+                  <img src={resized(image.r2_url, 640)} alt={image.description || 'Gallery photo'} loading="lazy" decoding="async" />
                 )}
                 <div className="image-info">
                   {editingImage?.imageId === image.id ? (
                     <>
-                      <div className="form-group mb-2">
+                      <div className="form-group">
                         <input
                           type="date"
                           value={editingImage.date}
@@ -730,7 +488,7 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                           }
                         />
                       </div>
-                      <div className="form-group mb-2">
+                      <div className="form-group">
                         <textarea
                           value={editingImage.caption}
                           onChange={(e) =>
@@ -751,11 +509,14 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                   ) : (
                     <>
                       <div className="image-date">{formatCapturedDate(image.captured_date)}</div>
-                      <div className="image-caption">{image.description || 'No caption'}</div>
+                      <div className="image-note">{image.description || 'No note'}</div>
                       <div className="image-actions">
                         <button className="btn" onClick={() => startEditingImage(image)}>
                           Edit
                         </button>
+                        <a className="btn" href={framePath(selectedCollection.slug, image)} target="_blank" rel="noopener noreferrer">
+                          View
+                        </a>
                         <button className="btn btn-danger" onClick={() => handleDeleteImage(image.id)}>
                           Delete
                         </button>
@@ -774,8 +535,8 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
         <div className="form-modal" onClick={() => setShowNewCollectionForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Create New Collection</h3>
-              <button className="btn" onClick={() => setShowNewCollectionForm(false)}>
+              <h3>New roll</h3>
+              <button className="btn" onClick={() => setShowNewCollectionForm(false)} aria-label="Close">
                 ✕
               </button>
             </div>
@@ -792,12 +553,12 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
             </div>
 
             <div className="form-group">
-              <label>Month (0 for year-only collection, 1-12 for specific month)</label>
+              <label>Month</label>
               <select
                 value={formData.month}
                 onChange={(e) => setFormData({ ...formData, month: parseInt(e.target.value) })}
               >
-                <option value="0">Year Only (2023, 2024)</option>
+                <option value="0">Whole year</option>
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -813,8 +574,8 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
               </select>
             </div>
 
-            <p className="text-gunSmoke text-sm mb-4">
-              Preview: {generateCollectionDisplayName(formData.year, formData.month === 0 ? undefined : formData.month)}
+            <p className="modal-preview">
+              Will be called {generateCollectionDisplayName(formData.year, formData.month === 0 ? undefined : formData.month)}
               {' ('}
               {generateCollectionSlug(formData.year, formData.month === 0 ? undefined : formData.month)}
               {')'}
@@ -825,7 +586,7 @@ const GalleryEditor: React.FC<GalleryEditorProps> = ({ token }) => {
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={handleCreateCollection}>
-                Create Collection
+                Create roll
               </button>
             </div>
           </div>

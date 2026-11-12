@@ -1,11 +1,8 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import AdminLayout from '../layouts/AdminLayout.astro';
 import AdminApp from '../components/admin/AdminApp';
 ---
 
-<BaseLayout 
-  title="Admin Panel | Uncompiled"
-  description="Admin management panel for Uncompiled entries"
->
+<AdminLayout title="Admin · Rishi Ahuja">
   <AdminApp client:load />
-</BaseLayout>
+</AdminLayout>

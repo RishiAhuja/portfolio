@@ -17,7 +17,8 @@ export const RESUME_TRACKS: Record<
     fileName: (version) => `rishi-resume-v${version}.pdf`,
     hint: 'rishi-resume-v<number>.pdf',
     label: 'Engineering',
-    publicPaths: ['/resume'],
+    // rishia.in's links, which vercel.json there forwards to this archive.
+    publicPaths: ['/engineering/resume'],
   },
   research: {
     prefix: 'resume/research/',

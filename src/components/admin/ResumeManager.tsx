@@ -169,9 +169,9 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
       <div className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <h2 className="text-xl font-bold font-ptMono text-quillGray">Resume Tracker</h2>
-            <p className="text-sm text-gunSmoke font-ptMono mt-2">
-              Versioned PDFs in R2 at {trackConfig.prefix}{trackConfig.hint}.
+            <h2 className="text-lg font-medium text-quillGray">Current version</h2>
+            <p className="text-sm text-gunSmoke mt-1">
+              Versioned PDFs stored at {trackConfig.prefix}{trackConfig.hint}.
             </p>
           </div>
           <button
@@ -220,7 +220,7 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
         {latestResume ? (
           <div className="mt-5 border border-accent-light/40 bg-accent-light/5 rounded-sm p-4">
             <div className="text-xs text-accent-light font-ptMono mb-2">
-              Latest {trackConfig.label} Resume
+              Latest {trackConfig.label.toLowerCase()} résumé
             </div>
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
@@ -237,13 +237,13 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
                   text-accent-light font-ptMono text-sm hover:bg-accent-light hover:text-codGray
                   transition-all duration-200 text-center"
               >
-                Open Latest
+                Open latest
               </a>
             </div>
           </div>
         ) : (
           <div className="mt-5 border border-gunSmoke/30 rounded-sm p-4 text-sm text-gunSmoke font-ptMono">
-            No versioned {trackConfig.label.toLowerCase()} resume PDFs in R2 yet.
+            No versioned {trackConfig.label.toLowerCase()} résumés uploaded yet.
             Public URLs currently fall back to{' '}
             <a
               href={FALLBACK_URLS[track]}
@@ -259,12 +259,12 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
       </div>
 
       <div className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-5">
-        <h3 className="text-base font-bold font-ptMono text-quillGray mb-4">
-          Upload {trackConfig.label} Resume
+        <h3 className="text-base font-medium text-quillGray mb-4">
+          Upload a new {trackConfig.label.toLowerCase()} version
         </h3>
         <div className="grid gap-4 md:grid-cols-[1fr_280px_auto] md:items-end">
           <div>
-            <label className="block text-sm font-ptMono text-gunSmoke mb-2">PDF File</label>
+            <label className="block text-sm text-gunSmoke mb-2">PDF</label>
             <input
               type="file"
               accept="application/pdf,.pdf"
@@ -274,7 +274,7 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-ptMono text-gunSmoke mb-2">R2 Filename</label>
+            <label className="block text-sm text-gunSmoke mb-2">File name</label>
             <input
               type="text"
               value={targetFileName}
@@ -291,7 +291,7 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
               text-accent-light font-ptMono text-sm hover:bg-accent-light hover:text-codGray
               transition-all duration-200 disabled:opacity-50 disabled:hover:bg-accent-light/10 disabled:hover:text-accent-light"
           >
-            {isUploading ? 'Uploading...' : 'Upload'}
+            {isUploading ? 'Uploading…' : 'Upload'}
           </button>
         </div>
 
@@ -303,13 +303,13 @@ const ResumeManager: React.FC<ResumeManagerProps> = ({ token }) => {
       </div>
 
       <div className="bg-darkGrey border border-gunSmoke/30 rounded-sm p-5">
-        <h3 className="text-base font-bold font-ptMono text-quillGray mb-4">
-          All {trackConfig.label} Resumes
+        <h3 className="text-base font-medium text-quillGray mb-4">
+          All {trackConfig.label.toLowerCase()} versions
         </h3>
         {isLoading ? (
-          <p className="text-gunSmoke font-ptMono text-sm">Loading resumes...</p>
+          <p className="text-gunSmoke font-ptMono text-sm">Loading versions…</p>
         ) : resumes.length === 0 ? (
-          <p className="text-gunSmoke font-ptMono text-sm">No resumes found.</p>
+          <p className="text-gunSmoke font-ptMono text-sm">No versions yet.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left font-ptMono text-sm">

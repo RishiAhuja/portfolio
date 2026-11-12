@@ -1,0 +1,44 @@
+/* rishia.in's fonts, colours, and base styles, shared by the gallery and admin. */
+@font-face { font-family: 'Athletics'; src: url('/fonts/athletics/Athletics-Regular.woff2') format('woff2'); font-weight: 300 500; font-display: swap; }
+@font-face { font-family: 'Athletics'; src: url('/fonts/athletics/Athletics-Medium.woff2') format('woff2'); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: 'Charter'; src: url('/fonts/charter/charter_regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Charter'; src: url('/fonts/charter/charter_italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  --text: #353535;
+  --text-muted: #666667;
+  --bg: #ffffff;
+  --bg-soft: #f6f6f6;
+  --rule: #e6e6e6;
+  --accent: #174ea6;
+  --font: 'Athletics', sans-serif;
+  --font-read: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+  --page-gutter: 6vw;
+}
+
+@media (min-width: 769px) { :root { --page-gutter: 8.5vw; } }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+main:focus { outline: none; }
+
+.wrap { width: 100%; padding-inline: var(--page-gutter); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip-link { position: absolute; left: -999px; top: 0; padding: 0.6em 1em; background: var(--bg); }
+.skip-link:focus { left: 1rem; top: 1rem; z-index: 10; }

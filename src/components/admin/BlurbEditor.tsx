@@ -1210,19 +1210,19 @@ function BlockRow({
       ))}
 
       {showMenu && menu && (
-        <div data-blurb-menu className="absolute left-10 z-20 w-64 overflow-hidden rounded-md border border-white/10 bg-[#161616] py-1 shadow-2xl" style={{ top: (menu.line ?? 0) * 32 + 32 }}>
+        <div data-blurb-menu className="absolute left-10 z-20 w-64 overflow-hidden rounded-md border border-gunSmoke/20 bg-codGray py-1 shadow-lg" style={{ top: (menu.line ?? 0) * 32 + 32 }}>
           {commands.map((command, index) => (
             <button
               key={command.id}
               type="button"
-              className={`flex w-full items-baseline justify-between px-3 py-1.5 text-left text-sm ${index === menu.index ? 'bg-white/10 text-white' : 'text-white/75'}`}
+              className={`flex w-full items-baseline justify-between px-3 py-1.5 text-left text-sm ${index === menu.index ? 'bg-darkGrey text-quillGray' : 'text-quillGray/80'}`}
               onMouseDown={(event) => { event.preventDefault(); onChoose(command); }}
             >
               <span>{command.label}</span>
-              <span className="text-[11px] text-white/35">{command.hint}</span>
+              <span className="text-[11px] text-gunSmoke">{command.hint}</span>
             </button>
           ))}
-          {commands.length === 0 && <p className="px-3 py-2 text-sm text-white/40">Nothing matches</p>}
+          {commands.length === 0 && <p className="px-3 py-2 text-sm text-gunSmoke">Nothing matches</p>}
           {menu.mode === 'turn' && (
             <div className="mt-1 border-t border-white/10 pt-1">
               <MenuAction label="Move up" onClick={() => onMove(-1)} />
@@ -1239,7 +1239,7 @@ function BlockRow({
       {linkFor && (
         <form className="absolute left-10 top-0 z-10 -translate-y-full" onSubmit={onApplyLink}>
           <input
-            className="w-64 bg-[#161616] px-2 py-1 text-sm text-accent-light outline-none"
+            className="w-64 bg-codGray px-2 py-1 text-sm text-accent-light outline-none"
             placeholder="Paste a URL, then Enter"
             value={linkUrl}
             onChange={(event) => onLinkUrl(event.target.value)}
@@ -1326,7 +1326,7 @@ function BlockRow({
                     src={image.src}
                     alt=""
                     draggable
-                    className="h-40 w-full cursor-grab rounded-sm bg-black/30 object-contain active:cursor-grabbing"
+                    className="h-40 w-full cursor-grab rounded-sm bg-darkGrey object-contain active:cursor-grabbing"
                     onDragStart={(event) => {
                       dragFrom.current = imageIndex;
                       event.dataTransfer.effectAllowed = 'move';

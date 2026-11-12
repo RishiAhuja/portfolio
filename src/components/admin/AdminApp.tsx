@@ -53,9 +53,7 @@ const AdminApp: React.FC = () => {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen bg-codGray flex items-center justify-center">
-        <p className="text-gunSmoke font-ptMono">Checking authentication...</p>
-      </div>
+      <p className="admin-status">Checking your session…</p>
     );
   }
 
