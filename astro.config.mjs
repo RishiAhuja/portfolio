@@ -19,6 +19,15 @@ export default defineConfig({
     functionPerRoute: false,
     edgeMiddleware: false,
     imageService: true,
+    // Vercel's default sizes plus 256 for gallery contact-sheet thumbnails.
+    imagesConfig: {
+      sizes: [256, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+      domains: [],
+      remotePatterns: [
+        { protocol: 'https', hostname: '**.public.blob.vercel-storage.com' },
+        { protocol: 'https', hostname: 'artifacts.rishia.in', pathname: '/events/**' },
+      ],
+    },
     webAnalytics: {
       enabled: true
     }

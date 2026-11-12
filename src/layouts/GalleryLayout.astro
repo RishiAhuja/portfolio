@@ -1,0 +1,58 @@
+---
+// The gallery uses rishia.in's design rather than the archive's dark theme,
+// so it has its own layout and stylesheet instead of BaseLayout and Tailwind.
+import '../styles/gallery.css';
+import { GALLERY_ORIGIN, PORTFOLIO_ORIGIN } from '../lib/galleryFrames';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string | null;
+}
+
+const { title, description, image } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(path, GALLERY_ORIGIN).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${PORTFOLIO_ORIGIN}/favicon-32.png`} />
+    <link rel="apple-touch-icon" href={`${PORTFOLIO_ORIGIN}/apple-touch-icon.png`} />
+    <link rel="canonical" href={canonical} />
+    <link rel="preload" href="/fonts/athletics/Athletics-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:site_name" content="Rishi Ahuja" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:site" content="@Rishi2220" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={image} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="gallery-header wrap">
+      <a class="gallery-home" href={PORTFOLIO_ORIGIN}>Rishi Ahuja</a>
+      <nav aria-label="Gallery">
+        <a href="/gallery" aria-current={path === '/gallery' ? 'page' : undefined}>Gallery</a>
+        <a href={`${PORTFOLIO_ORIGIN}/blurb`}>Blurbs</a>
+      </nav>
+    </header>
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="gallery-footer wrap">
+      <p>Photos by Rishi Ahuja. More at <a href={PORTFOLIO_ORIGIN}>rishia.in</a>.</p>
+    </footer>
+  </body>
+</html>

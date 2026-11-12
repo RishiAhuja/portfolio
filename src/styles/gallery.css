@@ -1,0 +1,170 @@
+/* Gallery styles, matching rishia.in's tokens and type. */
+@font-face { font-family: 'Athletics'; src: url('/fonts/athletics/Athletics-Regular.woff2') format('woff2'); font-weight: 300 500; font-display: swap; }
+@font-face { font-family: 'Athletics'; src: url('/fonts/athletics/Athletics-Medium.woff2') format('woff2'); font-weight: 600 700; font-display: swap; }
+@font-face { font-family: 'Charter'; src: url('/fonts/charter/charter_regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Charter'; src: url('/fonts/charter/charter_italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  --text: #353535;
+  --text-muted: #666667;
+  --bg: #ffffff;
+  --bg-soft: #f6f6f6;
+  --rule: #e6e6e6;
+  --accent: #174ea6;
+  /* Film-camera date imprints are amber LCD digits. */
+  --stamp: #f59a23;
+  --font: 'Athletics', sans-serif;
+  --font-read: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+  --page-gutter: 6vw;
+}
+
+@media (min-width: 769px) { :root { --page-gutter: 8.5vw; } }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+main:focus { outline: none; }
+
+.wrap { width: 100%; padding-inline: var(--page-gutter); }
+
+.skip-link { position: absolute; left: -999px; top: 0; padding: 0.6em 1em; background: var(--bg); }
+.skip-link:focus { left: 1rem; top: 1rem; z-index: 10; }
+
+/* Header and footer */
+.gallery-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 2rem 0;
+  font-size: 0.95em;
+}
+.gallery-home { font-weight: 500; }
+.gallery-header nav { display: flex; gap: 1.4rem; }
+.gallery-header nav a[aria-current='page'] { color: var(--accent); }
+.gallery-footer { padding-block: 4rem 3rem; color: var(--text-muted); font-size: 0.9em; }
+.gallery-footer a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Shared page heading */
+.gallery-intro { padding-block: 3.5rem 2.2rem; }
+.crumbs { display: flex; gap: 0.45em; margin: 0 0 0.55em; color: var(--text-muted); font-size: 0.92em; }
+.gallery-intro h1 { margin: 0 0 0.3em; font-size: clamp(1.6rem, 2.4vw, 2.2rem); font-weight: 500; line-height: 1.2; }
+.gallery-lede { margin: 0; max-width: 38em; color: var(--text-muted); }
+
+.stamp {
+  position: absolute;
+  right: 0.7em;
+  bottom: 0.55em;
+  color: var(--stamp);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: clamp(0.72rem, 1.4vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 3px rgba(245, 154, 35, 0.55), 0 1px 1px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+/* Index: one roll per month, grouped by year */
+.roll-year { margin: 0 0 3rem; }
+.roll-year h2 { margin: 0 0 1rem; font-size: 1.05em; font-weight: 500; color: var(--text-muted); }
+.rolls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: 1.6rem 1.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.roll a { display: block; }
+.roll-cover {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--bg-soft);
+}
+.roll-cover img, .roll-cover video { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 300ms ease-out; }
+.roll a:hover .roll-cover :is(img, video) { transform: scale(1.03); }
+.roll-name { margin: 0.7em 0 0; font-weight: 500; }
+.roll-meta { margin: 0; color: var(--text-muted); font-size: 0.9em; }
+@media (prefers-reduced-motion: reduce) { .roll-cover :is(img, video) { transition: none; } }
+
+/* Album: a contact strip, then one frame after another */
+.contact-strip {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  background: #1f1f1f;
+  border-radius: 6px;
+  list-style: none;
+}
+.contact-strip a {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 2px;
+  opacity: 0.55;
+  transition: opacity 150ms ease-out;
+}
+.contact-strip a:hover, .contact-strip a[aria-current='true'] { opacity: 1; }
+.contact-strip a[aria-current='true'] { outline: 2px solid var(--stamp); outline-offset: -2px; }
+.contact-strip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.contact-strip .strip-video { display: grid; place-items: center; width: 100%; height: 100%; background: #3a3a3a; color: #ddd; font-size: 0.8em; }
+
+.frames { display: grid; gap: 4.5rem; margin: 3rem 0 0; padding: 0; list-style: none; }
+.frame { margin: 0; scroll-margin-top: 1.5rem; }
+/* Each frame is as wide as fits in 82% of the viewport height, using its
+   aspect ratio (--ratio), so space is reserved before the photo loads. */
+.frame-photo {
+  position: relative;
+  width: min(100%, calc(82vh * var(--ratio, 1.333)));
+  margin-inline: auto;
+  background: var(--bg-soft);
+}
+.frame-photo img, .frame-photo video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 82vh;
+  object-fit: contain;
+}
+.frame-photo video { background: #111; }
+.frame figcaption { max-width: 36em; margin: 0.9em auto 0; }
+.frame-meta { margin: 0; color: var(--text-muted); font-size: 0.85em; font-variant-numeric: tabular-nums; }
+.frame-note { margin: 0.25em 0 0; font-family: var(--font-read); font-size: 1.05rem; line-height: 1.6; }
+
+.roll-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.roll-nav a { display: grid; gap: 0.1em; }
+.roll-nav small { color: var(--text-muted); font-size: 0.8em; }
+.roll-nav .newer { margin-left: auto; text-align: right; }
+.keys-hint { margin: 0.6rem 0 0; color: var(--text-muted); font-size: 0.8em; }
+@media (hover: none) { .keys-hint { display: none; } }
+
+.empty-state { padding-block: 2rem 4rem; color: var(--text-muted); }

@@ -1,186 +1,49 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/ui/Breadcrumbs';
+import GalleryLayout from '../layouts/GalleryLayout.astro';
 import { getAllGalleryCollections } from '../lib/gallery';
+import { frameCount, isVideoUrl, resized, rollName, rollStamp, shareImage, sortRolls } from '../lib/galleryFrames';
 
-const allCollections = await getAllGalleryCollections();
-
-const breadcrumbs = [
-  { label: 'Rishi', href: '/' },
-  { label: 'Artifacts' }
-];
-
-// Sort collections by year and month (newest first)
-const sortedCollections = allCollections.sort((a, b) => {
-  if (a.year !== b.year) return b.year - a.year;
-  // For same year, put year-only collections after monthly ones
-  if (a.month === null && b.month !== null) return 1;
-  if (a.month !== null && b.month === null) return -1;
-  if (a.month === null && b.month === null) return 0;
-  return (b.month || 0) - (a.month || 0);
-});
+const rolls = sortRolls(await getAllGalleryCollections());
+const years = [...new Set(rolls.map((roll) => roll.year))];
+const totalFrames = rolls.reduce((sum, roll) => sum + (roll.image_count ?? 0), 0);
 ---
 
-<BaseLayout 
-  title="Artifacts | Rishi Ahuja"
-  description="Image archive"
+<GalleryLayout
+  title="Gallery · Rishi Ahuja"
+  description="Photos from trips, conferences, and ordinary days, kept a roll a month."
+  image={shareImage(rolls.map((roll) => roll.cover_image_url))}
 >
-  <style>
-    .gallery-container {
-      font-family: 'PT Mono', monospace;
-      background: var(--codGray);
-      color: var(--quillGray);
-      min-height: 100vh;
-    }
-    
-    .gallery-inner {
-      max-width: 56rem; /* max-w-4xl = 56rem */
-      margin: 0 auto;
-      padding: 3rem 1rem;
-    }
-    
-    @media (min-width: 768px) {
-      .gallery-inner {
-        padding: 3rem 2rem;
-      }
-    }
-    
-    .gallery-header {
-      margin-bottom: 3rem;
-    }
-    
-    .gallery-title {
-      font-size: 1.875rem;
-      font-weight: 700;
-      color: var(--quillGray);
-      margin-bottom: 0.75rem;
-      margin-top: 1.5rem;
-    }
-    
-    @media (min-width: 768px) {
-      .gallery-title {
-        font-size: 2.25rem;
-      }
-    }
-    
-    .gallery-subtitle {
-      color: var(--gunSmoke);
-      font-size: 0.9rem;
-    }
+  <section class="gallery-intro wrap">
+    <h1>Gallery</h1>
+    <p class="gallery-lede">Trips, conferences, and ordinary days, kept a roll a month. {rolls.length > 0 && <>{rolls.length} rolls, {totalFrames} frames.</>}</p>
+  </section>
 
-    .gallery-caveat {
-      margin-top: 0.4rem;
-      font-size: 0.7rem;
-      color: var(--gunSmoke);
-      opacity: 0.4;
-      letter-spacing: 0.02em;
-    }
-    
-    .gallery-listing {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-    
-    .collection-card {
-      display: block;
-      text-decoration: none;
-      border: 1px solid rgba(var(--gunSmoke-rgb), 0.2);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 1;
-    }
-    
-    .collection-card:hover {
-      border-color: var(--accent-light);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-    
-    .collection-cover {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      background: var(--darkGrey);
-    }
-    
-    .collection-info {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 1rem;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6), transparent);
-    }
-    
-    .collection-name {
-      color: var(--quillGray);
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    
-    .collection-count {
-      color: var(--gunSmoke);
-      font-size: 0.8rem;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--gunSmoke);
-    }
-    
-    @media (max-width: 768px) {
-      .gallery-listing {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 1rem;
-      }
-    }
-  </style>
-
-  <main class="gallery-container">
-    <div class="gallery-inner">
-      <!-- Breadcrumbs -->
-      <Breadcrumbs client:load items={breadcrumbs} />
-      
-      <header class="gallery-header">
-        <h1 class="gallery-title">Artifacts</h1>
-        <p class="gallery-subtitle">
-          {sortedCollections.length} {sortedCollections.length === 1 ? 'collection' : 'collections'}
-        </p>
-        <p class="gallery-caveat">may not be maintained</p>
-      </header>
-
-      {allCollections.length > 0 ? (
-        <div class="gallery-listing">
-          {sortedCollections.map((collection) => (
-            <a href={`/gallery/${collection.slug}`} class="collection-card">
-              {collection.cover_image_url ? (
-                <img 
-                  src={collection.cover_image_url} 
-                  alt={collection.display_name}
-                  class="collection-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="collection-cover" />
-              )}
-              <div class="collection-info">
-                <div class="collection-name">{collection.display_name}</div>
-                <div class="collection-count">{collection.image_count || 0} photos</div>
-              </div>
-            </a>
+  <div class="wrap">
+    {rolls.length === 0 ? (
+      <p class="empty-state">The first roll is still being developed.</p>
+    ) : years.map((year) => (
+      <section class="roll-year" aria-labelledby={`year-${year}`}>
+        <h2 id={`year-${year}`}>{year}</h2>
+        <ul class="rolls">
+          {rolls.filter((roll) => roll.year === year).map((roll) => (
+            <li class="roll">
+              <a href={`/gallery/${roll.slug}`}>
+                <div class="roll-cover">
+                  {roll.cover_image_url && (isVideoUrl(roll.cover_image_url) ? (
+                    // The #t fragment makes browsers paint a frame instead of black.
+                    <video src={`${roll.cover_image_url}#t=0.5`} muted playsinline preload="metadata" aria-hidden="true" tabindex="-1" />
+                  ) : (
+                    <img src={resized(roll.cover_image_url, 640)} alt="" width="640" height="800" loading="lazy" decoding="async" />
+                  ))}
+                  <span class="stamp" aria-hidden="true">{rollStamp(roll)}</span>
+                </div>
+                <p class="roll-name">{rollName(roll)}</p>
+                <p class="roll-meta">{frameCount(roll.image_count ?? 0)}</p>
+              </a>
+            </li>
           ))}
-        </div>
-      ) : (
-        <div class="empty-state">
-          <h2>No collections yet</h2>
-          <p>Check back soon.</p>
-        </div>
-      )}
-    </div>
-  </main>
-</BaseLayout>
-  
+        </ul>
+      </section>
+    ))}
+  </div>
+</GalleryLayout>
