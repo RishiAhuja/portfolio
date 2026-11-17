@@ -116,6 +116,23 @@
 }
 .admin-status { display: grid; place-items: center; min-height: 60vh; color: var(--text-muted); }
 
+/* Comment review (CommentsReview.tsx) */
+.comments-review { max-width: 46rem; }
+.comments-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.comments-filters button { display: inline-flex; align-items: center; gap: 0.5em; min-height: 40px; padding: 0.45em 1em; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--text); font: inherit; font-size: 0.9em; cursor: pointer; }
+.comments-filters button:hover { border-color: var(--accent); color: var(--accent); }
+.comments-filters button[aria-pressed='true'] { border-color: var(--text); background: var(--text); color: #fff; }
+.comments-count { min-width: 1.5em; padding: 0 0.45em; border-radius: 999px; background: var(--accent); color: #fff; font-size: 0.8em; font-weight: 700; text-align: center; }
+.comments-filters button[aria-pressed='true'] .comments-count { background: #fff; color: var(--text); }
+.comments-empty { color: var(--text-muted); }
+.comments-list { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.comments-list > li { padding: 1.1rem 1.2rem; border: 1px solid var(--rule); border-radius: 12px; }
+.comments-meta { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; align-items: baseline; margin: 0; color: var(--text-muted); font-size: 0.85em; }
+.comments-meta strong { color: var(--text); font-size: 1.1em; font-weight: 600; }
+.comments-meta a { color: var(--accent); }
+.comments-body { margin: 0.6rem 0 1rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.comments-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
 /* Gallery editor (GalleryEditorV2.tsx) */
 .gallery-editor .header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
 .gallery-editor h2 { margin: 0; font-size: 1.1rem; font-weight: 500; }

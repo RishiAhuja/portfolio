@@ -3,6 +3,7 @@ import { adminLogout } from '../../lib/admin';
 import GalleryEditor from './GalleryEditorV2';
 import ResumeManager from './ResumeManager';
 import BlurbEditor from './BlurbEditor';
+import CommentsReview from './CommentsReview';
 
 interface AdminDashboardProps {
   token: string;
@@ -14,6 +15,7 @@ const SECTIONS = [
   { id: 'gallery', label: 'Gallery', lede: 'Upload photos, add notes and dates, and choose each roll’s cover.' },
   { id: 'resumes', label: 'Résumés', lede: 'Upload a new version; the résumé links on rishia.in always open the latest.' },
   { id: 'blurbs', label: 'Blurbs', lede: 'Write a blurb, upload its images, and export the JSON for rishia.in.' },
+  { id: 'comments', label: 'Comments', lede: 'New comments on rishia.in blurbs stay hidden until you approve them here.' },
 ] as const;
 
 type SectionId = (typeof SECTIONS)[number]['id'];
@@ -66,6 +68,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token, email, onLogout 
         {active === 'gallery' && <GalleryEditor token={token} />}
         {active === 'resumes' && <ResumeManager token={token} />}
         {active === 'blurbs' && <BlurbEditor token={token} />}
+        {active === 'comments' && <CommentsReview token={token} />}
       </main>
     </>
   );
